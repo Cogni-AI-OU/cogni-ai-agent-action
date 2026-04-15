@@ -26,35 +26,32 @@ inputs:
     required: true
   permissions:
     default: |-
-      {
-        "bash": {
-          "*": "deny",
-          "ansible*": "allow",
-          "ansible-galaxy*": "allow",
-          "ansible-playbook*": "allow",
-          "awk*": "allow",
-          "continue*": "allow",
-          "cp*": "allow",
-          "ex*": "allow",
-          "gh*": "allow",
-          "gh pr review*": "deny",
-          "git*": "allow",
-          "hexdump*": "allow",
-          "jq*": "allow",
-          "links*": "allow",
-          "mawk*": "allow",
-          "pipx*": "allow",
-          "pre-commit*": "allow",
-          "printf*": "allow",
-          "sed*": "allow",
-          "set*": "allow",
-          "time*": "allow",
-          "timeout*": "allow",
-          "touch*": "allow",
-          "true*": "allow",
-          "vim*": "allow"
-        }
-      }
+      bash:
+        '*': deny
+        ansible*: allow
+        ansible-galaxy*: allow
+        ansible-playbook*: allow
+        awk*: allow
+        continue*: allow
+        cp*: allow
+        ex*: allow
+        gh*: allow
+        gh pr review*: deny
+        git*: allow
+        hexdump*: allow
+        jq*: allow
+        links*: allow
+        mawk*: allow
+        pipx*: allow
+        pre-commit*: allow
+        printf*: allow
+        sed*: allow
+        set*: allow
+        time*: allow
+        timeout*: allow
+        touch*: allow
+        true*: allow
+        vim*: allow
     description: Permissions configuration for OpenCode.
     required: false
   prompt:
@@ -98,6 +95,21 @@ runs:
       run: |
         ls -la ~/.config/opencode/* 2>/dev/null || true
         ls -la ${{ runner.temp }}/.agents/cogni-ai-architect/
+    - name: Convert permissions to JSON
+      if: github.event.sender.type != 'Bot'
+      id: permissions
+      shell: python
+      env:
+        PERMISSIONS_YAML: ${{ inputs.permissions }}
+      run: |
+        import os
+        import json
+        import yaml
+
+        permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
+
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"json={json.dumps(permissions)}\n")
     - name: Run opencode
       if: github.event.sender.type != 'Bot'
       id: opencode
@@ -145,7 +157,7 @@ runs:
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
-        OPENCODE_PERMISSION: ${{ inputs.permissions }}
+        OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ inputs.agent }}
         model: ${{ inputs.model }}
