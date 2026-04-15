@@ -67,7 +67,7 @@ runs:
       shell: bash
       run: |
         ls -la ~/.config/opencode/* 2>/dev/null || true
-        ls -la .agents/.agents/agents/
+        ls -la .agents/cogni-ai-architect/
     - name: Run opencode
       if: github.event.sender.type != 'Bot'
       id: opencode
@@ -88,7 +88,7 @@ runs:
               "cogni-ai": {
                 "mode": "primary",
                 "model": "opencode/gpt-5.3-codex",
-                "prompt": "file:.agents/.agents/agents/cogni-ai-architect.agent.md",
+                "prompt": "file:.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,
