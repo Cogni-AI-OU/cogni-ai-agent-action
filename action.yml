@@ -159,6 +159,6 @@ runs:
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
-        agent: ${{ inputs.agent }}
-        model: ${{ inputs.model }}
+        agent: ${{ inputs.agent || 'cogni-ai-architect' }}
+        model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
