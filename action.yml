@@ -57,12 +57,25 @@ runs:
           printf '%s\n' "$prompt"
           echo 'EOF'
         } >> "$GITHUB_OUTPUT"
-    - name: Write OpenCode config
-      uses: DamianReeves/write-file-action@v1.3
+    - name: Checkout cogni-ai-agents
+      uses: actions/checkout@v6
       with:
-        path: ~/.opencode/opencode.jsonc
-        write-mode: overwrite
-        contents: |
+        path: .agents
+        persist-credentials: false
+        repository: Cogni-AI-OU/cogni-ai-agents
+    - name: List OpenCode config
+      shell: bash
+      run: |
+        ls -la ~/.config/opencode/* 2>/dev/null || true
+        ls -la .agents/.agents/agents/
+    - name: Run opencode
+      id: opencode
+      uses: anomalyco/opencode/github@v1.4.3
+      env:
+        GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
+        OPENCODE_CONFIG_CONTENT: |-
           {
             "$schema": "https://opencode.ai/config.json",
             "instructions": [
@@ -98,24 +111,6 @@ runs:
               "github-pr-search": false
             }
           }
-    - name: Checkout cogni-ai-agents
-      uses: actions/checkout@v6
-      with:
-        path: .agents
-        persist-credentials: false
-        repository: Cogni-AI-OU/cogni-ai-agents
-    - name: List OpenCode config
-      shell: bash
-      run: |
-        ls -la ~/.config/opencode/* 2>/dev/null || true
-        ls -la .agents/.agents/agents/
-    - name: Run opencode
-      id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
-      env:
-        GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
         OPENCODE_PERMISSION: |-
           {
