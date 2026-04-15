@@ -1,5 +1,9 @@
 # cogni-ai-agent-action
 
+[![Tag][gh-tag-image]][gh-tag-link]
+[![Check][gha-image-check-main]][gha-link-check-main]
+[![Edit][gh-edit-badge]][gh-edit-link]
+
 Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a GitHub Actions workflow.
 
 ## Usage
@@ -55,3 +59,14 @@ jobs:
 | Output | Description |
 |---|---|
 | `response` | The response from the agent |
+
+<!-- Named links -->
+
+[gh-edit-badge]: https://img.shields.io/badge/GitHub-edit-purple.svg?logo=github
+[gh-edit-link]: https://github.dev/Cogni-AI-OU/cogni-ai-agent-action
+
+[gh-tag-image]: https://img.shields.io/github/tag/Cogni-AI-OU/cogni-ai-agent-action.svg?logo=github
+[gh-tag-link]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/tags
+
+[gha-link-check-main]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/actions?query=workflow%3ACheck+branch%3Amain
+[gha-image-check-main]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/workflows/Check/badge.svg
