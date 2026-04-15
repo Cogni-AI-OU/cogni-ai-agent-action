@@ -146,4 +146,3 @@ runs:
         agent: ${{ inputs.agent }}
         model: ${{ inputs.model }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        use_github_token: 'true'
