@@ -18,7 +18,7 @@ inputs:
     description: Issue or PR number this request relates to.
     required: false
   model:
-    default: opencode/gemini-3.1-pro
+    default: opencode/gpt-5-codex
     description: Model to use for OpenCode.
     required: false
   opencode-api-key:
