@@ -1,0 +1,27 @@
+---
+name: Action
+
+on:
+  pull_request:
+    paths-ignore:
+      - '*.md'
+  push:
+    paths-ignore:
+      - '*.md'
+
+jobs:
+  test:
+    name: Run Action
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Action
+        uses: ./
+        with:
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: ${{ github.event.head_commit.message || github.event.pull_request.title }}

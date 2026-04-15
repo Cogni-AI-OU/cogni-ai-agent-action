@@ -1,0 +1,102 @@
+---
+# See: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+author: Cogni AI OU
+branding:
+  color: blue
+  icon: cpu
+description: Runs Cogni AI agent via OpenCode
+inputs:
+  agent:
+    default: cogni-ai-architect
+    description: Agent to use.
+    required: false
+  github-token:
+    default: ${{ github.token }}
+    description: GitHub token.
+    required: false
+  issue_number:
+    description: Issue or PR number this request relates to.
+    required: false
+  model:
+    default: opencode/gemini-3.1-pro
+    description: Model to use for OpenCode.
+    required: false
+  opencode-api-key:
+    description: API key for OpenCode.
+    required: true
+  prompt:
+    default: ''
+    description: Prompt to pass to the agent.
+    required: false
+name: Cogni AI Agent
+outputs:
+  response:
+    description: The response from the agent.
+    value: ${{ steps.opencode.outputs.response }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve prompt
+      id: prompt
+      shell: bash
+      env:
+        ISSUE_NUMBER: ${{ inputs.issue_number }}
+        PROMPT_INPUT: ${{ inputs.prompt }}
+      run: |
+        set -euo pipefail
+        prompt="${PROMPT_INPUT:-}"
+        if [ -n "${ISSUE_NUMBER:-}" ]; then
+          if [ -n "$prompt" ]; then
+            prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
+          else
+            prompt="Related to issue/PR #${ISSUE_NUMBER}"
+          fi
+        fi
+        {
+          echo 'prompt<<EOF'
+          printf '%s\n' "$prompt"
+          echo 'EOF'
+        } >> "$GITHUB_OUTPUT"
+    - name: Run opencode
+      id: opencode
+      uses: anomalyco/opencode/github@v1.4.3
+      timeout-minutes: 60
+      env:
+        GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
+        # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
+        OPENCODE_PERMISSION: |-
+          {
+            "bash": {
+              "*": "deny",
+              "ansible*": "allow",
+              "ansible-galaxy*": "allow",
+              "ansible-playbook*": "allow",
+              "awk*": "allow",
+              "continue*": "allow",
+              "cp*": "allow",
+              "ex*": "allow",
+              "gh*": "allow",
+              "gh pr review*": "deny",
+              "git*": "allow",
+              "hexdump*": "allow",
+              "jq*": "allow",
+              "links*": "allow",
+              "mawk*": "allow",
+              "pipx*": "allow",
+              "pre-commit*": "allow",
+              "printf*": "allow",
+              "sed*": "allow",
+              "set*": "allow",
+              "time*": "allow",
+              "timeout*": "allow",
+              "touch*": "allow",
+              "true*": "allow",
+              "vim*": "allow"
+            }
+          }
+      with:
+        agent: ${{ inputs.agent }}
+        model: ${{ inputs.model }}
+        prompt: ${{ steps.prompt.outputs.prompt }}
