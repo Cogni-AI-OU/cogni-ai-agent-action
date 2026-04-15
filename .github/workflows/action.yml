@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    if: "!endsWith(github.actor, '[bot]')"
+    if: github.event.sender.type != 'Bot'
     name: Run Action
     runs-on: ubuntu-latest
     permissions:
