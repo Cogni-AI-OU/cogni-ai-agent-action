@@ -100,7 +100,6 @@ runs:
     - name: Run opencode
       id: opencode
       uses: anomalyco/opencode/github@v1.4.3
-      timeout-minutes: 60
       env:
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
