@@ -11,6 +11,7 @@ on:
 
 jobs:
   test:
+    if: "!endsWith(github.actor, '[bot]')"
     name: Run Action
     runs-on: ubuntu-latest
     permissions:
