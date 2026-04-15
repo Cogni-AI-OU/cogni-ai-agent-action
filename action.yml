@@ -58,11 +58,8 @@ runs:
           echo 'EOF'
         } >> "$GITHUB_OUTPUT"
     - name: Checkout cogni-ai-agents
-      uses: actions/checkout@v6
-      with:
-        path: ${{ runner.temp }}/.agents
-        persist-credentials: false
-        repository: Cogni-AI-OU/cogni-ai-agents
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
     - name: List OpenCode config
       shell: bash
       run: |
