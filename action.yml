@@ -89,7 +89,7 @@ runs:
             "agent": {
               "cogni-ai": {
                 "mode": "primary",
-                "model": "opencode/gpt-5.3-codex",
+                "model": "opencode/gpt-5-codex",
                 "prompt": "file:.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
