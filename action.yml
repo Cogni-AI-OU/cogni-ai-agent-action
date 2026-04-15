@@ -74,6 +74,7 @@ runs:
               "cogni-ai": {
                 "mode": "primary",
                 "model": "opencode/gpt-5.3-codex",
+                "prompt": "file:.agents/.agents/agents/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,
@@ -98,11 +99,16 @@ runs:
             }
           }
     - name: Checkout cogni-ai-agents
-      shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ~/.config/opencode/agents
+      uses: actions/checkout@v6
+      with:
+        path: .agents
+        persist-credentials: false
+        repository: Cogni-AI-OU/cogni-ai-agents
     - name: List OpenCode config
       shell: bash
-      run: ls -la ~/.config/opencode/*
+      run: |
+        ls -la ~/.config/opencode/* 2>/dev/null || true
+        ls -la .agents/.agents/agents/
     - name: Run opencode
       id: opencode
       uses: anomalyco/opencode/github@v1.4.3
