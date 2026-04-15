@@ -1,6 +1,6 @@
 ---
 # OpenCode workflow — calls the org-level reusable OpenCode workflow.
-# Triggered by /oc commands in issue/PR comments, or manually via workflow_dispatch/workflow_call.
+# Triggered by /oc commands in issue/PR comments, or manually via workflow_dispatch.
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode
 on:
@@ -12,27 +12,6 @@ on:
     types:
       - created
       - edited
-  workflow_call:
-    inputs:
-      agent:
-        default: cogni-ai-architect
-        description: Agent to use.
-        required: false
-        type: string
-      issue_number:
-        description: Issue or PR number this request relates to
-        required: false
-        type: number
-      model:
-        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3.1-pro' }}
-        description: Model to use for OpenCode
-        required: false
-        type: string
-      prompt:
-        default: ''
-        description: Custom prompt to override the default prompt
-        required: false
-        type: string
   workflow_dispatch:
     inputs:
       agent:
