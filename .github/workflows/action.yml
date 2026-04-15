@@ -5,20 +5,8 @@ on:
   pull_request:
     paths-ignore:
       - '*.md'
-  push:
-    paths-ignore:
-      - '*.md'
 
 jobs:
-  validate-secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate secrets
-        run: |
-          if [ -z "${{ secrets.OPENCODE_API_KEY }}" ]; then
-            echo "::error::OPENCODE_API_KEY secret is not set"
-            exit 1
-          fi
   test:
     if: github.event.sender.type != 'Bot'
     name: Run Action

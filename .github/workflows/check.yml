@@ -9,15 +9,6 @@ permissions:
   contents: read
 
 jobs:
-  validate-secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate secrets
-        run: |
-          if [ -z "${{ secrets.OPENCODE_API_KEY }}" ]; then
-            echo "::error::OPENCODE_API_KEY secret is not set"
-            exit 1
-          fi
   check:
     uses: Cogni-AI-OU/.github/.github/workflows/check.yml@main
     with:
