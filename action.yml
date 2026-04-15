@@ -69,6 +69,7 @@ runs:
         ls -la ~/.config/opencode/* 2>/dev/null || true
         ls -la .agents/.agents/agents/
     - name: Run opencode
+      if: ${{ !endsWith(github.actor, '[bot]') }}
       id: opencode
       uses: anomalyco/opencode/github@v1.4.3
       env:
