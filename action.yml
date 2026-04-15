@@ -18,7 +18,7 @@ inputs:
     description: Issue or PR number this request relates to.
     required: false
   model:
-    default: opencode/gemini-3.1-pro
+    default: opencode/gpt-5-codex
     description: Model to use for OpenCode.
     required: false
   opencode-api-key:
@@ -76,6 +76,8 @@ runs:
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
+        # @see: https://opencode.ai/docs/zen
+        # For full list of available models: https://opencode.ai/zen/v1/models
         OPENCODE_CONFIG_CONTENT: |-
           {
             "$schema": "https://opencode.ai/config.json",
@@ -87,7 +89,7 @@ runs:
             "agent": {
               "cogni-ai": {
                 "mode": "primary",
-                "model": "opencode/gpt-5.3-codex",
+                "model": "opencode/gpt-5-codex",
                 "prompt": "file:.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
