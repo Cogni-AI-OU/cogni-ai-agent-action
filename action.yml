@@ -60,14 +60,14 @@ runs:
     - name: Checkout cogni-ai-agents
       uses: actions/checkout@v6
       with:
-        path: .agents
+        path: ${{ runner.temp }}/.agents
         persist-credentials: false
         repository: Cogni-AI-OU/cogni-ai-agents
     - name: List OpenCode config
       shell: bash
       run: |
         ls -la ~/.config/opencode/* 2>/dev/null || true
-        ls -la .agents/cogni-ai-architect/
+        ls -la ${{ runner.temp }}/.agents/cogni-ai-architect/
     - name: Run opencode
       if: github.event.sender.type != 'Bot'
       id: opencode
@@ -88,7 +88,7 @@ runs:
               "cogni-ai": {
                 "mode": "primary",
                 "model": "opencode/gpt-5.3-codex",
-                "prompt": "file:.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,
