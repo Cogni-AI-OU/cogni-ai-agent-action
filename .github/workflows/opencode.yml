@@ -99,7 +99,7 @@ concurrency:
   group: opencode-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
 env:
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
-  OPENCODE_MODEL_DEFAULT: opencode/gemini-3.1-pro
+  OPENCODE_MODEL_DEFAULT: opencode/gpt-5-codex
 jobs:
   opencode:
     if: |
