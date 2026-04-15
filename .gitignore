@@ -1,0 +1,22 @@
+# .gitignore configuration file.
+# Examples: <https://github.com/github/gitignore>
+# Syntax: <https://git-scm.com/docs/gitignore>
+# Keep items organized and in alphabetical order.
+
+# Cache-related files
+.cache/
+
+# Environments
+.env
+.envrc
+.venv
+env/
+venv/
+
+# Temporary binary files
+actionlint
+
+# Temporary or backup files
+*.bak
+*.orig
+*.swp
