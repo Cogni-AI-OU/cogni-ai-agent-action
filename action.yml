@@ -87,7 +87,7 @@ runs:
               ".github/skills/AGENTS.md"
             ],
             "agent": {
-              "cogni-ai": {
+              "cogni-ai-architect": {
                 "mode": "primary",
                 "model": "opencode/gpt-5-codex",
                 "prompt": "file:.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
@@ -149,3 +149,4 @@ runs:
         agent: ${{ inputs.agent }}
         model: ${{ inputs.model }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        use_github_token: 'true'
