@@ -39,6 +39,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt }}
