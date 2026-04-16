@@ -1,11 +1,9 @@
 ---
 name: Action
-
 on:
   pull_request:
     paths-ignore:
       - '*.md'
-
 jobs:
   test:
     if: github.event.sender.type != 'Bot'
