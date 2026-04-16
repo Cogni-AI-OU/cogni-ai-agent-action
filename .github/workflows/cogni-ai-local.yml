@@ -162,6 +162,8 @@ jobs:
       - name: Run Cogni AI agent
         id: cogni-ai
         uses: ./
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: >-
             ${{ inputs.agent || env.OPENCODE_AGENT_DEFAULT }}
