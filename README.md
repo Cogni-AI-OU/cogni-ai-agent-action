@@ -46,6 +46,45 @@ jobs:
           prompt: ${{ inputs.prompt }}
 ```
 
+### Advanced workflow
+
+You can also trigger the agent via issue or PR comments:
+
+```yaml
+---
+name: Cogni AI Comment
+
+on:
+  issue_comment:
+    types:
+      - created
+      - edited
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
+
+jobs:
+  agent:
+    # Only run if the comment starts with /oc
+    if: startsWith(github.event.comment.body, '/oc')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Cogni AI Agent
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: ${{ github.event.comment.body }}
+```
+
 ### Inputs
 
 | Input              | Description                 | Default                | Required |
