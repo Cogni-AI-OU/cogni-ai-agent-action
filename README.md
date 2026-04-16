@@ -39,12 +39,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt }}
 ```
 
 ### Advanced workflow
+
+You can also trigger the agent via issue or PR comments:
 
 ```yaml
 ---
@@ -56,9 +60,11 @@ on:
   issue_comment:
     types:
       - created
+      - edited
   pull_request_review_comment:
     types:
       - created
+      - edited
   workflow_dispatch:
     inputs:
       model:
@@ -114,10 +120,12 @@ jobs:
       # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action>
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: ${{ inputs.prompt }}
+          prompt: ${{ github.event.comment.body || inputs.prompt }}
 ```
 
 ### Inputs
