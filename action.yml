@@ -183,15 +183,9 @@ runs:
       run: |
         if [ "$IS_REVIEW_ISSUE" == "true" ] || \
            [ "$IS_REVIEW_PR" == "true" ]; then
-           [ "$IS_REVIEW_PR" == "true" ]; then
           echo "run=true" >> "$GITHUB_OUTPUT"
           echo "agent=cogni-ai-reviewer" >> "$GITHUB_OUTPUT"
         elif [ "$IS_WORKFLOW_DISPATCH" == "true" ] || \
-             [ "$IS_WORKFLOW_CALL" == "true" ] || \
-             [ "$IS_ISSUE" == "true" ] || \
-             [ "$IS_ISSUE_COMMENT" == "true" ] || \
-             [ "$IS_PR_REVIEW_COMMENT" == "true" ] || \
-             [ "$IS_PR" == "true" ]; then
              [ "$IS_WORKFLOW_CALL" == "true" ] || \
              [ "$IS_ISSUE" == "true" ] || \
              [ "$IS_ISSUE_COMMENT" == "true" ] || \
