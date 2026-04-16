@@ -52,8 +52,10 @@ You can also trigger the agent via issue or PR comments:
 
 ```yaml
 ---
-name: Cogni AI Comment
+# See: <https://opencode.ai/docs>
+name: Cogni AI Agent
 
+# yamllint disable-line rule:truthy
 on:
   issue_comment:
     types:
@@ -63,11 +65,50 @@ on:
     types:
       - created
       - edited
+  workflow_dispatch:
+    inputs:
+      model:
+        default: opencode/gpt-5-codex
+        description: Model to use for OpenCode
+        options:
+          - opencode/big-pickle
+          - opencode/claude-3-5-haiku
+          - opencode/claude-haiku-4-5
+          - opencode/claude-opus-4-5
+          - opencode/claude-opus-4-6
+          - opencode/claude-sonnet-4
+          - opencode/claude-sonnet-4-5
+          - opencode/claude-sonnet-4-6
+          - opencode/gemini-3.1-pro
+          - opencode/gemini-3-flash
+          - opencode/gemini-3-pro
+          - opencode/glm-5
+          - opencode/glm-5.1
+          - opencode/gpt-5
+          - opencode/gpt-5-codex
+          - opencode/gpt-5-nano
+          - opencode/gpt-5.3-codex
+          - opencode/gpt-5.3-codex-spark
+          - opencode/gpt-5.4
+          - opencode/gpt-5.4-mini
+          - opencode/gpt-5.4-nano
+          - opencode/minimax-m2.5
+          - opencode/minimax-m2.5-free
+          - opencode/nemotron-3-super-free
+          - opencode/qwen3-coder
+          - opencode/qwen3.6-plus-free
+        required: true
+        type: choice
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
 
 jobs:
-  agent:
-    # Only run if the comment starts with /oc
-    if: startsWith(github.event.comment.body, '/oc')
+  cogni-ai-agent:
+    name: Run Cogni AI agent
+    # Only run for workflow_dispatch or if the comment starts with /oc
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.comment.body, '/oc')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -75,14 +116,18 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
+      # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action>
       - name: Run Cogni AI Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        uses: Cogni-AI-OU/cogni-ai-agent-action@main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ github.event.comment.body }}
+          model: ${{ inputs.model }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
+          prompt: ${{ github.event.comment.body || inputs.prompt }}
 ```
 
 ### Inputs
