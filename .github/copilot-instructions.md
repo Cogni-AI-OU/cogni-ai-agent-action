@@ -4,6 +4,6 @@ Key contents:
 
 - **Agent configurations**: `AGENTS.md` for AI coding assistants
 
-### Getting started
+## Getting started
 
 - Refer to the `README.md` in the project root for setup and installation instructions.
