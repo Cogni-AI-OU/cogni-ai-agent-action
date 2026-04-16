@@ -10,13 +10,6 @@ inputs:
     default: cogni-ai-architect
     description: Agent to use.
     required: false
-  github-token:
-    default: ${{ github.token }}
-    description: GitHub token.
-    required: false
-  issue_number:
-    description: Issue or PR number this request relates to.
-    required: false
   model:
     default: opencode/gpt-5-codex
     description: Model to use for OpenCode.
@@ -70,7 +63,7 @@ runs:
       id: prompt
       shell: bash
       env:
-        ISSUE_NUMBER: ${{ inputs.issue_number }}
+        ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail

@@ -49,7 +49,6 @@ jobs:
 | Input | Description | Default | Required |
 |---|---|---|---|
 | `agent` | Agent to use | `cogni-ai-architect` | No |
-| `issue_number` | Issue or PR number to reference | — | No |
 | `model` | Model to use for OpenCode | `opencode/gpt-5-codex` | No |
 | `opencode-api-key` | API key for OpenCode | — | **Yes** |
 | `prompt` | Prompt to pass to the agent | `''` | No |
