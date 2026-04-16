@@ -4,6 +4,10 @@
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode
 on:
+  issues:
+    types:
+      - opened
+      - edited
   issue_comment:
     types:
       - created
