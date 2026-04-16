@@ -124,7 +124,11 @@ jobs:
           endsWith(github.event.comment.body, ' /opencode') ||
           github.event.comment.body == '/opencode' ||
           contains(github.event.comment.body, '@opencode-agent') ||
-          contains(github.event.comment.body, '@OpenCode-Agent')
+          contains(github.event.comment.body, '@OpenCode-Agent') ||
+          contains(github.event.comment.body, ' /review ') ||
+          startsWith(github.event.comment.body, '/review ') ||
+          endsWith(github.event.comment.body, ' /review') ||
+          github.event.comment.body == '/review'
         )
       )
     name: Cogni AI
