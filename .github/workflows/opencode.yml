@@ -1,21 +1,9 @@
 ---
 # OpenCode workflow — calls the org-level reusable OpenCode workflow.
-# Triggered by /oc commands in issue/PR comments, or manually via workflow_dispatch.
+# Triggered manually via workflow_dispatch.
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode
 on:
-  issues:
-    types:
-      - opened
-      - edited
-  issue_comment:
-    types:
-      - created
-      - edited
-  pull_request_review_comment:
-    types:
-      - created
-      - edited
   workflow_dispatch:
     inputs:
       agent:
