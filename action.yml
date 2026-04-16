@@ -199,11 +199,17 @@ runs:
       id: prompt
       shell: bash
       env:
+        COMMENT_BODY: >-
+          ${{ github.event_name == 'issues' && github.event.issue.body ||
+          github.event.comment.body || '' }}
         ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
+        if [ -z "$prompt" ]; then
+          prompt="${COMMENT_BODY:-}"
+        fi
         if [ -n "${ISSUE_NUMBER:-}" ]; then
           if [ -n "$prompt" ]; then
             prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
