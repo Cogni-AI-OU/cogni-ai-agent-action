@@ -26,10 +26,6 @@ on:
           - title
         required: false
         type: choice
-      issue_number:
-        description: Issue or PR number this request relates to
-        required: false
-        type: number
       model:
         default: opencode/gemini-3.1-pro
         description: Model to use for OpenCode

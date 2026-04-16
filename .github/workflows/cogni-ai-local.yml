@@ -19,10 +19,6 @@ on:
         description: Agent to use.
         required: false
         type: string
-      issue_number:
-        description: Issue or PR number this request relates to
-        required: false
-        type: number
       model:
         default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3.1-pro' }}
         description: Model to use for OpenCode
@@ -47,10 +43,6 @@ on:
           - title
         required: false
         type: choice
-      issue_number:
-        description: Issue or PR number this request relates to
-        required: false
-        type: number
       model:
         default: opencode/gemini-3.1-pro
         description: Model to use for OpenCode
@@ -172,20 +164,12 @@ jobs:
         id: prompt
         env:
           COMMENT_BODY: ${{ github.event.comment.body || '' }}
-          ISSUE_NUMBER: ${{ inputs.issue_number }}
           PROMPT_INPUT: ${{ inputs.prompt }}
         run: |
           set -euo pipefail
           prompt="${PROMPT_INPUT:-}"
           if [ -z "$prompt" ]; then
             prompt="${COMMENT_BODY:-}"
-          fi
-          if [ -n "${ISSUE_NUMBER:-}" ]; then
-            if [ -n "$prompt" ]; then
-              prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
-            else
-              prompt="Related to issue/PR #${ISSUE_NUMBER}"
-            fi
           fi
           {
             echo 'prompt<<EOF'
