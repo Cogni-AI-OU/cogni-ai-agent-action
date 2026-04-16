@@ -63,47 +63,93 @@ runs:
       id: check
       shell: bash
       env:
-        IS_ARCHITECT: >-
+        IS_WORKFLOW_DISPATCH: >-
+          ${{ github.event_name == 'workflow_dispatch' }}
+        IS_WORKFLOW_CALL: >-
+          ${{ github.event_name == 'workflow_call' }}
+        IS_ISSUE: >-
           ${{
-            github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || (
-              !endsWith(github.actor, '[bot]') && (
-                (
-                  github.event_name == 'issues' &&
-                  contains(fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'), github.event.issue.author_association) &&
-                  (
-                    contains(github.event.issue.body, ' /oc ') || startsWith(github.event.issue.body, '/oc ') || endsWith(github.event.issue.body, ' /oc') || github.event.issue.body == '/oc' ||
-                    contains(github.event.issue.body, ' /opencode ') || startsWith(github.event.issue.body, '/opencode ') || endsWith(github.event.issue.body, ' /opencode') || github.event.issue.body == '/opencode' ||
-                    contains(github.event.issue.body, '@opencode-agent') || contains(github.event.issue.body, '@OpenCode-Agent')
-                  )
-                ) ||
-                (
-                  github.event_name == 'issue_comment' &&
-                  contains(fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'), github.event.comment.author_association) &&
-                  (
-                    contains(github.event.comment.body, ' /oc ') || startsWith(github.event.comment.body, '/oc ') || endsWith(github.event.comment.body, ' /oc') || github.event.comment.body == '/oc' ||
-                    contains(github.event.comment.body, ' /opencode ') || startsWith(github.event.comment.body, '/opencode ') || endsWith(github.event.comment.body, ' /opencode') || github.event.comment.body == '/opencode' ||
-                    contains(github.event.comment.body, '@opencode-agent') || contains(github.event.comment.body, '@OpenCode-Agent')
-                  )
-                ) ||
-                (
-                  github.event_name == 'pull_request_review_comment' &&
-                  contains(fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'), github.event.comment.author_association) &&
-                  (
-                    contains(github.event.comment.body, ' /oc ') || startsWith(github.event.comment.body, '/oc ') || endsWith(github.event.comment.body, ' /oc') || github.event.comment.body == '/oc' ||
-                    contains(github.event.comment.body, ' /opencode ') || startsWith(github.event.comment.body, '/opencode ') || endsWith(github.event.comment.body, ' /opencode') || github.event.comment.body == '/opencode' ||
-                    contains(github.event.comment.body, '@opencode-agent') || contains(github.event.comment.body, '@OpenCode-Agent')
-                  )
-                )
-              )
-            ) ||
+            github.event_name == 'issues' &&
+            !endsWith(github.actor, '[bot]') &&
+            contains(
+              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
+              github.event.issue.author_association
+            ) &&
             (
-              (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
+              contains(github.event.issue.body, ' /oc ') ||
+              startsWith(github.event.issue.body, '/oc ') ||
+              endsWith(github.event.issue.body, ' /oc') ||
+              github.event.issue.body == '/oc' ||
+              contains(github.event.issue.body, ' /opencode ') ||
+              startsWith(github.event.issue.body, '/opencode ') ||
+              endsWith(github.event.issue.body, ' /opencode') ||
+              github.event.issue.body == '/opencode' ||
+              contains(github.event.issue.body, '@opencode-agent') ||
+              contains(github.event.issue.body, '@OpenCode-Agent')
+            )
+          }}
+        IS_ISSUE_COMMENT: >-
+          ${{
+            github.event_name == 'issue_comment' &&
+            !endsWith(github.actor, '[bot]') &&
+            contains(
+              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
+              github.event.comment.author_association)
+            ) &&
+          &&
+            (
+              contains(github.event.comment.body, ' /oc ') ||
+              startsWith(github.event.comment.body, '/oc ') ||
+              endsWith(github.event.comment.body, ' /oc') ||
+              github.event.comment.body == '/oc' ||
+              contains(github.event.comment.body, ' /opencode ') ||
+              startsWith(github.event.comment.body, '/opencode ') ||
+              endsWith(github.event.comment.body, ' /opencode') ||
+              github.event.comment.body == '/opencode' ||
+              contains(github.event.comment.body, '@opencode-agent') ||
+              contains(github.event.comment.body, '@OpenCode-Agent')
+            )
+          }}
+        IS_PR_REVIEW_COMMENT: >-
+          ${{
+            github.event_name == 'pull_request_review_comment' &&
+            !endsWith(github.actor, '[bot]') &&
+            contains(
+              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
+              github.event.comment.author_association)
+            ) &&
+          &&
+            (
+              contains(github.event.comment.body, ' /oc ') ||
+              startsWith(github.event.comment.body, '/oc ') ||
+              endsWith(github.event.comment.body, ' /oc') ||
+              github.event.comment.body == '/oc' ||
+              contains(github.event.comment.body, ' /opencode ') ||
+              startsWith(github.event.comment.body, '/opencode ') ||
+              endsWith(github.event.comment.body, ' /opencode') ||
+              github.event.comment.body == '/opencode' ||
+              contains(github.event.comment.body, '@opencode-agent') ||
+              contains(github.event.comment.body, '@OpenCode-Agent')
+            )
+          }}
+        IS_PR: >-
+          ${{
+            (github.event_name == 'pull_request' ||
+             github.event_name ==
+               'pull_request_target') &&
+            (
+              (!endsWith(github.actor, '[bot]') &&
+                contains(
+                  fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
+                  github.event.pull_request.author_association)) ||
+                ) &&
               (
-                (!endsWith(github.actor, '[bot]') && contains(fromJson('["COLLABORATOR","MEMBER","OWNER"]'), github.event.pull_request.author_association)) ||
-                (
-                  contains(fromJson('["Copilot","copilot[bot]","copilot-swe-agent"]'), github.event.pull_request.user.login) &&
-                  github.event.pull_request.author_association == 'CONTRIBUTOR'
-                )
+                contains(
+                  fromJson('["Copilot","copilot[bot]","copilot-swe-agent"]'),
+                  github.event.pull_request.user.login)
+                ) &&
+          &&
+                github.event.pull_request.author_association == 'CONTRIBUTOR'
               )
             )
           }}
@@ -111,25 +157,49 @@ runs:
           ${{
             github.event_name == 'issue_comment' &&
             !endsWith(github.actor, '[bot]') &&
-            contains(fromJson('["COLLABORATOR","MEMBER","OWNER"]'), github.event.comment.author_association) &&
+            contains(
+              fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
+              github.event.comment.author_association
+            ) &&
             (
-              contains(github.event.comment.body, ' /review ') || startsWith(github.event.comment.body, '/review ') || endsWith(github.event.comment.body, ' /review') || github.event.comment.body == '/review'
+              contains(github.event.comment.body, ' /review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, ' /review') ||
+              github.event.comment.body == '/review'
             )
           }}
         IS_REVIEW_PR: >-
           ${{
             github.event_name == 'pull_request_review_comment' &&
             !endsWith(github.actor, '[bot]') &&
-            contains(fromJson('["COLLABORATOR","MEMBER","OWNER"]'), github.event.comment.author_association) &&
+            contains(
+              fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
+              github.event.comment.author_association
+            ) &&
             (
-              contains(github.event.comment.body, ' /review ') || startsWith(github.event.comment.body, '/review ') || endsWith(github.event.comment.body, ' /review') || github.event.comment.body == '/review'
+              contains(github.event.comment.body, ' /review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, ' /review') ||
+              github.event.comment.body == '/review'
             )
           }}
       run: |
-        if [ "$IS_REVIEW_ISSUE" == "true" ] || [ "$IS_REVIEW_PR" == "true" ]; then
+        if [ "$IS_REVIEW_ISSUE" == "true" ] || \
+           [ "$IS_REVIEW_PR" == "true" ]; then
+           [ "$IS_REVIEW_PR" == "true" ]; then
           echo "run=true" >> "$GITHUB_OUTPUT"
           echo "agent=cogni-ai-reviewer" >> "$GITHUB_OUTPUT"
-        elif [ "$IS_ARCHITECT" == "true" ]; then
+        elif [ "$IS_WORKFLOW_DISPATCH" == "true" ] || \
+             [ "$IS_WORKFLOW_CALL" == "true" ] || \
+             [ "$IS_ISSUE" == "true" ] || \
+             [ "$IS_ISSUE_COMMENT" == "true" ] || \
+             [ "$IS_PR_REVIEW_COMMENT" == "true" ] || \
+             [ "$IS_PR" == "true" ]; then
+             [ "$IS_WORKFLOW_CALL" == "true" ] || \
+             [ "$IS_ISSUE" == "true" ] || \
+             [ "$IS_ISSUE_COMMENT" == "true" ] || \
+             [ "$IS_PR_REVIEW_COMMENT" == "true" ] || \
+             [ "$IS_PR" == "true" ]; then
           echo "run=true" >> "$GITHUB_OUTPUT"
           echo "agent=cogni-ai-architect" >> "$GITHUB_OUTPUT"
         fi
@@ -175,9 +245,7 @@ runs:
         import os
         import json
         import yaml
-
         permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
-
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(permissions)}\n")
     - name: Run opencode
