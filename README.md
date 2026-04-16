@@ -46,17 +46,17 @@ jobs:
 
 ### Inputs
 
-| Input | Description | Default | Required |
-|---|---|---|---|
-| `agent` | Agent to use | `cogni-ai-architect` | No |
-| `model` | Model to use for OpenCode | `opencode/gpt-5-codex` | No |
-| `opencode-api-key` | API key for OpenCode | — | **Yes** |
-| `prompt` | Prompt to pass to the agent | `''` | No |
+| Input              | Description                 | Default                | Required |
+| ------------------ | --------------------------- | ---------------------- | -------- |
+| `agent`            | Agent to use                | `cogni-ai-architect`   | No       |
+| `model`            | Model to use for OpenCode   | `opencode/gpt-5-codex` | No       |
+| `opencode-api-key` | API key for OpenCode        | —                      | **Yes**  |
+| `prompt`           | Prompt to pass to the agent | `''`                   | No       |
 
 ### Outputs
 
-| Output | Description |
-|---|---|
+| Output     | Description                 |
+| ---------- | --------------------------- |
 | `response` | The response from the agent |
 
 <!-- Named links -->

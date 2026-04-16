@@ -99,4 +99,4 @@ jobs:
       agent: ${{ inputs.agent || '' }}
       model: ${{ inputs.model || '' }}
       prompt: ${{ inputs.prompt || '' }}
-    secrets: inherit
+    secrets: inherit  # pragma: allowlist secret

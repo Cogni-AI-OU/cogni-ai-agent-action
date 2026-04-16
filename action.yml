@@ -94,9 +94,8 @@ runs:
             !endsWith(github.actor, '[bot]') &&
             contains(
               fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association)
+              github.event.comment.author_association
             ) &&
-          &&
             (
               contains(github.event.comment.body, ' /oc ') ||
               startsWith(github.event.comment.body, '/oc ') ||
@@ -116,9 +115,8 @@ runs:
             !endsWith(github.actor, '[bot]') &&
             contains(
               fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association)
+              github.event.comment.author_association
             ) &&
-          &&
             (
               contains(github.event.comment.body, ' /oc ') ||
               startsWith(github.event.comment.body, '/oc ') ||
@@ -135,20 +133,19 @@ runs:
         IS_PR: >-
           ${{
             (github.event_name == 'pull_request' ||
-             github.event_name ==
-               'pull_request_target') &&
+             github.event_name == 'pull_request_target') &&
             (
               (!endsWith(github.actor, '[bot]') &&
                 contains(
                   fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
-                  github.event.pull_request.author_association)) ||
-                ) &&
+                  github.event.pull_request.author_association
+                )
+              ) ||
               (
                 contains(
                   fromJson('["Copilot","copilot[bot]","copilot-swe-agent"]'),
-                  github.event.pull_request.user.login)
+                  github.event.pull_request.user.login
                 ) &&
-          &&
                 github.event.pull_request.author_association == 'CONTRIBUTOR'
               )
             )
