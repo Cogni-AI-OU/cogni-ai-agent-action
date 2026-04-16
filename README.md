@@ -107,8 +107,6 @@ on:
 jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
-    # Only run for workflow_dispatch or if the comment starts with /oc
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.comment.body, '/oc')
     runs-on: ubuntu-latest
     permissions:
       contents: write
