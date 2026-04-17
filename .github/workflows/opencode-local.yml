@@ -34,15 +34,8 @@ on:
       agent:
         default: ''
         description: Agent to use.
-        options:
-          - ''
-          - build
-          - compaction
-          - plan
-          - summary
-          - title
         required: false
-        type: choice
+        type: string
       model:
         default: opencode/gemini-3.1-pro
         description: Model to use for OpenCode
