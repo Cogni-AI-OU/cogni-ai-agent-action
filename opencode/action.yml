@@ -16,7 +16,7 @@ inputs:
     description: Agent to use.
     required: false
   model:
-    default: opencode/gpt-5-codex
+    default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
   mentions:
@@ -235,6 +235,6 @@ runs:
       with:
         agent: ${{ inputs.agent }}
         mentions: ${{ inputs.mentions || '/oc,/opencode,/review' }}
-        model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
+        model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false
