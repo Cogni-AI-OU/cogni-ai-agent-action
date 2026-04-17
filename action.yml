@@ -229,12 +229,6 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
-    - name: List OpenCode config
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: |
-        ls -la ~/.config/opencode/* 2>/dev/null || true
-        ls -la ${{ runner.temp }}/.agents/cogni-ai-architect/
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
