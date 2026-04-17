@@ -146,24 +146,12 @@ jobs:
         id: prompt
         env:
           COMMENT_BODY: ${{ github.event.comment.body || '' }}
-          PREVIOUS_BUILD_URL: >-
-            ${{ github.run_attempt > 1 &&
-            format('{0}/{1}/actions/runs/{2}/attempts/{3}',
-            github.server_url, github.repository, github.run_id,
-            github.run_attempt - 1) || '' }}
           PROMPT_INPUT: ${{ inputs.prompt }}
         run: |
           set -euo pipefail
           prompt="${PROMPT_INPUT:-}"
           if [ -z "$prompt" ]; then
             prompt="${COMMENT_BODY:-}"
-          fi
-          if [ -n "${PREVIOUS_BUILD_URL:-}" ]; then
-            rerun_note="Note: This is a re-run of a previous build attempt."
-            rerun_note+=" Check the previous attempt to understand what was"
-            rerun_note+=" already done and continue from where it left off:"
-            rerun_note+=" ${PREVIOUS_BUILD_URL}"
-            prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
           fi
           {
             echo 'prompt<<EOF'
