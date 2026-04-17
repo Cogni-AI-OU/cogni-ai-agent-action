@@ -64,9 +64,16 @@ the agent MUST integrate remote changes with a merge commit workflow.
 
 ### Workspace & Syncing Invariants
 
+- **Git File Operations**: Use `git mv`, `git rm`, or equivalent Git-aware tooling (instead of `mv` or `rm`) to preserve history when working with files under source control.
 - **No Untracked Additions**: NEVER automatically commit untracked files or workspace artifacts (like temporary API payloads, script outputs, `.github/ISSUE_TEMPLATE/*`, or `CODE_OF_CONDUCT.md`) unless explicitly specified in the synchronization checklist or explicitly asked by the user. Always clean up temporary files created during execution.
 - **Selective Sync**: Do not blindly copy entire directories from remote templates. Cherry-pick only the files that are meant to be updated or created.
 - **Strict File Syncing**: When syncing configuration files from an external repository or template, only modify or copy the specific files requested.
+
+### Commit & CI/CD Invariants
+
+- **CI/CD Failure Escalation**: When CI/CD pipelines or automated checks fail, do NOT immediately patch local configuration files or create suppressions to hide errors. Investigate the execution environment and upstream dependencies. If the root cause originates outside the repository scope, state the required upstream fix clearly and halt rather than introducing local entropy.
+- **No Garbage Commits**: Ensure no dummy or unrelated test files (such as API payloads, bash script outputs, or generated markdown comments) are included in the commit.
+- **Verify Before Commit**: Verify your expected changes with `git diff --no-color`. NEVER use blanket `git add .` without verifying the exact list of staged files.
 
 ### GitHub Runtime Decision Policy
 
