@@ -76,7 +76,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/gpt-5-codex
         description: Model to use for OpenCode
         options:
           - opencode/big-pickle
@@ -142,7 +142,7 @@ jobs:
 | ------------------ | --------------------------- | ---------------------- | -------- |
 | `agent`            | Agent to use                | `cogni-ai-architect`   | No       |
 | `mentions`         | Comma-separated mentions    | `/co,/cogni,/review`   | No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
+| `model`            | Model to use for OpenCode   | `opencode/gpt-5-codex` | No       |
 | `opencode-api-key` | API key for OpenCode        | —                      | **Yes**  |
 | `prompt`           | Prompt to pass to the agent | `''`                   | No       |
 

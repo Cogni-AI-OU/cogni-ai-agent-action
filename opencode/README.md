@@ -70,32 +70,9 @@ on:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
         options:
-          - opencode/big-pickle
-          - opencode/claude-3-5-haiku
-          - opencode/claude-haiku-4-5
-          - opencode/claude-opus-4-5
-          - opencode/claude-opus-4-6
-          - opencode/claude-sonnet-4
-          - opencode/claude-sonnet-4-5
-          - opencode/claude-sonnet-4-6
           - opencode/gemini-3.1-pro
           - opencode/gemini-3-flash
           - opencode/gemini-3-pro
-          - opencode/glm-5
-          - opencode/glm-5.1
-          - opencode/gpt-5
-          - opencode/gpt-5-codex
-          - opencode/gpt-5-nano
-          - opencode/gpt-5.3-codex
-          - opencode/gpt-5.3-codex-spark
-          - opencode/gpt-5.4
-          - opencode/gpt-5.4-mini
-          - opencode/gpt-5.4-nano
-          - opencode/minimax-m2.5
-          - opencode/minimax-m2.5-free
-          - opencode/nemotron-3-super-free
-          - opencode/qwen3-coder
-          - opencode/qwen3.6-plus-free
         required: true
         type: choice
       prompt:
@@ -133,7 +110,7 @@ jobs:
 | ------------------ | --------------------------- | ---------------------- | -------- |
 | `agent`            | Agent to use                | —                      | No       |
 | `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`| No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
+| `model`            | Model to use for OpenCode   | `opencode/gpt-5-codex` | No       |
 | `opencode-api-key` | API key for OpenCode        | —                      | **Yes**  |
 | `permissions`      | Permissions configuration   | —                      | No       |
 | `prompt`           | Prompt to pass to the agent | `''`                   | No       |

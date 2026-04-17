@@ -10,7 +10,7 @@ inputs:
     description: Agent to use.
     required: false
   model:
-    default: opencode/gemini-3-flash
+    default: opencode/gpt-5-codex
     description: Model to use for OpenCode.
     required: false
   mentions:
@@ -234,15 +234,6 @@ runs:
             prompt="Related to issue/PR #${ISSUE_NUMBER}"
           fi
         fi
-        if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then
-          prev_attempt=$(( GITHUB_RUN_ATTEMPT - 1 ))
-          previous_build_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${prev_attempt}"
-          rerun_note="Note: This is a re-run of a previous build attempt."
-          rerun_note+=" Check the previous attempt to understand what was"
-          rerun_note+=" already done and continue from where it left off:"
-          rerun_note+=" ${previous_build_url}"
-          prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
-        fi
         {
           echo 'prompt<<EOF'
           printf '%s\n' "$prompt"
@@ -290,7 +281,7 @@ runs:
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash",
+                "model": "opencode/gpt-5-codex",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
@@ -300,7 +291,7 @@ runs:
               },
               "cogni-ai-reviewer": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash",
+                "model": "opencode/gpt-5-codex",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
                 "tools": {
                   "write": true,
@@ -330,6 +321,6 @@ runs:
       with:
         agent: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
-        model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
+        model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false

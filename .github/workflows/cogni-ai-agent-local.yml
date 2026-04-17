@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       model:
-        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
+        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3.1-pro' }}
         description: Model to use for OpenCode
         required: false
         type: string
@@ -44,7 +44,7 @@ on:
         required: false
         type: choice
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/gemini-3.1-pro
         description: Model to use for OpenCode
         options:
           - opencode/big-pickle
@@ -103,10 +103,10 @@ on:
 # When a new run is triggered, it will queue until the previous pending run completes.
 concurrency:
   cancel-in-progress: false
-  group: opencode-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
+  group: opencode-agent-local-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
 env:
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
-  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+  OPENCODE_MODEL_DEFAULT: opencode/gemini-3.1-pro
 jobs:
   cogni-ai:
     name: Cogni AI
