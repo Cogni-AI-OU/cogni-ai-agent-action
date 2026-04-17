@@ -9,8 +9,8 @@ The OpenCode workflow runs a generic OpenCode agent without loading any speciali
 1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
-You can trigger the agent via `workflow_dispatch`, or via issue or PR comments using
-commands like `/oc`, `/opencode`, or `/review`.
+You can trigger the agent via `workflow_dispatch`, or via issue or PR
+comments using commands like `/oc`, `/opencode`, or `/review`.
 
 ### Basic workflow
 
