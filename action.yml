@@ -262,7 +262,7 @@ runs:
           {
             "$schema": "https://opencode.ai/config.json",
             "instructions": [
-              "AGENTS.md",
+              "AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.md",
               "${{ runner.temp }}/.skills/AGENTS.md"
             ],
