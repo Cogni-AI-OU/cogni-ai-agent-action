@@ -32,6 +32,7 @@ inputs:
         git*: allow
         hexdump*: allow
         jq*: allow
+        ls*: allow
         links*: allow
         mawk*: allow
         pipx*: allow
@@ -39,6 +40,7 @@ inputs:
         printf*: allow
         sed*: allow
         set*: allow
+        stat*: allow
         time*: allow
         timeout*: allow
         touch*: allow
