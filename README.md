@@ -48,7 +48,7 @@ jobs:
 
 ### Advanced workflow
 
-You can also trigger the agent via issue or PR comments:
+You can also trigger the agent via issue or PR comments using commands like `/co`, `/cogni`, or `/review`:
 
 ```yaml
 ---
@@ -133,6 +133,7 @@ jobs:
 | Input              | Description                 | Default                | Required |
 | ------------------ | --------------------------- | ---------------------- | -------- |
 | `agent`            | Agent to use                | `cogni-ai-architect`   | No       |
+| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review`   | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gpt-5-codex` | No       |
 | `opencode-api-key` | API key for OpenCode        | —                      | **Yes**  |
 | `prompt`           | Prompt to pass to the agent | `''`                   | No       |
