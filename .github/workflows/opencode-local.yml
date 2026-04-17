@@ -1,0 +1,182 @@
+---
+# OpenCode Local workflow — runs the local composite action (./opencode/action.yml) as a wrapper for OpenCode.
+# Triggered by /oc, /opencode, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
+# Note: Keep keys and envs in alphabetical order.
+name: OpenCode Local
+on:
+  issue_comment:
+    types:
+      - created
+      - edited
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
+  workflow_call:
+    inputs:
+      agent:
+        default: ''
+        description: Agent to use.
+        required: false
+        type: string
+      model:
+        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
+        description: Model to use for OpenCode
+        required: false
+        type: string
+      prompt:
+        default: ''
+        description: Custom prompt to override the default prompt
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      agent:
+        default: ''
+        description: Agent to use.
+        required: false
+        type: string
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        options:
+          - opencode/big-pickle
+          - opencode/claude-3-5-haiku
+          - opencode/claude-haiku-4-5
+          - opencode/claude-opus-4-1
+          - opencode/claude-opus-4-5
+          - opencode/claude-opus-4-6
+          - opencode/claude-sonnet-4
+          - opencode/claude-sonnet-4-5
+          - opencode/claude-sonnet-4-6
+          - opencode/gemini-3.1-pro
+          - opencode/gemini-3-flash
+          - opencode/glm-4.6
+          - opencode/glm-4.7-free
+          - opencode/glm-5
+          - opencode/glm-5.1
+          - opencode/gpt-5
+          - opencode/gpt-5-codex
+          - opencode/gpt-5-nano
+          - opencode/gpt-5.1
+          - opencode/gpt-5.1-codex
+          - opencode/gpt-5.1-codex-max
+          - opencode/gpt-5.1-codex-mini
+          - opencode/gpt-5.2
+          - opencode/gpt-5.2-codex
+          - opencode/gpt-5.3-codex
+          - opencode/gpt-5.3-codex-spark
+          - opencode/gpt-5.4
+          - opencode/gpt-5.4-mini
+          - opencode/gpt-5.4-nano
+          - opencode/gpt-5.4-pro
+          - opencode/grok-code
+          - opencode/kimi-k2
+          - opencode/kimi-k2-thinking
+          - opencode/kimi-k2.5
+          - opencode/minimax-m2.1-free
+          - opencode/minimax-m2.5
+          - opencode/minimax-m2.5-free
+          - opencode/nemotron-3-super-free
+          - opencode/qwen3-coder
+          - opencode/qwen3.6-plus-free
+          # Grok models (xAI)
+          - xai/grok-4-1-fast-non-reasoning  # Fast responses, 2M context
+          - xai/grok-4-1-fast-reasoning  # Tool-calling + reasoning, 2M context
+          - xai/grok-4.20-0309-non-reasoning  # Flagship, 2M context
+          - xai/grok-4.20-0309-reasoning  # Flagship + reasoning, 2M context
+          - xai/grok-code-fast-1  # Agentic coding + reasoning, 256K context
+        required: false
+        type: choice
+      prompt:
+        description: Custom prompt to override the default prompt
+        required: false
+        default: ''
+# Prevent concurrent runs on the same branch to avoid push conflicts.
+# When a new run is triggered, it will queue until the previous pending run completes.
+concurrency:
+  cancel-in-progress: false
+  group: opencode-local-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
+env:
+  OPENCODE_AGENT_DEFAULT: ''
+  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+jobs:
+  opencode:
+    name: OpenCode
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false  # Prevents duplicate Authorization header
+      - uses: actions/cache@v5.0.1
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit|
+      - uses: actions/setup-python@v6.1.0
+        with:
+          cache: pip
+          cache-dependency-path: .devcontainer/requirements.txt
+          python-version: '3.12'
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - name: Cache installed dependencies
+        id: cache-dependencies
+        uses: actions/cache@v5.0.1
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: pip install -r .devcontainer/requirements.txt
+      - name: Resolve prompt from comment
+        id: prompt
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          PROMPT_INPUT: ${{ inputs.prompt }}
+        run: |
+          set -euo pipefail
+          prompt="${PROMPT_INPUT:-}"
+          if [ -z "$prompt" ]; then
+            prompt="${COMMENT_BODY:-}"
+          fi
+          {
+            echo 'prompt<<EOF'
+            printf '%s\n' "$prompt"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+      - name: Run OpenCode agent
+        id: opencode
+        uses: ./opencode
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          agent: >-
+            ${{ inputs.agent || '' }}
+          model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: ${{ steps.prompt.outputs.prompt }}
+      - name: Annotate prompt and output
+        env:
+          OPENCODE_PROMPT: ${{ steps.prompt.outputs.prompt }}
+          OPENCODE_OUTPUT: ${{ steps.opencode.outputs.response }}
+        run: |
+          set -euo pipefail
+          escape() {
+            local value="$1"
+            value=${value//'%'/'%25'}
+            value=${value//$'\r'/'%0D'}
+            value=${value//$'\n'/'%0A'}
+            printf '%s' "$value"
+          }
+          echo "::notice title=OpenCode prompt::$(escape "$OPENCODE_PROMPT")"
+          echo "::notice title=OpenCode output::$(escape "${OPENCODE_OUTPUT:-}")"
+      - name: Print logs
+        if: failure()
+        run: grep -v INFO ~/.local/share/opencode/log/* || true
