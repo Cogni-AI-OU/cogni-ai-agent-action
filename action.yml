@@ -310,3 +310,4 @@ runs:
         agent: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        use_github_token: false
