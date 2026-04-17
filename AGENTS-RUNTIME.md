@@ -25,12 +25,12 @@ Check `github.event_name` and payload to identify trigger source:
 
 - **General PR comment** (`issue_comment`):
   - Condition: `if: ${{ github.event.issue.pull_request }}`
-  - Reply Method: `gh pr comment`
+  - Reply Method: `gh pr comment` or `gh pr review` for batching broad feedback and setting state.
 - **Issue comment** (`issue_comment`):
   - Condition: `if: ${{ !github.event.issue.pull_request }}`
   - Reply Method: `gh issue comment`
 - **Inline code review** (`pull_request_review_comment`):
-  - Reply Method: `gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."`
+  - Reply Method: Use `gh pr review` to submit batched inline feedback, or `gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."` for single-line replies.
 
 **Routing Invariants**:
 
@@ -56,6 +56,12 @@ the agent MUST integrate remote changes with a merge commit workflow.
 4. If base changes must be integrated into head, merge base explicitly:
    `git fetch origin <base-branch> && git merge --no-ff origin/<base-branch>`.
 5. Resolve conflicts, commit merge if required, then push normally (no force).
+
+### Restricted Shell & Ephemeral Environment
+
+- **Ephemeral State**: Any uncommitted modifications or tools installed outside of the project directory will be immediately lost when the runner terminates. ALL intended state changes must be committed and pushed to the remote branch to persist.
+- **Batching PR Feedback**: You SHOULD use `gh pr review` to batch broad feedback, resolve threads, and assert review states (`APPROVE`, `REQUEST_CHANGES`, `COMMENT`). Using batched reviews prevents notification spam and integrates natively with branch protection gates.
+- **Restricted Command Allowlist**: You are operating in a highly restricted shell environment where arbitrary commands are denied by default. Only explicitly allowed tools can be invoked.
 
 ### General Constraints
 

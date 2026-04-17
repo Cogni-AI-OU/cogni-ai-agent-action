@@ -28,7 +28,7 @@ inputs:
         cp*: allow
         ex*: allow
         gh*: allow
-        gh pr review*: deny
+        gh pr review*: allow  # For batched feedback and setting review states
         git*: allow
         hexdump*: allow
         jq*: allow
