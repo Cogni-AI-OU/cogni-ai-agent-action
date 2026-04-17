@@ -1,0 +1,234 @@
+---
+# See: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+author: Cogni AI OU
+branding:
+  color: blue
+  icon: cpu
+description: Runs OpenCode Agent
+inputs:
+  agent:
+    description: Agent to use.
+    required: false
+  model:
+    default: opencode/gpt-5-codex
+    description: Model to use for OpenCode.
+    required: false
+  mentions:
+    default: /co,/cogni,/review
+    description: Comma-separated trigger mentions for OpenCode.
+    required: false
+  opencode-api-key:
+    description: API key for OpenCode.
+    required: true
+  permissions:
+    default: |-
+      bash:
+        '*': deny
+        ansible*: allow
+        ansible-galaxy*: allow
+        ansible-playbook*: allow
+        awk*: allow
+        continue*: allow
+        cp*: allow
+        ex*: allow
+        gh*: allow
+        gh pr review*: allow  # For batched feedback and setting review states
+        git*: allow
+        hexdump*: allow
+        jq*: allow
+        ls*: allow
+        links*: allow
+        mawk*: allow
+        pipx*: allow
+        pre-commit*: allow
+        printf*: allow
+        sed*: allow
+        set*: allow
+        stat*: allow
+        time*: allow
+        timeout*: allow
+        touch*: allow
+        true*: allow
+        vim*: allow
+    description: Permissions configuration for OpenCode.
+    required: false
+  prompt:
+    default: ''
+    description: Prompt to pass to the agent.
+    required: false
+name: OpenCode Agent
+outputs:
+  response:
+    description: The response from the agent.
+    value: ${{ steps.opencode.outputs.response }}
+runs:
+  using: composite
+  steps:
+    - name: Check conditions
+      id: check
+      shell: bash
+      env:
+        IS_WORKFLOW_DISPATCH: >-
+          ${{ github.event_name == 'workflow_dispatch' }}
+        IS_WORKFLOW_CALL: >-
+          ${{ github.event_name == 'workflow_call' }}
+        IS_ISSUE: >-
+          ${{
+            github.event_name == 'issues' &&
+            !endsWith(github.actor, '[bot]') &&
+            contains(
+              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
+              github.event.issue.author_association
+            ) &&
+            (
+              contains(github.event.issue.body, '/co ') ||
+              startsWith(github.event.issue.body, '/co ') ||
+              endsWith(github.event.issue.body, '/co') ||
+              github.event.issue.body == '/co' ||
+              contains(github.event.issue.body, '/cogni ') ||
+              startsWith(github.event.issue.body, '/cogni ') ||
+              endsWith(github.event.issue.body, '/cogni') ||
+              github.event.issue.body == '/cogni' ||
+              contains(github.event.issue.body, '/review ') ||
+              startsWith(github.event.issue.body, '/review ') ||
+              endsWith(github.event.issue.body, '/review') ||
+              github.event.issue.body == '/review' ||
+              contains(github.event.issue.body, '@opencode-agent') ||
+              contains(github.event.issue.body, '@OpenCode-Agent')
+            )
+          }}
+        IS_ISSUE_COMMENT: >-
+          ${{
+            github.event_name == 'issue_comment' &&
+            !endsWith(github.actor, '[bot]') &&
+            contains(
+              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
+              github.event.comment.author_association
+            ) &&
+            (
+              contains(github.event.comment.body, '/co ') ||
+              startsWith(github.event.comment.body, '/co ') ||
+              endsWith(github.event.comment.body, '/co') ||
+              github.event.comment.body == '/co' ||
+              contains(github.event.comment.body, '/cogni ') ||
+              startsWith(github.event.comment.body, '/cogni ') ||
+              endsWith(github.event.comment.body, '/cogni') ||
+              github.event.comment.body == '/cogni' ||
+              contains(github.event.comment.body, '/review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, '/review') ||
+              github.event.comment.body == '/review' ||
+              contains(github.event.comment.body, '@opencode-agent') ||
+              contains(github.event.comment.body, '@OpenCode-Agent')
+            )
+          }}
+        IS_PR_REVIEW_COMMENT: >-
+          ${{
+            github.event_name == 'pull_request_review_comment' &&
+            !endsWith(github.actor, '[bot]') &&
+            contains(
+              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
+              github.event.comment.author_association
+            ) &&
+            (
+              contains(github.event.comment.body, '/co ') ||
+              startsWith(github.event.comment.body, '/co ') ||
+              endsWith(github.event.comment.body, '/co') ||
+              github.event.comment.body == '/co' ||
+              contains(github.event.comment.body, '/cogni ') ||
+              startsWith(github.event.comment.body, '/cogni ') ||
+              endsWith(github.event.comment.body, '/cogni') ||
+              github.event.comment.body == '/cogni' ||
+              contains(github.event.comment.body, '/review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, '/review') ||
+              github.event.comment.body == '/review' ||
+              contains(github.event.comment.body, '@opencode-agent') ||
+              contains(github.event.comment.body, '@OpenCode-Agent')
+            )
+          }}
+        IS_PR: >-
+          ${{
+            (github.event_name == 'pull_request' ||
+             github.event_name == 'pull_request_target') &&
+            (
+              (!endsWith(github.actor, '[bot]') &&
+                contains(
+                  fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
+                  github.event.pull_request.author_association
+                )
+              ) ||
+              (
+                contains(
+                  fromJson('["Copilot","copilot[bot]","copilot-swe-agent"]'),
+                  github.event.pull_request.user.login
+                ) &&
+                github.event.pull_request.author_association == 'CONTRIBUTOR'
+              )
+            )
+          }}
+      run: |
+        if [ "$IS_WORKFLOW_DISPATCH" == "true" ] || \
+           [ "$IS_WORKFLOW_CALL" == "true" ] || \
+           [ "$IS_ISSUE" == "true" ] || \
+           [ "$IS_ISSUE_COMMENT" == "true" ] || \
+           [ "$IS_PR_REVIEW_COMMENT" == "true" ] || \
+           [ "$IS_PR" == "true" ]; then
+          echo "run=true" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Resolve prompt
+      if: steps.check.outputs.run == 'true'
+      id: prompt
+      shell: bash
+      env:
+        COMMENT_BODY: >-
+          ${{ github.event_name == 'issues' && github.event.issue.body ||
+          github.event.comment.body || '' }}
+        ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || '' }}
+        PROMPT_INPUT: ${{ inputs.prompt }}
+      run: |
+        set -euo pipefail
+        prompt="${PROMPT_INPUT:-}"
+        if [ -z "$prompt" ]; then
+          prompt="${COMMENT_BODY:-}"
+        fi
+        if [ -n "${ISSUE_NUMBER:-}" ]; then
+          if [ -n "$prompt" ]; then
+            prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
+          else
+            prompt="Related to issue/PR #${ISSUE_NUMBER}"
+          fi
+        fi
+        {
+          echo 'prompt<<EOF'
+          printf '%s\n' "$prompt"
+          echo 'EOF'
+        } >> "$GITHUB_OUTPUT"
+    - name: Convert permissions to JSON
+      if: steps.check.outputs.run == 'true'
+      id: permissions
+      shell: python
+      env:
+        PERMISSIONS_YAML: ${{ inputs.permissions }}
+      run: |
+        import os
+        import json
+        import yaml
+        permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"json={json.dumps(permissions)}\n")
+    - name: Run opencode
+      if: steps.check.outputs.run == 'true'
+      id: opencode
+      uses: anomalyco/opencode/github@v1.4.3
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
+        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
+        OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
+      with:
+        agent: ${{ inputs.agent }}
+        mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
+        model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
+        prompt: ${{ steps.prompt.outputs.prompt }}
+        use_github_token: false
