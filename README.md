@@ -13,6 +13,8 @@ Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a
 1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
+You can trigger the agent via `workflow_dispatch`, or via issue or PR comments using commands like `/co`, `/cogni`, or `/review`.
+
 ### Basic workflow
 
 The default Cogni AI agent workflow loads specialized agents, skills, and instructions.
@@ -54,7 +56,7 @@ For running a generic OpenCode agent without specialized skills or instructions,
 
 ### Advanced workflow
 
-You can also trigger the agent via issue or PR comments using commands like `/co`, `/cogni`, or `/review`:
+An example of a more advanced configuration:
 
 ```yaml
 ---
