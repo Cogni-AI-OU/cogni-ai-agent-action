@@ -64,6 +64,28 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Prepare triggers
+      id: triggers
+      shell: bash
+      run: |
+        cat <<'EOF' >> "$GITHUB_ENV"
+        TRIGGERS_EXACT=${{
+          format('["{0}","@opencode-agent","@OpenCode-Agent"]',
+          replace(inputs.mentions, ',', '","'))
+        }}
+        TRIGGERS_STARTS=${{
+          format('["{0} ","@opencode-agent ","@OpenCode-Agent "]',
+          replace(inputs.mentions, ',', ' ","'))
+        }}
+        TRIGGERS_ENDS=${{
+          format('[" {0}"," @opencode-agent"," @OpenCode-Agent"]',
+          replace(inputs.mentions, ',', '"," '))
+        }}
+        TRIGGERS_CONTAINS=${{
+          format('[" {0} "," @opencode-agent "," @OpenCode-Agent "]',
+          replace(inputs.mentions, ',', ' "," '))
+        }}
+        EOF
     - name: Check conditions
       id: check
       shell: bash
@@ -81,20 +103,10 @@ runs:
               github.event.issue.author_association
             ) &&
             (
-              contains(github.event.issue.body, '/co ') ||
-              startsWith(github.event.issue.body, '/co ') ||
-              endsWith(github.event.issue.body, '/co') ||
-              github.event.issue.body == '/co' ||
-              contains(github.event.issue.body, '/cogni ') ||
-              startsWith(github.event.issue.body, '/cogni ') ||
-              endsWith(github.event.issue.body, '/cogni') ||
-              github.event.issue.body == '/cogni' ||
-              contains(github.event.issue.body, '/review ') ||
-              startsWith(github.event.issue.body, '/review ') ||
-              endsWith(github.event.issue.body, '/review') ||
-              github.event.issue.body == '/review' ||
-              contains(github.event.issue.body, '@opencode-agent') ||
-              contains(github.event.issue.body, '@OpenCode-Agent')
+              contains(fromJson(env.TRIGGERS_CONTAINS), github.event.issue.body) ||
+              contains(fromJson(env.TRIGGERS_STARTS), github.event.issue.body) ||
+              contains(fromJson(env.TRIGGERS_ENDS), github.event.issue.body) ||
+              contains(fromJson(env.TRIGGERS_EXACT), github.event.issue.body)
             )
           }}
         IS_ISSUE_COMMENT: >-
@@ -106,20 +118,10 @@ runs:
               github.event.comment.author_association
             ) &&
             (
-              contains(github.event.comment.body, '/co ') ||
-              startsWith(github.event.comment.body, '/co ') ||
-              endsWith(github.event.comment.body, '/co') ||
-              github.event.comment.body == '/co' ||
-              contains(github.event.comment.body, '/cogni ') ||
-              startsWith(github.event.comment.body, '/cogni ') ||
-              endsWith(github.event.comment.body, '/cogni') ||
-              github.event.comment.body == '/cogni' ||
-              contains(github.event.comment.body, '/review ') ||
-              startsWith(github.event.comment.body, '/review ') ||
-              endsWith(github.event.comment.body, '/review') ||
-              github.event.comment.body == '/review' ||
-              contains(github.event.comment.body, '@opencode-agent') ||
-              contains(github.event.comment.body, '@OpenCode-Agent')
+              contains(fromJson(env.TRIGGERS_CONTAINS), github.event.comment.body) ||
+              contains(fromJson(env.TRIGGERS_STARTS), github.event.comment.body) ||
+              contains(fromJson(env.TRIGGERS_ENDS), github.event.comment.body) ||
+              contains(fromJson(env.TRIGGERS_EXACT), github.event.comment.body)
             )
           }}
         IS_PR_REVIEW_COMMENT: >-
@@ -131,20 +133,10 @@ runs:
               github.event.comment.author_association
             ) &&
             (
-              contains(github.event.comment.body, '/co ') ||
-              startsWith(github.event.comment.body, '/co ') ||
-              endsWith(github.event.comment.body, '/co') ||
-              github.event.comment.body == '/co' ||
-              contains(github.event.comment.body, '/cogni ') ||
-              startsWith(github.event.comment.body, '/cogni ') ||
-              endsWith(github.event.comment.body, '/cogni') ||
-              github.event.comment.body == '/cogni' ||
-              contains(github.event.comment.body, '/review ') ||
-              startsWith(github.event.comment.body, '/review ') ||
-              endsWith(github.event.comment.body, '/review') ||
-              github.event.comment.body == '/review' ||
-              contains(github.event.comment.body, '@opencode-agent') ||
-              contains(github.event.comment.body, '@OpenCode-Agent')
+              contains(fromJson(env.TRIGGERS_CONTAINS), github.event.comment.body) ||
+              contains(fromJson(env.TRIGGERS_STARTS), github.event.comment.body) ||
+              contains(fromJson(env.TRIGGERS_ENDS), github.event.comment.body) ||
+              contains(fromJson(env.TRIGGERS_EXACT), github.event.comment.body)
             )
           }}
         IS_PR: >-
