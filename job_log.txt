@@ -1,0 +1,868 @@
+﻿2026-04-17T15:48:55.7228761Z Current runner version: '2.333.1'
+2026-04-17T15:48:55.7251731Z ##[group]Runner Image Provisioner
+2026-04-17T15:48:55.7252665Z Hosted Compute Agent
+2026-04-17T15:48:55.7253211Z Version: 20260213.493
+2026-04-17T15:48:55.7253759Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-04-17T15:48:55.7254726Z Build Date: 2026-02-13T00:28:41Z
+2026-04-17T15:48:55.7255385Z Worker ID: {8e6ba74a-ad21-4d9b-9e77-dc3dd6b35dbf}
+2026-04-17T15:48:55.7256006Z Azure Region: westus3
+2026-04-17T15:48:55.7256657Z ##[endgroup]
+2026-04-17T15:48:55.7258002Z ##[group]Operating System
+2026-04-17T15:48:55.7258570Z Ubuntu
+2026-04-17T15:48:55.7259115Z 24.04.4
+2026-04-17T15:48:55.7259532Z LTS
+2026-04-17T15:48:55.7260057Z ##[endgroup]
+2026-04-17T15:48:55.7260610Z ##[group]Runner Image
+2026-04-17T15:48:55.7261138Z Image: ubuntu-24.04
+2026-04-17T15:48:55.7261625Z Version: 20260413.86.1
+2026-04-17T15:48:55.7262801Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-04-17T15:48:55.7264289Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-04-17T15:48:55.7265550Z ##[endgroup]
+2026-04-17T15:48:55.7266723Z ##[group]GITHUB_TOKEN Permissions
+2026-04-17T15:48:55.7268686Z Contents: write
+2026-04-17T15:48:55.7269236Z Issues: write
+2026-04-17T15:48:55.7269689Z Metadata: read
+2026-04-17T15:48:55.7270309Z PullRequests: write
+2026-04-17T15:48:55.7270813Z ##[endgroup]
+2026-04-17T15:48:55.7273063Z Secret source: Actions
+2026-04-17T15:48:55.7273847Z Prepare workflow directory
+2026-04-17T15:48:55.7602249Z Prepare all required actions
+2026-04-17T15:48:55.7641274Z Getting action download info
+2026-04-17T15:48:56.3163942Z Download action repository 'actions/checkout@v6' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+2026-04-17T15:48:56.4267177Z Download action repository 'actions/setup-python@v6.1.0' (SHA:83679a892e2d95755f2dac6acb0bfd1e9ac5d548)
+2026-04-17T15:48:56.5678120Z Download action repository 'actions/cache@v5.0.1' (SHA:9255dc7a253b0ccc959486e2bca901246202afeb)
+2026-04-17T15:48:56.7335319Z Download action repository 'Cogni-AI-OU/cogni-ai-agent-action@main' (SHA:95f238a4c74074187439cc2f20b4ffb535718373)
+2026-04-17T15:48:57.3952699Z Getting action download info
+2026-04-17T15:48:57.6010238Z Download action repository 'anomalyco/opencode@v1.4.3' (SHA:877be7e8e04142cd8fbebcb5e6c4b9617bf28cce)
+2026-04-17T15:49:00.6313288Z Getting action download info
+2026-04-17T15:49:00.8061720Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-04-17T15:49:00.9446909Z Complete job name: Run Cogni AI agent
+2026-04-17T15:49:01.0121427Z ##[group]Run actions/checkout@v6
+2026-04-17T15:49:01.0122002Z with:
+2026-04-17T15:49:01.0122213Z   persist-credentials: false
+2026-04-17T15:49:01.0122469Z   repository: EA31337/ansible-role-wine
+2026-04-17T15:49:01.0122912Z   token: ***
+2026-04-17T15:49:01.0123093Z   ssh-strict: true
+2026-04-17T15:49:01.0123276Z   ssh-user: git
+2026-04-17T15:49:01.0123453Z   clean: true
+2026-04-17T15:49:01.0123663Z   sparse-checkout-cone-mode: true
+2026-04-17T15:49:01.0123923Z   fetch-depth: 1
+2026-04-17T15:49:01.0124108Z   fetch-tags: false
+2026-04-17T15:49:01.0124303Z   show-progress: true
+2026-04-17T15:49:01.0124743Z   lfs: false
+2026-04-17T15:49:01.0124919Z   submodules: false
+2026-04-17T15:49:01.0125116Z   set-safe-directory: true
+2026-04-17T15:49:01.0125578Z ##[endgroup]
+2026-04-17T15:49:01.1030477Z Syncing repository: EA31337/ansible-role-wine
+2026-04-17T15:49:01.1031793Z ##[group]Getting Git version info
+2026-04-17T15:49:01.1032401Z Working directory is '/home/runner/work/ansible-role-wine/ansible-role-wine'
+2026-04-17T15:49:01.1033024Z [command]/usr/bin/git version
+2026-04-17T15:49:01.1053738Z git version 2.53.0
+2026-04-17T15:49:01.1108204Z ##[endgroup]
+2026-04-17T15:49:01.1121898Z Temporarily overriding HOME='/home/runner/work/_temp/aad982d1-0938-4264-ae9c-69e8a632f5bd' before making global git config changes
+2026-04-17T15:49:01.1123274Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-17T15:49:01.1127364Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ansible-role-wine/ansible-role-wine
+2026-04-17T15:49:01.1159932Z Deleting the contents of '/home/runner/work/ansible-role-wine/ansible-role-wine'
+2026-04-17T15:49:01.1163665Z ##[group]Initializing the repository
+2026-04-17T15:49:01.1168623Z [command]/usr/bin/git init /home/runner/work/ansible-role-wine/ansible-role-wine
+2026-04-17T15:49:01.1273681Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-04-17T15:49:01.1275174Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-04-17T15:49:01.1276444Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-04-17T15:49:01.1277349Z hint: call:
+2026-04-17T15:49:01.1277783Z hint:
+2026-04-17T15:49:01.1278337Z hint: 	git config --global init.defaultBranch <name>
+2026-04-17T15:49:01.1278942Z hint:
+2026-04-17T15:49:01.1279552Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-04-17T15:49:01.1280598Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-04-17T15:49:01.1281355Z hint:
+2026-04-17T15:49:01.1281755Z hint: 	git branch -m <name>
+2026-04-17T15:49:01.1282191Z hint:
+2026-04-17T15:49:01.1282880Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-04-17T15:49:01.1284230Z Initialized empty Git repository in /home/runner/work/ansible-role-wine/ansible-role-wine/.git/
+2026-04-17T15:49:01.1287239Z [command]/usr/bin/git remote add origin https://github.com/EA31337/ansible-role-wine
+2026-04-17T15:49:01.1318021Z ##[endgroup]
+2026-04-17T15:49:01.1318670Z ##[group]Disabling automatic garbage collection
+2026-04-17T15:49:01.1322759Z [command]/usr/bin/git config --local gc.auto 0
+2026-04-17T15:49:01.1349823Z ##[endgroup]
+2026-04-17T15:49:01.1350389Z ##[group]Setting up auth
+2026-04-17T15:49:01.1351088Z Removing SSH command configuration
+2026-04-17T15:49:01.1357285Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-17T15:49:01.1386882Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-17T15:49:01.1681845Z Removing HTTP extra header
+2026-04-17T15:49:01.1686759Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-17T15:49:01.1715391Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-17T15:49:01.1919214Z Removing includeIf entries pointing to credentials config files
+2026-04-17T15:49:01.1925345Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-17T15:49:01.1954551Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-17T15:49:01.2169576Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-04-17T15:49:01.2204983Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git.path /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.2233892Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.2262985Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.2292169Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.2318050Z ##[endgroup]
+2026-04-17T15:49:01.2318423Z ##[group]Fetching the repository
+2026-04-17T15:49:01.2328869Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +23ee1680a2a11e5ab88a5fb4cd9ab119bdc66e9b:refs/remotes/origin/master
+2026-04-17T15:49:01.7415256Z From https://github.com/EA31337/ansible-role-wine
+2026-04-17T15:49:01.7415942Z  * [new ref]         23ee1680a2a11e5ab88a5fb4cd9ab119bdc66e9b -> origin/master
+2026-04-17T15:49:01.7449381Z [command]/usr/bin/git branch --list --remote origin/master
+2026-04-17T15:49:01.7473105Z   origin/master
+2026-04-17T15:49:01.7481622Z [command]/usr/bin/git rev-parse refs/remotes/origin/master
+2026-04-17T15:49:01.7503185Z 23ee1680a2a11e5ab88a5fb4cd9ab119bdc66e9b
+2026-04-17T15:49:01.7507549Z ##[endgroup]
+2026-04-17T15:49:01.7507998Z ##[group]Determining the checkout info
+2026-04-17T15:49:01.7508879Z ##[endgroup]
+2026-04-17T15:49:01.7512897Z [command]/usr/bin/git sparse-checkout disable
+2026-04-17T15:49:01.7553682Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-04-17T15:49:01.7578338Z ##[group]Checking out the ref
+2026-04-17T15:49:01.7583363Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-04-17T15:49:01.7669161Z Reset branch 'master'
+2026-04-17T15:49:01.7671880Z branch 'master' set up to track 'origin/master'.
+2026-04-17T15:49:01.7676696Z ##[endgroup]
+2026-04-17T15:49:01.7711495Z [command]/usr/bin/git log -1 --format=%H
+2026-04-17T15:49:01.7740866Z 23ee1680a2a11e5ab88a5fb4cd9ab119bdc66e9b
+2026-04-17T15:49:01.7750825Z ##[group]Removing auth
+2026-04-17T15:49:01.7751272Z Removing SSH command configuration
+2026-04-17T15:49:01.7755176Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-17T15:49:01.7786421Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-17T15:49:01.8022802Z Removing HTTP extra header
+2026-04-17T15:49:01.8028464Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-17T15:49:01.8060610Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-17T15:49:01.8291991Z Removing includeIf entries pointing to credentials config files
+2026-04-17T15:49:01.8294995Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-17T15:49:01.8318138Z includeif.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git.path
+2026-04-17T15:49:01.8319314Z includeif.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git/worktrees/*.path
+2026-04-17T15:49:01.8320284Z includeif.gitdir:/github/workspace/.git.path
+2026-04-17T15:49:01.8325621Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-04-17T15:49:01.8331142Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git.path
+2026-04-17T15:49:01.8354905Z /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8363985Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git.path /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8406483Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git/worktrees/*.path
+2026-04-17T15:49:01.8427489Z /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8436088Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/ansible-role-wine/ansible-role-wine/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8469892Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-04-17T15:49:01.8493763Z /github/runner_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8503512Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8531866Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-04-17T15:49:01.8552224Z /github/runner_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8559224Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config
+2026-04-17T15:49:01.8588520Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-17T15:49:01.8794834Z Removing credentials config '/home/runner/work/_temp/git-credentials-496d4ba2-078c-43bd-8e04-731dbe9cd2fc.config'
+2026-04-17T15:49:01.8801877Z ##[endgroup]
+2026-04-17T15:49:01.9008386Z ##[group]Run actions/setup-python@v6.1.0
+2026-04-17T15:49:01.9008683Z with:
+2026-04-17T15:49:01.9008891Z   python-version: 3.12
+2026-04-17T15:49:01.9009094Z   check-latest: false
+2026-04-17T15:49:01.9009407Z   token: ***
+2026-04-17T15:49:01.9009596Z   update-environment: true
+2026-04-17T15:49:01.9009814Z   allow-prereleases: false
+2026-04-17T15:49:01.9010029Z   freethreaded: false
+2026-04-17T15:49:01.9010227Z ##[endgroup]
+2026-04-17T15:49:02.0279088Z ##[group]Installed versions
+2026-04-17T15:49:02.0368215Z (node:2338) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-04-17T15:49:02.0369548Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-17T15:49:02.0370333Z Successfully set up CPython (3.12.13)
+2026-04-17T15:49:02.0371176Z ##[endgroup]
+2026-04-17T15:49:02.1089179Z ##[group]Run actions/cache@v5.0.1
+2026-04-17T15:49:02.1089462Z with:
+2026-04-17T15:49:02.1089636Z   path: ~/.local
+2026-04-17T15:49:02.1089991Z   key: Linux-pip-df01a71cc268d9a344c5b8a534ecaedd7117903391f58c51c11cb3185ec161a6
+2026-04-17T15:49:02.1090413Z   enableCrossOsArchive: false
+2026-04-17T15:49:02.1090648Z   fail-on-cache-miss: false
+2026-04-17T15:49:02.1090860Z   lookup-only: false
+2026-04-17T15:49:02.1091055Z   save-always: false
+2026-04-17T15:49:02.1091231Z env:
+2026-04-17T15:49:02.1091461Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:02.1091911Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:02.1092319Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:02.1092680Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:02.1093055Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:02.1093461Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:02.1093761Z ##[endgroup]
+2026-04-17T15:49:02.4507076Z Cache hit for: Linux-pip-df01a71cc268d9a344c5b8a534ecaedd7117903391f58c51c11cb3185ec161a6
+2026-04-17T15:49:03.7163211Z Received 16777216 of 97875211 (17.1%), 16.0 MBs/sec
+2026-04-17T15:49:04.4802128Z Received 97875211 of 97875211 (100.0%), 52.9 MBs/sec
+2026-04-17T15:49:04.4804166Z Cache Size: ~93 MB (97875211 B)
+2026-04-17T15:49:04.4852500Z [command]/usr/bin/tar -xf /home/runner/work/_temp/5b7b1167-e29f-4720-bbc4-cd378503ecda/cache.tzst -P -C /home/runner/work/ansible-role-wine/ansible-role-wine --use-compress-program unzstd
+2026-04-17T15:49:06.9628784Z Cache restored successfully
+2026-04-17T15:49:06.9752105Z Cache restored from key: Linux-pip-df01a71cc268d9a344c5b8a534ecaedd7117903391f58c51c11cb3185ec161a6
+2026-04-17T15:49:06.9899144Z ##[group]Run echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+2026-04-17T15:49:06.9899565Z [36;1mecho "$HOME/.local/bin" >> "$GITHUB_PATH"[0m
+2026-04-17T15:49:06.9928633Z shell: /usr/bin/bash -e {0}
+2026-04-17T15:49:06.9928884Z env:
+2026-04-17T15:49:06.9929142Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:06.9929572Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:06.9929984Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:06.9930353Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:06.9930739Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:06.9931127Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:06.9931440Z ##[endgroup]
+2026-04-17T15:49:07.0150153Z ##[group]Run Cogni-AI-OU/cogni-ai-agent-action@main
+2026-04-17T15:49:07.0150488Z with:
+2026-04-17T15:49:07.0150692Z   model: opencode/gpt-5-codex
+2026-04-17T15:49:07.0151240Z   opencode-api-key: ***
+2026-04-17T15:49:07.0152680Z   permissions: bash:
+  '*': deny
+  ansible*: allow
+  ansible-galaxy*: allow
+  ansible-playbook*: allow
+  awk*: allow
+  continue*: allow
+  cp*: allow
+  docker*: allow
+  ex*: allow
+  gh*: allow
+  gh pr review*: allow
+  git*: allow
+  hexdump*: allow
+  jq*: allow
+  links*: allow
+  mawk*: allow
+  molecule*: allow
+  pipx*: allow
+  pre-commit*: allow
+  printf*: allow
+  sed*: allow
+  set*: allow
+  time*: allow
+  timeout*: allow
+  touch*: allow
+  true*: allow
+  vim*: allow
+2026-04-17T15:49:07.0155045Z   prompt: Focus on your instructions that were given and tell about inconsistencies and which files that were requested to load are missing and what was their expected location.
+2026-04-17T15:49:07.0155763Z env:
+2026-04-17T15:49:07.0156058Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0156483Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:07.0156889Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0157260Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0157628Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0158012Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:07.0158359Z ##[endgroup]
+2026-04-17T15:49:07.0245535Z ##[group]Run if [ "$IS_REVIEW_ISSUE" == "true" ] || \
+2026-04-17T15:49:07.0245901Z [36;1mif [ "$IS_REVIEW_ISSUE" == "true" ] || \[0m
+2026-04-17T15:49:07.0246199Z [36;1m   [ "$IS_REVIEW_PR" == "true" ]; then[0m
+2026-04-17T15:49:07.0246494Z [36;1m  echo "run=true" >> "$GITHUB_OUTPUT"[0m
+2026-04-17T15:49:07.0246841Z [36;1m  echo "agent=cogni-ai-reviewer" >> "$GITHUB_OUTPUT"[0m
+2026-04-17T15:49:07.0247217Z [36;1melif [ "$IS_WORKFLOW_DISPATCH" == "true" ] || \[0m
+2026-04-17T15:49:07.0247544Z [36;1m     [ "$IS_WORKFLOW_CALL" == "true" ] || \[0m
+2026-04-17T15:49:07.0247832Z [36;1m     [ "$IS_ISSUE" == "true" ] || \[0m
+2026-04-17T15:49:07.0248117Z [36;1m     [ "$IS_ISSUE_COMMENT" == "true" ] || \[0m
+2026-04-17T15:49:07.0248418Z [36;1m     [ "$IS_PR_REVIEW_COMMENT" == "true" ] || \[0m
+2026-04-17T15:49:07.0248710Z [36;1m     [ "$IS_PR" == "true" ]; then[0m
+2026-04-17T15:49:07.0248978Z [36;1m  echo "run=true" >> "$GITHUB_OUTPUT"[0m
+2026-04-17T15:49:07.0249314Z [36;1m  echo "agent=cogni-ai-architect" >> "$GITHUB_OUTPUT"[0m
+2026-04-17T15:49:07.0249621Z [36;1mfi[0m
+2026-04-17T15:49:07.0270941Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:07.0271273Z env:
+2026-04-17T15:49:07.0271527Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0271957Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:07.0272393Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0272767Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0273146Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0273680Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:07.0273998Z   IS_WORKFLOW_DISPATCH: true
+2026-04-17T15:49:07.0274218Z   IS_WORKFLOW_CALL: false
+2026-04-17T15:49:07.0274685Z   IS_ISSUE: false
+2026-04-17T15:49:07.0274880Z   IS_ISSUE_COMMENT: false
+2026-04-17T15:49:07.0275101Z   IS_PR_REVIEW_COMMENT: false
+2026-04-17T15:49:07.0275310Z   IS_PR: false
+2026-04-17T15:49:07.0275497Z   IS_REVIEW_ISSUE: false
+2026-04-17T15:49:07.0275705Z   IS_REVIEW_PR: false
+2026-04-17T15:49:07.0275896Z ##[endgroup]
+2026-04-17T15:49:07.0348124Z ##[group]Run set -euo pipefail
+2026-04-17T15:49:07.0348404Z [36;1mset -euo pipefail[0m
+2026-04-17T15:49:07.0348647Z [36;1mprompt="${PROMPT_INPUT:-}"[0m
+2026-04-17T15:49:07.0348910Z [36;1mif [ -z "$prompt" ]; then[0m
+2026-04-17T15:49:07.0349337Z [36;1m  prompt="${COMMENT_BODY:-}"[0m
+2026-04-17T15:49:07.0349583Z [36;1mfi[0m
+2026-04-17T15:49:07.0349786Z [36;1mif [ -n "${ISSUE_NUMBER:-}" ]; then[0m
+2026-04-17T15:49:07.0350120Z [36;1m  if [ -n "$prompt" ]; then[0m
+2026-04-17T15:49:07.0350536Z [36;1m    prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")[0m
+2026-04-17T15:49:07.0350934Z [36;1m  else[0m
+2026-04-17T15:49:07.0351179Z [36;1m    prompt="Related to issue/PR #${ISSUE_NUMBER}"[0m
+2026-04-17T15:49:07.0351477Z [36;1m  fi[0m
+2026-04-17T15:49:07.0351651Z [36;1mfi[0m
+2026-04-17T15:49:07.0351820Z [36;1m{[0m
+2026-04-17T15:49:07.0351999Z [36;1m  echo 'prompt<<EOF'[0m
+2026-04-17T15:49:07.0352240Z [36;1m  printf '%s\n' "$prompt"[0m
+2026-04-17T15:49:07.0352479Z [36;1m  echo 'EOF'[0m
+2026-04-17T15:49:07.0352685Z [36;1m} >> "$GITHUB_OUTPUT"[0m
+2026-04-17T15:49:07.0372621Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:07.0372951Z env:
+2026-04-17T15:49:07.0373203Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0373624Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:07.0374044Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0374628Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0375007Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0375378Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:07.0375695Z   COMMENT_BODY: 
+2026-04-17T15:49:07.0375885Z   ISSUE_NUMBER: 
+2026-04-17T15:49:07.0376544Z   PROMPT_INPUT: Focus on your instructions that were given and tell about inconsistencies and which files that were requested to load are missing and what was their expected location.
+2026-04-17T15:49:07.0377259Z ##[endgroup]
+2026-04-17T15:49:07.0439628Z ##[group]Run git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git /home/runner/work/_temp/.agents
+2026-04-17T15:49:07.0440397Z [36;1mgit clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git /home/runner/work/_temp/.agents[0m
+2026-04-17T15:49:07.0460312Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:07.0460641Z env:
+2026-04-17T15:49:07.0460881Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0461293Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:07.0461697Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0462058Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0462424Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.0462782Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:07.0463087Z ##[endgroup]
+2026-04-17T15:49:07.0515457Z Cloning into '/home/runner/work/_temp/.agents'...
+2026-04-17T15:49:07.4840150Z ##[group]Run git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git /home/runner/work/_temp/.skills
+2026-04-17T15:49:07.4858948Z [36;1mgit clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git /home/runner/work/_temp/.skills[0m
+2026-04-17T15:49:07.4881410Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:07.4881719Z env:
+2026-04-17T15:49:07.4881958Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.4882373Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:07.4882777Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.4883129Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.4883483Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.4883842Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:07.4884140Z ##[endgroup]
+2026-04-17T15:49:07.4939034Z Cloning into '/home/runner/work/_temp/.skills'...
+2026-04-17T15:49:07.9971577Z ##[group]Run import os
+2026-04-17T15:49:07.9972063Z [36;1mimport os[0m
+2026-04-17T15:49:07.9972260Z [36;1mimport json[0m
+2026-04-17T15:49:07.9972459Z [36;1mimport yaml[0m
+2026-04-17T15:49:07.9972782Z [36;1mpermissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))[0m
+2026-04-17T15:49:07.9973242Z [36;1mwith open(os.environ['GITHUB_OUTPUT'], 'a') as f:[0m
+2026-04-17T15:49:07.9973598Z [36;1m    f.write(f"json={json.dumps(permissions)}\n")[0m
+2026-04-17T15:49:07.9975686Z shell: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python {0}
+2026-04-17T15:49:07.9976004Z env:
+2026-04-17T15:49:07.9976245Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.9976659Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:07.9977068Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.9977424Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.9977788Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:07.9978161Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:07.9979663Z   PERMISSIONS_YAML: bash:
+  '*': deny
+  ansible*: allow
+  ansible-galaxy*: allow
+  ansible-playbook*: allow
+  awk*: allow
+  continue*: allow
+  cp*: allow
+  docker*: allow
+  ex*: allow
+  gh*: allow
+  gh pr review*: allow
+  git*: allow
+  hexdump*: allow
+  jq*: allow
+  links*: allow
+  mawk*: allow
+  molecule*: allow
+  pipx*: allow
+  pre-commit*: allow
+  printf*: allow
+  sed*: allow
+  set*: allow
+  time*: allow
+  timeout*: allow
+  touch*: allow
+  true*: allow
+  vim*: allow
+2026-04-17T15:49:07.9981103Z ##[endgroup]
+2026-04-17T15:49:08.5937891Z ##[group]Run anomalyco/opencode/github@v1.4.3
+2026-04-17T15:49:08.5938182Z with:
+2026-04-17T15:49:08.5938369Z   agent: cogni-ai-architect
+2026-04-17T15:49:08.5938608Z   model: opencode/gpt-5-codex
+2026-04-17T15:49:08.5939293Z   prompt: Focus on your instructions that were given and tell about inconsistencies and which files that were requested to load are missing and what was their expected location.
+2026-04-17T15:49:08.5940011Z   use_github_token: false
+2026-04-17T15:49:08.5940220Z env:
+2026-04-17T15:49:08.5940465Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5940894Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:08.5941295Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5941659Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5942029Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5942394Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:08.5943026Z   GH_TOKEN: ***
+2026-04-17T15:49:08.5943234Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-04-17T15:49:08.5943704Z   OPENCODE_API_KEY: ***
+2026-04-17T15:49:08.5947000Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.md",
+    "/home/runner/work/_temp/.skills/AGENTS.md"
+  ],
+  "agent": {
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cogni-ai-reviewer": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+2026-04-17T15:49:08.5951805Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}}
+2026-04-17T15:49:08.5953377Z ##[endgroup]
+2026-04-17T15:49:08.5969523Z ##[group]Run VERSION=$(curl -sf https://api.github.com/repos/anomalyco/opencode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
+2026-04-17T15:49:08.5970473Z [36;1mVERSION=$(curl -sf https://api.github.com/repos/anomalyco/opencode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)[0m
+2026-04-17T15:49:08.5971122Z [36;1mecho "version=${VERSION:-latest}" >> $GITHUB_OUTPUT[0m
+2026-04-17T15:49:08.5992701Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:08.5993017Z env:
+2026-04-17T15:49:08.5993263Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5993681Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:08.5994114Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5994699Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5995072Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.5995442Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:08.5995877Z   GH_TOKEN: ***
+2026-04-17T15:49:08.5996085Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-04-17T15:49:08.5996559Z   OPENCODE_API_KEY: ***
+2026-04-17T15:49:08.5999547Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.md",
+    "/home/runner/work/_temp/.skills/AGENTS.md"
+  ],
+  "agent": {
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cogni-ai-reviewer": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+2026-04-17T15:49:08.6004050Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}}
+2026-04-17T15:49:08.6005982Z ##[endgroup]
+2026-04-17T15:49:08.9172009Z ##[group]Run actions/cache@v4
+2026-04-17T15:49:08.9172261Z with:
+2026-04-17T15:49:08.9172441Z   path: ~/.opencode/bin
+2026-04-17T15:49:08.9172670Z   key: opencode-Linux-X64-v1.4.8
+2026-04-17T15:49:08.9172930Z   enableCrossOsArchive: false
+2026-04-17T15:49:08.9173165Z   fail-on-cache-miss: false
+2026-04-17T15:49:08.9173375Z   lookup-only: false
+2026-04-17T15:49:08.9173566Z   save-always: false
+2026-04-17T15:49:08.9173742Z env:
+2026-04-17T15:49:08.9173978Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.9174920Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:08.9175378Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.9175762Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.9176121Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:08.9176483Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:08.9176961Z   GH_TOKEN: ***
+2026-04-17T15:49:08.9177171Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-04-17T15:49:08.9177637Z   OPENCODE_API_KEY: ***
+2026-04-17T15:49:08.9180618Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.md",
+    "/home/runner/work/_temp/.skills/AGENTS.md"
+  ],
+  "agent": {
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cogni-ai-reviewer": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+2026-04-17T15:49:08.9185544Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}}
+2026-04-17T15:49:08.9187127Z ##[endgroup]
+2026-04-17T15:49:09.2851731Z Cache not found for input keys: opencode-Linux-X64-v1.4.8
+2026-04-17T15:49:09.2927138Z ##[group]Run curl -fsSL https://opencode.ai/install | bash
+2026-04-17T15:49:09.2927571Z [36;1mcurl -fsSL https://opencode.ai/install | bash[0m
+2026-04-17T15:49:09.2949008Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:09.2949324Z env:
+2026-04-17T15:49:09.2949564Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:09.2949979Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:09.2950384Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:09.2950765Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:09.2951140Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:09.2951506Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:09.2952163Z   GH_TOKEN: ***
+2026-04-17T15:49:09.2952374Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-04-17T15:49:09.2952840Z   OPENCODE_API_KEY: ***
+2026-04-17T15:49:09.2956318Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.md",
+    "/home/runner/work/_temp/.skills/AGENTS.md"
+  ],
+  "agent": {
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cogni-ai-reviewer": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+2026-04-17T15:49:09.2960829Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}}
+2026-04-17T15:49:09.2962402Z ##[endgroup]
+2026-04-17T15:49:09.8682856Z [0m
+2026-04-17T15:49:09.8683689Z [0;2mInstalling [0mopencode [0;2mversion: [0m1.4.8[0m
+2026-04-17T15:49:10.1109143Z #=#=#                                                                          
+2026-04-17T15:49:10.2117065Z ##O#-#                                                                         
+2026-04-17T15:49:10.2117578Z 
+2026-04-17T15:49:10.3155870Z                                                                            1.2%
+2026-04-17T15:49:10.3938475Z ##############################                                            41.9%
+2026-04-17T15:49:10.3939078Z ######################################################################## 100.0%
+2026-04-17T15:49:11.3197825Z [0m[0;2mSuccessfully added [0mopencode [0;2mto $PATH in [0m/home/runner/.bashrc[0m
+2026-04-17T15:49:11.3199137Z [0mAdded /home/runner/.opencode/bin to $GITHUB_PATH[0m
+2026-04-17T15:49:11.3199871Z 
+2026-04-17T15:49:11.3200411Z [0;2m                    [0m             ▄     
+2026-04-17T15:49:11.3201371Z [0;2m█▀▀█ █▀▀█ █▀▀█ █▀▀▄ [0m█▀▀▀ █▀▀█ █▀▀█ █▀▀█
+2026-04-17T15:49:11.3202039Z [0;2m█░░█ █░░█ █▀▀▀ █░░█ [0m█░░░ █░░█ █░░█ █▀▀▀
+2026-04-17T15:49:11.3204156Z [0;2m▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀  ▀ [0m▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+2026-04-17T15:49:11.3204695Z 
+2026-04-17T15:49:11.3204718Z 
+2026-04-17T15:49:11.3205046Z [0;2mOpenCode includes free models, to start:[0m
+2026-04-17T15:49:11.3205414Z 
+2026-04-17T15:49:11.3205657Z cd <project>  [0;2m# Open directory[0m
+2026-04-17T15:49:11.3206218Z opencode      [0;2m# Run command[0m
+2026-04-17T15:49:11.3206447Z 
+2026-04-17T15:49:11.3206686Z [0;2mFor more information visit [0mhttps://opencode.ai/docs
+2026-04-17T15:49:11.3206957Z 
+2026-04-17T15:49:11.3206963Z 
+2026-04-17T15:49:11.3229190Z ##[group]Run echo "$HOME/.opencode/bin" >> $GITHUB_PATH
+2026-04-17T15:49:11.3229557Z [36;1mecho "$HOME/.opencode/bin" >> $GITHUB_PATH[0m
+2026-04-17T15:49:11.3251183Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:11.3251525Z env:
+2026-04-17T15:49:11.3251771Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3252179Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:11.3252748Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3253113Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3253477Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3253843Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:11.3254764Z   GH_TOKEN: ***
+2026-04-17T15:49:11.3254999Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-04-17T15:49:11.3255473Z   OPENCODE_API_KEY: ***
+2026-04-17T15:49:11.3258607Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.md",
+    "/home/runner/work/_temp/.skills/AGENTS.md"
+  ],
+  "agent": {
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cogni-ai-reviewer": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+2026-04-17T15:49:11.3263138Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}}
+2026-04-17T15:49:11.3265106Z ##[endgroup]
+2026-04-17T15:49:11.3324219Z ##[group]Run opencode github run
+2026-04-17T15:49:11.3324803Z [36;1mopencode github run[0m
+2026-04-17T15:49:11.3344784Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-04-17T15:49:11.3345112Z env:
+2026-04-17T15:49:11.3345354Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3345759Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-04-17T15:49:11.3346168Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3346540Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3346911Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-04-17T15:49:11.3347289Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-04-17T15:49:11.3347745Z   GH_TOKEN: ***
+2026-04-17T15:49:11.3347952Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-04-17T15:49:11.3348420Z   OPENCODE_API_KEY: ***
+2026-04-17T15:49:11.3351426Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.md",
+    "/home/runner/work/_temp/.skills/AGENTS.md"
+  ],
+  "agent": {
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cogni-ai-reviewer": {
+      "mode": "primary",
+      "model": "opencode/gpt-5-codex",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+2026-04-17T15:49:11.3356364Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}}
+2026-04-17T15:49:11.3357955Z   MODEL: opencode/gpt-5-codex
+2026-04-17T15:49:11.3358190Z   AGENT: cogni-ai-architect
+2026-04-17T15:49:11.3358401Z   SHARE: 
+2026-04-17T15:49:11.3359019Z   PROMPT: Focus on your instructions that were given and tell about inconsistencies and which files that were requested to load are missing and what was their expected location.
+2026-04-17T15:49:11.3359713Z   USE_GITHUB_TOKEN: false
+2026-04-17T15:49:11.3359919Z   MENTIONS: 
+2026-04-17T15:49:11.3360083Z   VARIANT: 
+2026-04-17T15:49:11.3360246Z   OIDC_BASE_URL: 
+2026-04-17T15:49:11.3360426Z ##[endgroup]
+2026-04-17T15:49:12.2145466Z Performing one time database migration, may take a few minutes...
+2026-04-17T15:49:12.2294564Z sqlite-migration:done
+2026-04-17T15:49:12.2294978Z Database migration complete.
+2026-04-17T15:49:13.5748299Z Configuring git...
+2026-04-17T15:49:14.8156201Z opencode session ses_263de337fffeE8YcPtge82MXSA
+2026-04-17T15:49:14.8156739Z Triggered by: kenorb
+2026-04-17T15:49:14.8157201Z Checking out new branch...
+2026-04-17T15:49:14.8497371Z Sending message to opencode...
+2026-04-17T15:49:23.6691846Z 
+2026-04-17T15:49:23.6702666Z [94m[1m| [0m[90m Glob     [0m{"pattern":".github/**/*.md","path":"."}
+2026-04-17T15:49:23.7405771Z [94m[1m| [0m[90m Glob     [0m{"pattern":".github/skills/**/*.md","path":"."}
+2026-04-17T15:49:23.7406341Z 
+2026-04-17T15:49:27.5559717Z [94m[1m| [0m[90m Glob     [0m{"pattern":"**/AGENTS.md","path":"."}
+2026-04-17T15:49:27.5560065Z 
+2026-04-17T15:49:37.6990172Z [0m
+2026-04-17T15:49:37.6990597Z **Instruction Review**
+2026-04-17T15:49:37.6992135Z - Repo guidance insists on loading `.github/skills/AGENTS.md` (and downstream skill docs) before any action, but the repository has no `.github/skills` directory, so that mandate can’t be satisfied.
+2026-04-17T15:49:37.6994576Z - The hierarchy also calls for `.github/AGENTS.md`, `.opencode/AGENTS.md`, and `.vscode/AGENTS.md`, yet none exist in the tree, leaving gaps in the supposed instruction chain.
+2026-04-17T15:49:37.6997168Z - Skill-loading protocol lists 12 specific SKILL files (e.g., ansible, context-aware-ops, git), but there are no corresponding files to read, so the “mandatory” loading step contradicts the current filesystem.
+2026-04-17T15:49:37.6998456Z 
+2026-04-17T15:49:37.6998581Z **Missing Files**
+2026-04-17T15:49:37.6999193Z - `.github/skills/AGENTS.md` — expected at `.github/skills/AGENTS.md`
+2026-04-17T15:49:37.6999824Z - `.github/skills/ansible/SKILL.md`
+2026-04-17T15:49:37.7000252Z - `.github/skills/context-aware-ops/SKILL.md`
+2026-04-17T15:49:37.7000691Z - `.github/skills/git/SKILL.md`
+2026-04-17T15:49:37.7001074Z - `.github/skills/git-expert/SKILL.md`
+2026-04-17T15:49:37.7001531Z - `.github/skills/github/SKILL.md`
+2026-04-17T15:49:37.7002062Z - `.github/skills/github-actions/SKILL.md`
+2026-04-17T15:49:37.7002638Z - `.github/skills/molecule/SKILL.md`
+2026-04-17T15:49:37.7003175Z - `.github/skills/pre-commit/SKILL.md`
+2026-04-17T15:49:37.7003704Z - `.github/skills/robust-commands/SKILL.md`
+2026-04-17T15:49:37.7004241Z - `.github/skills/shell/SKILL.md`
+2026-04-17T15:49:37.7004870Z - `.github/skills/skill-writer/SKILL.md`
+2026-04-17T15:49:37.7005181Z - `.github/skills/vim-ex/SKILL.md`
+2026-04-17T15:49:37.7005691Z - `.github/AGENTS.md`
+2026-04-17T15:49:37.7005897Z - `.opencode/AGENTS.md`
+2026-04-17T15:49:37.7006101Z - `.vscode/AGENTS.md`
+2026-04-17T15:49:37.7006223Z 
+2026-04-17T15:49:37.7006535Z All of the above were referenced as required inputs but are absent, creating the inconsistencies noted.
+2026-04-17T15:49:37.7007052Z [0m
+2026-04-17T15:49:38.0274813Z Checking if branch is dirty...
+2026-04-17T15:49:38.0450129Z Response: **Instruction Review**
+2026-04-17T15:49:38.0451671Z - Repo guidance insists on loading `.github/skills/AGENTS.md` (and downstream skill docs) before any action, but the repository has no `.github/skills` directory, so that mandate can’t be satisfied.
+2026-04-17T15:49:38.0453947Z - The hierarchy also calls for `.github/AGENTS.md`, `.opencode/AGENTS.md`, and `.vscode/AGENTS.md`, yet none exist in the tree, leaving gaps in the supposed instruction chain.
+2026-04-17T15:49:38.0455956Z - Skill-loading protocol lists 12 specific SKILL files (e.g., ansible, context-aware-ops, git), but there are no corresponding files to read, so the “mandatory” loading step contradicts the current filesystem.
+2026-04-17T15:49:38.0457338Z 
+2026-04-17T15:49:38.0457486Z **Missing Files**
+2026-04-17T15:49:38.0458174Z - `.github/skills/AGENTS.md` — expected at `.github/skills/AGENTS.md`
+2026-04-17T15:49:38.0458873Z - `.github/skills/ansible/SKILL.md`
+2026-04-17T15:49:38.0459410Z - `.github/skills/context-aware-ops/SKILL.md`
+2026-04-17T15:49:38.0459960Z - `.github/skills/git/SKILL.md`
+2026-04-17T15:49:38.0460439Z - `.github/skills/git-expert/SKILL.md`
+2026-04-17T15:49:38.0460925Z - `.github/skills/github/SKILL.md`
+2026-04-17T15:49:38.0461405Z - `.github/skills/github-actions/SKILL.md`
+2026-04-17T15:49:38.0461782Z - `.github/skills/molecule/SKILL.md`
+2026-04-17T15:49:38.0462047Z - `.github/skills/pre-commit/SKILL.md`
+2026-04-17T15:49:38.0462336Z - `.github/skills/robust-commands/SKILL.md`
+2026-04-17T15:49:38.0462731Z - `.github/skills/shell/SKILL.md`
+2026-04-17T15:49:38.0463185Z - `.github/skills/skill-writer/SKILL.md`
+2026-04-17T15:49:38.0463663Z - `.github/skills/vim-ex/SKILL.md`
+2026-04-17T15:49:38.0464093Z - `.github/AGENTS.md`
+2026-04-17T15:49:38.0464850Z - `.opencode/AGENTS.md`
+2026-04-17T15:49:38.0465230Z - `.vscode/AGENTS.md`
+2026-04-17T15:49:38.0465451Z 
+2026-04-17T15:49:38.0465963Z All of the above were referenced as required inputs but are absent, creating the inconsistencies noted.
+2026-04-17T15:49:38.2238074Z Post job cleanup.
+2026-04-17T15:49:38.2299756Z Post job cleanup.
+2026-04-17T15:49:38.2330054Z Post job cleanup.
+2026-04-17T15:49:38.3725214Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/ansible-role-wine/ansible-role-wine --files-from manifest.txt --use-compress-program zstdmt
+2026-04-17T15:49:40.0699161Z Sent 36241408 of 46881434 (77.3%), 34.5 MBs/sec
+2026-04-17T15:49:40.5980911Z Sent 46881434 of 46881434 (100.0%), 29.2 MBs/sec
+2026-04-17T15:49:40.7830164Z Cache saved with key: opencode-Linux-X64-v1.4.8
+2026-04-17T15:49:40.8477355Z Post job cleanup.
+2026-04-17T15:49:40.9640286Z Cache hit occurred on the primary key Linux-pip-df01a71cc268d9a344c5b8a534ecaedd7117903391f58c51c11cb3185ec161a6, not saving cache.
+2026-04-17T15:49:40.9739608Z Post job cleanup.
+2026-04-17T15:49:41.0869331Z (node:2595) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-04-17T15:49:41.0870146Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-17T15:49:41.0995846Z Post job cleanup.
+2026-04-17T15:49:41.1796192Z [command]/usr/bin/git version
+2026-04-17T15:49:41.1831928Z git version 2.53.0
+2026-04-17T15:49:41.1864209Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/990e2ce5-83cb-45b0-bf11-8a6e09ab20f8/.gitconfig'
+2026-04-17T15:49:41.1873687Z Temporarily overriding HOME='/home/runner/work/_temp/990e2ce5-83cb-45b0-bf11-8a6e09ab20f8' before making global git config changes
+2026-04-17T15:49:41.1875638Z Adding repository directory to the temporary git global config as a safe directory
+2026-04-17T15:49:41.1879791Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ansible-role-wine/ansible-role-wine
+2026-04-17T15:49:41.1909795Z Removing SSH command configuration
+2026-04-17T15:49:41.1915829Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-04-17T15:49:41.1973402Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-04-17T15:49:41.2189806Z Removing HTTP extra header
+2026-04-17T15:49:41.2194031Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-04-17T15:49:41.2215882Z http.https://github.com/.extraheader
+2026-04-17T15:49:41.2227436Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-04-17T15:49:41.2257212Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-04-17T15:49:41.2473918Z Removing includeIf entries pointing to credentials config files
+2026-04-17T15:49:41.2480559Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-04-17T15:49:41.2515183Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-04-17T15:49:41.2893586Z Cleaning up orphan processes
+2026-04-17T15:49:41.3154628Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/cache@v4. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
