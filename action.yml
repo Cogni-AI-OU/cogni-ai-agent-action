@@ -226,6 +226,10 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
+    - name: Checkout cogni-ai-agent-skills
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
     - name: List OpenCode config
       if: steps.check.outputs.run == 'true'
       shell: bash
@@ -261,7 +265,8 @@ runs:
             "instructions": [
               "AGENTS.md",
               ".github/copilot-instructions.md",
-              ".github/skills/AGENTS.md"
+              ".github/skills/AGENTS.md",
+              "${{ runner.temp }}/.skills/AGENTS.md"
             ],
             "agent": {
               "cogni-ai-architect": {
