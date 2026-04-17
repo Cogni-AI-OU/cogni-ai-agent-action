@@ -266,6 +266,7 @@ runs:
               "AGENTS.md",
               ".github/copilot-instructions.md",
               ".github/skills/AGENTS.md",
+              "${{ runner.temp }}/.agents/AGENTS.md",
               "${{ runner.temp }}/.skills/AGENTS.md"
             ],
             "agent": {
