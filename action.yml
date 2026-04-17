@@ -10,7 +10,7 @@ inputs:
     description: Agent to use.
     required: false
   model:
-    default: opencode/gpt-5-codex
+    default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
   mentions:
@@ -281,7 +281,7 @@ runs:
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
-                "model": "opencode/gpt-5-codex",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "write": true,
@@ -291,7 +291,7 @@ runs:
               },
               "cogni-ai-reviewer": {
                 "mode": "primary",
-                "model": "opencode/gpt-5-codex",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
                 "tools": {
                   "write": true,
@@ -321,6 +321,6 @@ runs:
       with:
         agent: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
-        model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
+        model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false

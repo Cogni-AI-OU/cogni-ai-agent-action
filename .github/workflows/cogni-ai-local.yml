@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       model:
-        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3.1-pro' }}
+        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
         description: Model to use for OpenCode
         required: false
         type: string
@@ -44,7 +44,7 @@ on:
         required: false
         type: choice
       model:
-        default: opencode/gemini-3.1-pro
+        default: opencode/gemini-3-flash
         description: Model to use for OpenCode
         options:
           - opencode/big-pickle
@@ -106,7 +106,7 @@ concurrency:
   group: cogni-ai-local-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
 env:
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
-  OPENCODE_MODEL_DEFAULT: opencode/gemini-3.1-pro
+  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
   cogni-ai:
     name: Cogni AI
