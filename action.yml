@@ -28,7 +28,7 @@ inputs:
         cp*: allow
         ex*: allow
         gh*: allow
-        gh pr review*: deny
+        gh pr review*: allow  # For batched feedback and setting review states
         git*: allow
         hexdump*: allow
         jq*: allow
@@ -262,7 +262,7 @@ runs:
           {
             "$schema": "https://opencode.ai/config.json",
             "instructions": [
-              "AGENTS.md",
+              "AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.md",
               "${{ runner.temp }}/.skills/AGENTS.md"
             ],
@@ -310,3 +310,4 @@ runs:
         agent: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         model: ${{ inputs.model || 'opencode/gpt-5-codex' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        use_github_token: false
