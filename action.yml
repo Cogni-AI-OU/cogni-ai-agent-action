@@ -89,6 +89,10 @@ runs:
               startsWith(github.event.issue.body, '/cogni ') ||
               endsWith(github.event.issue.body, '/cogni') ||
               github.event.issue.body == '/cogni' ||
+              contains(github.event.issue.body, '/review ') ||
+              startsWith(github.event.issue.body, '/review ') ||
+              endsWith(github.event.issue.body, '/review') ||
+              github.event.issue.body == '/review' ||
               contains(github.event.issue.body, '@opencode-agent') ||
               contains(github.event.issue.body, '@OpenCode-Agent')
             )
@@ -110,6 +114,10 @@ runs:
               startsWith(github.event.comment.body, '/cogni ') ||
               endsWith(github.event.comment.body, '/cogni') ||
               github.event.comment.body == '/cogni' ||
+              contains(github.event.comment.body, '/review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, '/review') ||
+              github.event.comment.body == '/review' ||
               contains(github.event.comment.body, '@opencode-agent') ||
               contains(github.event.comment.body, '@OpenCode-Agent')
             )
@@ -131,6 +139,10 @@ runs:
               startsWith(github.event.comment.body, '/cogni ') ||
               endsWith(github.event.comment.body, '/cogni') ||
               github.event.comment.body == '/cogni' ||
+              contains(github.event.comment.body, '/review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, '/review') ||
+              github.event.comment.body == '/review' ||
               contains(github.event.comment.body, '@opencode-agent') ||
               contains(github.event.comment.body, '@OpenCode-Agent')
             )
