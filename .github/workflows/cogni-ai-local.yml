@@ -1,6 +1,6 @@
 ---
 # Cogni AI Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
-# Triggered by /oc commands in issue/PR comments, or manually via workflow_dispatch/workflow_call.
+# Triggered by /co, /cogni, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Local
 on:
