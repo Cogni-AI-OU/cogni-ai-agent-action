@@ -15,6 +15,8 @@ Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a
 
 ### Basic workflow
 
+The default Cogni AI agent workflow loads specialized agents, skills, and instructions.
+
 ```yaml
 ---
 name: Cogni AI
@@ -47,6 +49,8 @@ jobs:
 ```
 
 ### OpenCode workflow
+
+The OpenCode workflow runs a generic OpenCode agent without loading any specialized Cogni AI agents, skills, or instructions.
 
 ```yaml
 ---
