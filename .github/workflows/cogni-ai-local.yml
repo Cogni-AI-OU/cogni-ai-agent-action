@@ -166,7 +166,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: >-
-            ${{ inputs.agent || env.OPENCODE_AGENT_DEFAULT }}
+            ${{ inputs.agent || '' }}
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ steps.prompt.outputs.prompt }}

@@ -7,7 +7,6 @@ branding:
 description: Runs Cogni AI agent via OpenCode
 inputs:
   agent:
-    default: cogni-ai-architect
     description: Agent to use.
     required: false
   model:
