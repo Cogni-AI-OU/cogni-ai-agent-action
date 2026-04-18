@@ -195,5 +195,5 @@ jobs:
           echo "::notice title=Cogni AI Agent Local prompt::$(escape "$COGNI_AI_PROMPT")"
           echo "::notice title=Cogni AI Agent Local output::$(escape "${COGNI_AI_OUTPUT:-}")"
       - name: Print logs
-        if: failure()
+        if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
