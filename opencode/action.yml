@@ -254,3 +254,14 @@ runs:
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false
+    - name: Write response to summary
+      if: always() && steps.opencode.outputs.response != ''
+      shell: bash
+      env:
+        RESPONSE: ${{ steps.opencode.outputs.response }}
+      run: |
+        {
+          echo "## Agent Response"
+          echo ""
+          echo "$RESPONSE"
+        } >> "$GITHUB_STEP_SUMMARY"
