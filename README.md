@@ -52,6 +52,7 @@ jobs:
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt }}
+    timeout-minutes: 60
 ```
 
 ### OpenCode workflow
@@ -142,6 +143,7 @@ jobs:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
           prompt: ${{ github.event.comment.body || inputs.prompt }}
+    timeout-minutes: 60
 ```
 
 ### Inputs
