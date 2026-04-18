@@ -5,12 +5,6 @@ branding:
   color: blue
   icon: cpu
 description: Runs OpenCode Agent
-env:
-  TRIGGER_OC: /oc
-  TRIGGER_OPENCODE: /opencode
-  TRIGGER_REVIEW: /review
-  TRIGGER_AGENT_LOWER: '@opencode-agent'
-  TRIGGER_AGENT_MIXED: '@OpenCode-Agent'
 inputs:
   agent:
     description: Agent to use.
@@ -20,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   mentions:
-    default: /oc,/opencode,/review
+    default: /co,/cogni,/review
     description: Comma-separated trigger mentions for OpenCode.
     required: false
   opencode-api-key:
@@ -70,16 +64,6 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Prepare environment
-      shell: bash
-      run: |
-        {
-          echo "TRIGGER_OC=${TRIGGER_OC}"
-          echo "TRIGGER_OPENCODE=${TRIGGER_OPENCODE}"
-          echo "TRIGGER_REVIEW=${TRIGGER_REVIEW}"
-          echo "TRIGGER_AGENT_LOWER=${TRIGGER_AGENT_LOWER}"
-          echo "TRIGGER_AGENT_MIXED=${TRIGGER_AGENT_MIXED}"
-        } >> "$GITHUB_ENV"
     - name: Check conditions
       id: check
       shell: bash
@@ -97,20 +81,20 @@ runs:
               github.event.issue.author_association
             ) &&
             (
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_OC)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_OC)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_OC) ||
-              github.event.issue.body == env.TRIGGER_OC ||
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_OPENCODE) ||
-              github.event.issue.body == env.TRIGGER_OPENCODE ||
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_REVIEW) ||
-              github.event.issue.body == env.TRIGGER_REVIEW ||
-              contains(github.event.issue.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.issue.body, env.TRIGGER_AGENT_MIXED)
+              contains(github.event.issue.body, '/co ') ||
+              startsWith(github.event.issue.body, '/co ') ||
+              endsWith(github.event.issue.body, '/co') ||
+              github.event.issue.body == '/co' ||
+              contains(github.event.issue.body, '/cogni ') ||
+              startsWith(github.event.issue.body, '/cogni ') ||
+              endsWith(github.event.issue.body, '/cogni') ||
+              github.event.issue.body == '/cogni' ||
+              contains(github.event.issue.body, '/review ') ||
+              startsWith(github.event.issue.body, '/review ') ||
+              endsWith(github.event.issue.body, '/review') ||
+              github.event.issue.body == '/review' ||
+              contains(github.event.issue.body, '@opencode-agent') ||
+              contains(github.event.issue.body, '@OpenCode-Agent')
             )
           }}
         IS_ISSUE_COMMENT: >-
@@ -122,20 +106,20 @@ runs:
               github.event.comment.author_association
             ) &&
             (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OC) ||
-              github.event.comment.body == env.TRIGGER_OC ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OPENCODE) ||
-              github.event.comment.body == env.TRIGGER_OPENCODE ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_MIXED)
+              contains(github.event.comment.body, '/co ') ||
+              startsWith(github.event.comment.body, '/co ') ||
+              endsWith(github.event.comment.body, '/co') ||
+              github.event.comment.body == '/co' ||
+              contains(github.event.comment.body, '/cogni ') ||
+              startsWith(github.event.comment.body, '/cogni ') ||
+              endsWith(github.event.comment.body, '/cogni') ||
+              github.event.comment.body == '/cogni' ||
+              contains(github.event.comment.body, '/review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, '/review') ||
+              github.event.comment.body == '/review' ||
+              contains(github.event.comment.body, '@opencode-agent') ||
+              contains(github.event.comment.body, '@OpenCode-Agent')
             )
           }}
         IS_PR_REVIEW_COMMENT: >-
@@ -147,20 +131,20 @@ runs:
               github.event.comment.author_association
             ) &&
             (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OC) ||
-              github.event.comment.body == env.TRIGGER_OC ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OPENCODE) ||
-              github.event.comment.body == env.TRIGGER_OPENCODE ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_MIXED)
+              contains(github.event.comment.body, '/co ') ||
+              startsWith(github.event.comment.body, '/co ') ||
+              endsWith(github.event.comment.body, '/co') ||
+              github.event.comment.body == '/co' ||
+              contains(github.event.comment.body, '/cogni ') ||
+              startsWith(github.event.comment.body, '/cogni ') ||
+              endsWith(github.event.comment.body, '/cogni') ||
+              github.event.comment.body == '/cogni' ||
+              contains(github.event.comment.body, '/review ') ||
+              startsWith(github.event.comment.body, '/review ') ||
+              endsWith(github.event.comment.body, '/review') ||
+              github.event.comment.body == '/review' ||
+              contains(github.event.comment.body, '@opencode-agent') ||
+              contains(github.event.comment.body, '@OpenCode-Agent')
             )
           }}
         IS_PR: >-
@@ -244,7 +228,7 @@ runs:
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ inputs.agent }}
-        mentions: ${{ inputs.mentions || '/oc,/opencode,/review' }}
+        mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false
