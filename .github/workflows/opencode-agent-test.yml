@@ -1,0 +1,18 @@
+name: OpenCode Agent Test
+on:
+  push:
+  pull_request:
+    types: [ready_for_review]
+
+jobs:
+  opencode-test:
+    runs-on: ubuntu-latest
+    permissions: read-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Run OpenCode Agent
+        uses: ./opencode
+        with:
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: Identify yourself.

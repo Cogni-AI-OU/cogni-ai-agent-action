@@ -96,6 +96,9 @@ runs:
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
+          } else if (eventName === 'push') {
+            run = true;
+            agent = 'cogni-ai-architect';
           } else if (eventName === 'issues' && !isBot) {
             const assoc = context.payload.issue?.author_association;
             const body = context.payload.issue?.body;
@@ -145,13 +148,23 @@ runs:
         COMMENT_BODY: >-
           ${{ github.event_name == 'issues' && github.event.issue.body ||
           github.event.comment.body || '' }}
+        EVENT_NAME: ${{ github.event_name }}
+        HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message || '' }}
         ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        PUSH_REF: ${{ github.event.ref || '' }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
         if [ -z "$prompt" ]; then
-          prompt="${COMMENT_BODY:-}"
+          if [ "$EVENT_NAME" = "push" ] && [ -n "${HEAD_COMMIT_MESSAGE:-}" ]; then
+            prompt="${HEAD_COMMIT_MESSAGE}"
+            if [ -n "${PUSH_REF:-}" ]; then
+              prompt=$(printf 'Push to %s\n\n%s' "$PUSH_REF" "$prompt")
+            fi
+          else
+            prompt="${COMMENT_BODY:-}"
+          fi
         fi
         if [ -n "${ISSUE_NUMBER:-}" ]; then
           if [ -n "$prompt" ]; then
@@ -196,13 +209,20 @@ runs:
         permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(permissions)}\n")
+    - name: Masquerade push as workflow_dispatch
+      if: steps.check.outputs.run == 'true' && github.event_name == 'push'
+      shell: bash
+      run: echo "GITHUB_EVENT_NAME=workflow_dispatch" >> "$GITHUB_ENV"
+    - name: Masquerade pull_request_target as pull_request
+      if: steps.check.outputs.run == 'true' && github.event_name == 'pull_request_target'
+      shell: bash
+      run: echo "GITHUB_EVENT_NAME=pull_request" >> "$GITHUB_ENV"
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
       uses: anomalyco/opencode/github@v1.4.3
       env:
         GH_TOKEN: ${{ github.token }}
-        GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         # @see: https://opencode.ai/docs/zen
         # For full list of available models: https://opencode.ai/zen/v1/models
