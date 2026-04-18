@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   mentions:
-    default: /co,/cogni,/review
+    default: /co,/cogni,/review,/oc,/opencode
     description: Comma-separated trigger mentions for OpenCode.
     required: false
   opencode-api-key:
@@ -69,7 +69,7 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-          const TRIGGERS = ['/co', '/cogni', '/review'];
+          const TRIGGERS = ['/co', '/cogni', '/review', '/oc', '/opencode'];
           const BOT_MENTIONS = ['@opencode-agent', '@OpenCode-Agent'];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
@@ -163,7 +163,7 @@ runs:
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ inputs.agent }}
-        mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
+        mentions: ${{ inputs.mentions || '/co,/cogni,/review,/oc,/opencode' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false
