@@ -40,7 +40,14 @@ Check `github.event_name` and payload to identify trigger source:
 
 **Routing Invariants**:
 
-- **Direct API Responses ONLY**: When asked to comment on an issue or PR, you MUST use the `gh` CLI (`gh issue comment`, `gh pr comment`, etc.) to post the comment directly via API. NEVER write the comment text to a file in the workspace or commit such files, as this can trigger unintended PR creation with garbage files.
+- **Direct API Responses ONLY**: When asked to comment on an issue or PR, you MUST use the `gh` CLI (`gh issue comment`, `gh pr comment`, etc.) to post the comment directly via API. NEVER write the comment text to a file in the workspace or commit such files, as this can trigger unintended PR creation with garbage files. For long comments, use a HEREDOC:
+  ```bash
+  gh issue comment 123 --body "$(cat <<'EOF'
+  [your comment text here]
+  EOF
+  )"
+  ```
+- **Workspace Cleanliness (No PR for Non-Code-Change Tasks)**: If your task is purely informational (e.g., analyzing an issue, posting a comment, or answering a question), you MUST ensure the workspace remains completely clean (no modified or untracked files). In the opencode infrastructure, ANY modification to the workspace (dirty state) after a "repo event" (like `workflow_dispatch`) will trigger an automatic Pull Request to persist those changes. If you must create temporary files for analysis, you MUST delete them or run `git clean -fd` before finishing. Verify cleanliness with `git status` before completing your session.
 - **Symmetric Routing**: ALWAYS reply via the exact originating channel. NEVER cross threads.
 - Parse `github.event.comment.id` and `in_reply_to_id` to maintain thread continuity.
 
