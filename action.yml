@@ -259,10 +259,11 @@ runs:
           rerun_note+=" ${previous_build_url}"
           prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
         fi
+        EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         {
-          echo 'prompt<<EOF'
+          echo "prompt<<$EOF"
           printf '%s\n' "$prompt"
-          echo 'EOF'
+          echo "$EOF"
         } >> "$GITHUB_OUTPUT"
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'

@@ -215,10 +215,11 @@ runs:
             prompt="Related to issue/PR #${ISSUE_NUMBER}"
           fi
         fi
+        EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         {
-          echo 'prompt<<EOF'
+          echo "prompt<<$EOF"
           printf '%s\n' "$prompt"
-          echo 'EOF'
+          echo "$EOF"
         } >> "$GITHUB_OUTPUT"
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
