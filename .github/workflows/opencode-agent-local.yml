@@ -102,7 +102,7 @@ env:
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
   opencode:
-    name: OpenCode
+    name: OpenCode Agent Local
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -151,7 +151,7 @@ jobs:
             printf '%s\n' "$prompt"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
-      - name: Run OpenCode agent
+      - name: Run OpenCode Agent Local
         id: opencode
         uses: ./opencode
         env:
@@ -175,8 +175,8 @@ jobs:
             value=${value//$'\n'/'%0A'}
             printf '%s' "$value"
           }
-          echo "::notice title=OpenCode prompt::$(escape "$OPENCODE_PROMPT")"
-          echo "::notice title=OpenCode output::$(escape "${OPENCODE_OUTPUT:-}")"
+          echo "::notice title=OpenCode Agent Local prompt::$(escape "$OPENCODE_PROMPT")"
+          echo "::notice title=OpenCode Agent Local output::$(escape "${OPENCODE_OUTPUT:-}")"
       - name: Print logs
         if: failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
