@@ -40,6 +40,7 @@ Check `github.event_name` and payload to identify trigger source:
 
 **Routing Invariants**:
 
+- **Direct API Responses ONLY**: When asked to comment on an issue or PR, you MUST use the `gh` CLI (`gh issue comment`, `gh pr comment`, etc.) to post the comment directly via API. NEVER write the comment text to a file in the workspace or commit such files, as this can trigger unintended PR creation with garbage files.
 - **Symmetric Routing**: ALWAYS reply via the exact originating channel. NEVER cross threads.
 - Parse `github.event.comment.id` and `in_reply_to_id` to maintain thread continuity.
 
