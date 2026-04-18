@@ -70,6 +70,16 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        {
+          echo "TRIGGER_OC=${TRIGGER_OC}"
+          echo "TRIGGER_OPENCODE=${TRIGGER_OPENCODE}"
+          echo "TRIGGER_REVIEW=${TRIGGER_REVIEW}"
+          echo "TRIGGER_AGENT_LOWER=${TRIGGER_AGENT_LOWER}"
+          echo "TRIGGER_AGENT_MIXED=${TRIGGER_AGENT_MIXED}"
+        } >> "$GITHUB_ENV"
     - name: Check conditions
       id: check
       shell: bash
