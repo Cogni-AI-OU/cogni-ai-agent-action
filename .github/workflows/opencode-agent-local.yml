@@ -188,5 +188,5 @@ jobs:
           echo "::notice title=OpenCode Agent Local prompt::$(escape "$OPENCODE_PROMPT")"
           echo "::notice title=OpenCode Agent Local output::$(escape "${OPENCODE_OUTPUT:-}")"
       - name: Print logs
-        if: failure()
+        if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true

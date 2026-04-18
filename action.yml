@@ -274,3 +274,7 @@ runs:
           echo ""
           echo "$RESPONSE"
         } >> "$GITHUB_STEP_SUMMARY"
+    - name: Print logs
+      if: cancelled() || failure()
+      shell: bash
+      run: grep -v INFO ~/.local/share/opencode/log/* || true

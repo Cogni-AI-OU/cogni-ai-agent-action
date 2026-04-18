@@ -23,3 +23,6 @@ jobs:
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+      - name: Print logs
+        if: cancelled() || failure()
+        run: grep -v INFO ~/.local/share/opencode/log/* || true
