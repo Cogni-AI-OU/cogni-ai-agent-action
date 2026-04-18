@@ -35,8 +35,8 @@ jobs:
   agent:
     if: |
       github.event_name == 'workflow_dispatch' ||
-      startsWith(github.event.comment.body, '/') ||
-      startsWith(github.event.comment.body, '@')
+      contains(github.event.comment.body, '/') ||
+      contains(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -121,8 +121,8 @@ jobs:
     name: Run Cogni AI agent
     if: |
       github.event_name == 'workflow_dispatch' ||
-      startsWith(github.event.comment.body, '/') ||
-      startsWith(github.event.comment.body, '@')
+      contains(github.event.comment.body, '/') ||
+      contains(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
