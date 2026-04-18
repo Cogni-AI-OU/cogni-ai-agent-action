@@ -28,6 +28,10 @@ on:
 
 jobs:
   agent:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.event.comment.body, '/') ||
+      startsWith(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -106,6 +110,10 @@ on:
 jobs:
   opencode-agent:
     name: Run OpenCode agent
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.event.comment.body, '/') ||
+      startsWith(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -129,14 +137,14 @@ jobs:
 
 ### Inputs
 
-| Input              | Description                 | Default                | Required |
-| ------------------ | --------------------------- | ---------------------- | -------- |
-| `agent`            | Agent to use                | —                      | No       |
-| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`| No       |
+| Input              | Description                 | Default                   | Required |
+| ------------------ | --------------------------- | ------------------------- | -------- |
+| `agent`            | Agent to use                | —                         | No       |
+| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key` | API key for OpenCode        | —                      | **Yes**  |
-| `permissions`      | Permissions configuration   | —                      | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                   | No       |
+| `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
+| `permissions`      | Permissions configuration   | —                         | No       |
+| `prompt`           | Prompt to pass to the agent | `''`                      | No       |
 
 ### Outputs
 
