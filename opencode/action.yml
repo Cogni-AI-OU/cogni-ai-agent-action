@@ -253,7 +253,7 @@ runs:
       shell: bash
       env:
         RESPONSE: ${{ steps.opencode.outputs.response }}
-      run: |
+      run: |-
         {
           echo "## Agent Response"
           echo ""

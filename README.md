@@ -33,6 +33,10 @@ on:
 
 jobs:
   agent:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.comment.body, '/') ||
+      contains(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -115,6 +119,10 @@ on:
 jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.comment.body, '/') ||
+      contains(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -138,13 +146,13 @@ jobs:
 
 ### Inputs
 
-| Input              | Description                 | Default                | Required |
-| ------------------ | --------------------------- | ---------------------- | -------- |
-| `agent`            | Agent to use                | `cogni-ai-architect`   | No       |
-| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review`   | No       |
+| Input              | Description                 | Default                   | Required |
+| ------------------ | --------------------------- | ------------------------- | -------- |
+| `agent`            | Agent to use                | `cogni-ai-architect`      | No       |
+| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review`      | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key` | API key for OpenCode        | —                      | **Yes**  |
-| `prompt`           | Prompt to pass to the agent | `''`                   | No       |
+| `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
+| `prompt`           | Prompt to pass to the agent | `''`                      | No       |
 
 ### Outputs
 
