@@ -5,12 +5,6 @@ branding:
   color: blue
   icon: cpu
 description: Runs OpenCode Agent
-env:
-  TRIGGER_OC: /oc
-  TRIGGER_OPENCODE: /opencode
-  TRIGGER_REVIEW: /review
-  TRIGGER_AGENT_LOWER: '@opencode-agent'
-  TRIGGER_AGENT_MIXED: '@OpenCode-Agent'
 inputs:
   agent:
     description: Agent to use.
@@ -70,128 +64,55 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Prepare environment
-      shell: bash
-      run: |
-        {
-          echo "TRIGGER_OC=${TRIGGER_OC}"
-          echo "TRIGGER_OPENCODE=${TRIGGER_OPENCODE}"
-          echo "TRIGGER_REVIEW=${TRIGGER_REVIEW}"
-          echo "TRIGGER_AGENT_LOWER=${TRIGGER_AGENT_LOWER}"
-          echo "TRIGGER_AGENT_MIXED=${TRIGGER_AGENT_MIXED}"
-        } >> "$GITHUB_ENV"
     - name: Check conditions
       id: check
-      shell: bash
+      uses: actions/github-script@v7
       env:
-        IS_WORKFLOW_DISPATCH: >-
-          ${{ github.event_name == 'workflow_dispatch' }}
-        IS_WORKFLOW_CALL: >-
-          ${{ github.event_name == 'workflow_call' }}
-        IS_ISSUE: >-
-          ${{
-            github.event_name == 'issues' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.issue.author_association
-            ) &&
-            (
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_OC)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_OC)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_OC) ||
-              github.event.issue.body == env.TRIGGER_OC ||
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_OPENCODE) ||
-              github.event.issue.body == env.TRIGGER_OPENCODE ||
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_REVIEW) ||
-              github.event.issue.body == env.TRIGGER_REVIEW ||
-              contains(github.event.issue.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.issue.body, env.TRIGGER_AGENT_MIXED)
-            )
-          }}
-        IS_ISSUE_COMMENT: >-
-          ${{
-            github.event_name == 'issue_comment' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association
-            ) &&
-            (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OC) ||
-              github.event.comment.body == env.TRIGGER_OC ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OPENCODE) ||
-              github.event.comment.body == env.TRIGGER_OPENCODE ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_MIXED)
-            )
-          }}
-        IS_PR_REVIEW_COMMENT: >-
-          ${{
-            github.event_name == 'pull_request_review_comment' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association
-            ) &&
-            (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OC)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OC) ||
-              github.event.comment.body == env.TRIGGER_OC ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_OPENCODE)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_OPENCODE) ||
-              github.event.comment.body == env.TRIGGER_OPENCODE ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_MIXED)
-            )
-          }}
-        IS_PR: >-
-          ${{
-            (github.event_name == 'pull_request' ||
-             github.event_name == 'pull_request_target') &&
-            (
-              (!endsWith(github.actor, '[bot]') &&
-                contains(
-                  fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
-                  github.event.pull_request.author_association
-                )
-              ) ||
-              (
-                contains(
-                  fromJson('["Copilot","copilot[bot]","copilot-swe-agent"]'),
-                  github.event.pull_request.user.login
-                ) &&
-                github.event.pull_request.author_association == 'CONTRIBUTOR'
-              )
-            )
-          }}
-      run: |
-        if [ "$IS_WORKFLOW_DISPATCH" == "true" ] || \
-           [ "$IS_WORKFLOW_CALL" == "true" ] || \
-           [ "$IS_ISSUE" == "true" ] || \
-           [ "$IS_ISSUE_COMMENT" == "true" ] || \
-           [ "$IS_PR_REVIEW_COMMENT" == "true" ] || \
-           [ "$IS_PR" == "true" ]; then
-          echo "run=true" >> "$GITHUB_OUTPUT"
-        fi
+        MENTIONS: ${{ inputs.mentions || '/oc,/opencode,/review' }}
+      with:
+        script: |
+          const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
+          const BOT_MENTIONS = ['@opencode-agent', '@OpenCode-Agent'];
+          const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
+          const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
+
+          function matchesTrigger(body, triggers) {
+            if (!body) return false;
+            return triggers.some(t => body.endsWith(t) || body.includes(t + ' '));
+          }
+
+          function matchesBotMention(body) {
+            if (!body) return false;
+            return BOT_MENTIONS.some(m => body.includes(m));
+          }
+
+          const isBot = context.actor.endsWith('[bot]');
+          const eventName = context.eventName;
+          let run = false;
+
+          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+            run = true;
+          } else if (eventName === 'issues' && !isBot) {
+            const assoc = context.payload.issue?.author_association;
+            const body = context.payload.issue?.body;
+            run = ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body));
+          } else if (eventName === 'issue_comment' && !isBot) {
+            const assoc = context.payload.comment?.author_association;
+            const body = context.payload.comment?.body;
+            run = ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body));
+          } else if (eventName === 'pull_request_review_comment' && !isBot) {
+            const assoc = context.payload.comment?.author_association;
+            const body = context.payload.comment?.body;
+            run = ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body));
+          } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
+            const pr = context.payload.pull_request;
+            const assoc = pr?.author_association;
+            const login = pr?.user?.login;
+            run = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+          }
+
+          core.setOutput('run', run ? 'true' : '');
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
