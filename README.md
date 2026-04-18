@@ -33,6 +33,7 @@ on:
 
 jobs:
   agent:
+    timeout-minutes: 60
     if: |
       github.event_name == 'workflow_dispatch' ||
       contains(github.event.comment.body, '/') ||
@@ -119,6 +120,7 @@ on:
 jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
+    timeout-minutes: 60
     if: |
       github.event_name == 'workflow_dispatch' ||
       contains(github.event.comment.body, '/') ||

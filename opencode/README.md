@@ -28,6 +28,7 @@ on:
 
 jobs:
   agent:
+    timeout-minutes: 60
     if: |
       github.event_name == 'workflow_dispatch' ||
       contains(github.event.comment.body, '/') ||
@@ -110,6 +111,7 @@ on:
 jobs:
   opencode-agent:
     name: Run OpenCode agent
+    timeout-minutes: 60
     if: |
       github.event_name == 'workflow_dispatch' ||
       contains(github.event.comment.body, '/') ||
