@@ -1,8 +1,8 @@
 ---
-# Cogni AI Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
-# Triggered by /co, /cogni, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
+# OpenCode Agent Local workflow — runs the local composite action (./opencode/action.yml) as a wrapper for OpenCode.
+# Triggered by /oc, /opencode, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
-name: Cogni AI Local
+name: OpenCode Agent Local
 on:
   issue_comment:
     types:
@@ -15,7 +15,7 @@ on:
   workflow_call:
     inputs:
       agent:
-        default: cogni-ai-architect
+        default: ''
         description: Agent to use.
         required: false
         type: string
@@ -32,17 +32,10 @@ on:
   workflow_dispatch:
     inputs:
       agent:
-        default: cogni-ai-architect
+        default: ''
         description: Agent to use.
-        options:
-          - build
-          - cogni-ai-architect
-          - compaction
-          - plan
-          - summary
-          - title
         required: false
-        type: choice
+        type: string
       model:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
@@ -103,13 +96,13 @@ on:
 # When a new run is triggered, it will queue until the previous pending run completes.
 concurrency:
   cancel-in-progress: false
-  group: cogni-ai-local-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
+  group: opencode-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
 env:
-  OPENCODE_AGENT_DEFAULT: cogni-ai-architect
+  OPENCODE_AGENT_DEFAULT: ''
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
-  cogni-ai:
-    name: Cogni AI
+  opencode:
+    name: OpenCode Agent Local
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -158,9 +151,9 @@ jobs:
             printf '%s\n' "$prompt"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
-      - name: Run Cogni AI agent
-        id: cogni-ai
-        uses: ./
+      - name: Run OpenCode Agent Local
+        id: opencode
+        uses: ./opencode
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -171,8 +164,8 @@ jobs:
           prompt: ${{ steps.prompt.outputs.prompt }}
       - name: Annotate prompt and output
         env:
-          COGNI_AI_PROMPT: ${{ steps.prompt.outputs.prompt }}
-          COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
+          OPENCODE_PROMPT: ${{ steps.prompt.outputs.prompt }}
+          OPENCODE_OUTPUT: ${{ steps.opencode.outputs.response }}
         run: |
           set -euo pipefail
           escape() {
@@ -182,8 +175,8 @@ jobs:
             value=${value//$'\n'/'%0A'}
             printf '%s' "$value"
           }
-          echo "::notice title=Cogni AI prompt::$(escape "$COGNI_AI_PROMPT")"
-          echo "::notice title=Cogni AI output::$(escape "${COGNI_AI_OUTPUT:-}")"
+          echo "::notice title=OpenCode Agent Local prompt::$(escape "$OPENCODE_PROMPT")"
+          echo "::notice title=OpenCode Agent Local output::$(escape "${OPENCODE_OUTPUT:-}")"
       - name: Print logs
         if: failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
