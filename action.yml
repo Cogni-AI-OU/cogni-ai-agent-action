@@ -212,7 +212,10 @@ runs:
             "instructions": [
               "AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.md",
-              "${{ runner.temp }}/.skills/AGENTS.md"
+              "${{ runner.temp }}/.skills/AGENTS.md",
+              "${{ runner.temp }}/.skills/git/SKILL.md",
+              "${{ runner.temp }}/.skills/github/SKILL.md",
+              "${{ runner.temp }}/.skills/github-actions/SKILL.md"
             ],
             "agent": {
               "cogni-ai-architect": {
