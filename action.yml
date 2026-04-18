@@ -84,136 +84,100 @@ runs:
       id: check
       shell: bash
       env:
-        IS_WORKFLOW_DISPATCH: >-
-          ${{ github.event_name == 'workflow_dispatch' }}
-        IS_WORKFLOW_CALL: >-
-          ${{ github.event_name == 'workflow_call' }}
-        IS_ISSUE: >-
-          ${{
-            github.event_name == 'issues' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.issue.author_association
-            ) &&
-            (
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_CO)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_CO)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_CO) ||
-              github.event.issue.body == env.TRIGGER_CO ||
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_COGNI)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_COGNI)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_COGNI) ||
-              github.event.issue.body == env.TRIGGER_COGNI ||
-              contains(github.event.issue.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.issue.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.issue.body, env.TRIGGER_REVIEW) ||
-              github.event.issue.body == env.TRIGGER_REVIEW ||
-              contains(github.event.issue.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.issue.body, env.TRIGGER_AGENT_MIXED)
-            )
-          }}
-        IS_ISSUE_COMMENT: >-
-          ${{
-            github.event_name == 'issue_comment' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association
-            ) &&
-            (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_CO)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_CO)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_CO) ||
-              github.event.comment.body == env.TRIGGER_CO ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_COGNI)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_COGNI)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_COGNI) ||
-              github.event.comment.body == env.TRIGGER_COGNI ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_MIXED)
-            )
-          }}
-        IS_PR_REVIEW_COMMENT: >-
-          ${{
-            github.event_name == 'pull_request_review_comment' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","CONTRIBUTOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association
-            ) &&
-            (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_CO)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_CO)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_CO) ||
-              github.event.comment.body == env.TRIGGER_CO ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_COGNI)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_COGNI)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_COGNI) ||
-              github.event.comment.body == env.TRIGGER_COGNI ||
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_LOWER) ||
-              contains(github.event.comment.body, env.TRIGGER_AGENT_MIXED)
-            )
-          }}
-        IS_PR: >-
-          ${{
-            (github.event_name == 'pull_request' ||
-             github.event_name == 'pull_request_target') &&
-            (
-              (!endsWith(github.actor, '[bot]') &&
-                contains(
-                  fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
-                  github.event.pull_request.author_association
-                )
-              ) ||
-              (
-                contains(
-                  fromJson('["Copilot","copilot[bot]","copilot-swe-agent"]'),
-                  github.event.pull_request.user.login
-                ) &&
-                github.event.pull_request.author_association == 'CONTRIBUTOR'
-              )
-            )
-          }}
-        IS_REVIEW_ISSUE: >-
-          ${{
-            github.event_name == 'issue_comment' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association
-            ) &&
-            (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW
-            )
-          }}
-        IS_REVIEW_PR: >-
-          ${{
-            github.event_name == 'pull_request_review_comment' &&
-            !endsWith(github.actor, '[bot]') &&
-            contains(
-              fromJson('["COLLABORATOR","MEMBER","OWNER"]'),
-              github.event.comment.author_association
-            ) &&
-            (
-              contains(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              startsWith(github.event.comment.body, format('{0} ', env.TRIGGER_REVIEW)) ||
-              endsWith(github.event.comment.body, env.TRIGGER_REVIEW) ||
-              github.event.comment.body == env.TRIGGER_REVIEW
-            )
-          }}
+        EVENT_NAME: ${{ github.event_name }}
+        ACTOR: ${{ github.actor }}
+        AUTHOR_ASSOCIATION_ISSUE: ${{ github.event.issue.author_association }}
+        AUTHOR_ASSOCIATION_COMMENT: ${{ github.event.comment.author_association }}
+        AUTHOR_ASSOCIATION_PR: ${{ github.event.pull_request.author_association }}
+        PR_USER_LOGIN: ${{ github.event.pull_request.user.login }}
+        COMMENT_BODY: ${{ github.event.comment.body }}
+        ISSUE_BODY: ${{ github.event.issue.body }}
+        MENTIONS: ${{ inputs.mentions }}
       run: |
+        IS_WORKFLOW_DISPATCH="false"
+        IS_WORKFLOW_CALL="false"
+        IS_ISSUE="false"
+        IS_ISSUE_COMMENT="false"
+        IS_PR_REVIEW_COMMENT="false"
+        IS_PR="false"
+        IS_REVIEW_ISSUE="false"
+        IS_REVIEW_PR="false"
+
+        check_association() {
+          local assoc="$1"
+          case "$assoc" in
+            "COLLABORATOR"|"CONTRIBUTOR"|"MEMBER"|"OWNER") return 0 ;;
+            *) return 1 ;;
+          esac
+        }
+
+        check_reviewer_association() {
+          local assoc="$1"
+          case "$assoc" in
+            "COLLABORATOR"|"MEMBER"|"OWNER") return 0 ;;
+            *) return 1 ;;
+          esac
+        }
+
+        check_mentions() {
+          local body="$1"
+          IFS=',' read -ra ADDR <<< "$MENTIONS"
+          for mention in "${ADDR[@]}"; do
+            mention="${mention#"${mention%%[![:space:]]*}"}"
+            mention="${mention%"${mention##*[![:space:]]}"}"
+            if [[ -z "$mention" ]]; then continue; fi
+            if [[ "$body" == *"$mention "* ]] || [[ "$body" == *"$mention" ]] || [[ "$body" == "$mention" ]]; then
+              return 0
+            fi
+          done
+          if [[ "$body" == *"$TRIGGER_AGENT_LOWER"* ]] || [[ "$body" == *"$TRIGGER_AGENT_MIXED"* ]]; then
+            return 0
+          fi
+          return 1
+        }
+
+        check_review_mention() {
+          local body="$1"
+          if [[ "$body" == *"$TRIGGER_REVIEW "* ]] || [[ "$body" == *"$TRIGGER_REVIEW" ]] || [[ "$body" == "$TRIGGER_REVIEW" ]]; then
+            return 0
+          fi
+          return 1
+        }
+
+        if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+          IS_WORKFLOW_DISPATCH="true"
+        elif [[ "$EVENT_NAME" == "workflow_call" ]]; then
+          IS_WORKFLOW_CALL="true"
+        elif [[ "$ACTOR" != *"[bot]" ]]; then
+          if [[ "$EVENT_NAME" == "issues" ]]; then
+            if check_association "$AUTHOR_ASSOCIATION_ISSUE" && check_mentions "$ISSUE_BODY"; then
+              IS_ISSUE="true"
+            fi
+          elif [[ "$EVENT_NAME" == "issue_comment" ]]; then
+            if check_reviewer_association "$AUTHOR_ASSOCIATION_COMMENT" && check_review_mention "$COMMENT_BODY"; then
+              IS_REVIEW_ISSUE="true"
+            elif check_association "$AUTHOR_ASSOCIATION_COMMENT" && check_mentions "$COMMENT_BODY"; then
+              IS_ISSUE_COMMENT="true"
+            fi
+          elif [[ "$EVENT_NAME" == "pull_request_review_comment" ]]; then
+            if check_reviewer_association "$AUTHOR_ASSOCIATION_COMMENT" && check_review_mention "$COMMENT_BODY"; then
+              IS_REVIEW_PR="true"
+            elif check_association "$AUTHOR_ASSOCIATION_COMMENT" && check_mentions "$COMMENT_BODY"; then
+              IS_PR_REVIEW_COMMENT="true"
+            fi
+          elif [[ "$EVENT_NAME" == "pull_request" || "$EVENT_NAME" == "pull_request_target" ]]; then
+            if check_association "$AUTHOR_ASSOCIATION_PR"; then
+              IS_PR="true"
+            fi
+          fi
+        fi
+
+        if [[ "$EVENT_NAME" == "pull_request" || "$EVENT_NAME" == "pull_request_target" ]]; then
+           if [[ "$PR_USER_LOGIN" == "Copilot" || "$PR_USER_LOGIN" == "copilot[bot]" || "$PR_USER_LOGIN" == "copilot-swe-agent" ]] && [[ "$AUTHOR_ASSOCIATION_PR" == "CONTRIBUTOR" ]]; then
+             IS_PR="true"
+           fi
+        fi
+
         if [ "$IS_REVIEW_ISSUE" == "true" ] || \
            [ "$IS_REVIEW_PR" == "true" ]; then
           echo "run=true" >> "$GITHUB_OUTPUT"
