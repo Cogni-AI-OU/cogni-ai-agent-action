@@ -1,0 +1,19 @@
+name: OpenCode Agent Test
+on:
+  push:
+  pull_request:
+    types: [ready_for_review]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Run OpenCode Agent
+        uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@27f9137a07f6e855a1a6c897e8e35bbb93d6ea11
+        with:
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
