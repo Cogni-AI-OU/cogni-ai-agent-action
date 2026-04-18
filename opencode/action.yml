@@ -136,10 +136,11 @@ runs:
             prompt="Related to issue/PR #${ISSUE_NUMBER}"
           fi
         fi
+        EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
-          echo 'prompt<<EOF'
+          echo "prompt<<$EOF_TOKEN"
           printf '%s\n' "$prompt"
-          echo 'EOF'
+          echo "$EOF_TOKEN"
         } >> "$GITHUB_OUTPUT"
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
