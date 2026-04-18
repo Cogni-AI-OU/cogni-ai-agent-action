@@ -9,8 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions: read-all
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Run OpenCode Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        uses: ./opencode
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: Identify yourself.
