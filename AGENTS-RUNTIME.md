@@ -96,6 +96,7 @@ the agent MUST integrate remote changes with a merge commit workflow.
 - **No Untracked Additions**: NEVER automatically commit untracked files or workspace artifacts (like temporary API payloads, script outputs, `.github/ISSUE_TEMPLATE/*`, or `CODE_OF_CONDUCT.md`) unless explicitly specified in the synchronization checklist or explicitly asked by the user. Always clean up temporary files created during execution.
 - **Selective Sync**: Do not blindly copy entire directories from remote templates. Cherry-pick only the files that are meant to be updated or created.
 - **Strict File Syncing**: When syncing configuration files from an external repository or template, only modify or copy the specific files requested.
+- **Final Status Check**: ALWAYS run `git status` at the end of your work before completion to verify the final workspace state and ensure no unintended modifications or untracked files remain.
 
 ### Commit & CI/CD Invariants
 
