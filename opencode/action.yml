@@ -69,6 +69,7 @@ runs:
       uses: actions/github-script@v7
       env:
         MENTIONS: ${{ inputs.mentions || '/oc,/opencode,/review' }}
+        PROMPT: ${{ inputs.prompt }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
@@ -88,9 +89,12 @@ runs:
 
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
+          const prompt = process.env.PROMPT;
           let run = false;
 
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+          if (prompt && prompt.trim().length > 0) {
+            run = true;
+          } else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
           } else if (eventName === 'issues' && !isBot) {
             const assoc = context.payload.issue?.author_association;
