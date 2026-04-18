@@ -110,13 +110,15 @@ runs:
           [[ "$body" == *"${trigger} "* || "$body" == *"$trigger" ]]
         }
 
+        # Strips leading and trailing whitespace from the value in $1.
+        trim() { local v="$1"; v="${v#"${v%%[![:space:]]*}"}"; echo "${v%"${v##*[![:space:]]}"}"; }
+
         # Returns 0 when the body matches any mention from the MENTIONS csv or the @agent handles.
         has_mention() {
           local body="$1" mention
           IFS=',' read -ra mentions <<< "$MENTIONS"
           for mention in "${mentions[@]}"; do
-            mention="${mention#"${mention%%[![:space:]]*}"}"
-            mention="${mention%"${mention##*[![:space:]]}"}"
+            mention="$(trim "$mention")"
             [[ -n "$mention" ]] && body_has_trigger "$body" "$mention" && return 0
           done
           [[ "$body" == *"$TRIGGER_AGENT_LOWER"* || "$body" == *"$TRIGGER_AGENT_MIXED"* ]]
