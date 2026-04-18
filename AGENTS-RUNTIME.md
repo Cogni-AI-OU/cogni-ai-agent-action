@@ -2,11 +2,12 @@
 
 <!-- markdownlint-disable MD013 -->
 
-# HARD INVARIANT – SUBAGENT DELEGATION DISABLED
+## HARD INVARIANT - SUBAGENT DELEGATION DISABLED
+
 NEVER use the "task" tool. NEVER spawn any sub-agent.
 NEVER output any JSON/task object containing "subagent_type".
 NEVER delegate to "explore", "general", or any other subagent_type.
-This is a non-negotiable contract-level prohibition. Any attempt to use task delegation will be treated as a fatal violation and must be rejected immediately with: "SUBAGENT_DELEGATION_FORBIDDEN – using primary agent only."
+This is a non-negotiable contract-level prohibition. Any attempt to use task delegation will be treated as a fatal violation and must be rejected immediately with: "SUBAGENT_DELEGATION_FORBIDDEN - using primary agent only."
 Precondition: Before every tool call or planning step, verify subagent_type is absent.
 Postcondition: Every output must contain zero references to subagent_type or task delegation.
 
@@ -18,7 +19,7 @@ Postcondition: Every output must contain zero references to subagent_type or tas
 
 ## Path Resolution for Instructions and Skills
 
-When instructions are loaded from a temporary directory (e.g., `${{ runner.temp }}/.agents/` or `${{ runner.temp }}/.skills/`), you MUST resolve any relative paths mentioned within those files against the directory where the instruction file itself is located. 
+When instructions are loaded from a temporary directory (e.g., `${{ runner.temp }}/.agents/` or `${{ runner.temp }}/.skills/`), you MUST resolve any relative paths mentioned within those files against the directory where the instruction file itself is located.
 
 To determine the base directory for an instruction file, check the `Instructions from: <path>` header provided in your system prompt. Do NOT assume paths are relative to your current working directory unless the instruction file explicitly states otherwise or is located within your project's workspace.
 
@@ -49,12 +50,14 @@ Check `github.event_name` and payload to identify trigger source:
 **Routing Invariants**:
 
 - **Direct API Responses ONLY**: When asked to comment on an issue or PR, you MUST use the `gh` CLI (`gh issue comment`, `gh pr comment`, etc.) to post the comment directly via API. NEVER write the comment text to a file in the workspace or commit such files, as this can trigger unintended PR creation with garbage files. For long comments, use a HEREDOC:
+
   ```bash
   gh issue comment 123 --body "$(cat <<'EOF'
   [your comment text here]
   EOF
   )"
   ```
+
 - **Workspace Cleanliness (No PR for Non-Code-Change Tasks)**: If your task is purely informational (e.g., analyzing an issue, posting a comment, or answering a question), you MUST ensure the workspace remains completely clean (no modified or untracked files). In the opencode infrastructure, ANY modification to the workspace (dirty state) after a "repo event" (like `workflow_dispatch`) will trigger an automatic Pull Request to persist those changes. If you must create temporary files for analysis, you MUST delete them or run `git clean -fd` before finishing. Verify cleanliness with `git status` before completing your session.
 - **Symmetric Routing**: ALWAYS reply via the exact originating channel. NEVER cross threads.
 - Parse `github.event.comment.id` and `in_reply_to_id` to maintain thread continuity.

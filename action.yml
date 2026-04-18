@@ -77,22 +77,18 @@ runs:
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
-
           function matchesTrigger(body, triggers) {
             if (!body) return false;
             return triggers.some(t => body.endsWith(t) || body.includes(t + ' '));
           }
-
           function matchesBotMention(body) {
             if (!body) return false;
             return BOT_MENTIONS.some(m => body.includes(m));
           }
-
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
           let run = false;
           let agent = '';
-
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
@@ -134,7 +130,6 @@ runs:
               agent = 'cogni-ai-architect';
             }
           }
-
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
     - name: Resolve prompt
