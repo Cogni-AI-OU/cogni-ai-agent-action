@@ -2,6 +2,14 @@
 
 <!-- markdownlint-disable MD013 -->
 
+# HARD INVARIANT – SUBAGENT DELEGATION DISABLED
+NEVER use the "task" tool. NEVER spawn any sub-agent.
+NEVER output any JSON/task object containing "subagent_type".
+NEVER delegate to "explore", "general", or any other subagent_type.
+This is a non-negotiable contract-level prohibition. Any attempt to use task delegation will be treated as a fatal violation and must be rejected immediately with: "SUBAGENT_DELEGATION_FORBIDDEN – using primary agent only."
+Precondition: Before every tool call or planning step, verify subagent_type is absent.
+Postcondition: Every output must contain zero references to subagent_type or task delegation.
+
 ## Initialization Project Sequence
 
 1. **Agent Contract Alignment**: Locate, read, and strictly enforce the invariants defined in the current project workspace's main `AGENTS.md` and any of its directory-specific `AGENTS.md`. Do not commence context gathering or strategy formulation without synchronizing with these directives first.
