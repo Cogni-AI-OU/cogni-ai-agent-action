@@ -162,7 +162,7 @@ jobs:
           if [ -z "$prompt" ]; then
             prompt="${COMMENT_BODY:-}"
           fi
-          EOF_TOKEN="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64 | tr -dc 'a-zA-Z0-9' | head -c 20)"
+          EOF_TOKEN="EOF_$(openssl rand -hex 10)"
           {
             echo "prompt<<$EOF_TOKEN"
             printf '%s\n' "$prompt"
