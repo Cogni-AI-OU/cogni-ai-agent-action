@@ -171,16 +171,20 @@ runs:
         permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(permissions)}\n")
+    - name: Masquerade push as workflow_dispatch
+      if: steps.check.outputs.run == 'true' && github.event_name == 'push'
+      shell: bash
+      run: echo "GITHUB_EVENT_NAME=workflow_dispatch" >> "$GITHUB_ENV"
+    - name: Masquerade pull_request_target as pull_request
+      if: steps.check.outputs.run == 'true' && github.event_name == 'pull_request_target'
+      shell: bash
+      run: echo "GITHUB_EVENT_NAME=pull_request" >> "$GITHUB_ENV"
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
       uses: anomalyco/opencode/github@v1.4.3
       env:
         GH_TOKEN: ${{ github.token }}
-        GITHUB_EVENT_NAME: >-
-          ${{ github.event_name == 'pull_request_target' && 'pull_request'
-          || github.event_name == 'push' && 'workflow_dispatch'
-          || github.event_name }}
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
