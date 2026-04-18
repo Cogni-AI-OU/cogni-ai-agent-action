@@ -162,11 +162,11 @@ jobs:
           if [ -z "$prompt" ]; then
             prompt="${COMMENT_BODY:-}"
           fi
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          EOF_TOKEN="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64 | tr -dc 'a-zA-Z0-9' | head -c 20)"
           {
-            echo "prompt<<$EOF"
+            echo "prompt<<$EOF_TOKEN"
             printf '%s\n' "$prompt"
-            echo "$EOF"
+            echo "$EOF_TOKEN"
           } >> "$GITHUB_OUTPUT"
       - name: Run Cogni AI Agent Local
         id: cogni-ai
