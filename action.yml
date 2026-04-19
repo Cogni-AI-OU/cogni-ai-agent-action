@@ -132,7 +132,7 @@ runs:
           }
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
-    - name: Cancel stale concurrent runs
+    - name: Wait for concurrent runs
       if: steps.check.outputs.run == 'true'
       id: concurrency
       uses: actions/github-script@v7
@@ -147,7 +147,7 @@ runs:
             'pull_request_target',
           ];
           if (!issueOrPREvents.includes(eventName)) {
-            core.info('Concurrency check: skipped (not an issue/PR event)');
+            core.info('Concurrency wait: skipped (not an issue/PR event)');
             return;
           }
           const { data: currentRun } = await github.rest.actions.getWorkflowRun({
@@ -158,41 +158,41 @@ runs:
           const workflowId = currentRun.workflow_id;
           const groupKey = currentRun.display_title;
           const currentCreatedAt = new Date(currentRun.created_at).getTime();
-          let staleRuns = [];
-          for (const status of ['in_progress', 'queued']) {
-            const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: workflowId,
-              status,
-            });
-            staleRuns.push(
-              ...workflow_runs.filter(
-                run => run.id !== context.runId
-                  && new Date(run.created_at).getTime() < currentCreatedAt
-                  && run.display_title === groupKey
-              )
-            );
-          }
-          if (staleRuns.length === 0) {
-            core.info('Concurrency check: no stale runs found');
-            return;
-          }
-          core.info(
-            `Concurrency check: found ${staleRuns.length} stale run(s) for "${groupKey}"`
-          );
-          for (const run of staleRuns) {
-            try {
-              await github.rest.actions.cancelWorkflowRun({
+          const POLL_INTERVAL_MS = 30_000;
+          const MAX_WAIT_MS = 20 * 60_000;
+          const start = Date.now();
+          while (Date.now() - start < MAX_WAIT_MS) {
+            let olderActiveRuns = [];
+            for (const status of ['in_progress', 'queued']) {
+              const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                run_id: run.id,
+                workflow_id: workflowId,
+                status,
               });
-              core.info(`Cancelled stale run #${run.run_number} (ID: ${run.id})`);
-            } catch (error) {
-              core.warning(`Failed to cancel run ${run.id}: ${error.message}`);
+              olderActiveRuns.push(
+                ...workflow_runs.filter(
+                  run => run.id !== context.runId
+                    && new Date(run.created_at).getTime() < currentCreatedAt
+                    && run.display_title === groupKey
+                )
+              );
             }
+            if (olderActiveRuns.length === 0) {
+              core.info('Concurrency wait: no older active runs, proceeding');
+              return;
+            }
+            const ids = olderActiveRuns.map(r => r.id).join(', ');
+            core.info(
+              `Concurrency wait: ${olderActiveRuns.length} older run(s) still active ` +
+              `(IDs: ${ids}). Waiting ${POLL_INTERVAL_MS / 1000}s…`
+            );
+            await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
           }
+          core.warning(
+            `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
+            `for older runs of "${groupKey}" to finish. Proceeding anyway.`
+          );
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
