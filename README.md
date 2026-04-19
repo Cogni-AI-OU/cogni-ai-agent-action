@@ -31,6 +31,18 @@ on:
         required: true
         type: string
 
+# Prevent concurrent runs on the same PR/issue to avoid conflicts.
+# On the default branch each run gets a unique group so runs can proceed in parallel.
+concurrency:
+  cancel-in-progress: false
+  group: >-
+    opencode-${{
+      (github.event.issue.pull_request && github.event.issue.number)
+      || github.event.pull_request.number
+      || (github.ref_name != github.event.repository.default_branch && github.ref)
+      || github.run_id
+    }}
+
 jobs:
   agent:
     if: |
@@ -116,6 +128,18 @@ on:
         description: Prompt for the agent
         required: true
         type: string
+
+# Prevent concurrent runs on the same PR/issue to avoid conflicts.
+# On the default branch each run gets a unique group so runs can proceed in parallel.
+concurrency:
+  cancel-in-progress: false
+  group: >-
+    opencode-${{
+      (github.event.issue.pull_request && github.event.issue.number)
+      || github.event.pull_request.number
+      || (github.ref_name != github.event.repository.default_branch && github.ref)
+      || github.run_id
+    }}
 
 jobs:
   cogni-ai-agent:
