@@ -167,7 +167,7 @@ jobs:
 | `model`                 | Model to use for OpenCode     | `opencode/gemini-3-flash` | No       |
 | `opencode-api-key`      | API key for OpenCode          | —                         | **Yes**  |
 | `permissions_primary`   | Primary permissions config    | *(See action.yml)*        | No       |
-| `permissions_secondary` | Secondary permissions config  | `''`                      | No       |
+| `permissions_secondary` | Secondary permissions config (overrides primary on conflicts) | `''`                      | No       |
 | `prompt`                | Prompt to pass to the agent   | `''`                      | No       |
 
 ### Outputs
