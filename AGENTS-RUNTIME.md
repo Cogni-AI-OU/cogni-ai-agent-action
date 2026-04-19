@@ -14,7 +14,7 @@ Postcondition: Every output must contain zero references to subagent_type or tas
 ## Initialization Project Sequence
 
 1. **Agent Contract Alignment**: Locate, read, and strictly enforce the invariants defined in the current project workspace's main `AGENTS.md` and any of its directory-specific `AGENTS.md`. Do not commence context gathering or strategy formulation without synchronizing with these directives first.
-2. **Skill & Instruction Loading**: Autonomously discover and load `.github/copilot-instructions.md`, relevant `.instructions.md` rules, and applicable `SKILL.md` workflows.
+2. **Skill & Instruction Loading**: Autonomously discover and load `.github/copilot-instructions.md`, relevant `.instructions.md` rules, and applicable `SKILL.md` workflows. Note that in GitHub Actions, the central skills repository is checked out at `$RUNNER_TEMP/.skills` (e.g., `/home/runner/work/_temp/.skills`). Read `SKILL.md` files from there instead of `.github/skills/` when instructed.
 3. **Context Gathering for Ambiguity**: For ambiguous queries, you MUST load the project's `README.md`, relevant documentation, and files from the project codebase to establish sufficient context.
 
 ## Path Resolution for Instructions and Skills

@@ -239,6 +239,14 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+    - name: Patch agent instructions with absolute paths
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        # Replace relative SKILL.md paths with absolute paths in the skills catalog
+        sed -i "s|\](\([^/]*\)/SKILL.md)|](${{ runner.temp }}/.skills/\1/SKILL.md)|g" ${{ runner.temp }}/.skills/AGENTS.md
+        # Update references to point to the central temp directory instead of the local repo
+        sed -i "s|\.github/skills|${{ runner.temp }}/.skills|g" ${{ runner.temp }}/.agents/AGENTS.md
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
