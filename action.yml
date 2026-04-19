@@ -157,6 +157,7 @@ runs:
           });
           const workflowId = currentRun.workflow_id;
           const groupKey = currentRun.display_title;
+          const currentCreatedAt = new Date(currentRun.created_at).getTime();
           let staleRuns = [];
           for (const status of ['in_progress', 'queued']) {
             const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
@@ -168,7 +169,7 @@ runs:
             staleRuns.push(
               ...workflow_runs.filter(
                 run => run.id !== context.runId
-                  && run.id < context.runId
+                  && new Date(run.created_at).getTime() < currentCreatedAt
                   && run.display_title === groupKey
               )
             );
