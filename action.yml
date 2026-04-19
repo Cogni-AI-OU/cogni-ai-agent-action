@@ -56,7 +56,7 @@ inputs:
     required: false
   permissions_secondary:
     default: ''
-    description: Secondary permissions configuration for OpenCode. Will be merged with primary.
+    description: Secondary permissions configuration for OpenCode. Will be deeply merged with primary (secondary takes precedence).
     required: false
   prompt:
     default: ''
@@ -256,15 +256,17 @@ runs:
         import os
         import json
         import yaml
-        def deep_merge(dict1, dict2):
-            for key, value in dict2.items():
-                if isinstance(value, dict) and isinstance(dict1.get(key), dict):
-                    deep_merge(dict1[key], value)
+        def deep_merge(target, source):
+            for key, value in source.items():
+                if isinstance(value, dict) and isinstance(target.get(key), dict):
+                    deep_merge(target[key], value)
                 else:
-                    dict1[key] = value
-            return dict1
-        primary = yaml.safe_load(os.environ.get('PERMISSIONS_PRIMARY_YAML', '')) or {}
-        secondary = yaml.safe_load(os.environ.get('PERMISSIONS_SECONDARY_YAML', '')) or {}
+                    target[key] = value
+            return target
+        def ensure_dict(value):
+            return value if isinstance(value, dict) else {}
+        primary = ensure_dict(yaml.safe_load(os.environ.get('PERMISSIONS_PRIMARY_YAML', '')))
+        secondary = ensure_dict(yaml.safe_load(os.environ.get('PERMISSIONS_SECONDARY_YAML', '')))
         permissions = deep_merge(primary, secondary)
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(permissions)}\n")
