@@ -39,7 +39,9 @@ inputs:
         ls*: allow
         links*: allow
         mawk*: allow
+        pipenv*: allow
         pipx*: allow
+        poetry*: allow
         pre-commit*: allow
         printf*: allow
         sed*: allow
