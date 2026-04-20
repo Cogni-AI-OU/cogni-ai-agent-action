@@ -30,6 +30,7 @@ inputs:
         awk*: allow
         continue*: allow
         cp*: allow
+        curl*: allow
         ex*: allow
         gh*: allow
         gh pr review*: allow  # For batched feedback and setting review states
