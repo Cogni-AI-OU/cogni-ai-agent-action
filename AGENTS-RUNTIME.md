@@ -38,6 +38,7 @@ You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub ac
 
 Check `github.event_name` and payload to identify trigger source:
 
+- **Outdated/Resolved PR comments**: If a PR comment's thread has been addressed or is now outdated due to code changes, you SHOULD use the `gh` CLI or API to mark the comment/thread as resolved.
 - **General PR comment** (`issue_comment`):
   - Condition: `if: ${{ github.event.issue.pull_request }}`
   - Reply Method: `gh pr comment` or `gh pr review` for batching broad feedback and setting state.
@@ -77,10 +78,36 @@ the agent MUST integrate remote changes with a merge commit workflow.
 1. Determine base/head from Pull Request Context (e.g. `gh pr view`).
 2. Ensure work is on the PR head branch (not detached HEAD).
 3. Sync head branch from remote with merge semantics:
-   `git pull --no-rebase origin <head-branch>`.
+   `git pull --no-rebase origin $(git rev-parse --abbrev-ref HEAD)`.
 4. If base changes must be integrated into head, merge base explicitly:
    `git fetch origin <base-branch> && git merge --no-ff origin/<base-branch>`.
 5. Resolve conflicts, commit merge if required, then push normally (no force).
+
+### Pre-Completion Upstream Sync
+
+Before finishing your session, you **MUST** pull and integrate the latest
+upstream changes so the post-run auto-push does not get rejected with
+`[rejected] ... (fetch first)`.
+
+**Mandatory steps (strict order, run immediately before session end)**:
+
+1. Stage and commit all local work (`git add` only verified files—i.e., those that have passed tests, linting, and manual review—then
+   `git commit`).
+2. Pull with merge semantics from the current head branch:
+   `git pull --no-rebase origin $(git rev-parse --abbrev-ref HEAD)`.
+3. Resolve any merge conflicts, then commit the merge.
+4. Verify the branch is up-to-date with `git status` and
+   `git log --oneline -3`.
+
+**Invariants**:
+
+- This sync MUST happen **after** all code changes are committed and
+  **before** the session ends.
+- MUST use merge semantics (`--no-rebase`), consistent with the
+  Branch Sync Policy above.
+- If the pull introduces conflicts that cannot be resolved automatically,
+  commit the best-effort merge and clearly document the conflict in the
+  PR description.
 
 ### Restricted Shell & Ephemeral Environment
 
