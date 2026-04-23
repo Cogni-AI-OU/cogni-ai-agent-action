@@ -82,6 +82,32 @@ the agent MUST integrate remote changes with a merge commit workflow.
    `git fetch origin <base-branch> && git merge --no-ff origin/<base-branch>`.
 5. Resolve conflicts, commit merge if required, then push normally (no force).
 
+### Pre-Completion Upstream Sync
+
+Before finishing your session, you **MUST** pull and integrate the latest
+upstream changes so the post-run auto-push does not get rejected with
+`[rejected] ... (fetch first)`.
+
+**Mandatory steps (strict order, run immediately before session end)**:
+
+1. Stage and commit all local work (`git add` only verified files, then
+   `git commit`).
+2. Pull with merge semantics from the current head branch:
+   `git pull --no-rebase origin <head-branch>`.
+3. Resolve any merge conflicts, then commit the merge.
+4. Verify the branch is up-to-date with `git status` and
+   `git log --oneline -3`.
+
+**Invariants**:
+
+- This sync MUST happen **after** all code changes are committed and
+  **before** the session ends.
+- MUST use merge semantics (`--no-rebase`), consistent with the
+  Branch Sync Policy above.
+- If the pull introduces conflicts that cannot be resolved automatically,
+  commit the best-effort merge and clearly document the conflict in the
+  PR description.
+
 ### Restricted Shell & Ephemeral Environment
 
 - **Ephemeral State**: Any uncommitted modifications or tools installed outside of the project directory will be immediately lost when the runner terminates. ALL intended state changes must be committed and pushed to the remote branch to persist.
