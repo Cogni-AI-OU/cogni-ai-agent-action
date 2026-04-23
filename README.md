@@ -61,7 +61,7 @@ For running a generic OpenCode agent without specialized skills or instructions,
 
 ### Advanced workflow
 
-An example of a more advanced configuration:
+An example of a more advanced configuration with issue and pull request triggers:
 
 ```yaml
 ---
@@ -70,10 +70,21 @@ name: Cogni AI Agent
 
 # yamllint disable-line rule:truthy
 on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
   issue_comment:
     types:
       - created
       - edited
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
   pull_request_review_comment:
     types:
       - created
@@ -122,8 +133,10 @@ jobs:
     name: Run Cogni AI agent
     if: |
       github.event_name == 'workflow_dispatch' ||
-      contains(github.event.comment.body, '/') ||
-      contains(github.event.comment.body, '@')
+      github.event_name == 'issues' ||
+      github.event_name == 'pull_request' ||
+      contains(github.event.comment.body || '', '/') ||
+      contains(github.event.comment.body || '', '@')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -142,7 +155,13 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: ${{ github.event.comment.body || inputs.prompt }}
+          prompt: >-
+            ${{
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              inputs.prompt
+            }}
     timeout-minutes: 60
 ```
 
