@@ -9,6 +9,8 @@
 # Environments
 .env
 .envrc
+.github/agents/
+.github/skills/
 .venv
 env/
 venv/
