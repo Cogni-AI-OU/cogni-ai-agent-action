@@ -20,7 +20,7 @@ inputs:
   opencode-api-key:
     description: API key for OpenCode.
     required: true
-  permissions:
+  permissions_primary:
     default: |-
       bash:
         '*': deny
@@ -30,6 +30,7 @@ inputs:
         awk*: allow
         continue*: allow
         cp*: allow
+        curl*: allow
         ex*: allow
         gh*: allow
         gh pr review*: allow  # For batched feedback and setting review states
@@ -52,7 +53,11 @@ inputs:
         touch*: allow
         true*: allow
         vim*: allow
-    description: Permissions configuration for OpenCode.
+    description: Primary permissions configuration for OpenCode.
+    required: false
+  permissions_secondary:
+    default: ''
+    description: Secondary permissions configuration for OpenCode. Will be deeply merged with primary (secondary takes precedence).
     required: false
   prompt:
     default: ''
@@ -252,12 +257,24 @@ runs:
       id: permissions
       shell: python
       env:
-        PERMISSIONS_YAML: ${{ inputs.permissions }}
+        PERMISSIONS_PRIMARY_YAML: ${{ inputs.permissions_primary }}
+        PERMISSIONS_SECONDARY_YAML: ${{ inputs.permissions_secondary }}
       run: |
         import os
         import json
         import yaml
-        permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
+        def deep_merge(target, source):
+            for key, value in source.items():
+                if isinstance(value, dict) and isinstance(target.get(key), dict):
+                    deep_merge(target[key], value)
+                else:
+                    target[key] = value
+            return target
+        def ensure_dict(value):
+            return value if isinstance(value, dict) else {}
+        primary = ensure_dict(yaml.safe_load(os.environ.get('PERMISSIONS_PRIMARY_YAML', '')))
+        secondary = ensure_dict(yaml.safe_load(os.environ.get('PERMISSIONS_SECONDARY_YAML', '')))
+        permissions = deep_merge(primary, secondary)
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(permissions)}\n")
     - name: Run opencode
