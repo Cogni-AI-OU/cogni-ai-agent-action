@@ -44,7 +44,9 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@v1
         env:

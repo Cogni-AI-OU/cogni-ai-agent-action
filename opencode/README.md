@@ -39,7 +39,9 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run OpenCode Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
         env:
@@ -135,7 +137,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action/tree/main/opencode>
