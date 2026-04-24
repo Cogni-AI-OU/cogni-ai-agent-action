@@ -177,9 +177,10 @@ jobs:
 
 ### Outputs
 
-| Output     | Description                 |
-| ---------- | --------------------------- |
-| `response` | The response from the agent |
+| Output     | Description                        |
+| ---------- | ---------------------------------- |
+| `prompt`   | The resolved prompt sent to the agent |
+| `response` | The response from the agent        |
 
 <!-- Named links -->
 

@@ -60,6 +60,9 @@ inputs:
     required: false
 name: Cogni AI Agent
 outputs:
+  prompt:
+    description: The resolved prompt sent to the agent.
+    value: ${{ steps.prompt.outputs.prompt }}
   response:
     description: The response from the agent.
     value: ${{ steps.opencode.outputs.response }}
@@ -233,6 +236,9 @@ runs:
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
         } >> "$GITHUB_OUTPUT"
+        echo "::group::Resolved prompt"
+        printf '%s\n' "$prompt"
+        echo "::endgroup::"
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
@@ -325,9 +331,16 @@ runs:
       if: always() && steps.opencode.outputs.response != ''
       shell: bash
       env:
+        PROMPT: ${{ steps.prompt.outputs.prompt }}
         RESPONSE: ${{ steps.opencode.outputs.response }}
       run: |-
         {
+          if [ -n "${PROMPT:-}" ]; then
+            echo "## Prompt"
+            echo ""
+            echo "$PROMPT"
+            echo ""
+          fi
           echo "## Agent Response"
           echo ""
           echo "$RESPONSE"
