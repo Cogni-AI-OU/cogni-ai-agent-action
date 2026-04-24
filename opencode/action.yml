@@ -31,9 +31,11 @@ inputs:
         continue*: allow
         cp*: allow
         ex*: allow
+        find*: allow
         gh*: allow
         gh pr review*: allow  # For batched feedback and setting review states
         git*: allow
+        glob*: allow
         hexdump*: allow
         jq*: allow
         ls*: allow
