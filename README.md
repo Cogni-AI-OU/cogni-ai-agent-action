@@ -175,7 +175,32 @@ jobs:
 | `mentions`         | Comma-separated mentions    | `/co,/cogni,/review`      | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
 | `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
+| `permissions`      | Permissions configuration   | —                         | No       |
 | `prompt`           | Prompt to pass to the agent | `''`                      | No       |
+
+### Hierarchical Permissions
+
+You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-reviewer`) can override or extend these defaults.
+
+```yaml
+with:
+  permissions: |
+    default:
+      bash:
+        ls*: allow
+        grep*: allow
+    cogni-ai-architect:
+      bash:
+        git*: allow
+        write*: allow
+    cogni-ai-reviewer:
+      bash:
+        git*: deny
+    cogni-ai-devops:
+      bash:
+        ansible*: allow
+        terraform*: allow
+```
 
 ### Outputs
 
