@@ -153,6 +153,20 @@ runs:
               run = true;
               agent = getAgent(body);
             }
+          } else if (eventName === 'discussion' && !isBot) {
+            const assoc = context.payload.discussion?.author_association;
+            const body = context.payload.discussion?.body;
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = getAgent(body);
+            }
+          } else if (eventName === 'discussion_comment' && !isBot) {
+            const assoc = context.payload.comment?.author_association;
+            const body = context.payload.comment?.body;
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = getAgent(body);
+            }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
@@ -177,6 +191,8 @@ runs:
         script: |
           const eventName = context.eventName;
           const issueOrPREvents = [
+            'discussion',
+            'discussion_comment',
             'issue_comment',
             'issues',
             'pull_request',
@@ -236,9 +252,12 @@ runs:
       shell: bash
       env:
         COMMENT_BODY: >-
-          ${{ github.event_name == 'issues' && github.event.issue.body ||
-          github.event.comment.body || '' }}
-        ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || '' }}
+          ${{ github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body ||
+              '' }}
+        ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail

@@ -12,6 +12,15 @@ on:
     types:
       - created
       - edited
+  discussion:
+    types:
+      - created
+      - edited
+      - answered
+  discussion_comment:
+    types:
+      - created
+      - edited
   issues:
     types:
       - opened
@@ -107,6 +116,7 @@ concurrency:
     opencode-${{
       (github.event.issue.pull_request && github.event.issue.number)
       || github.event.pull_request.number
+      || github.event.discussion.number
       || (github.ref_name != github.event.repository.default_branch && github.ref)
       || github.run_id
     }}
@@ -122,6 +132,7 @@ jobs:
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
       pull-requests: write
+      discussions: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -151,7 +162,7 @@ jobs:
       - name: Resolve prompt from comment
         id: prompt
         env:
-          COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          COMMENT_BODY: ${{ github.event.comment.body || github.event.discussion.body || github.event.issue.body || '' }}
           PROMPT_INPUT: ${{ inputs.prompt }}
         run: |
           set -euo pipefail
