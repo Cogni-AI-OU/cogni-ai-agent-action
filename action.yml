@@ -54,7 +54,15 @@ inputs:
         touch*: allow
         true*: allow
         vim*: allow
-    description: Permissions configuration for OpenCode.
+    description: |-
+      Permissions configuration for OpenCode. Supports hierarchical format with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect', 'cogni-ai-reviewer').
+      Example:
+        default:
+          bash:
+            ls*: allow
+        cogni-ai-architect:
+          bash:
+            git*: allow
     required: false
   prompt:
     default: ''
@@ -254,14 +262,41 @@ runs:
       id: permissions
       shell: python
       env:
+        AGENT_NAME: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         PERMISSIONS_YAML: ${{ inputs.permissions }}
       run: |
         import os
         import json
         import yaml
-        permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
+
+        def deep_merge(base, override):
+            if not isinstance(base, dict) or not isinstance(override, dict):
+                return override
+            for key, value in override.items():
+                if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+                    deep_merge(base[key], value)
+                else:
+                    base[key] = value
+            return base
+
+        raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
+        agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
+        try:
+            permissions = yaml.safe_load(raw_yaml) or {}
+        except Exception:
+            permissions = {}
+
+        if isinstance(permissions, dict) and ('default' in permissions or agent in permissions):
+            base_perms = permissions.get('default', {})
+            agent_perms = permissions.get(agent, {})
+            if not isinstance(base_perms, dict): base_perms = {}
+            if not isinstance(agent_perms, dict): agent_perms = {}
+            final_perms = deep_merge(base_perms, agent_perms)
+        else:
+            final_perms = permissions
+
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-            f.write(f"json={json.dumps(permissions)}\n")
+            f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode

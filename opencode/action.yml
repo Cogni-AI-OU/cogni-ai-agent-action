@@ -54,7 +54,15 @@ inputs:
         touch*: allow
         true*: allow
         vim*: allow
-    description: Permissions configuration for OpenCode.
+    description: |-
+      Permissions configuration for OpenCode. Supports hierarchical format with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect', 'cogni-ai-reviewer').
+      Example:
+        default:
+          bash:
+            ls*: allow
+        cogni-ai-architect:
+          bash:
+            git*: allow
     required: false
   prompt:
     default: ''
@@ -90,28 +98,45 @@ runs:
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
           let run = false;
+          let agent = '';
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
+            agent = 'cogni-ai-architect';
           } else if (eventName === 'issues' && !isBot) {
             const assoc = context.payload.issue?.author_association;
             const body = context.payload.issue?.body;
-            run = ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body));
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = 'cogni-ai-architect';
+            }
           } else if (eventName === 'issue_comment' && !isBot) {
             const assoc = context.payload.comment?.author_association;
             const body = context.payload.comment?.body;
-            run = ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body));
+            const isReview = body && body.includes('/review');
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = isReview ? 'cogni-ai-reviewer' : 'cogni-ai-architect';
+            }
           } else if (eventName === 'pull_request_review_comment' && !isBot) {
             const assoc = context.payload.comment?.author_association;
             const body = context.payload.comment?.body;
-            run = ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body));
+            const isReview = body && body.includes('/review');
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = isReview ? 'cogni-ai-reviewer' : 'cogni-ai-architect';
+            }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
             const login = pr?.user?.login;
-            run = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
-              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            if ((!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR')) {
+              run = true;
+              agent = 'cogni-ai-architect';
+            }
           }
           core.setOutput('run', run ? 'true' : '');
+          core.setOutput('agent', agent);
     - name: Wait for concurrent runs
       if: steps.check.outputs.run == 'true'
       id: concurrency
@@ -207,14 +232,41 @@ runs:
       id: permissions
       shell: python
       env:
+        AGENT_NAME: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         PERMISSIONS_YAML: ${{ inputs.permissions }}
       run: |
         import os
         import json
         import yaml
-        permissions = yaml.safe_load(os.environ.get('PERMISSIONS_YAML', ''))
+
+        def deep_merge(base, override):
+            if not isinstance(base, dict) or not isinstance(override, dict):
+                return override
+            for key, value in override.items():
+                if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+                    deep_merge(base[key], value)
+                else:
+                    base[key] = value
+            return base
+
+        raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
+        agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
+        try:
+            permissions = yaml.safe_load(raw_yaml) or {}
+        except Exception:
+            permissions = {}
+
+        if isinstance(permissions, dict) and ('default' in permissions or agent in permissions):
+            base_perms = permissions.get('default', {})
+            agent_perms = permissions.get(agent, {})
+            if not isinstance(base_perms, dict): base_perms = {}
+            if not isinstance(agent_perms, dict): agent_perms = {}
+            final_perms = deep_merge(base_perms, agent_perms)
+        else:
+            final_perms = permissions
+
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-            f.write(f"json={json.dumps(permissions)}\n")
+            f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
@@ -225,7 +277,7 @@ runs:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
-        agent: ${{ inputs.agent }}
+        agent: ${{ inputs.agent || steps.check.outputs.agent || 'cogni-ai-architect' }}
         mentions: ${{ inputs.mentions || '/oc,/opencode,/review' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
