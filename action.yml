@@ -192,7 +192,7 @@ runs:
             const ids = olderActiveRuns.map(r => r.id).join(', ');
             core.info(
               `Concurrency wait: ${olderActiveRuns.length} older run(s) still active ` +
-              `(IDs: ${ids}). Waiting ${POLL_INTERVAL_MS / 1000}s…`
+              `(IDs: ${ids}). Waiting ${POLL_INTERVAL_MS / 1000}s...`
             );
             await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
           }
