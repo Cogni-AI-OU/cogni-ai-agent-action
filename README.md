@@ -196,6 +196,9 @@ with:
     cogni-ai-reviewer:
       bash:
         git*: deny
+    cogni-ai-devops:
+      bash:
+        ansible*: allow
 ```
 
 ### Outputs

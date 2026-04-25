@@ -22,47 +22,50 @@ inputs:
     required: true
   permissions:
     default: |-
-      bash:
-        '*': deny
-        ansible*: allow
-        ansible-galaxy*: allow
-        ansible-playbook*: allow
-        awk*: allow
-        continue*: allow
-        cp*: allow
-        ex*: allow
-        find*: allow
-        gh*: allow
-        gh pr review*: allow  # For batched feedback and setting review states
-        git*: allow
-        glob*: allow
-        hexdump*: allow
-        jq*: allow
-        ls*: allow
-        links*: allow
-        mawk*: allow
-        pipenv*: allow
-        pipx*: allow
-        poetry*: allow
-        pre-commit*: allow
-        printf*: allow
-        sed*: allow
-        set*: allow
-        stat*: allow
-        time*: allow
-        timeout*: allow
-        touch*: allow
-        true*: allow
-        vim*: allow
+      default:
+        bash:
+          '*': deny
+          awk*: allow
+          continue*: allow
+          cp*: allow
+          ex*: allow
+          find*: allow
+          gh*: allow
+          gh pr review*: allow  # For batched feedback and setting review states
+          git*: allow
+          glob*: allow
+          hexdump*: allow
+          jq*: allow
+          ls*: allow
+          links*: allow
+          mawk*: allow
+          pipenv*: allow
+          pipx*: allow
+          poetry*: allow
+          pre-commit*: allow
+          printf*: allow
+          sed*: allow
+          set*: allow
+          stat*: allow
+          time*: allow
+          timeout*: allow
+          touch*: allow
+          true*: allow
+          vim*: allow
+      cogni-ai-devops:
+        bash:
+          ansible*: allow
+          ansible-galaxy*: allow
+          ansible-playbook*: allow
     description: |-
-      Permissions configuration for OpenCode. Supports hierarchical format with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect', 'cogni-ai-reviewer').
+      Permissions configuration for OpenCode. Supports hierarchical format with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect', 'cogni-ai-reviewer', 'cogni-ai-devops').
       Example:
         default:
           bash:
             ls*: allow
-        cogni-ai-architect:
+        cogni-ai-devops:
           bash:
-            git*: allow
+            ansible*: allow
     required: false
   prompt:
     default: ''
