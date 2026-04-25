@@ -91,7 +91,7 @@ upstream changes so the post-run auto-push does not get rejected with
 
 **Mandatory steps (strict order, run immediately before session end)**:
 
-1. Stage and commit all local work (`git add` only verified files—i.e., those that have passed tests, linting, and manual review—then
+1. Stage and commit all local work (`git add` only verified files -- i.e., those that have passed tests, linting, and manual review -- then
    `git commit`).
 2. Pull with merge semantics from the current head branch:
    `git pull --no-rebase origin $(git rev-parse --abbrev-ref HEAD)`.

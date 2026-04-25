@@ -12,6 +12,10 @@ on:
     types:
       - created
       - edited
+  issues:
+    types:
+      - opened
+      - edited
   workflow_call:
     inputs:
       agent:
