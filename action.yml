@@ -133,8 +133,7 @@ runs:
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
-            const isReviewTrigger = ['issue_comment', 'pull_request_review_comment'].includes(eventName) &&
-                                    REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
 
             if (isReviewTrigger) {
               run = true;

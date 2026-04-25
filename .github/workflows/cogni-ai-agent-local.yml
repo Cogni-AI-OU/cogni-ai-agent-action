@@ -166,40 +166,6 @@ jobs:
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: pip install -r .devcontainer/requirements.txt
-      - name: Resolve prompt from comment
-        id: prompt
-        env:
-          COMMENT_BODY: >-
-            ${{ github.event.comment.body ||
-                github.event.discussion.body ||
-                github.event.issue.body ||
-                github.event.pull_request.body ||
-                '' }}
-          ISSUE_NUMBER: >-
-            ${{ github.event.issue.number ||
-                github.event.pull_request.number ||
-                github.event.discussion.number ||
-                '' }}
-          PROMPT_INPUT: ${{ inputs.prompt }}
-        run: |
-          set -euo pipefail
-          prompt="${PROMPT_INPUT:-}"
-          if [ -z "$prompt" ]; then
-            prompt="${COMMENT_BODY:-}"
-          fi
-          if [ -n "${ISSUE_NUMBER:-}" ]; then
-            if [ -n "$prompt" ]; then
-              prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
-            else
-              prompt="Related to issue/PR #${ISSUE_NUMBER}"
-            fi
-          fi
-          EOF_TOKEN="EOF_$(openssl rand -hex 10)"
-          {
-            echo "prompt<<$EOF_TOKEN"
-            printf '%s\n' "$prompt"
-            echo "$EOF_TOKEN"
-          } >> "$GITHUB_OUTPUT"
       - name: Run Cogni AI Agent Local
         id: cogni-ai
         uses: ./
@@ -210,10 +176,10 @@ jobs:
             ${{ inputs.agent || '' }}
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ steps.prompt.outputs.prompt }}
+          prompt: ${{ inputs.prompt }}
       - name: Annotate prompt and output
         env:
-          COGNI_AI_PROMPT: ${{ steps.prompt.outputs.prompt }}
+          COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
           COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
         run: |
           set -euo pipefail
