@@ -57,6 +57,9 @@ inputs:
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
+          pulumi*: allow
+          terragrunt*: allow
+          terraform*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect', 'cogni-ai-reviewer', 'cogni-ai-devops').
       Example:
@@ -66,6 +69,7 @@ inputs:
         cogni-ai-devops:
           bash:
             ansible*: allow
+            terraform*: allow
     required: false
   prompt:
     default: ''

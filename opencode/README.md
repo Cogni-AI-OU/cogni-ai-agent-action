@@ -190,6 +190,7 @@ with:
     cogni-ai-devops:
       bash:
         ansible*: allow
+        terraform*: allow
 ```
 
 ### Outputs
