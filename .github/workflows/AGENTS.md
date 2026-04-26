@@ -24,7 +24,7 @@ For a human-readable overview, see [README.md](README.md).
 ### cogni-ai-agent-local.yml
 
 - Purpose: Runs local `action.yml` wrapper.
-- Triggers: `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
 - Commands: `/co`, `/cogni`, `/review`.
 
 ### copilot-setup-steps.yml
@@ -36,7 +36,7 @@ For a human-readable overview, see [README.md](README.md).
 ### opencode-agent-local.yml
 
 - Purpose: Runs local `./opencode/action.yml` wrapper.
-- Triggers: `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
 - Commands: `/oc`, `/opencode`, `/review`.
 
 ### opencode.yml

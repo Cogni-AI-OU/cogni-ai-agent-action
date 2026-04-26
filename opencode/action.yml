@@ -150,6 +150,9 @@ runs:
             if (isReviewTrigger) {
               run = true;
               agent = 'cogni-ai-reviewer';
+            } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = getAgent(body);
             }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
