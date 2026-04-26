@@ -103,29 +103,24 @@ runs:
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
-
           function matchesTrigger(body, triggers) {
             if (!body) return false;
             return triggers.some(t => body.endsWith(t) || body.includes(t + ' '));
           }
-
           function matchesBotMention(body) {
             if (!body) return false;
             return BOT_MENTIONS.some(m => body.includes(m));
           }
-
           function getAgent(body) {
             if (!body) return 'cogni-ai-architect';
             // Stricter pattern for /review to avoid misclassification
             if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-reviewer';
             return 'cogni-ai-architect';
           }
-
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
           let run = false;
           let agent = '';
-
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
@@ -134,7 +129,6 @@ runs:
             const assoc = payload?.author_association;
             const body = payload?.body;
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
-
             if (isReviewTrigger) {
               run = true;
               agent = 'cogni-ai-reviewer';
@@ -147,7 +141,6 @@ runs:
             const assoc = payload?.author_association;
             const body = payload?.body;
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
-
             if (isReviewTrigger) {
               run = true;
               agent = 'cogni-ai-reviewer';
@@ -166,7 +159,6 @@ runs:
               agent = 'cogni-ai-architect';
             }
           }
-
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
@@ -296,6 +288,13 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+    - name: Checkout cogni-ai-agent-instructions
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
+          ${{ runner.temp }}/.instructions
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
@@ -307,7 +306,6 @@ runs:
         import os
         import json
         import yaml
-
         def deep_merge(base, override):
             if not isinstance(base, dict) or not isinstance(override, dict):
                 return override
@@ -318,14 +316,12 @@ runs:
                 else:
                     res[k] = v
             return res
-
         raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
         agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
         try:
             permissions = yaml.safe_load(raw_yaml) or {}
         except Exception:
             permissions = {}
-
         if isinstance(permissions, dict) and ('default' in permissions or agent in permissions):
             base_perms = permissions.get('default', {})
             agent_perms = permissions.get(agent, {})
@@ -334,7 +330,6 @@ runs:
             final_perms = deep_merge(base_perms, agent_perms)
         else:
             final_perms = permissions
-
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
@@ -356,6 +351,7 @@ runs:
               "${{ runner.temp }}/.agents/AGENTS.mmd",
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
               "${{ runner.temp }}/.agents/FLOWS.mmd",
+              "${{ runner.temp }}/.instructions/AGENTS.md",
               "${{ runner.temp }}/.skills/AGENTS.md",
               "${{ runner.temp }}/.skills/git/SKILL.md",
               "${{ runner.temp }}/.skills/github/SKILL.md",
