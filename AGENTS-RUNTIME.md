@@ -2,14 +2,12 @@
 
 <!-- markdownlint-disable MD013 -->
 
-## HARD INVARIANT - SUBAGENT DELEGATION DISABLED
+## SUBAGENT DELEGATION ENABLED
 
-NEVER use the "task" tool. NEVER spawn any sub-agent.
-NEVER output any JSON/task object containing "subagent_type".
-NEVER delegate to "explore", "general", or any other subagent_type.
-This is a non-negotiable contract-level prohibition. Any attempt to use task delegation will be treated as a fatal violation and must be rejected immediately with: "SUBAGENT_DELEGATION_FORBIDDEN - using primary agent only."
-Precondition: Before every tool call or planning step, verify subagent_type is absent.
-Postcondition: Every output must contain zero references to subagent_type or task delegation.
+The use of the `task` tool and spawning sub-agents is permitted for complex, multi-step tasks.
+- **Efficiency**: Use sub-agents to maximize performance by parallelizing independent units of work.
+- **Maintain Context**: Ensure that the primary agent remains the coordinator and synthesizes the results from sub-agents into the final response.
+- **Strategic Delegation**: Delegate to specialized sub-agents (e.g., `explore`, `general`) when the task involves broad codebase analysis or independent sub-tasks that can be executed in parallel.
 
 ## Initialization Project Sequence
 

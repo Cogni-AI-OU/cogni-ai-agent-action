@@ -64,7 +64,7 @@ inputs:
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-reviewer', 'cogni-ai-devops').
+      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops', etc.).
       Example:
         default:
           bash:

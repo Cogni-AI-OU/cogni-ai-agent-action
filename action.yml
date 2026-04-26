@@ -64,7 +64,7 @@ inputs:
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-reviewer', 'cogni-ai-devops').
+      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops', etc.).
       Example:
         default:
           bash:
@@ -382,6 +382,56 @@ runs:
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-fact-ops": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-context7-ops": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-weaver": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-elite": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-keeper": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,
