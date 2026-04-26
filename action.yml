@@ -302,55 +302,37 @@ runs:
         import os
         import json
         import glob
+        import shutil
 
         runner_temp = os.environ.get('RUNNER_TEMP')
         workspace = os.environ.get('GITHUB_WORKSPACE')
         skills_dir = os.path.join(runner_temp, '.skills')
-        
-        # Option A: Create symlink
         symlink_path = os.path.join(workspace, '.skills')
-        if os.path.exists(symlink_path):
-            os.remove(symlink_path)
-        os.symlink(skills_dir, symlink_path)
-        
-        # Option C: Build proper skill manifest/registry
-        skills = {}
-        # Find all SKILL.md files
-        for skill_md in glob.glob(os.path.join(skills_dir, "**/SKILL.md"), recursive=True):
-            rel_path = os.path.relpath(skill_md, skills_dir)
-            skill_id = os.path.dirname(rel_path)
-            if not skill_id or skill_id == '.':
-                continue
-                
-            # Basic metadata extraction from SKILL.md frontmatter
-            description = ""
+
+        if not os.path.isdir(skills_dir):
+            print(f"Warning: Skills directory not found at {skills_dir}. Skipping registration.")
+            exit(0)
+
+        # Option A: Create symlink (with fallback for non-symlink-capable environments)
+        if os.path.exists(symlink_path) or os.path.islink(symlink_path):
+            # Remove existing path safely whether it's a symlink, file, or directory
+            if os.path.islink(symlink_path) or os.path.isfile(symlink_path):
+                os.remove(symlink_path)
+            elif os.path.isdir(symlink_path):
+                shutil.rmtree(symlink_path)
+
+        try:
+            os.symlink(skills_dir, symlink_path)
+            print(f"Created symlink: {symlink_path} -> {skills_dir}")
+        except (OSError, NotImplementedError, PermissionError) as e:
+            # Fallback: copy directory when symlinks are not supported or permitted
+            print(f"Failed to create symlink: {e}. Falling back to copy.")
             try:
-                with open(skill_md, 'r') as f:
-                    lines = f.readlines()
-                    for i, line in enumerate(lines):
-                        if line.strip() == 'description: >-':
-                            description = lines[i+1].strip()
-                            break
-                        elif line.strip().startswith('description:'):
-                            description = line.split(':', 1)[1].strip().strip('"').strip("'")
-                            break
-            except Exception as e:
-                print(f"Error reading {skill_md}: {e}")
-            
-            skills[skill_id] = {
-                "path": os.path.join(workspace, '.skills', rel_path),
-                "description": description
-            }
-            
-        manifest = {
-            "version": "1.0.0",
-            "skills": skills
-        }
-        
-        with open(os.path.join(workspace, 'skills.json'), 'w') as f:
-            json.dump(manifest, f, indent=2)
-            
-        print(f"Registered {len(skills)} skills in skills.json")
+                shutil.copytree(skills_dir, symlink_path)
+                print(f"Copied skills to {symlink_path}")
+            except Exception as copy_e:
+                print(f"Error copying skills: {copy_e}")
+
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
@@ -403,17 +385,18 @@ runs:
             "$schema": "https://opencode.ai/config.json",
             "instructions": [
               "AGENTS-RUNTIME.md",
-              "skills.json",
               "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.mmd",
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
               "${{ runner.temp }}/.agents/FLOWS.mmd",
               "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/git/SKILL.md",
-              "${{ runner.temp }}/.skills/github/SKILL.md",
-              "${{ runner.temp }}/.skills/github-actions/SKILL.md"
+              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
             ],
+            "skills": {
+              "paths": [
+                "${{ runner.temp }}/.skills"
+              ]
+            },
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
