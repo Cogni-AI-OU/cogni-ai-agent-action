@@ -352,27 +352,13 @@ runs:
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
               "${{ runner.temp }}/.agents/FLOWS.mmd",
               "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/ansible/SKILL.md",
-              "${{ runner.temp }}/.skills/context-aware-ops/SKILL.md",
-              "${{ runner.temp }}/.skills/fact-writer/SKILL.md",
-              "${{ runner.temp }}/.skills/gh/SKILL.md",
-              "${{ runner.temp }}/.skills/git/SKILL.md",
-              "${{ runner.temp }}/.skills/git-expert/SKILL.md",
-              "${{ runner.temp }}/.skills/github/SKILL.md",
-              "${{ runner.temp }}/.skills/github-actions/SKILL.md",
-              "${{ runner.temp }}/.skills/github-script/SKILL.md",
-              "${{ runner.temp }}/.skills/mermaid/SKILL.md",
-              "${{ runner.temp }}/.skills/mermaid-beta/SKILL.md",
-              "${{ runner.temp }}/.skills/minizinc/SKILL.md",
-              "${{ runner.temp }}/.skills/molecule/SKILL.md",
-              "${{ runner.temp }}/.skills/pdf/SKILL.md",
-              "${{ runner.temp }}/.skills/pre-commit/SKILL.md",
-              "${{ runner.temp }}/.skills/robust-commands/SKILL.md",
-              "${{ runner.temp }}/.skills/shell/SKILL.md",
-              "${{ runner.temp }}/.skills/skill-writer/SKILL.md",
-              "${{ runner.temp }}/.skills/vim-ex/SKILL.md"
+              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
             ],
+            "skills": {
+              "paths": [
+                "${{ runner.temp }}/.skills"
+              ]
+            },
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
