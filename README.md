@@ -147,7 +147,13 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'issues' ||
       github.event_name == 'pull_request' ||
-      github.event_name == 'discussion' ||
+      (
+        github.event_name == 'discussion' &&
+        (
+          contains(github.event.discussion.body || '', '/') ||
+          contains(github.event.discussion.body || '', '@')
+        )
+      ) ||
       contains(github.event.comment.body || '', '/') ||
       contains(github.event.comment.body || '', '@')
     runs-on: ubuntu-latest
