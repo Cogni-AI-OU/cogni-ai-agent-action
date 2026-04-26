@@ -155,8 +155,9 @@ runs:
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
             const login = pr?.user?.login;
-            if ((!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
-              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR')) {
+            const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            if (isAllowed) {
               run = true;
               agent = 'cogni-ai-architect';
             }

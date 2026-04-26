@@ -181,14 +181,7 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: >-
-            ${{
-              github.event.comment.body ||
-              github.event.issue.body ||
-              github.event.pull_request.body ||
-              github.event.discussion.body ||
-              inputs.prompt
-            }}
+          prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 ```
 
