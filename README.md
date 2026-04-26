@@ -90,6 +90,7 @@ on:
   discussion_comment:
     types:
       - created
+      - edited
   pull_request:
     types:
       - opened
