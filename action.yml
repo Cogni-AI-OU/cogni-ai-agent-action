@@ -369,7 +369,8 @@ runs:
                 }
               },
               "cogni-ai-reviewer": {
-                "mode": "primary",
+                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and architectural invariant verification.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
                 "tools": {
@@ -379,7 +380,8 @@ runs:
                 }
               },
               "cogni-ai-devops": {
-                "mode": "primary",
+                "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
                 "tools": {
@@ -389,7 +391,8 @@ runs:
                 }
               },
               "cogni-ai-fact-ops": {
-                "mode": "primary",
+                "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
                 "tools": {
@@ -399,7 +402,8 @@ runs:
                 }
               },
               "cogni-ai-context7-ops": {
-                "mode": "primary",
+                "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
                 "tools": {

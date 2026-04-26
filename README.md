@@ -58,6 +58,12 @@ jobs:
     timeout-minutes: 60
 ```
 
+### Task delegation
+
+`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, and `cogni-ai-reviewer` are configured with `mode: all`, so
+they remain selectable as primary agents and are also exposed to OpenCode's
+`task` tool as named subagent delegation targets.
+
 ### OpenCode workflow
 
 For running a generic OpenCode agent without specialized skills or instructions, see the [OpenCode Agent documentation](opencode/README.md).
