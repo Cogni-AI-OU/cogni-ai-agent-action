@@ -389,7 +389,8 @@ runs:
                 }
               },
               "cogni-ai-fact-ops": {
-                "mode": "primary",
+                "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
                 "tools": {

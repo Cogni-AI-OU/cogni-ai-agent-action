@@ -60,9 +60,9 @@ jobs:
 
 ### Task delegation
 
-`cogni-ai-context7-ops` is configured with `mode: all`, so it remains selectable as
-a primary agent and is also exposed to OpenCode's `task` tool as a named subagent
-delegation target.
+`cogni-ai-context7-ops` and `cogni-ai-fact-ops` are configured with `mode: all`, so
+they remain selectable as primary agents and are also exposed to OpenCode's
+`task` tool as named subagent delegation targets.
 
 ### OpenCode workflow
 
