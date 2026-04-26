@@ -140,18 +140,6 @@ on:
         required: true
         type: string
 
-# Prevent concurrent runs on the same branch to avoid push conflicts.
-concurrency:
-  cancel-in-progress: false
-  group: >-
-    opencode-${{
-      github.event.issue.number
-      || github.event.pull_request.number
-      || github.event.discussion.number
-      || (github.ref_name != github.event.repository.default_branch && github.ref)
-      || github.run_id
-    }}
-
 jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
