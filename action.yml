@@ -354,6 +354,7 @@ runs:
               "AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.md",
               "${{ runner.temp }}/.agents/AGENTS.mmd",
+              "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
               "${{ runner.temp }}/.agents/FLOWS.mmd",
               "${{ runner.temp }}/.skills/AGENTS.md",
               "${{ runner.temp }}/.skills/git/SKILL.md",
