@@ -61,7 +61,9 @@ inputs:
           terragrunt*: allow
           terraform*: allow
     description: |-
-      Permissions configuration for OpenCode. Supports hierarchical format with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect', 'cogni-ai-reviewer', 'cogni-ai-devops').
+      Permissions configuration for OpenCode. Supports hierarchical format
+      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
+      'cogni-ai-reviewer', 'cogni-ai-devops').
       Example:
         default:
           bash:
@@ -126,17 +128,13 @@ runs:
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
-          } else if (eventName === 'issues' && !isBot) {
-            const assoc = context.payload.issue?.author_association;
-            const body = context.payload.issue?.body;
-            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
-              run = true;
-              agent = getAgent(body);
-            }
-          } else if (eventName === 'issue_comment' && !isBot) {
-            const assoc = context.payload.comment?.author_association;
-            const body = context.payload.comment?.body;
-            if (REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS)) {
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
+            const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
+            const assoc = payload?.author_association;
+            const body = payload?.body;
+            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+
+            if (isReviewTrigger) {
               run = true;
               agent = 'cogni-ai-reviewer';
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
@@ -144,9 +142,12 @@ runs:
               agent = getAgent(body);
             }
           } else if (eventName === 'pull_request_review_comment' && !isBot) {
-            const assoc = context.payload.comment?.author_association;
-            const body = context.payload.comment?.body;
-            if (REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS)) {
+            const payload = context.payload.comment;
+            const assoc = payload?.author_association;
+            const body = payload?.body;
+            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+
+            if (isReviewTrigger) {
               run = true;
               agent = 'cogni-ai-reviewer';
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
@@ -157,8 +158,9 @@ runs:
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
             const login = pr?.user?.login;
-            if ((!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
-              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR')) {
+            const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            if (isAllowed) {
               run = true;
               agent = 'cogni-ai-architect';
             }
@@ -176,6 +178,8 @@ runs:
         script: |
           const eventName = context.eventName;
           const issueOrPREvents = [
+            'discussion',
+            'discussion_comment',
             'issue_comment',
             'issues',
             'pull_request',
@@ -235,9 +239,17 @@ runs:
       shell: bash
       env:
         COMMENT_BODY: >-
-          ${{ github.event_name == 'issues' && github.event.issue.body ||
-          github.event.comment.body || '' }}
-        ISSUE_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number || '' }}
+          ${{ github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body ||
+              '' }}
+        ISSUE_NUMBER: >-
+          ${{ github.event.issue.number ||
+              github.event.pull_request.number ||
+              github.event.discussion.number ||
+              '' }}
+        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail
@@ -246,10 +258,15 @@ runs:
           prompt="${COMMENT_BODY:-}"
         fi
         if [ -n "${ISSUE_NUMBER:-}" ]; then
+          entity_type="issue/PR"
+          if [ -n "${DISCUSSION_NUMBER:-}" ]; then
+            entity_type="discussion"
+          fi
+          header="Related to $entity_type #$ISSUE_NUMBER"
           if [ -n "$prompt" ]; then
-            prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
+            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
-            prompt="Related to issue/PR #${ISSUE_NUMBER}"
+            prompt="$header"
           fi
         fi
         if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then

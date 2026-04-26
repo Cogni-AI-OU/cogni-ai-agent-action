@@ -43,6 +43,7 @@ jobs:
       id-token: write
       issues: write
       pull-requests: write
+      discussions: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -53,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt }}
+          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
     timeout-minutes: 60
 ```
 
@@ -78,6 +79,15 @@ on:
       - edited
       - reopened
   issue_comment:
+    types:
+      - created
+      - edited
+  discussion:
+    types:
+      - created
+      - edited
+      - answered
+  discussion_comment:
     types:
       - created
       - edited
@@ -135,8 +145,21 @@ jobs:
     name: Run Cogni AI agent
     if: |
       github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'issues' ||
       github.event_name == 'pull_request' ||
+      (
+        github.event_name == 'issues' &&
+        (
+          contains(github.event.issue.body || '', '/') ||
+          contains(github.event.issue.body || '', '@')
+        )
+      ) ||
+      (
+        github.event_name == 'discussion' &&
+        (
+          contains(github.event.discussion.body || '', '/') ||
+          contains(github.event.discussion.body || '', '@')
+        )
+      ) ||
       contains(github.event.comment.body || '', '/') ||
       contains(github.event.comment.body || '', '@')
     runs-on: ubuntu-latest
@@ -145,6 +168,7 @@ jobs:
       id-token: write
       issues: write
       pull-requests: write
+      discussions: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -157,13 +181,7 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: >-
-            ${{
-              github.event.comment.body ||
-              github.event.issue.body ||
-              github.event.pull_request.body ||
-              inputs.prompt
-            }}
+          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
     timeout-minutes: 60
 ```
 
