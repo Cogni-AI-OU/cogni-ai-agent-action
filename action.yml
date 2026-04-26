@@ -284,10 +284,6 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
-    - name: Checkout cogni-ai-agent-skills
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
     - name: Checkout cogni-ai-agent-instructions
       if: steps.check.outputs.run == 'true'
       shell: bash
@@ -295,6 +291,10 @@ runs:
         git clone --depth 1 \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
           ${{ runner.temp }}/.instructions
+    - name: Checkout cogni-ai-agent-skills
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
