@@ -54,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt }}
+          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
     timeout-minutes: 60
 ```
 
@@ -140,6 +140,18 @@ on:
         required: true
         type: string
 
+# Prevent concurrent runs on the same branch to avoid push conflicts.
+concurrency:
+  cancel-in-progress: false
+  group: >-
+    opencode-${{
+      github.event.issue.number
+      || github.event.pull_request.number
+      || github.event.discussion.number
+      || (github.ref_name != github.event.repository.default_branch && github.ref)
+      || github.run_id
+    }}
+
 jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
@@ -181,7 +193,7 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: ${{ inputs.prompt }}
+          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
     timeout-minutes: 60
 ```
 
