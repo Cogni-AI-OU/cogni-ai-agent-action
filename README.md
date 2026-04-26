@@ -60,7 +60,7 @@ jobs:
 
 ### Task delegation
 
-`cogni-ai-context7-ops` and `cogni-ai-fact-ops` are configured with `mode: all`, so
+`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, and `cogni-ai-reviewer` are configured with `mode: all`, so
 they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 

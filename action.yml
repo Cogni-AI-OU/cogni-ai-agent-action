@@ -369,7 +369,8 @@ runs:
                 }
               },
               "cogni-ai-reviewer": {
-                "mode": "primary",
+                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and architectural invariant verification.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
                 "tools": {
@@ -379,7 +380,8 @@ runs:
                 }
               },
               "cogni-ai-devops": {
-                "mode": "primary",
+                "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
                 "tools": {
