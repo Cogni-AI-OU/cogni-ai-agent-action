@@ -21,6 +21,15 @@ When instructions are loaded from a temporary directory (e.g., `${{ runner.temp 
 
 To determine the base directory for an instruction file, check the `Instructions from: <path>` header provided in your system prompt. Do NOT assume paths are relative to your current working directory unless the instruction file explicitly states otherwise or is located within your project's workspace.
 
+### Skill Manifest
+
+A JSON skill manifest is generated at runtime and placed in the workspace at `.skills-manifest.json`. This file contains a registry of all available skills with their absolute paths and descriptions. When you need to discover or load a skill:
+
+1. Read `.skills-manifest.json` from the workspace root.
+2. Look up the skill by name in the `skills` object.
+3. Use the `path` field to read the skill's `SKILL.md` file (via bash, since the path is outside the workspace).
+4. The `skills_dir` field contains the base directory where all skills are cloned.
+
 ## GitHub Actions Runtime
 
 You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub action through the OpenCode integration within a GitHub runner environment. The project resides in `/home/runner/work/` in the GitHub runner.

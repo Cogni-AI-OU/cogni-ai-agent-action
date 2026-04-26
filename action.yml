@@ -295,6 +295,54 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+    - name: Generate skill manifest
+      if: steps.check.outputs.run == 'true'
+      id: skills
+      shell: python
+      env:
+        SKILLS_DIR: ${{ runner.temp }}/.skills
+        WORKSPACE: ${{ github.workspace }}
+      run: |
+        import json
+        import os
+
+        skills_dir = os.environ["SKILLS_DIR"]
+        workspace = os.environ["WORKSPACE"]
+        manifest = {"skills_dir": skills_dir, "skills": {}}
+        MAX_DESCRIPTION_LENGTH = 200
+
+        for entry in sorted(os.listdir(skills_dir)):
+            skill_md = os.path.join(skills_dir, entry, "SKILL.md")
+            if not os.path.isfile(skill_md):
+                continue
+            description = ""
+            try:
+                with open(skill_md, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line or line.startswith("#"):
+                            continue
+                        # Use first non-empty, non-heading line as description
+                        description = line[:MAX_DESCRIPTION_LENGTH]
+                        break
+            except (IOError, UnicodeDecodeError) as e:
+                print(f"Warning: could not read {skill_md}: {e}")
+            manifest["skills"][entry] = {
+                "path": skill_md,
+                "description": description,
+            }
+
+        manifest_path = os.path.join(workspace, ".skills-manifest.json")
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2)
+
+        with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+            f.write(f"manifest_path={manifest_path}\n")
+            f.write(f"count={len(manifest['skills'])}\n")
+
+        print(f"Generated skill manifest with {len(manifest['skills'])} skills at {manifest_path}")
+        for name, info in manifest["skills"].items():
+            print(f"  - {name}: {info['description'][:80]}")
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
@@ -353,6 +401,7 @@ runs:
               "${{ runner.temp }}/.agents/FLOWS.mmd",
               "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md",
+              "${{ github.workspace }}/.skills-manifest.json",
               "${{ runner.temp }}/.skills/git/SKILL.md",
               "${{ runner.temp }}/.skills/github/SKILL.md",
               "${{ runner.temp }}/.skills/github-actions/SKILL.md"
@@ -457,6 +506,11 @@ runs:
             "tools": {
               "github-triage": false,
               "github-pr-search": false
+            },
+            "skills": {
+              "paths": [
+                "${{ runner.temp }}/.skills"
+              ]
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
