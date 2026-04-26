@@ -58,6 +58,12 @@ jobs:
     timeout-minutes: 60
 ```
 
+### Task delegation
+
+`cogni-ai-context7-ops` is configured with `mode: all`, so it remains selectable as
+a primary agent and is also exposed to OpenCode's `task` tool as a named subagent
+delegation target.
+
 ### OpenCode workflow
 
 For running a generic OpenCode agent without specialized skills or instructions, see the [OpenCode Agent documentation](opencode/README.md).

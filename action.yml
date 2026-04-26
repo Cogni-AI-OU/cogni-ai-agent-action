@@ -399,7 +399,8 @@ runs:
                 }
               },
               "cogni-ai-context7-ops": {
-                "mode": "primary",
+                "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
                 "tools": {
