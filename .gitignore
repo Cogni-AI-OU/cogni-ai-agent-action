@@ -6,9 +6,6 @@
 # Cache-related files
 .cache/
 
-# Dynamic skill manifest (generated at runtime)
-.skills-manifest.json
-
 # Environments
 .env
 .envrc
