@@ -12,7 +12,7 @@ The use of the `task` tool and spawning sub-agents is permitted for complex, mul
 ## Initialization Project Sequence
 
 1. **Agent Contract Alignment**: Locate, read, and strictly enforce the invariants defined in the current project workspace's main `AGENTS.md` and any of its directory-specific `AGENTS.md`. Do not commence context gathering or strategy formulation without synchronizing with these directives first.
-2. **Skill & Instruction Loading**: Autonomously discover and load `.github/copilot-instructions.md`, relevant `.instructions.md` rules, and applicable `SKILL.md` workflows.
+2. **Skill & Instruction Loading**: Autonomously discover and load `.github/copilot-instructions.md`, relevant `.instructions.md` rules, and applicable `SKILL.md` workflows. You MUST check `skills.json` in the workspace root for a registry of available skills and their absolute paths. Additionally, the `.skills/` directory is symlinked into the workspace for direct discovery.
 3. **Context Gathering for Ambiguity**: For ambiguous queries, you MUST load the project's `README.md`, relevant documentation, and files from the project codebase to establish sufficient context.
 
 ## Path Resolution for Instructions and Skills
@@ -20,6 +20,8 @@ The use of the `task` tool and spawning sub-agents is permitted for complex, mul
 When instructions are loaded from a temporary directory (e.g., `${{ runner.temp }}/.agents/` or `${{ runner.temp }}/.skills/`), you MUST resolve any relative paths mentioned within those files against the directory where the instruction file itself is located.
 
 To determine the base directory for an instruction file, check the `Instructions from: <path>` header provided in your system prompt. Do NOT assume paths are relative to your current working directory unless the instruction file explicitly states otherwise or is located within your project's workspace.
+
+For skills specifically, prefer using the absolute paths provided in `skills.json` or discover them via the `.skills/` directory in the workspace.
 
 ## GitHub Actions Runtime
 

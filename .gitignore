@@ -12,6 +12,8 @@
 /.github/agents/
 /.github/instructions/
 /.github/skills/
+.skills/
+skills.json
 .venv
 env/
 venv/
