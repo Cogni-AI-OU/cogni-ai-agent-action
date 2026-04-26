@@ -347,12 +347,12 @@ runs:
             "$schema": "https://opencode.ai/config.json",
             "instructions": [
               "AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.agents/AGENTS.md",
+              "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.mmd",
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
               "${{ runner.temp }}/.agents/FLOWS.mmd",
-              "${{ runner.temp }}/.instructions/AGENTS.md",
-              "${{ runner.temp }}/.skills/AGENTS.md",
+              "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.skills/git/SKILL.md",
               "${{ runner.temp }}/.skills/github/SKILL.md",
               "${{ runner.temp }}/.skills/github-actions/SKILL.md"
