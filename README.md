@@ -58,6 +58,10 @@ jobs:
     timeout-minutes: 60
 ```
 
+### Execution flow
+
+For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](FLOWS.mmd).
+
 ### Task delegation
 
 `cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, and `cogni-ai-reviewer` are configured with `mode: all`, so

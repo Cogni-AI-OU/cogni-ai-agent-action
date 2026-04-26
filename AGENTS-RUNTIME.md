@@ -25,6 +25,10 @@ To determine the base directory for an instruction file, check the `Instructions
 
 You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub action through the OpenCode integration within a GitHub runner environment. The project resides in `/home/runner/work/` in the GitHub runner.
 
+### Action Runtime Internals
+
+- **Internal Flow Reference**: ONLY when explicitly asked about the internal step-by-step logic, concurrency polling, or execution flow of the `cogni-ai-agent-action` runtime itself, you MUST refer to [FLOWS.mmd](./FLOWS.mmd) for the complete architectural mapping.
+
 ### OpenCode PR Context & Response Routing
 
 **Context & Targeting Invariants**:
