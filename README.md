@@ -145,8 +145,14 @@ jobs:
     name: Run Cogni AI agent
     if: |
       github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'issues' ||
       github.event_name == 'pull_request' ||
+      (
+        github.event_name == 'issues' &&
+        (
+          contains(github.event.issue.body || '', '/') ||
+          contains(github.event.issue.body || '', '@')
+        )
+      ) ||
       (
         github.event_name == 'discussion' &&
         (

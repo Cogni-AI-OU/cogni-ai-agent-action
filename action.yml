@@ -128,8 +128,7 @@ runs:
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
-          } else if (['issues', 'issue_comment', 'pull_request_review_comment',
-                      'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
@@ -141,6 +140,16 @@ runs:
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
               agent = getAgent(body);
+            }
+          } else if (eventName === 'pull_request_review_comment' && !isBot) {
+            const payload = context.payload.comment;
+            const assoc = payload?.author_association;
+            const body = payload?.body;
+            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+
+            if (isReviewTrigger) {
+              run = true;
+              agent = 'cogni-ai-reviewer';
             }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
@@ -237,6 +246,7 @@ runs:
               github.event.pull_request.number ||
               github.event.discussion.number ||
               '' }}
+        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail
@@ -245,10 +255,15 @@ runs:
           prompt="${COMMENT_BODY:-}"
         fi
         if [ -n "${ISSUE_NUMBER:-}" ]; then
+          entity_type="issue/PR"
+          if [ -n "${DISCUSSION_NUMBER:-}" ]; then
+            entity_type="discussion"
+          fi
+          header="Related to $entity_type #$ISSUE_NUMBER"
           if [ -n "$prompt" ]; then
-            prompt=$(printf 'Related to issue/PR #%s\n\n%s' "$ISSUE_NUMBER" "$prompt")
+            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
-            prompt="Related to issue/PR #${ISSUE_NUMBER}"
+            prompt="$header"
           fi
         fi
         if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then
