@@ -215,8 +215,10 @@ with:
   permissions: |
     default:
       bash:
-        ls*: allow
-        grep*: allow
+        "*": allow
+        gh api graphql*: deny
+        gh issue comment*: deny
+        gh pr comment*: deny
     cogni-ai-architect:
       bash:
         git*: allow
@@ -231,6 +233,29 @@ with:
     cogni-ai-github-ops:
       bash:
         gh api graphql*: allow  # Can also modify/delete issues/discussions
+        gh issue close*: allow
+        gh issue comment*: allow
+        gh issue create*: allow
+        gh issue delete*: allow
+        gh issue edit*: allow
+        gh issue lock*: allow
+        gh issue pin*: allow
+        gh issue reopen*: allow
+        gh issue transfer*: allow
+        gh issue unlock*: allow
+        gh issue unpin*: allow
+        gh pr close*: allow
+        gh pr comment*: allow
+        gh pr create*: allow
+        gh pr edit*: allow
+        gh pr lock*: allow
+        gh pr merge*: allow
+        gh pr ready*: allow
+        gh pr reopen*: allow
+        gh pr revert*: allow
+        gh pr review*: allow
+        gh pr unlock*: allow
+        gh pr update-branch*: allow
 ```
 
 ### Outputs
