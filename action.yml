@@ -305,7 +305,7 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh extension install github/gh-models
+        gh extension install github/gh-models || gh extension upgrade github/gh-models
         gh models list
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
