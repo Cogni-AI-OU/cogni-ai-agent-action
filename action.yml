@@ -352,17 +352,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-context7-ops": {
@@ -372,17 +372,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-devops": {
@@ -392,17 +392,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-elite": {
@@ -411,17 +411,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-fact-ops": {
@@ -431,17 +431,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-keeper": {
@@ -450,17 +450,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-reviewer": {
@@ -470,17 +470,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               },
               "cogni-ai-weaver": {
@@ -489,17 +489,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
                 "tools": {
                   "bash": true,
-                  "read": true,
+                  "codesearch": true,
+                  "edit": true,
                   "glob": true,
                   "grep": true,
-                  "edit": true,
-                  "write": true,
+                  "read": true,
+                  "skill": true,
                   "task": true,
-                  "webfetch": true,
                   "todowrite": true,
+                  "webfetch": true,
                   "websearch": true,
-                  "codesearch": true,
-                  "skill": true
+                  "write": true
                 }
               }
             },
@@ -533,17 +533,17 @@ runs:
             },
             "tools": {
               "bash": true,
-              "read": true,
+              "codesearch": true,
+              "edit": true,
               "glob": true,
               "grep": true,
-              "edit": true,
-              "write": true,
+              "read": true,
+              "skill": true,
               "task": true,
-              "webfetch": true,
               "todowrite": true,
+              "webfetch": true,
               "websearch": true,
-              "codesearch": true,
-              "skill": true
+              "write": true
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
