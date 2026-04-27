@@ -138,7 +138,17 @@ runs:
             run_id: context.runId,
           });
           const workflowId = currentRun.workflow_id;
-          const groupKey = currentRun.display_title;
+          const entityNumber =
+            context.payload.issue?.number ??
+            context.payload.pull_request?.number ??
+            context.payload.discussion?.number;
+
+          if (!entityNumber) {
+            core.info('Concurrency wait: skipped (no issue/PR/discussion number)');
+            return;
+          }
+
+          const groupKey = `${workflowId}:${eventName}:${entityNumber}`;
           const currentCreatedAt = new Date(currentRun.created_at).getTime();
           const POLL_INTERVAL_MS = 30_000;
           const MAX_WAIT_MS = 20 * 60_000;
