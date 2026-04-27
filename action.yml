@@ -443,6 +443,9 @@ runs:
                 }
               }
             },
+            "experimental": {
+              "batch_tool": true,
+            },
             "provider": {
               "opencode": {
                 "options": {}
@@ -458,11 +461,6 @@ runs:
               "github-triage": false,
               "github-pr-search": false
             },
-            "experimental": {
-              "batch_tool": {
-                "description": "Enable the batch tool",
-                "type": "boolean"
-              }
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
