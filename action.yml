@@ -13,6 +13,10 @@ inputs:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
+  gh-models-enabled:
+    default: "true"
+    description: Whether to enable gh-models extension.
+    required: false
   mentions:
     default: /co,/cogni,/review
     description: Comma-separated trigger mentions for OpenCode.
@@ -295,6 +299,14 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+    - name: Install gh-models extension
+      if: steps.check.outputs.run == 'true' && inputs.gh-models-enabled == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh extension install github/gh-models
+        gh models list --json
     - name: Convert permissions to JSON
       if: steps.check.outputs.run == 'true'
       id: permissions
