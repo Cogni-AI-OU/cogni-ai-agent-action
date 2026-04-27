@@ -338,13 +338,6 @@ runs:
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
-        OPENCODE_CONFIG_CONTENT: |-
-          {
-            "$schema": "https://opencode.ai/config.json",
-            "experimental": {
-              "openTelemetry": true
-            }
-          }
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions || '/oc,/opencode,/review' }}
