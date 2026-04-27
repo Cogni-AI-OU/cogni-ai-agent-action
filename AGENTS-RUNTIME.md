@@ -7,7 +7,7 @@
 The use of the `task` tool and spawning sub-agents is permitted for complex, multi-step tasks.
 - **Efficiency**: Use sub-agents to maximize performance by parallelizing independent units of work.
 - **Maintain Context**: Ensure that the primary agent remains the coordinator and synthesizes the results from sub-agents into the final response.
-- **Strategic Delegation**: Delegate to specialized sub-agents (e.g., `explore`, `general`) when the task involves broad codebase analysis or independent sub-tasks that can be executed in parallel.
+- **Strategic Delegation**: Delegate to specialized sub-agents when the task involves broad codebase analysis or independent sub-tasks that can be executed in parallel.
 
 ## Initialization Project Sequence
 

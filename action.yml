@@ -442,7 +442,9 @@ runs:
                   "edit": true,
                   "bash": true
                 }
-              }
+              },
+              "explore": false,
+              "general": false
             },
             "experimental": {
               "batch_tool": true
