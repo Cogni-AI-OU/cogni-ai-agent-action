@@ -342,6 +342,7 @@ runs:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         # @see: https://opencode.ai/docs/zen
         # For full list of available models: https://opencode.ai/zen/v1/models
+        # Schema: https://opencode.ai/config.json
         OPENCODE_CONFIG_CONTENT: |-
           {
             "$schema": "https://opencode.ai/config.json",
