@@ -23,54 +23,44 @@ inputs:
   permissions:
     default: |-
       default:
-        bash:
-          '*': deny
-          awk*: allow
-          base64*: allow
-          continue*: allow
-          cp*: allow
-          ex*: allow
-          find*: allow
-          gh*: allow
-          gh pr review*: allow  # For batched feedback and setting review states
-          git*: allow
-          glob*: allow
-          hexdump*: allow
-          jq*: allow
-          ls*: allow
-          links*: allow
-          mawk*: allow
-          pipenv*: allow
-          pipx*: allow
-          poetry*: allow
-          pre-commit*: allow
-          printf*: allow
-          sed*: allow
-          set*: allow
-          stat*: allow
-          time*: allow
-          timeout*: allow
-          touch*: allow
-          true*: allow
-          vim*: allow
-        read: allow
-        list: allow
+        bash: allow
+        edit: allow
         glob: allow
         grep: allow
-        edit: allow
+        list: allow
+        question: deny
+        read: allow
+        # Skills are limited to a curated list from the upstream cogni-ai-agent-skills repository.
+        skill:
+          ansible: allow
+          context-aware-ops: allow
+          fact-writer: allow
+          gh: allow
+          git: allow
+          git-expert: allow
+          github: allow
+          github-actions: allow
+          github-script: allow
+          mermaid: allow
+          mermaid-beta: allow
+          minizinc: allow
+          molecule: allow
+          pdf: allow
+          pre-commit: allow
+          robust-commands: allow
+          shell: allow
+          skill-writer: allow
+          vim-ex: allow
         task: allow
         todowrite: allow
-        question: deny
-        skill:
-          '*': allow
       cogni-ai-devops:
         bash:
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
           pulumi*: allow
-          terragrunt*: allow
           terraform*: allow
+          terragrunt*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
