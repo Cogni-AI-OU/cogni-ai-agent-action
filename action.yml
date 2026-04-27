@@ -351,9 +351,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-context7-ops": {
@@ -362,9 +371,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-devops": {
@@ -373,9 +391,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-elite": {
@@ -383,9 +410,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-fact-ops": {
@@ -394,9 +430,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-keeper": {
@@ -404,9 +449,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-reviewer": {
@@ -415,9 +469,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               },
               "cogni-ai-weaver": {
@@ -425,9 +488,18 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
                 "tools": {
-                  "write": true,
+                  "bash": true,
+                  "read": true,
+                  "glob": true,
+                  "grep": true,
                   "edit": true,
-                  "bash": true
+                  "write": true,
+                  "task": true,
+                  "webfetch": true,
+                  "todowrite": true,
+                  "websearch": true,
+                  "codesearch": true,
+                  "skill": true
                 }
               }
             },
@@ -460,8 +532,18 @@ runs:
               ]
             },
             "tools": {
-              "github-pr-search": true,
-              "github-triage": true
+              "bash": true,
+              "read": true,
+              "glob": true,
+              "grep": true,
+              "edit": true,
+              "write": true,
+              "task": true,
+              "webfetch": true,
+              "todowrite": true,
+              "websearch": true,
+              "codesearch": true,
+              "skill": true
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
