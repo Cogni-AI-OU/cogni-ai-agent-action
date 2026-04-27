@@ -53,6 +53,8 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
+        skill:
+          '*': allow
       cogni-ai-devops:
         bash:
           ansible*: allow
