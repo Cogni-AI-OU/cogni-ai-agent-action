@@ -345,6 +345,9 @@ runs:
         OPENCODE_CONFIG_CONTENT: |-
           {
             "$schema": "https://opencode.ai/config.json",
+            "experimental": {
+              "openTelemetry": true
+            },
             "instructions": [
               "AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
