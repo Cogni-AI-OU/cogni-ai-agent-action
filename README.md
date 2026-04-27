@@ -228,6 +228,9 @@ with:
       bash:
         ansible*: allow
         terraform*: allow
+    cogni-ai-github-ops:
+      bash:
+        gh api graphql*: allow  # Can also modify/delete issues/discussions
 ```
 
 ### Outputs
