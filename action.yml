@@ -356,11 +356,11 @@ runs:
                   "bash": true
                 }
               },
-              "cogni-ai-reviewer": {
-                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and architectural invariant verification.",
+              "cogni-ai-context7-ops": {
+                "description": "Uses Context7-backed documentation context for research and delegation tasks.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,
@@ -378,42 +378,21 @@ runs:
                   "bash": true
                 }
               },
+              "cogni-ai-elite": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
               "cogni-ai-fact-ops": {
                 "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
-              },
-              "cogni-ai-context7-ops": {
-                "description": "Uses Context7-backed documentation context for research and delegation tasks.",
-                "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
-              },
-              "cogni-ai-weaver": {
-                "mode": "primary",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
-              },
-              "cogni-ai-elite": {
-                "mode": "primary",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,
@@ -429,10 +408,34 @@ runs:
                   "edit": true,
                   "bash": true
                 }
+              },
+              "cogni-ai-reviewer": {
+                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and architectural invariant verification.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-weaver": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
               }
             },
             "experimental": {
-              "batch_tool": true,
+              "batch_tool": {
+                "description": "Enable the batch tool",
+                "type": "boolean"
+              }
             },
             "instructions": [
               "AGENTS-RUNTIME.md",
@@ -443,15 +446,15 @@ runs:
               "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
             ],
-            "provider": {
-              "opencode": {
-                "options": {}
-              }
-            },
             "mcp": {
               "context7": {
                 "type": "remote",
                 "url": "https://mcp.context7.com/mcp"
+              }
+            },
+            "provider": {
+              "opencode": {
+                "options": {}
               }
             },
             "skills": {
