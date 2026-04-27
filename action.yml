@@ -460,8 +460,8 @@ runs:
               ]
             },
             "tools": {
-              "github-pr-search": false,
-              "github-triage": false
+              "github-pr-search": true,
+              "github-triage": true
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
