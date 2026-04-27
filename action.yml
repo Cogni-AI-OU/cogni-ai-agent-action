@@ -53,6 +53,14 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
+        read: allow
+        list: allow
+        glob: allow
+        grep: allow
+        edit: allow
+        task: allow
+        todowrite: allow
+        question: deny
         skill:
           '*': allow
       cogni-ai-devops:
