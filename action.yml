@@ -345,20 +345,6 @@ runs:
         OPENCODE_CONFIG_CONTENT: |-
           {
             "$schema": "https://opencode.ai/config.json",
-            "instructions": [
-              "AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.agents/AGENTS.mmd",
-              "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
-              "${{ runner.temp }}/.agents/FLOWS.mmd",
-              "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
-            ],
-            "skills": {
-              "paths": [
-                "${{ runner.temp }}/.skills"
-              ]
-            },
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
@@ -445,6 +431,15 @@ runs:
                 }
               }
             },
+            "instructions": [
+              "AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.agents/AGENTS.mmd",
+              "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
+              "${{ runner.temp }}/.agents/FLOWS.mmd",
+              "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
+            ],
             "provider": {
               "opencode": {
                 "options": {}
@@ -455,6 +450,11 @@ runs:
                 "type": "remote",
                 "url": "https://mcp.context7.com/mcp"
               }
+            },
+            "skills": {
+              "paths": [
+                "${{ runner.temp }}/.skills"
+              ]
             },
             "tools": {
               "github-triage": false,
