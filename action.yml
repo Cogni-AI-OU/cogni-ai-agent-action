@@ -432,7 +432,7 @@ runs:
               }
             },
             "experimental": {
-              "batch_tool": true,
+              "batch_tool": true
             },
             "instructions": [
               "AGENTS-RUNTIME.md",
@@ -460,8 +460,8 @@ runs:
               ]
             },
             "tools": {
-              "github-triage": false,
-              "github-pr-search": false
+              "github-pr-search": false,
+              "github-triage": false
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
