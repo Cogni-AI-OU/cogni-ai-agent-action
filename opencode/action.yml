@@ -32,6 +32,7 @@ inputs:
           ex*: allow
           find*: allow
           gh*: allow
+          gh api graphql*: allow  # Can also delete issues/discussions
           gh pr review*: allow  # For batched feedback and setting review states
           git*: allow
           glob*: allow
