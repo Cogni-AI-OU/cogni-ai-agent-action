@@ -432,10 +432,7 @@ runs:
               }
             },
             "experimental": {
-              "batch_tool": {
-                "description": "Enable the batch tool",
-                "type": "boolean"
-              }
+              "batch_tool": true,
             },
             "instructions": [
               "AGENTS-RUNTIME.md",
