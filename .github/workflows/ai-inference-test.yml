@@ -1,9 +1,10 @@
 ---
 # AI Inference Test workflow — tests the local ai-inference action.
-# Triggered manually via workflow_dispatch.
+# Triggered on push or manually via workflow_dispatch.
 name: AI Inference Test
 run-name: Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}
 on:
+  push:
   workflow_dispatch:
     inputs:
       prompt:
@@ -23,5 +24,5 @@ jobs:
       - name: Run AI Inference
         uses: ./ai-inference
         with:
-          prompt: ${{ inputs.prompt }}
+          prompt: ${{ inputs.prompt || 'Count to 10.' }}
           token: ${{ secrets.GITHUB_TOKEN }}
