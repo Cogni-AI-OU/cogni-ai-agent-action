@@ -448,10 +448,12 @@ runs:
                 }
               },
               "explore": {
-                "disable": true
+                "disable": true,
+                "ignore_instructions": true
               },
               "general": {
-                "disable": true
+                "disable": true,
+                "ignore_instructions": true
               }
             },
             "experimental": {
