@@ -112,8 +112,9 @@ runs:
               // Match trigger with:
               // - start of string or whitespace before it
               // - end of string or whitespace / common punctuation (incl. newlines) after it
-              const pattern = new RegExp(`(^|\\s)${escaped}(?=$|[\\s,.!?:;)\]])`);
+              const pattern = new RegExp(`(^|\\\\s)${escaped}(?=$|[\\\\s,.!?:;\\\\)\\\\]])`);
               return pattern.test(body);
+
             });
           }
           function matchesBotMention(body) {
@@ -130,6 +131,9 @@ runs:
           const eventName = context.eventName;
           let run = false;
           let agent = '';
+          
+          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
+
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
@@ -137,6 +141,7 @@ runs:
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
+            console.log(`Assoc: ${assoc}, Body: ${body}`);
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -149,6 +154,7 @@ runs:
             const payload = context.payload.comment;
             const assoc = payload?.author_association;
             const body = payload?.body;
+            console.log(`PR Review Comment - Assoc: ${assoc}, Body: ${body}`);
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -198,7 +204,17 @@ runs:
             run_id: context.runId,
           });
           const workflowId = currentRun.workflow_id;
-          const groupKey = currentRun.display_title;
+          const entityNumber =
+            context.payload.issue?.number ??
+            context.payload.pull_request?.number ??
+            context.payload.discussion?.number;
+
+          if (!entityNumber) {
+            core.info('Concurrency wait: skipped (no issue/PR/discussion number)');
+            return;
+          }
+
+          const groupKey = `${workflowId}:${eventName}:${entityNumber}`;
           const currentCreatedAt = new Date(currentRun.created_at).getTime();
           const POLL_INTERVAL_MS = 30_000;
           const MAX_WAIT_MS = 20 * 60_000;
@@ -216,7 +232,7 @@ runs:
                 ...workflow_runs.filter(
                   run => run.id !== context.runId
                     && new Date(run.created_at).getTime() < currentCreatedAt
-                    && run.display_title === groupKey
+                    && run.display_title === currentRun.display_title
                 )
               );
             }
