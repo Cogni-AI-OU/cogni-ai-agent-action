@@ -70,7 +70,7 @@ runs:
               // Match trigger with:
               // - start of string or whitespace / common punctuation before it
               // - end of string or whitespace / common punctuation (incl. newlines) after it
-              const pattern = new RegExp(`(^|[\s,.!?:;\(\[])${escaped}(?=$|[\s,.!?:;\)\]])`);
+              const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
               return pattern.test(body);
             });
           }
@@ -79,9 +79,6 @@ runs:
             return BOT_MENTIONS.some(m => body.includes(m));
           }
           function getAgent(body) {
-            if (!body) return 'cogni-ai-architect';
-            // Stricter pattern for /review to avoid misclassification
-            if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-reviewer';
             return 'cogni-ai-architect';
           }
           const isBot = context.actor.endsWith('[bot]');
@@ -96,9 +93,8 @@ runs:
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
-            const bodyPreview = body ? body.replace(/\s+/g, ' ').slice(0, 80) : '';
             console.log(
-              `Assoc: ${assoc}, BodyLength: ${body?.length || 0}, BodyPreview: ${bodyPreview}`
+              `Assoc: ${assoc}, BodyLength: ${body?.length || 0}`
             );
             if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
@@ -142,14 +138,6 @@ runs:
             run_id: context.runId,
           });
           const workflowId = currentRun.workflow_id;
-          const entityNumber =
-            context.payload.issue?.number ??
-            context.payload.pull_request?.number ??
-            context.payload.discussion?.number;
-          if (!entityNumber) {
-            core.info('Concurrency wait: skipped (no issue/PR/discussion number)');
-            return;
-          }
           const currentCreatedAt = new Date(currentRun.created_at).getTime();
           const POLL_INTERVAL_MS = 30_000;
           const MAX_WAIT_MS = 20 * 60_000;
