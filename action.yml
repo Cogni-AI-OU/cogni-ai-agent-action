@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   gh-models-enabled:
-    default: "true"
+    default: 'true'
     description: Whether to enable gh-models extension.
     required: false
   mentions:
