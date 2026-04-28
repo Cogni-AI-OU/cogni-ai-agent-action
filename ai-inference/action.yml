@@ -78,9 +78,6 @@ runs:
             if (!body) return false;
             return BOT_MENTIONS.some(m => body.includes(m));
           }
-          function getAgent(body) {
-            return 'cogni-ai-architect';
-          }
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
           let run = false;
@@ -98,7 +95,7 @@ runs:
             );
             if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
-              agent = getAgent(body);
+              agent = 'cogni-ai-architect';
             }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
