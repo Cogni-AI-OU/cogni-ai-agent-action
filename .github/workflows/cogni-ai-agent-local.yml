@@ -3,7 +3,7 @@
 # Triggered by /co, /cogni, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Local
-run-name: Agent on ${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}
+run-name: "Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}"
 on:
   issue_comment:
     types:
