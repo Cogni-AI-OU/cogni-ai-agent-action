@@ -18,5 +18,5 @@ jobs:
       - name: Run AI Inference
         uses: ./ai-inference
         with:
-          prompt: ${{ inputs.prompt || 'Count to 10.' }}
+          prompt: 'Count to 10.'
           token: ${{ secrets.GITHUB_TOKEN }}
