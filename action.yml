@@ -91,6 +91,7 @@ inputs:
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
+          jinja2*: allow
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
