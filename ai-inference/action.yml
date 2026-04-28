@@ -4,89 +4,49 @@ author: Cogni AI OU
 branding:
   color: blue
   icon: cpu
-description: Runs OpenCode Agent
+description: Runs AI inference using GitHub Models
 inputs:
   agent:
-    description: Agent to use.
-    required: false
-  model:
-    default: opencode/gemini-3-flash
-    description: Model to use for OpenCode.
+    description: Agent to use for system prompt.
     required: false
   mentions:
-    default: /oc,/opencode,/review
-    description: Comma-separated trigger mentions for OpenCode.
+    default: /ai
+    description: Comma-separated trigger mentions for AI Inference.
     required: false
-  opencode-api-key:
-    description: API key for OpenCode.
-    required: true
-  permissions:
-    default: |-
-      default:
-        bash:
-          '*': deny
-          awk*: allow
-          base64*: allow
-          continue*: allow
-          cp*: allow
-          ex*: allow
-          find*: allow
-          gh*: allow
-          gh api graphql*: allow  # Can also delete issues/discussions
-          gh pr review*: allow  # For batched feedback and setting review states
-          git*: allow
-          glob*: allow
-          hexdump*: allow
-          jq*: allow
-          ls*: allow
-          links*: allow
-          mawk*: allow
-          pipenv*: allow
-          pipx*: allow
-          poetry*: allow
-          pre-commit*: allow
-          printf*: allow
-          sed*: allow
-          set*: allow
-          stat*: allow
-          time*: allow
-          timeout*: allow
-          touch*: allow
-          true*: allow
-          vim*: allow
-      cogni-ai-devops:
-        bash:
-          ansible*: allow
-          ansible-galaxy*: allow
-          ansible-playbook*: allow
-          pulumi*: allow
-          terragrunt*: allow
-          terraform*: allow
-    description: |-
-      Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops', etc.).
-      Example:
-        default:
-          bash:
-            ls*: allow
-        cogni-ai-devops:
-          bash:
-            ansible*: allow
-            terraform*: allow
+  model:
+    default: openai/gpt-4o
+    description: Model to use for inference.
+    required: false
+  system-prompt:
+    default: You are a helpful assistant
+    description: The system prompt to send to the model.
     required: false
   prompt:
     default: ''
-    description: Prompt to pass to the agent.
+    description: Prompt to pass to the model.
     required: false
-name: OpenCode Agent
+  enable-github-mcp:
+    default: 'true'
+    description: Enable Model Context Protocol integration with GitHub tools
+    required: false
+  github-mcp-toolsets:
+    default: repos,issues,pull_requests,actions,code_security
+    description: Toolsets to enable for GitHub MCP server.
+    required: false
+  github-mcp-token:
+    description: Token to use for GitHub MCP server.
+    required: false
+  token:
+    description: Token to use for inference. Typically the GITHUB_TOKEN secret.
+    required: false
+name: Cogni AI Inference
 outputs:
   prompt:
-    description: The resolved prompt sent to the agent.
+    description: The resolved prompt sent to the model.
     value: ${{ steps.prompt.outputs.prompt }}
   response:
-    description: The response from the agent.
-    value: ${{ steps.opencode.outputs.response }}
+    description: The response from the model.
+    value: ${{ steps.inference.outputs.response }}
 runs:
   using: composite
   steps:
@@ -94,16 +54,13 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/oc,/opencode,/review' }}
+        MENTIONS: ${{ inputs.mentions || '/ai' }}
         AGENT_INPUT: ${{ inputs.agent }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
-          const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
-          const BOT_MENTIONS = ['@opencode-agent', '@OpenCode-Agent'];
+          const BOT_MENTIONS = ['@ai-inference', '@AI-Inference'];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
-          const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
-          const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
           function matchesTrigger(body, triggers) {
             if (!body) return false;
             return triggers.some(t => {
@@ -113,7 +70,7 @@ runs:
               // Match trigger with:
               // - start of string or whitespace / common punctuation before it
               // - end of string or whitespace / common punctuation (incl. newlines) after it
-              const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
+              const pattern = new RegExp(`(^|[\s,.!?:;\(\[])${escaped}(?=$|[\s,.!?:;\)\]])`);
               return pattern.test(body);
             });
           }
@@ -135,44 +92,22 @@ runs:
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
-          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment', 'pull_request_review_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
             const bodyPreview = body ? body.replace(/\s+/g, ' ').slice(0, 80) : '';
-            console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}, BodyPreview: ${bodyPreview}`);
-            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
-            if (isReviewTrigger) {
-              run = true;
-              agent = 'cogni-ai-reviewer';
-            } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
-              run = true;
-              agent = getAgent(body);
-            }
-          } else if (eventName === 'pull_request_review_comment' && !isBot) {
-            const payload = context.payload.comment;
-            const assoc = payload?.author_association;
-            const body = payload?.body;
-            const bodyPreview = body ? body.replace(/\s+/g, ' ').slice(0, 80) : '';
             console.log(
-              `PR Review Comment - Assoc: ${assoc}, ` +
-              `BodyLength: ${body?.length || 0}, BodyPreview: ${bodyPreview}`
+              `Assoc: ${assoc}, BodyLength: ${body?.length || 0}, BodyPreview: ${bodyPreview}`
             );
-            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
-            if (isReviewTrigger) {
-              run = true;
-              agent = 'cogni-ai-reviewer';
-            } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
               agent = getAgent(body);
             }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
-            const login = pr?.user?.login;
-            const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
-              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
-            if (isAllowed) {
+            if (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) {
               run = true;
               agent = 'cogni-ai-architect';
             }
@@ -287,15 +222,6 @@ runs:
             prompt="$header"
           fi
         fi
-        if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then
-          prev_attempt=$(( GITHUB_RUN_ATTEMPT - 1 ))
-          previous_build_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${prev_attempt}"
-          rerun_note="Note: This is a re-run of a previous build attempt."
-          rerun_note+=" Check the previous attempt to understand what was"
-          rerun_note+=" already done and continue from where it left off:"
-          rerun_note+=" ${previous_build_url}"
-          prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
-        fi
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
@@ -305,64 +231,54 @@ runs:
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
-    - name: Convert permissions to JSON
+    - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
-      id: permissions
-      shell: python
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
+    - name: Resolve system prompt
+      if: steps.check.outputs.run == 'true'
+      id: system-prompt
+      shell: bash
       env:
-        AGENT_NAME: ${{ steps.check.outputs.effective_agent }}
-        PERMISSIONS_YAML: ${{ inputs.permissions }}
+        AGENT: ${{ steps.check.outputs.effective_agent }}
+        SYSTEM_PROMPT_INPUT: ${{ inputs.system-prompt }}
       run: |
-        import os
-        import json
-        import yaml
-        def deep_merge(base, override):
-            if not isinstance(base, dict) or not isinstance(override, dict):
-                return override
-            res = base.copy()
-            for k, v in override.items():
-                if k in res and isinstance(res[k], dict) and isinstance(v, dict):
-                    res[k] = deep_merge(res[k], v)
-                else:
-                    res[k] = v
-            return res
-        raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
-        agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
-        try:
-            permissions = yaml.safe_load(raw_yaml) or {}
-        except Exception:
-            permissions = {}
-        if isinstance(permissions, dict) and ('default' in permissions or agent in permissions):
-            base_perms = permissions.get('default', {})
-            agent_perms = permissions.get(agent, {})
-            if not isinstance(base_perms, dict): base_perms = {}
-            if not isinstance(agent_perms, dict): agent_perms = {}
-            final_perms = deep_merge(base_perms, agent_perms)
-        else:
-            final_perms = permissions
-        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-            f.write(f"json={json.dumps(final_perms)}\n")
-    - name: Run opencode
+        set -euo pipefail
+        # Default to the input if provided and not equal to the default assistant message
+        system_prompt="${SYSTEM_PROMPT_INPUT}"
+
+        # If agent is specified, try to load its prompt file
+        agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+        if [ -f "$agent_file" ]; then
+          echo "Loading system prompt from $agent_file"
+          system_prompt=$(cat "$agent_file")
+        else
+          echo "Agent file $agent_file not found, using default or input system prompt"
+        fi
+        EOF_TOKEN="EOF_$(openssl rand -hex 10)"
+        {
+          echo "system-prompt<<$EOF_TOKEN"
+          printf '%s\n' "$system_prompt"
+          echo "$EOF_TOKEN"
+        } >> "$GITHUB_OUTPUT"
+    - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
-      id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
-      env:
-        GH_TOKEN: ${{ github.token }}
-        GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
-        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
-        OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
+      id: inference
+      uses: actions/ai-inference@v1
       with:
-        agent: ${{ steps.check.outputs.effective_agent }}
-        mentions: ${{ inputs.mentions || '/oc,/opencode,/review' }}
-        model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
+        model: ${{ inputs.model || 'openai/gpt-4o' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        use_github_token: false
+        system-prompt: ${{ steps.system-prompt.outputs.system-prompt }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp }}
+        github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
+        github-mcp-token: ${{ inputs.github-mcp-token }}
+        token: ${{ inputs.token || github.token }}
     - name: Write response to summary
-      if: always() && steps.opencode.outputs.response != ''
+      if: always() && steps.inference.outputs.response != ''
       shell: bash
       env:
         PROMPT: ${{ steps.prompt.outputs.prompt }}
-        RESPONSE: ${{ steps.opencode.outputs.response }}
+        RESPONSE: ${{ steps.inference.outputs.response }}
       run: |-
         {
           if [ -n "${PROMPT:-}" ]; then
@@ -375,7 +291,3 @@ runs:
           echo ""
           echo "$RESPONSE"
         } >> "$GITHUB_STEP_SUMMARY"
-    - name: Print logs
-      if: cancelled() || failure()
-      shell: bash
-      run: grep -v INFO ~/.local/share/opencode/log/* || true

@@ -1,0 +1,27 @@
+---
+# AI Inference Test workflow — tests the local ai-inference action.
+# Triggered manually via workflow_dispatch.
+name: AI Inference Test
+run-name: Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: Prompt to pass to the model
+        required: false
+        default: 'Count to 10.'
+jobs:
+  test:
+    name: AI Inference Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      models: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run AI Inference
+        uses: ./ai-inference
+        with:
+          prompt: ${{ inputs.prompt }}
+          token: ${{ secrets.GITHUB_TOKEN }}
