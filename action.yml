@@ -55,7 +55,10 @@ inputs:
           shell: allow
           skill-writer: allow
           vim-ex: allow
-        task: allow
+        task:
+          '*': allow
+          explore: deny
+          general: deny
         todowrite: allow
       cogni-ai-devops:
         bash:
