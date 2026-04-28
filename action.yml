@@ -55,7 +55,11 @@ inputs:
           shell: allow
           skill-writer: allow
           vim-ex: allow
-        task: allow
+        # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
+        task:
+          '*': allow
+          explore: deny
+          general: deny
         todowrite: allow
       cogni-ai-devops:
         bash:
