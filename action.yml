@@ -55,6 +55,7 @@ inputs:
           shell: allow
           skill-writer: allow
           vim-ex: allow
+        # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
         task:
           '*': allow
           explore: deny
