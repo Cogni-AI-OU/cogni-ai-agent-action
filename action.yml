@@ -27,7 +27,32 @@ inputs:
   permissions:
     default: |-
       default:
-        bash: allow
+        bash:
+          "*": allow
+          gh api graphql*: deny
+          gh issue close*: deny
+          gh issue comment*: deny
+          gh issue create*: deny
+          gh issue delete*: deny
+          gh issue edit*: deny
+          gh issue lock*: deny
+          gh issue pin*: deny
+          gh issue reopen*: deny
+          gh issue transfer*: deny
+          gh issue unlock*: deny
+          gh issue unpin*: deny
+          gh pr close*: deny
+          gh pr comment*: deny
+          gh pr create*: deny
+          gh pr edit*: deny
+          gh pr lock*: deny
+          gh pr merge*: deny
+          gh pr ready*: deny
+          gh pr reopen*: deny
+          gh pr revert*: deny
+          gh pr review*: deny
+          gh pr unlock*: deny
+          gh pr update-branch*: deny
         edit: allow
         glob: allow
         grep: allow
@@ -69,10 +94,37 @@ inputs:
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
+      cogni-ai-github-ops:
+        bash:
+          gh api graphql*: allow  # Can also modify/delete issues/discussions
+          gh issue close*: allow
+          gh issue comment*: allow
+          gh issue create*: allow
+          gh issue delete*: allow
+          gh issue edit*: allow
+          gh issue lock*: allow
+          gh issue pin*: allow
+          gh issue reopen*: allow
+          gh issue transfer*: allow
+          gh issue unlock*: allow
+          gh issue unpin*: allow
+          gh pr close*: allow
+          gh pr comment*: allow
+          gh pr create*: allow
+          gh pr edit*: allow
+          gh pr lock*: allow
+          gh pr merge*: allow
+          gh pr ready*: allow
+          gh pr reopen*: allow
+          gh pr revert*: allow
+          gh pr review*: allow
+          gh pr unlock*: allow
+          gh pr update-branch*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops', etc.).
+      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops',
+      'cogni-ai-github-ops', etc.).
       Example:
         default:
           bash:
@@ -410,6 +462,17 @@ runs:
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
+                "tools": {
+                  "write": true,
+                  "edit": true,
+                  "bash": true
+                }
+              },
+              "cogni-ai-github-ops": {
+                "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md",
                 "tools": {
                   "write": true,
                   "edit": true,

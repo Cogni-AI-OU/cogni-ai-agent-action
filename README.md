@@ -64,7 +64,7 @@ For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd
 
 ### Task delegation
 
-`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, and `cogni-ai-reviewer` are configured with `mode: all`, so
+`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, and `cogni-ai-reviewer` are configured with `mode: all`, so
 they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 
@@ -208,27 +208,7 @@ jobs:
 
 ### Hierarchical Permissions
 
-You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-reviewer`) can override or extend these defaults.
-
-```yaml
-with:
-  permissions: |
-    default:
-      bash:
-        ls*: allow
-        grep*: allow
-    cogni-ai-architect:
-      bash:
-        git*: allow
-        write*: allow
-    cogni-ai-reviewer:
-      bash:
-        git*: deny
-    cogni-ai-devops:
-      bash:
-        ansible*: allow
-        terraform*: allow
-```
+Define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-reviewer`) override or extend these defaults. See [action.yml](action.yml) for default permissions.
 
 ### Outputs
 
