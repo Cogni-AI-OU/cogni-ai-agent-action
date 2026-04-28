@@ -1,6 +1,6 @@
 ---
 name: Action
-run-name: Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}
+run-name: Agent on ${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}
 on:
   pull_request:
     paths-ignore:
