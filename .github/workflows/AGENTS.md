@@ -20,7 +20,7 @@ For a human-readable overview, see [README.md](README.md).
 ### ai-inference-test.yml
 
 - Purpose: Tests the local `ai-inference/action.yml` action.
-- Triggers: `workflow_dispatch`.
+- Triggers: `push`, `workflow_dispatch`.
 
 ### check.yml
 

@@ -83,7 +83,7 @@ runs:
           let run = false;
           let agent = '';
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
             run = true;
             agent = 'cogni-ai-architect';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment', 'pull_request_review_comment'].includes(eventName) && !isBot) {
@@ -249,7 +249,7 @@ runs:
     - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
       id: inference
-      uses: actions/ai-inference@v2
+      uses: actions/ai-inference@e09e65981758de8b2fdab13c2bfb7c7d5493b0b6 # v2
       with:
         model: ${{ inputs.model || 'openai/gpt-4o' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
