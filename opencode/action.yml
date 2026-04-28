@@ -131,9 +131,7 @@ runs:
           const eventName = context.eventName;
           let run = false;
           let agent = '';
-          
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'cogni-ai-architect';
@@ -141,7 +139,8 @@ runs:
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
-            console.log(`Assoc: ${assoc}, Body: ${body}`);
+            const bodyPreview = body ? body.replace(/\s+/g, ' ').slice(0, 80) : '';
+            console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}, BodyPreview: ${bodyPreview}`);
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -154,7 +153,11 @@ runs:
             const payload = context.payload.comment;
             const assoc = payload?.author_association;
             const body = payload?.body;
-            console.log(`PR Review Comment - Assoc: ${assoc}, Body: ${body}`);
+            const bodyPreview = body ? body.replace(/\s+/g, ' ').slice(0, 80) : '';
+            console.log(
+              `PR Review Comment - Assoc: ${assoc}, ` +
+              `BodyLength: ${body?.length || 0}, BodyPreview: ${bodyPreview}`
+            );
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -208,13 +211,10 @@ runs:
             context.payload.issue?.number ??
             context.payload.pull_request?.number ??
             context.payload.discussion?.number;
-
           if (!entityNumber) {
             core.info('Concurrency wait: skipped (no issue/PR/discussion number)');
             return;
           }
-
-          const groupKey = `${workflowId}:${eventName}:${entityNumber}`;
           const currentCreatedAt = new Date(currentRun.created_at).getTime();
           const POLL_INTERVAL_MS = 30_000;
           const MAX_WAIT_MS = 20 * 60_000;
@@ -249,7 +249,7 @@ runs:
           }
           core.warning(
             `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
-            `for older runs of "${groupKey}" to finish. Proceeding anyway.`
+            `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
