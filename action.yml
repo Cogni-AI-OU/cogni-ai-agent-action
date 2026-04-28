@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   gh-models-enabled:
-    default: "true"
+    default: 'true'
     description: Whether to enable gh-models extension.
     required: false
   mentions:
@@ -443,8 +443,12 @@ runs:
                   "bash": true
                 }
               },
-              "explore": false,
-              "general": false
+              "explore": {
+                "disable": true
+              },
+              "general": {
+                "disable": true
+              }
             },
             "experimental": {
               "batch_tool": true
