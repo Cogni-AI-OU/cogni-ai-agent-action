@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   gh-models-enabled:
-    default: "true"
+    default: 'true'
     description: Whether to enable gh-models extension.
     required: false
   mentions:
@@ -55,7 +55,11 @@ inputs:
           shell: allow
           skill-writer: allow
           vim-ex: allow
-        task: allow
+        # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
+        task:
+          '*': allow
+          explore: deny
+          general: deny
         todowrite: allow
       cogni-ai-devops:
         bash:
@@ -442,6 +446,14 @@ runs:
                   "edit": true,
                   "bash": true
                 }
+              },
+              "explore": {
+                "disable": true,
+                "ignore_instructions": true
+              },
+              "general": {
+                "disable": true,
+                "ignore_instructions": true
               }
             },
             "experimental": {

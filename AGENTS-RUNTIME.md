@@ -2,12 +2,14 @@
 
 <!-- markdownlint-disable MD013 -->
 
-## SUBAGENT DELEGATION ENABLED
+## SUBAGENT DELEGATION POLICY
 
-The use of the `task` tool and spawning sub-agents is permitted for complex, multi-step tasks.
-- **Efficiency**: Use sub-agents to maximize performance by parallelizing independent units of work.
+The use of the `task` tool and spawning sub-agents is permitted for complex, multi-step tasks, but delegation is limited to the project agents explicitly configured by this runtime.
+
+- **Allowed Delegation Targets**: Use only the named project agents exposed by this runtime configuration.
+- **Built-in Subagents Disabled**: Built-in `explore` and `general` subagents are not approved for this runtime and MUST NOT be used, even if a host tool still lists them.
 - **Maintain Context**: Ensure that the primary agent remains the coordinator and synthesizes the results from sub-agents into the final response.
-- **Strategic Delegation**: Delegate to specialized sub-agents (e.g., `explore`, `general`) when the task involves broad codebase analysis or independent sub-tasks that can be executed in parallel.
+- **Strategic Delegation**: Delegate only when the task involves broad codebase analysis or independent sub-tasks that can be executed in parallel.
 
 ## Initialization Project Sequence
 
