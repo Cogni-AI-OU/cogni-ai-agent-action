@@ -172,7 +172,7 @@ runs:
               // Match trigger with:
               // - start of string or whitespace / common punctuation before it
               // - end of string or whitespace / common punctuation (incl. newlines) after it
-              const pattern = new RegExp(`(^|[\s,.!?:;\(\[])${escaped}(?=$|[\s,.!?:;\)\]])`);
+              const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
               return pattern.test(body);
             });
           }
