@@ -199,7 +199,7 @@ jobs:
 
 ### Sudo workflow
 
-An example of a workflow with elevated permissions and sudo mode (using `bash: '*': allow` and `id-token: write` permission to avoid OIDC token errors):
+An example of a workflow with elevated permissions and sudo mode (using `bash: '*': allow` and `id-token: write` permissions to avoid OIDC token errors):
 
 ```yaml
 ---
