@@ -29,6 +29,10 @@ inputs:
       default:
         bash:
           "*": allow
+          ansible*: deny
+          pulumi*: deny
+          terraform*: deny
+          terragrunt*: deny
           gh api graphql*: deny
           gh issue close*: deny
           gh issue comment*: deny
@@ -91,6 +95,7 @@ inputs:
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
+          docker*: allow
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
