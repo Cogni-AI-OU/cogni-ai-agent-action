@@ -27,19 +27,15 @@ inputs:
           '*': deny
           awk*: allow
           base64*: allow
-          continue*: allow
           cp*: allow
-          ex*: allow
+          docker*: allow
           find*: allow
           gh*: allow
-          gh api graphql*: allow  # Can also delete issues/discussions
-          gh pr review*: allow  # For batched feedback and setting review states
           git*: allow
           glob*: allow
           hexdump*: allow
           jq*: allow
           ls*: allow
-          links*: allow
           mawk*: allow
           pipenv*: allow
           pipx*: allow
@@ -54,27 +50,13 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
-      cogni-ai-devops:
-        bash:
-          ansible*: allow
-          ansible-galaxy*: allow
-          ansible-playbook*: allow
-          pulumi*: allow
-          terragrunt*: allow
-          terraform*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer', 'cogni-ai-devops',
-      'cogni-ai-fact-ops', etc.).
+      with 'default' and agent-specific overrides.
       Example:
         default:
           bash:
             ls*: allow
-        cogni-ai-devops:
-          bash:
-            ansible*: allow
-            terraform*: allow
     required: false
   prompt:
     default: ''

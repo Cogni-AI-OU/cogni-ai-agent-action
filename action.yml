@@ -29,35 +29,44 @@ inputs:
       default:
         bash:
           # Keep in alphabetical order.
-          "*": allow
-          ansible*: deny
+          '*': deny
+          awk*: allow
+          base64*: allow
+          cat*: allow
+          continue*: allow
+          cp*: allow
+          echo*: allow
+          ex*: allow
+          find*: allow
+          # GH is allowed but restricted for the default agent.
           gh api graphql*: deny
-          gh issue close*: deny
-          gh issue comment*: deny
-          gh issue create*: deny
-          gh issue delete*: deny
-          gh issue edit*: deny
-          gh issue lock*: deny
-          gh issue pin*: deny
-          gh issue reopen*: deny
-          gh issue transfer*: deny
-          gh issue unlock*: deny
-          gh issue unpin*: deny
-          gh pr close*: deny
-          gh pr comment*: deny
-          gh pr create*: deny
-          gh pr edit*: deny
-          gh pr lock*: deny
-          gh pr merge*: deny
-          gh pr ready*: deny
-          gh pr reopen*: deny
-          gh pr revert*: deny
-          gh pr review*: deny
-          gh pr unlock*: deny
-          gh pr update-branch*: deny
-          pulumi*: deny
-          terraform*: deny
-          terragrunt*: deny
+          gh issue*: deny
+          gh pr*: deny
+          gh*: allow
+          git*: allow
+          glob*: allow
+          grep*: allow
+          hexdump*: allow
+          jq*: allow
+          ls*: allow
+          links*: allow
+          mawk*: allow
+          mkdir*: allow
+          mv*: allow
+          pipenv*: allow
+          pipx*: allow
+          poetry*: allow
+          pre-commit*: allow
+          printf*: allow
+          rm*: allow
+          sed*: allow
+          set*: allow
+          stat*: allow
+          time*: allow
+          timeout*: allow
+          touch*: allow
+          true*: allow
+          vim*: allow
         edit: allow
         glob: allow
         grep: allow
