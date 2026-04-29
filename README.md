@@ -197,6 +197,57 @@ jobs:
     timeout-minutes: 60
 ```
 
+### Sudo workflow
+
+An example of a workflow with elevated permissions and sudo mode (using `bash: '*': allow` and `id-token: write` permission to avoid OIDC token errors):
+
+```yaml
+---
+name: Cogni AI Agent (Sudo)
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        options:
+          - opencode/gemini-3.1-pro
+          - opencode/gemini-3-flash
+        required: true
+        type: choice
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
+
+jobs:
+  cogni-ai-agent-sudo:
+    name: Run Cogni AI agent (Sudo)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create/edit/delete files
+      id-token: write # required for OIDC (otherwise it fails with Failed to get OIDC token)
+      issues: write # create/edit/delete issues
+      pull-requests: write # create/edit/delete PRs
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run Cogni AI Agent
+        uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          model: ${{ inputs.model }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          permissions: |-
+            bash:
+              '*': allow
+          prompt: ${{ inputs.prompt }}
+    timeout-minutes: 60
+```
+
 ### Inputs
 
 | Input              | Description                 | Default                   | Required |
