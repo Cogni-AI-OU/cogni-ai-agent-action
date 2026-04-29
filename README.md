@@ -249,6 +249,8 @@ jobs:
     timeout-minutes: 60
 ```
 
+Important note: Only use this sudo workflow with trusted inputs and repositories to avoid accidental or malicious destructive actions.
+
 ### Inputs
 
 | Input              | Description                 | Default                   | Required |
