@@ -176,7 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # create/edit/delete files
-      id-token: write # required for OIDC
+      id-token: write # required for OIDC token
       issues: write # create/edit/delete issues
       pull-requests: write # create/edit/delete PRs
       discussions: write # create/edit/delete discussions
@@ -199,7 +199,7 @@ jobs:
 
 ### Sudo workflow
 
-An example of a workflow with elevated permissions and sudo mode (using `bash: '*': allow` and `id-token: write` permissions to avoid OIDC token errors):
+An example of a manual-triggered workflow with elevated permissions and sudo mode (using `bash: '*': allow`):
 
 ```yaml
 ---
@@ -227,8 +227,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # create/edit/delete files
-      id-token: write # required for OIDC (otherwise it fails with Failed to get OIDC token)
+      id-token: write # required for OIDC token
       issues: write # create/edit/delete issues
+      packages: write # create/edit/delete packages
       pull-requests: write # create/edit/delete PRs
     steps:
       - uses: actions/checkout@v6
