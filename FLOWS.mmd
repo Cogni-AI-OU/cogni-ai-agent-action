@@ -7,7 +7,7 @@ flowchart TD
         CheckConditions -->|issues / issue_comment / discussion / discussion_comment / pull_request_review_comment| CommentCheck{Check Role & Mentions}
         CheckConditions -->|pull_request / pull_request_target| PRCheck{Check Role}
 
-        CommentCheck -->|Matches REVIEW_TRIGGERS| SetReviewer[run=true<br/>agent=cogni-ai-reviewer]
+        CommentCheck -->|Matches REVIEW_TRIGGERS| SetReviewer[run=true<br/>agent=cogni-ai-code-reviewer]
         CommentCheck -->|Matches TRIGGERS or BotMention| SetParsed[run=true<br/>agent=getAgent body]
         CommentCheck -->|No Match| Skip[run=false]
 
