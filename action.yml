@@ -28,7 +28,9 @@ inputs:
     default: |-
       default:
         bash:
+          # Keep in alphabetical order.
           "*": allow
+          ansible*: deny
           gh api graphql*: deny
           gh issue close*: deny
           gh issue comment*: deny
@@ -53,6 +55,9 @@ inputs:
           gh pr review*: deny
           gh pr unlock*: deny
           gh pr update-branch*: deny
+          pulumi*: deny
+          terraform*: deny
+          terragrunt*: deny
         edit: allow
         glob: allow
         grep: allow
@@ -88,14 +93,17 @@ inputs:
         todowrite: allow
       cogni-ai-devops:
         bash:
+          # Keep in alphabetical order.
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
+          docker*: allow
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
       cogni-ai-github-ops:
         bash:
+          # Keep in alphabetical order.
           gh api graphql*: allow  # Can also modify/delete issues/discussions
           gh issue close*: allow
           gh issue comment*: allow
@@ -122,6 +130,7 @@ inputs:
           gh pr update-branch*: allow
       cogni-ai-python-dev:
         bash:
+          # Keep in alphabetical order.
           jinja2*: allow
           python*: allow
           python3*: allow
