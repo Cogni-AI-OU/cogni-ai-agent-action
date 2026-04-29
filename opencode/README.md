@@ -171,7 +171,7 @@ jobs:
 
 ### Hierarchical Permissions
 
-You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-reviewer`) can override or extend these defaults.
+You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-code-reviewer`) can override or extend these defaults.
 
 ```yaml
 with:
@@ -184,7 +184,7 @@ with:
       bash:
         git*: allow
         write*: allow
-    cogni-ai-reviewer:
+    cogni-ai-code-reviewer:
       bash:
         git*: deny
     cogni-ai-devops:

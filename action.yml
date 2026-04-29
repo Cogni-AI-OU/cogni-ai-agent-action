@@ -128,8 +128,8 @@ inputs:
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops',
-      'cogni-ai-github-ops', etc.).
+      'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer', 'cogni-ai-devops',
+      'cogni-ai-fact-ops', 'cogni-ai-github-ops', etc.).
       Example:
         default:
           bash:
@@ -188,7 +188,7 @@ runs:
           function getAgent(body) {
             if (!body) return 'cogni-ai-architect';
             // Stricter pattern for /review to avoid misclassification
-            if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-reviewer';
+            if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
             return 'cogni-ai-architect';
           }
           const isBot = context.actor.endsWith('[bot]');
@@ -207,7 +207,7 @@ runs:
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
-              agent = 'cogni-ai-reviewer';
+              agent = 'cogni-ai-code-reviewer';
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
               agent = getAgent(body);
@@ -223,7 +223,7 @@ runs:
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
-              agent = 'cogni-ai-reviewer';
+              agent = 'cogni-ai-code-reviewer';
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
               agent = getAgent(body);
@@ -582,11 +582,31 @@ runs:
                   "write": true
                 }
               },
-              "cogni-ai-reviewer": {
-                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and architectural invariant verification.",
+              "cogni-ai-code-reviewer": {
+                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md",
+                "tools": {
+                  "bash": false,
+                  "codesearch": true,
+                  "edit": false,
+                  "glob": true,
+                  "grep": true,
+                  "read": true,
+                  "skill": true,
+                  "task": true,
+                  "todowrite": true,
+                  "webfetch": true,
+                  "websearch": true,
+                  "write": true
+                }
+              },
+              "cogni-ai-plan-reviewer": {
+                "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md",
                 "tools": {
                   "bash": false,
                   "codesearch": true,

@@ -65,7 +65,7 @@ For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd
 
 ### Task delegation
 
-`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, `cogni-ai-python-dev`, and `cogni-ai-reviewer` are configured with `mode: all`, so
+`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, `cogni-ai-python-dev`, `cogni-ai-code-reviewer`, and `cogni-ai-plan-reviewer` are configured with `mode: all`, so
 they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 
@@ -210,7 +210,7 @@ jobs:
 
 ### Hierarchical Permissions
 
-Define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-reviewer`) override or extend these defaults. See [action.yml](action.yml) for default permissions.
+Define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-code-reviewer`) override or extend these defaults. See [action.yml](action.yml) for default permissions.
 
 ### Outputs
 
