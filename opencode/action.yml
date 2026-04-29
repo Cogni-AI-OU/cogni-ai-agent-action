@@ -59,6 +59,7 @@ inputs:
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
+          docker*: allow
           pulumi*: allow
           terragrunt*: allow
           terraform*: allow
