@@ -91,7 +91,6 @@ inputs:
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
-          jinja2*: allow
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
@@ -121,6 +120,11 @@ inputs:
           gh pr review*: allow
           gh pr unlock*: allow
           gh pr update-branch*: allow
+      cogni-ai-python-dev:
+        bash:
+          jinja2*: allow
+          python*: allow
+          python3*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
@@ -543,6 +547,26 @@ runs:
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md",
+                "tools": {
+                  "bash": true,
+                  "codesearch": true,
+                  "edit": true,
+                  "glob": true,
+                  "grep": true,
+                  "read": true,
+                  "skill": true,
+                  "task": true,
+                  "todowrite": true,
+                  "webfetch": true,
+                  "websearch": true,
+                  "write": true
+                }
+              },
+              "cogni-ai-python-dev": {
+                "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md",
                 "tools": {
                   "bash": true,
                   "codesearch": true,
