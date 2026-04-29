@@ -39,11 +39,12 @@ jobs:
       contains(github.event.comment.body, '@')
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      id-token: write
-      issues: write
-      pull-requests: write
-      discussions: write
+      contents: write # create/edit/delete files
+      id-token: write # required for OIDC
+      issues: write # create/edit/delete issues
+      pull-requests: write # create/edit/delete PRs
+      discussions: write # create/edit/delete discussions
+      packages: read # read packages
     steps:
       - uses: actions/checkout@v6
         with:
@@ -174,11 +175,12 @@ jobs:
       contains(github.event.comment.body || '', '@')
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      id-token: write
-      issues: write
-      pull-requests: write
-      discussions: write
+      contents: write # create/edit/delete files
+      id-token: write # required for OIDC
+      issues: write # create/edit/delete issues
+      pull-requests: write # create/edit/delete PRs
+      discussions: write # create/edit/delete discussions
+      packages: read # read packages
     steps:
       - uses: actions/checkout@v6
         with:
