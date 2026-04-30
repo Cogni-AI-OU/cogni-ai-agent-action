@@ -64,7 +64,8 @@ Check `github.event_name` and payload to identify trigger source:
   ```
 
 - **Workspace Cleanliness (No PR for Non-Code-Change Tasks)**: If your task is purely informational (e.g., analyzing an issue, posting a comment, or answering a question), you MUST ensure the workspace remains completely clean (no modified or untracked files). In the opencode infrastructure, ANY modification to the workspace (dirty state) after a "repo event" (like `workflow_dispatch`) will trigger an automatic Pull Request to persist those changes. If you must create temporary files for analysis, you MUST delete them or run `git clean -fd` before finishing. Verify cleanliness with `git status` before completing your session.
-- **Symmetric Routing**: ALWAYS reply via the exact originating channel. NEVER cross threads. When asked to post or comment without providing a code fix, you MUST communicate back via the API without modifying any files (including temporary files created for analysis).
+- **Symmetric Routing**: ALWAYS reply via the exact originating channel. When asked to post or comment without providing a code fix,
+  you MUST communicate back via the API without modifying any files (this includes temporary files created for analysis).
 - Parse `github.event.comment.id` and `in_reply_to_id` to maintain thread continuity.
 
 ### Branch Sync Policy (No Rebase During Runtime)
