@@ -51,6 +51,9 @@ on:
         options:
           - build
           - cogni-ai-architect
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-plan-reviewer
           - compaction
           - plan
           - summary

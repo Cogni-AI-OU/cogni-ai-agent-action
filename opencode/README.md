@@ -190,7 +190,13 @@ with:
     cogni-ai-devops:
       bash:
         ansible*: allow
+        molecule*: allow
         terraform*: allow
+    cogni-ai-tester:
+      bash:
+        molecule*: allow
+        npm test*: allow
+        pytest*: allow
 ```
 
 ### Outputs
