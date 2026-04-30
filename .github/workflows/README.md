@@ -18,7 +18,7 @@ Jobs:
 ### Cogni AI Agent Local Workflow (`cogni-ai-agent-local.yml`)
 
 The `cogni-ai-agent-local.yml` workflow runs the local composite action (`./action.yml`) as a wrapper for OpenCode.
-It is triggered by `/co`, `/cogni`, or `/review` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
+It is triggered by `/co`, `/cogni`, `/review`, or `/test` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
 
 ### OpenCode Workflow (`opencode.yml`)
 
