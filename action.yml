@@ -100,6 +100,9 @@ inputs:
           explore: deny
           general: deny
         todowrite: allow
+      cogni-ai-code-reviewer:
+        bash: deny
+        edit: deny
       cogni-ai-devops:
         bash:
           # Keep in alphabetical order.
@@ -137,6 +140,9 @@ inputs:
           gh pr review*: allow
           gh pr unlock*: allow
           gh pr update-branch*: allow
+      cogni-ai-plan-reviewer:
+        bash: deny
+        edit: deny
       cogni-ai-python-dev:
         bash:
           # Keep in alphabetical order.
@@ -455,209 +461,64 @@ runs:
               "cogni-ai-architect": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
               },
               "cogni-ai-context7-ops": {
                 "description": "Uses Context7-backed documentation context for research and delegation tasks.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
               },
               "cogni-ai-devops": {
                 "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
               },
               "cogni-ai-fact-ops": {
                 "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
               },
               "cogni-ai-github-ops": {
                 "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
               },
               "cogni-ai-keeper": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
               },
               "cogni-ai-python-dev": {
                 "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
               },
               "cogni-ai-code-reviewer": {
                 "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md",
-                "tools": {
-                  "bash": false,
-                  "codesearch": true,
-                  "edit": false,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
               },
               "cogni-ai-plan-reviewer": {
                 "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md",
-                "tools": {
-                  "bash": false,
-                  "codesearch": true,
-                  "edit": false,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
               },
               "cogni-ai-weaver": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
-                "tools": {
-                  "bash": true,
-                  "codesearch": true,
-                  "edit": true,
-                  "glob": true,
-                  "grep": true,
-                  "read": true,
-                  "skill": true,
-                  "task": true,
-                  "todowrite": true,
-                  "webfetch": true,
-                  "websearch": true,
-                  "write": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
               },
               "explore": {
                 "disable": true,
@@ -695,20 +556,6 @@ runs:
               "paths": [
                 "${{ runner.temp }}/.skills"
               ]
-            },
-            "tools": {
-              "bash": true,
-              "codesearch": true,
-              "edit": true,
-              "glob": true,
-              "grep": true,
-              "read": true,
-              "skill": true,
-              "task": true,
-              "todowrite": true,
-              "webfetch": true,
-              "websearch": true,
-              "write": true
             }
           }
         # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
