@@ -110,6 +110,7 @@ inputs:
           ansible-galaxy*: allow
           ansible-playbook*: allow
           docker*: allow
+          molecule*: allow
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
@@ -149,6 +150,12 @@ inputs:
           jinja2*: allow
           python*: allow
           python3*: allow
+      cogni-ai-tester:
+        bash:
+          # Keep in alphabetical order.
+          molecule*: allow
+          npm test*: allow
+          pytest*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
