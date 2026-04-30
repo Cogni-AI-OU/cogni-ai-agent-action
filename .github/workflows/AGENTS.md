@@ -38,7 +38,7 @@ For a human-readable overview, see [README.md](README.md).
 
 - Purpose: Runs local `action.yml` wrapper.
 - Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
-- Commands: `/co`, `/cogni`, `/review`.
+- Commands: `/co`, `/cogni`, `/review`, `/brainstorm`.
 
 ### copilot-setup-steps.yml
 
@@ -50,7 +50,7 @@ For a human-readable overview, see [README.md](README.md).
 
 - Purpose: Runs local `./opencode/action.yml` wrapper.
 - Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
-- Commands: `/oc`, `/opencode`, `/review`.
+- Commands: `/oc`, `/opencode`, `/review`, `/brainstorm`.
 
 ### opencode.yml
 
