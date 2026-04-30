@@ -65,7 +65,7 @@ For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd
 
 ### Task delegation
 
-`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, `cogni-ai-python-dev`, `cogni-ai-code-reviewer`, and `cogni-ai-plan-reviewer` are configured with `mode: all`, so
+`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, `cogni-ai-python-dev`, `cogni-ai-code-reviewer`, `cogni-ai-plan-reviewer`, and `cogni-ai-tester` are configured with `mode: all`, so
 they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 

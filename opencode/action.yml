@@ -52,7 +52,8 @@ inputs:
           vim*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides.
+      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
+      'cogni-ai-code-reviewer', 'cogni-ai-tester', etc.).
       Example:
         default:
           bash:

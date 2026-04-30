@@ -153,7 +153,7 @@ inputs:
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
       'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer', 'cogni-ai-devops',
-      'cogni-ai-fact-ops', 'cogni-ai-github-ops', etc.).
+      'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-tester', etc.).
       Example:
         default:
           bash:
@@ -514,6 +514,12 @@ runs:
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+              },
+              "cogni-ai-tester": {
+                "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
               },
               "cogni-ai-weaver": {
                 "mode": "primary",

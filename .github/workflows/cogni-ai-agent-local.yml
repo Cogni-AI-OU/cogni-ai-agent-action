@@ -51,6 +51,14 @@ on:
         options:
           - build
           - cogni-ai-architect
+          - cogni-ai-code-reviewer
+          - cogni-ai-context7-ops
+          - cogni-ai-devops
+          - cogni-ai-fact-ops
+          - cogni-ai-github-ops
+          - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
           - compaction
           - plan
           - summary

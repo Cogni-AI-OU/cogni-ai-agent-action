@@ -191,6 +191,10 @@ with:
       bash:
         ansible*: allow
         terraform*: allow
+    cogni-ai-tester:
+      bash:
+        npm test*: allow
+        pytest*: allow
 ```
 
 ### Outputs
