@@ -87,7 +87,7 @@ inputs:
           mermaid: allow
           mermaid-beta: allow
           minizinc: allow
-          molecule: allow
+          molecule: deny
           pdf: allow
           pre-commit: allow
           robust-commands: allow
@@ -124,6 +124,8 @@ inputs:
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
+        skill:
+          molecule: allow
       cogni-ai-github-ops:
         bash:
           # Keep in alphabetical order.
@@ -443,13 +445,14 @@ runs:
         action_yaml_path = os.path.join(action_path, 'action.yml')
 
         default_perms_hierarchical = {}
-        try:
-            with open(action_yaml_path, 'r') as f:
-                action_data = yaml.safe_load(f)
-                default_perms_str = action_data.get('inputs', {}).get('permissions', {}).get('default', '')
-                default_perms_hierarchical = yaml.safe_load(default_perms_str) or {}
-        except Exception as e:
-            print(f"Warning: Failed to load default permissions from action.yml: {e}")
+        if action_path and os.path.exists(action_yaml_path):
+            try:
+                with open(action_yaml_path, 'r') as f:
+                    action_data = yaml.safe_load(f)
+                    default_perms_str = action_data.get('inputs', {}).get('permissions', {}).get('default', '')
+                    default_perms_hierarchical = yaml.safe_load(default_perms_str) or {}
+            except Exception as e:
+                print(f"Warning: Failed to load default permissions from action.yml: {e}")
 
         raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
         agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
@@ -462,7 +465,8 @@ runs:
         if not isinstance(user_permissions, dict):
             user_permissions = {}
 
-        is_hierarchical = any(k == 'default' or k.startswith('cogni-ai-') for k in user_permissions.keys())
+        categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
+        is_hierarchical = any(k not in categories for k in user_permissions.keys())
 
         if user_permissions:
             if is_hierarchical:
