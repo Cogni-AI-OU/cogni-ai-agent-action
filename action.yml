@@ -412,9 +412,6 @@ runs:
         if [ -f "${{ github.workspace }}/AGENTS.md" ]; then
           echo "has_agents=true" >> "$GITHUB_OUTPUT"
         fi
-        if [ -f "${{ github.workspace }}/AGENTS-RUNTIME.md" ]; then
-          echo "has_agents_runtime=true" >> "$GITHUB_OUTPUT"
-        fi
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
@@ -603,7 +600,6 @@ runs:
             },
             "instructions": [
               ${{ steps.prompt.outputs.has_agents == 'true' && '"AGENTS.md",' || '' }}
-              ${{ steps.prompt.outputs.has_agents_runtime == 'true' && '"AGENTS-RUNTIME.md",' || '' }}
               "${{ github.action_path }}/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.mmd",
