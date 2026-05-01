@@ -201,6 +201,7 @@ jobs:
         with:
           agent: >-
             ${{ inputs.agent || '' }}
+          mentions: /oc,/opencode
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
