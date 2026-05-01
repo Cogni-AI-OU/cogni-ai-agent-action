@@ -4,23 +4,23 @@
 
 % --- Sets & Enums ---
 enum AGENTS = { ARCHITECT, BRAIN_OPS, CODE_REVIEWER, DEVOPS, PLAN_REVIEWER, PYTHON_DEV, TESTER, FACT_OPS, CONTEXT7_OPS };
-enum SKILLS = { GH, GH_API, GH_MODELS, GH_PR, MERMAID, MINIZINC };
+enum SKILLS = { SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_MERMAID, SKILL_MINIZINC };
 enum TOOLS = { BASH, GLOB, READ, EDIT, SKILL };
-enum BASH_CMDS = { ANSIBLE, MOLECULE, TERRAFORM, NPM_TEST, PYTEST, GH, GIT, PYTHON };
+enum BASH_CMDS = { CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_NPM_TEST, CMD_PYTEST, CMD_GH, CMD_GIT, CMD_PYTHON };
 
 % --- Inputs from action.yml logic ---
 % In action.yml, skills.paths is a global array injected into the opencode config.
 % This implicitly gives ALL agents access to ALL skills discovered in that path.
 array[AGENTS] of set of SKILLS: required_skills = [
-    {GH, MERMAID, MINIZINC},            % ARCHITECT
-    {GH, GH_API, GH_MODELS, GH_PR, MINIZINC}, % BRAIN_OPS
-    {GH, GH_PR},                        % CODE_REVIEWER
-    {GH, GH_API, MINIZINC},             % DEVOPS
-    {GH, MERMAID},                      % PLAN_REVIEWER
-    {GH},                               % PYTHON_DEV
-    {GH},                               % TESTER
-    {GH},                               % FACT_OPS
-    {GH}                                % CONTEXT7_OPS
+    {SKILL_GH, SKILL_MERMAID, SKILL_MINIZINC},            % ARCHITECT
+    {SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_MINIZINC}, % BRAIN_OPS
+    {SKILL_GH, SKILL_GH_PR},                        % CODE_REVIEWER
+    {SKILL_GH, SKILL_GH_API, SKILL_MINIZINC},             % DEVOPS
+    {SKILL_GH, SKILL_MERMAID},                      % PLAN_REVIEWER
+    {SKILL_GH},                               % PYTHON_DEV
+    {SKILL_GH},                               % TESTER
+    {SKILL_GH},                               % FACT_OPS
+    {SKILL_GH}                                % CONTEXT7_OPS
 ];
 
 array[AGENTS] of set of TOOLS: required_tools = [
@@ -36,13 +36,13 @@ array[AGENTS] of set of TOOLS: required_tools = [
 ];
 
 array[AGENTS] of set of BASH_CMDS: required_bash = [
-    {GH, GIT},                          % ARCHITECT
-    {GH, GIT},                          % BRAIN_OPS
+    {CMD_GH, CMD_GIT},                          % ARCHITECT
+    {CMD_GH, CMD_GIT},                          % BRAIN_OPS
     {},                                 % CODE_REVIEWER
-    {ANSIBLE, MOLECULE, TERRAFORM, GH, GIT}, % DEVOPS
+    {CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_GH, CMD_GIT}, % DEVOPS
     {},                                 % PLAN_REVIEWER
-    {PYTHON, GH, GIT},                  % PYTHON_DEV
-    {MOLECULE, NPM_TEST, PYTEST, GH, GIT}, % TESTER
+    {CMD_PYTHON, CMD_GH, CMD_GIT},                  % PYTHON_DEV
+    {CMD_MOLECULE, CMD_NPM_TEST, CMD_PYTEST, CMD_GH, CMD_GIT}, % TESTER
     {},                                 % FACT_OPS
     {}                                  % CONTEXT7_OPS
 ];
@@ -62,7 +62,7 @@ var bool: isolated_environment_integrity;
 % Because `skills.paths = ["${{ runner.temp }}/.skills"]` is evaluated without
 % referencing the `AGENT_NAME` variable, EVERY agent gets the union of ALL skills.
 constraint forall(a in AGENTS)(
-    provisioned_skills[a] = {GH, GH_API, GH_MODELS, GH_PR, MERMAID, MINIZINC}
+    provisioned_skills[a] = {SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_MERMAID, SKILL_MINIZINC}
 );
 
 % Tool and Bash provisioning (modeled based on action.yml overrides)
@@ -85,7 +85,7 @@ constraint principle_of_least_privilege_maintained <-> (
 % we violate the isolation constraint.
 constraint isolated_environment_integrity <-> (
     principle_of_least_privilege_maintained /\
-    (not (GH_MODELS in provisioned_skills[CODE_REVIEWER])) % Example invariant
+    (not (SKILL_GH_MODELS in provisioned_skills[CODE_REVIEWER])) % Example invariant
 );
 
 % --- Solve Directive ---
