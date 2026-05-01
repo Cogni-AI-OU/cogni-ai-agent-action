@@ -440,8 +440,13 @@ runs:
               '' }}
         DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        CHANGED_FILES: ${{ steps.changed_files.outputs.text }}
       run: |
         set -euo pipefail
+        if [ -n "${CHANGED_FILES:-}" ]; then
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+        fi
         prompt="${PROMPT_INPUT:-}"
         if [ -z "$prompt" ]; then
           prompt="${COMMENT_BODY:-}"
