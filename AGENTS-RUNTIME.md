@@ -42,13 +42,6 @@ You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub ac
 
 - **No Garbage Commits**: Ensure no dummy or unrelated test files (such as API payloads, bash script outputs, or generated markdown comments) are included in the commit.
 
-### GitHub Runtime Decision Policy
-
-- **Default to Best Practice:** Implement the most recommended path autonomously when multiple options exist.
-- **Document Trade-offs:** Capture unresolved decisions, explicit options, and impacts in the PR description.
-- **Never Stall:** Proceed immediately with safe defaults. Request preference feedback in the PR instead of waiting.
-- **Report Defensively:** Present recommended option first; list alternatives only if they alter scope or risk.
-
 ## Firewall issues
 
 If you encounter firewall issues when using the GitHub Copilot Agent:
