@@ -31,12 +31,12 @@ jobs:
       - name: Download MiniZinc bundle
         if: steps.cache-minizinc.outputs.cache-hit != 'true'
         run: |
-          wget https://github.com/MiniZinc/MiniZincIDE/releases/download/${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz
-          tar xzf MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz
+          wget "https://github.com/MiniZinc/MiniZincIDE/releases/download/${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
+          tar xzf "MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
 
       - name: Add MiniZinc to PATH
         run: |
-          echo "$PWD/MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64/bin" >> $GITHUB_PATH
+          echo "$PWD/MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64/bin" >> "$GITHUB_PATH"
 
       - name: Verify MiniZinc installation
         run: |
