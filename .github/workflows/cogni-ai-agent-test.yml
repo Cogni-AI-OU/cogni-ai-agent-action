@@ -11,7 +11,6 @@ concurrency:
   group: opencode-test-${{ github.workflow }}
 env:
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
-  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
   OPENCODE_PROMPT_DEFAULT: >-
     You MUST answer the following questions with 1 or few words:
     1. Count how many skills are available via tool?
@@ -19,8 +18,14 @@ env:
     After all answers, do hard stop.
 jobs:
   cogni-ai:
-    name: Cogni AI Agent Test
+    name: Agent Test (${{ matrix.model }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        model:
+          - opencode/gpt-5-nano
+          - opencode/nemotron-3-super-free
     permissions:
       contents: read
       id-token: write
@@ -57,7 +62,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: ${{ env.OPENCODE_AGENT_DEFAULT }}
-          model: ${{ env.OPENCODE_MODEL_DEFAULT }}
+          model: ${{ matrix.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ env.OPENCODE_PROMPT_DEFAULT }}
       - name: Annotate prompt and output
