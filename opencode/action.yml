@@ -50,18 +50,24 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
+        glob: allow
+        read: allow
       cogni-ai-devops:
         bash:
           # Keep in alphabetical order.
           ansible*: allow
           molecule*: allow
           terraform*: allow
+        glob: allow
+        read: allow
       cogni-ai-tester:
         bash:
           # Keep in alphabetical order.
           molecule*: allow
           npm test*: allow
           pytest*: allow
+        glob: allow
+        read: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',

@@ -111,6 +111,8 @@ inputs:
           gh api*: allow
           gh pr checks*: allow
           gh run view*: allow
+        glob: allow
+        read: allow
         edit: deny
         skill:
           '*': deny
@@ -126,6 +128,8 @@ inputs:
           minizinc: allow
       cogni-ai-code-reviewer:
         bash: deny
+        glob: allow
+        read: allow
         edit: deny
       cogni-ai-devops:
         bash:
@@ -138,6 +142,8 @@ inputs:
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
+        glob: allow
+        read: allow
       cogni-ai-github-ops:
         bash:
           # Keep in alphabetical order.
@@ -165,8 +171,12 @@ inputs:
           gh pr review*: allow
           gh pr unlock*: allow
           gh pr update-branch*: allow
+        glob: allow
+        read: allow
       cogni-ai-plan-reviewer:
         bash: deny
+        glob: allow
+        read: allow
         edit: deny
       cogni-ai-python-dev:
         bash:
@@ -174,12 +184,16 @@ inputs:
           jinja2*: allow
           python*: allow
           python3*: allow
+        glob: allow
+        read: allow
       cogni-ai-tester:
         bash:
           # Keep in alphabetical order.
           molecule*: allow
           npm test*: allow
           pytest*: allow
+        glob: allow
+        read: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
