@@ -1,0 +1,37 @@
+name: Test MiniZinc Constraints
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-constraints:
+    runs-on: ubuntu-latest
+    env:
+      MINIZINC_VERSION: 2.9.3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install MiniZinc system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1
+
+      - name: Download MiniZinc bundle
+        run: |
+          wget https://github.com/MiniZinc/MiniZincIDE/releases/download/${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz
+          tar xzf MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz
+          echo "$PWD/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64/bin" >> $GITHUB_PATH
+
+      - name: Verify MiniZinc installation
+        run: |
+          minizinc --version
+          minizinc --solvers
+
+      - name: Run MiniZinc Constraints Check
+        run: |
+          minizinc CONSTRAINTS.mzn
