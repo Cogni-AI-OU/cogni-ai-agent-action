@@ -79,6 +79,10 @@ inputs:
           context-aware-ops: allow
           fact-writer: allow
           gh: allow
+          gh-api: allow
+          gh-models: allow
+          gh-pr: allow
+          gh-run: allow
           git: allow
           git-expert: allow
           github: allow
@@ -107,6 +111,18 @@ inputs:
           gh pr checks*: allow
           gh run view*: allow
         edit: deny
+        skill:
+          '*': deny
+          gh: allow
+          gh-api: allow
+          gh-models: allow
+          gh-pr: allow
+          gh-run: allow
+          git: allow
+          github: allow
+          github-actions: allow
+          github-script: allow
+          minizinc: allow
       cogni-ai-code-reviewer:
         bash: deny
         edit: deny
@@ -148,6 +164,20 @@ inputs:
           gh pr review*: allow
           gh pr unlock*: allow
           gh pr update-branch*: allow
+      cogni-ai-minizinc:
+        edit: deny
+        skill:
+          '*': deny
+          gh: allow
+          gh-api: allow
+          gh-models: allow
+          gh-pr: allow
+          gh-run: allow
+          git: allow
+          github: allow
+          github-actions: allow
+          github-script: allow
+          minizinc: allow
       cogni-ai-plan-reviewer:
         bash: deny
         edit: deny
