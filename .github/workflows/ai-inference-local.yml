@@ -2,14 +2,14 @@
 # AI Inference Local workflow — tests the local ai-inference action.
 # Triggered manually via workflow_dispatch.
 name: AI Inference Local
-run-name: "Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}"
+run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
 on:
   workflow_dispatch:
     inputs:
       prompt:
         description: Prompt to pass to the model
         required: false
-        default: 'Count to 10.'
+        default: Count to 10.
 jobs:
   test:
     name: AI Inference Local

@@ -1,0 +1,106 @@
+---
+# Cogni AI Agent Test workflow — triggered manually by user only.
+# No user inputs, uses predefined settings for testing.
+# Note: Keep keys and envs in alphabetical order.
+name: Cogni AI Agent Test
+run-name: 'Agent Test: Count skills and agents'
+on:
+  workflow_dispatch:
+jobs:
+  cogni-ai:
+    name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        agent:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-devops
+        model:
+          - opencode/gpt-5-nano
+          - opencode/nemotron-3-super-free
+        include:
+          - agent: cogni-ai-architect
+            prompt: >-
+              As Architect, answer with 1 or few words:
+              1. Count skills available via tool?
+              2. How many agents available to dispatch?
+              Hard stop.
+          - agent: cogni-ai-brain-ops
+            prompt: >-
+              As Brain Ops, answer with 1 or few words:
+              1. Count skills available via tool?
+              2. How many agents available to dispatch?
+              Hard stop.
+          - agent: cogni-ai-devops
+            prompt: >-
+              As DevOps, answer with 1 or few words:
+              1. Count skills available via tool?
+              2. How many agents available to dispatch?
+              Hard stop.
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/cache@v5.0.1
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit|
+      - uses: actions/setup-python@v6.1.0
+        with:
+          cache: pip
+          cache-dependency-path: .devcontainer/requirements.txt
+          python-version: '3.12'
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - id: cache-dependencies
+        name: Cache installed dependencies
+        uses: actions/cache@v5.0.1
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
+      - if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        name: Install dependencies
+        run: pip install -r .devcontainer/requirements.txt
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: cogni-ai
+        name: Run Cogni AI Agent Test
+        uses: ./
+        with:
+          agent: ${{ matrix.agent }}
+          model: ${{ matrix.model }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: ${{ matrix.prompt }}
+      - env:
+          COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
+          COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
+        name: Annotate prompt and output
+        run: |
+          set -euo pipefail
+          escape() {
+            local value="$1"
+            value=${value//'%'/'%25'}
+            value=${value//$'\r'/'%0D'}
+            value=${value//$'\n'/'%0A'}
+            printf '%s' "$value"
+          }
+          echo "::notice title=Cogni AI Agent Test prompt::$(escape "$COGNI_AI_PROMPT")"
+          echo "::notice title=Cogni AI Agent Test output::$(escape "${COGNI_AI_OUTPUT:-}")"
+      - env:
+          COGNI_AI_RESPONSE: ${{ steps.cogni-ai.outputs.response }}
+        name: Check for failure in output
+        run: |
+          if echo "$COGNI_AI_RESPONSE" | grep -q "FAIL"; then
+            echo "::error::Agent output contains 'FAIL' keyword"
+            exit 1
+          fi
+      - if: cancelled() || failure()
+        name: Print logs
+        run: grep -v INFO ~/.local/share/opencode/log/* || true

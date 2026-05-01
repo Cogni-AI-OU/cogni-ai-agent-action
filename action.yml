@@ -456,10 +456,8 @@ runs:
                 else:
                     res[k] = v
             return res
-
         action_path = os.environ.get('GITHUB_ACTION_PATH', '')
         action_yaml_path = os.path.join(action_path, 'action.yml')
-
         default_perms_hierarchical = {}
         if action_path and os.path.exists(action_yaml_path):
             try:
@@ -469,21 +467,16 @@ runs:
                     default_perms_hierarchical = yaml.safe_load(default_perms_str) or {}
             except Exception as e:
                 print(f"Warning: Failed to load default permissions from action.yml: {e}")
-
         raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
         agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
-        
         try:
             user_permissions = yaml.safe_load(raw_yaml) or {}
         except Exception:
             user_permissions = {}
-
         if not isinstance(user_permissions, dict):
             user_permissions = {}
-
         categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
         is_hierarchical = any(k not in categories for k in user_permissions.keys())
-
         if user_permissions:
             if is_hierarchical:
                 merged_hierarchical = deep_merge(default_perms_hierarchical, user_permissions)
@@ -494,15 +487,11 @@ runs:
                 merged_hierarchical['default'] = merged_default
         else:
             merged_hierarchical = default_perms_hierarchical
-
         base_perms = merged_hierarchical.get('default', {})
         agent_perms = merged_hierarchical.get(agent, {})
-
         if not isinstance(base_perms, dict): base_perms = {}
         if not isinstance(agent_perms, dict): agent_perms = {}
-
         final_perms = deep_merge(base_perms, agent_perms)
-
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
