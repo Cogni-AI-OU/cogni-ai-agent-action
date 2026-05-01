@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   mentions:
-    default: /oc,/opencode,/review,/brainstorm
+    default: /oc,/opencode,/review
     description: Comma-separated trigger mentions for OpenCode.
     required: false
   opencode-api-key:
@@ -50,12 +50,6 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
-      cogni-ai-brain-ops:
-        bash:
-          # Keep in alphabetical order.
-          gh api*: allow
-          gh pr checks*: allow
-          gh run view*: allow
       cogni-ai-devops:
         bash:
           # Keep in alphabetical order.
@@ -71,7 +65,7 @@ inputs:
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-code-reviewer', 'cogni-ai-tester', 'cogni-ai-brain-ops', etc.).
+      'cogni-ai-code-reviewer', 'cogni-ai-tester', etc.).
       Example:
         default:
           bash:
@@ -96,7 +90,7 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/oc,/opencode,/review,/brainstorm' }}
+        MENTIONS: ${{ inputs.mentions || '/oc,/opencode,/review' }}
         AGENT_INPUT: ${{ inputs.agent }}
       with:
         script: |
@@ -127,7 +121,6 @@ runs:
             if (!body) return 'cogni-ai-architect';
             // Stricter pattern for /review to avoid misclassification
             if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
-            if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
             return 'cogni-ai-architect';
           }
           const isBot = context.actor.endsWith('[bot]');
@@ -346,7 +339,7 @@ runs:
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
-        mentions: ${{ inputs.mentions || '/oc,/opencode,/review,/brainstorm' }}
+        mentions: ${{ inputs.mentions || '/oc,/opencode,/review' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false
