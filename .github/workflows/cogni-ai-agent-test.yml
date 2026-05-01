@@ -1,0 +1,78 @@
+---
+# Cogni AI Agent Test workflow — triggered manually by user only.
+# No user inputs, uses pre-defined settings for testing.
+# Note: Keep keys and envs in alphabetical order.
+name: Cogni AI Agent Test
+run-name: "Agent Test: Count skills and agents"
+on:
+  workflow_dispatch:
+concurrency:
+  cancel-in-progress: false
+  group: opencode-test-${{ github.run_id }}
+env:
+  OPENCODE_AGENT_DEFAULT: cogni-ai-architect
+  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+jobs:
+  cogni-ai:
+    name: Cogni AI Agent Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
+      discussions: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/cache@v5.0.1
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit|
+      - uses: actions/setup-python@v6.1.0
+        with:
+          cache: pip
+          cache-dependency-path: .devcontainer/requirements.txt
+          python-version: '3.12'
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - name: Cache installed dependencies
+        id: cache-dependencies
+        uses: actions/cache@v5.0.1
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: pip install -r .devcontainer/requirements.txt
+      - name: Run Cogni AI Agent Test
+        id: cogni-ai
+        uses: ./
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          agent: ${{ env.OPENCODE_AGENT_DEFAULT }}
+          model: ${{ env.OPENCODE_MODEL_DEFAULT }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: "You MUST answer the following questions with 1 or few words: 1. Count how many skills are available via tool? 2. How many agents are available to dispatch? After all answers, do hard stop."
+      - name: Annotate prompt and output
+        env:
+          COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
+          COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
+        run: |
+          set -euo pipefail
+          escape() {
+            local value="$1"
+            value=${value//'%'/'%25'}
+            value=${value//$'\r'/'%0D'}
+            value=${value//$'\n'/'%0A'}
+            printf '%s' "$value"
+          }
+          echo "::notice title=Cogni AI Agent Test prompt::$(escape "$COGNI_AI_PROMPT")"
+          echo "::notice title=Cogni AI Agent Test output::$(escape "${COGNI_AI_OUTPUT:-}")"
+      - name: Print logs
+        if: cancelled() || failure()
+        run: grep -v INFO ~/.local/share/opencode/log/* || true
