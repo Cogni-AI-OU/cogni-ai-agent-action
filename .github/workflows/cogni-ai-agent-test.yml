@@ -46,29 +46,29 @@ jobs:
           python-version: '3.12'
       - name: Install pre-commit
         run: pip install pre-commit
-      - name: Cache installed dependencies
-        id: cache-dependencies
+      - id: cache-dependencies
+        name: Cache installed dependencies
         uses: actions/cache@v5.0.1
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
-      - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+      - if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        name: Install dependencies
         run: pip install -r .devcontainer/requirements.txt
-      - name: Run Cogni AI Agent Test
-        id: cogni-ai
-        uses: ./
-        env:
+      - env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: cogni-ai
+        name: Run Cogni AI Agent Test
+        uses: ./
         with:
           agent: ${{ matrix.agent }}
           model: ${{ matrix.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ env.OPENCODE_PROMPT_DEFAULT }}
-      - name: Annotate prompt and output
-        env:
-          COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
+      - env:
           COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
+          COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
+        name: Annotate prompt and output
         run: |
           set -euo pipefail
           escape() {
@@ -80,6 +80,6 @@ jobs:
           }
           echo "::notice title=Cogni AI Agent Test prompt::$(escape "$COGNI_AI_PROMPT")"
           echo "::notice title=Cogni AI Agent Test output::$(escape "${COGNI_AI_OUTPUT:-}")"
-      - name: Print logs
-        if: cancelled() || failure()
+      - if: cancelled() || failure()
+        name: Print logs
         run: grep -v INFO ~/.local/share/opencode/log/* || true
