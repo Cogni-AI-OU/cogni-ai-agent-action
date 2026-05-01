@@ -42,7 +42,7 @@ You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub ac
 
 Check `github.event_name` and payload to identify trigger source:
 
-- **Outdated/Resolved PR comments**: If a PR comment's thread has been addressed or is now outdated due to code changes, you SHOULD use the `gh` CLI or API to mark the comment/thread as resolved.
+- **Outdated/Resolved PR comments**: If a PR comment's thread has been addressed or is now outdated due to code changes, you SHOULD use the `gh` CLI or API to mark the comment/thread as resolved. Note that when a user asks to "resolve comments", it can be ambiguous and it could mean marking unresolved/outdated PR thread comments as resolved when they're already addressed.
 - **General PR comment** (`issue_comment`):
   - Condition: `if: ${{ github.event.issue.pull_request }}`
   - Reply Method: `gh pr comment` or `gh pr review` for batching broad feedback and setting state.
