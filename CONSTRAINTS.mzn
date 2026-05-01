@@ -3,7 +3,7 @@
 % Used to verify if action.yml provides strict principle of least privilege.
 
 % --- Sets & Enums ---
-enum AGENTS = { ARCHITECT, BRAIN_OPS, CODE_REVIEWER, DEVOPS };
+enum AGENTS = { ARCHITECT, BRAIN_OPS, CODE_REVIEWER, DEVOPS, PLAN_REVIEWER, PYTHON_DEV, TESTER, FACT_OPS, CONTEXT7_OPS };
 enum SKILLS = { GH, GH_API, GH_MODELS, GH_PR, MERMAID, MINIZINC };
 
 % --- Inputs from action.yml logic ---
@@ -11,9 +11,14 @@ enum SKILLS = { GH, GH_API, GH_MODELS, GH_PR, MERMAID, MINIZINC };
 % This implicitly gives ALL agents access to ALL skills discovered in that path.
 array[AGENTS] of set of SKILLS: required_skills = [
     {GH, MERMAID, MINIZINC},            % ARCHITECT
-    {GH, GH_API, GH_MODELS, GH_PR, MERMAID}, % BRAIN_OPS
+    {GH, GH_API, GH_MODELS, GH_PR, MINIZINC}, % BRAIN_OPS
     {GH, GH_PR},                        % CODE_REVIEWER
-    {GH, GH_API, MINIZINC}              % DEVOPS
+    {GH, GH_API, MINIZINC},             % DEVOPS
+    {GH, MERMAID},                      % PLAN_REVIEWER
+    {GH},                               % PYTHON_DEV
+    {GH},                               % TESTER
+    {GH},                               % FACT_OPS
+    {GH}                                % CONTEXT7_OPS
 ];
 
 % --- State Variables ---
