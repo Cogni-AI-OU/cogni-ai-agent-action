@@ -5,6 +5,10 @@
 name: Cogni AI Agent Test
 run-name: 'Agent Test: Count skills and agents'
 on:
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
   workflow_dispatch:
 jobs:
   cogni-ai:
