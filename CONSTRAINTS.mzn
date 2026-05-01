@@ -1,4 +1,4 @@
-% AGENT_SKILLS_CONSTRAINTS.mzn
+% CONSTRAINTS.mzn
 % Formal mapping of agent roles to required skills vs. available paths.
 % Used to verify if action.yml provides strict principle of least privilege.
 
