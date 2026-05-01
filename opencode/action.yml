@@ -51,7 +51,11 @@ inputs:
           true*: allow
           vim*: allow
       cogni-ai-brain-ops:
-        bash: deny
+        bash:
+          # Keep in alphabetical order.
+          gh api*: allow
+          gh pr checks*: allow
+          gh run view*: allow
       cogni-ai-devops:
         bash:
           # Keep in alphabetical order.

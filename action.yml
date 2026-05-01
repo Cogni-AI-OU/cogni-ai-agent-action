@@ -101,7 +101,11 @@ inputs:
           general: deny
         todowrite: allow
       cogni-ai-brain-ops:
-        bash: deny
+        bash:
+          # Keep in alphabetical order.
+          gh api*: allow
+          gh pr checks*: allow
+          gh run view*: allow
         edit: deny
       cogni-ai-code-reviewer:
         bash: deny
