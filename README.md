@@ -34,9 +34,12 @@ on:
 jobs:
   agent:
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      contains(github.event.comment.body, '/') ||
-      contains(github.event.comment.body, '@')
+      github.event.sender.type != 'Bot' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        contains(github.event.comment.body, '/') ||
+        contains(github.event.comment.body, '@')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write # create/edit/delete files
@@ -155,24 +158,27 @@ jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'pull_request' ||
+      github.event.sender.type != 'Bot' &&
       (
-        github.event_name == 'issues' &&
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'pull_request' ||
         (
-          contains(github.event.issue.body || '', '/') ||
-          contains(github.event.issue.body || '', '@')
-        )
-      ) ||
-      (
-        github.event_name == 'discussion' &&
+          github.event_name == 'issues' &&
+          (
+            contains(github.event.issue.body || '', '/') ||
+            contains(github.event.issue.body || '', '@')
+          )
+        ) ||
         (
-          contains(github.event.discussion.body || '', '/') ||
-          contains(github.event.discussion.body || '', '@')
-        )
-      ) ||
-      contains(github.event.comment.body || '', '/') ||
-      contains(github.event.comment.body || '', '@')
+          github.event_name == 'discussion' &&
+          (
+            contains(github.event.discussion.body || '', '/') ||
+            contains(github.event.discussion.body || '', '@')
+          )
+        ) ||
+        contains(github.event.comment.body || '', '/') ||
+        contains(github.event.comment.body || '', '@')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write # create/edit/delete files
@@ -224,6 +230,7 @@ on:
 jobs:
   cogni-ai-agent-sudo:
     name: Run Cogni AI agent (Sudo)
+    if: ${{ github.event.sender.type != 'Bot' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write # create/edit/delete files
