@@ -61,8 +61,8 @@ on:
           - opencode/minimax-m2.5
           - opencode/minimax-m2.5-free
           - opencode/nemotron-3-super-free
-          - opencode/qwen3-coder
-          - opencode/qwen3.6-plus-free
+          - opencode/qwen3.6-plus
+          - opencode/qwen3.5-plus
           # Grok models (xAI)
           - xai/grok-4-1-fast-non-reasoning  # Fast responses, 2M context
           - xai/grok-4-1-fast-reasoning  # Tool-calling + reasoning, 2M context

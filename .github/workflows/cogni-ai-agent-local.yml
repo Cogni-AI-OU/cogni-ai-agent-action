@@ -1,6 +1,6 @@
 ---
 # Cogni AI Agent Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
-# Triggered by /co, /cogni, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
+# Triggered by /co, /cogni, /review, or /brainstorm commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Local
 run-name: "Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}"
@@ -49,12 +49,11 @@ on:
         default: cogni-ai-architect
         description: Agent to use.
         options:
-          - build
           - cogni-ai-architect
-          - compaction
-          - plan
-          - summary
-          - title
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-plan-reviewer
         required: false
         type: choice
       model:
@@ -99,8 +98,8 @@ on:
           - opencode/minimax-m2.5
           - opencode/minimax-m2.5-free
           - opencode/nemotron-3-super-free
-          - opencode/qwen3-coder
-          - opencode/qwen3.6-plus-free
+          - opencode/qwen3.6-plus
+          - opencode/qwen3.5-plus
           # Grok models (xAI)
           - xai/grok-4-1-fast-non-reasoning  # Fast responses, 2M context
           - xai/grok-4-1-fast-reasoning  # Tool-calling + reasoning, 2M context

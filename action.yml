@@ -18,7 +18,7 @@ inputs:
     description: Whether to enable gh-models extension.
     required: false
   mentions:
-    default: /co,/cogni,/review
+    default: /co,/cogni,/review,/brainstorm
     description: Comma-separated trigger mentions for OpenCode.
     required: false
   opencode-api-key:
@@ -111,6 +111,13 @@ inputs:
           pulumi*: deny
           terraform*: deny
           terragrunt*: deny
+      cogni-ai-brain-ops:
+        bash:
+          # Keep in alphabetical order.
+          gh api*: allow
+          gh pr checks*: allow
+          gh run view*: allow
+        edit: deny
       cogni-ai-code-reviewer:
         bash: deny
         edit: deny
@@ -121,6 +128,7 @@ inputs:
           ansible-galaxy*: allow
           ansible-playbook*: allow
           docker*: allow
+          molecule*: allow
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
@@ -162,11 +170,18 @@ inputs:
           jinja2*: allow
           python*: allow
           python3*: allow
+      cogni-ai-tester:
+        bash:
+          # Keep in alphabetical order.
+          molecule*: allow
+          npm test*: allow
+          pytest*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
       'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer', 'cogni-ai-devops',
-      'cogni-ai-fact-ops', 'cogni-ai-github-ops', etc.).
+      'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-tester',
+      'cogni-ai-brain-ops', etc.).
       Example:
         default:
           bash:
@@ -195,7 +210,7 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/co,/cogni,/review' }}
+        MENTIONS: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         AGENT_INPUT: ${{ inputs.agent }}
       with:
         script: |
@@ -226,6 +241,7 @@ runs:
             if (!body) return 'cogni-ai-architect';
             // Stricter pattern for /review to avoid misclassification
             if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
+            if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
             return 'cogni-ai-architect';
           }
           const isBot = context.actor.endsWith('[bot]');
@@ -561,10 +577,22 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
               },
+              "cogni-ai-tester": {
+                "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+              },
               "cogni-ai-weaver": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+              },
+              "cogni-ai-brain-ops": {
+                "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
               },
               "explore": {
                 "disable": true,
@@ -608,7 +636,7 @@ runs:
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
-        mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
+        mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false

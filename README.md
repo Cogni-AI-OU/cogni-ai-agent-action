@@ -13,7 +13,7 @@ Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a
 1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
-You can trigger the agent via `workflow_dispatch`, or via issue or PR comments using commands like `/co`, `/cogni`, or `/review`.
+You can trigger the agent via `workflow_dispatch`, or via issue or PR comments using commands like `/co`, `/cogni`, `/review`, or `/brainstorm`.
 
 ### Basic workflow
 
@@ -65,7 +65,7 @@ For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd
 
 ### Task delegation
 
-`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, `cogni-ai-python-dev`, `cogni-ai-code-reviewer`, and `cogni-ai-plan-reviewer` are configured with `mode: all`, so
+`cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`, `cogni-ai-python-dev`, `cogni-ai-code-reviewer`, `cogni-ai-plan-reviewer`, `cogni-ai-tester`, and `cogni-ai-brain-ops` are configured with `mode: all`, so
 they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 
@@ -142,8 +142,8 @@ on:
           - opencode/minimax-m2.5
           - opencode/minimax-m2.5-free
           - opencode/nemotron-3-super-free
-          - opencode/qwen3-coder
-          - opencode/qwen3.6-plus-free
+          - opencode/qwen3.6-plus
+          - opencode/qwen3.5-plus
         required: true
         type: choice
       prompt:
@@ -256,7 +256,7 @@ Important note: Only use this sudo workflow with trusted inputs and repositories
 | Input              | Description                 | Default                   | Required |
 | ------------------ | --------------------------- | ------------------------- | -------- |
 | `agent`            | Agent to use                | `cogni-ai-architect`      | No       |
-| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review`      | No       |
+| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review,/brainstorm` | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
 | `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
 | `permissions`      | Permissions configuration   | —                         | No       |

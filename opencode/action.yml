@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   mentions:
-    default: /oc,/opencode,/review
+    default: /oc,/opencode,/review  # Note: Do not change default triggers.
     description: Comma-separated trigger mentions for OpenCode.
     required: false
   opencode-api-key:
@@ -50,9 +50,22 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
+      cogni-ai-devops:
+        bash:
+          # Keep in alphabetical order.
+          ansible*: allow
+          molecule*: allow
+          terraform*: allow
+      cogni-ai-tester:
+        bash:
+          # Keep in alphabetical order.
+          molecule*: allow
+          npm test*: allow
+          pytest*: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides.
+      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
+      'cogni-ai-code-reviewer', 'cogni-ai-tester', etc.).
       Example:
         default:
           bash:
