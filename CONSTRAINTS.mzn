@@ -96,9 +96,10 @@ constraint forall(a in AGENTS)(
 
 % Tool and Bash provisioning (modeled based on action.yml overrides)
 % Required sets must be subsets of provisioned sets.
+% Note: Using subset or == to represent subseteq logic.
 constraint forall(a in AGENTS)(
-    required_tools[a] subset provisioned_tools[a] \/ required_tools[a] == provisioned_tools[a] /\
-    required_bash[a] subset provisioned_bash[a] \/ required_bash[a] == provisioned_bash[a]
+    (required_tools[a] subset provisioned_tools[a] \/ required_tools[a] == provisioned_tools[a]) /\
+    (required_bash[a] subset provisioned_bash[a] \/ required_bash[a] == provisioned_bash[a])
 );
 
 % For the sake of this model, we assume provisioned tools/bash match exactly what's required
