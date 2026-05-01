@@ -32,6 +32,7 @@ jobs:
               You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are Architect agent.
               2. You've over 20+ skills registered to use at your disposal.
+                 Do not scan action.yml for answers, you should have them already mentioned in the system prompt.
               3. You've access to bash tool.
               4. You've access to edit tool.
               5. You've access to glob tool.
@@ -44,6 +45,7 @@ jobs:
               You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are BrainOps agent.
               2. You've over 20+ skills registered to use at your disposal.
+                 Do not scan action.yml for answers, you should have them already mentioned in the system prompt.
               3. You've access to bash tool.
               4. You've access to edit tool.
               5. You've access to glob tool.
@@ -56,6 +58,7 @@ jobs:
               You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are DevOps agent.
               2. You've over 20+ skills registered to use at your disposal.
+                 Do not scan action.yml for answers, you should have them already mentioned in the system prompt.
               3. You've access to bash tool.
               4. You've access to edit tool.
               5. You've access to glob tool.
