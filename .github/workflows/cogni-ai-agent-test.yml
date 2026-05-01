@@ -29,7 +29,7 @@ jobs:
         include:
           - agent: cogni-ai-architect
             prompt: >-
-              You MUST answer the following statements with PASS or FAIL:
+              You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are Architect agent.
               2. You've over 20+ skills registered to use at your disposal.
               3. You've access to bash tool.
@@ -38,10 +38,10 @@ jobs:
               6. You've access to read tool.
               7. You've able to call context7-ops, devops and github-ops agents.
               8. You've access to the following MCPs: context7.
-              Keep the workspace clean. Once answered all, elaborate on fails, then do a hard stop.
+              Once answered all, elaborate on fails, then do a hard stop. Do not fix or edit files and keep the workspace clean. 
           - agent: cogni-ai-brain-ops
             prompt: >-
-              You MUST answer the following statements with PASS or FAIL:
+              You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are BrainOps agent.
               2. You've over 20+ skills registered to use at your disposal.
               3. You've access to bash tool.
@@ -50,10 +50,10 @@ jobs:
               6. You've access to read tool.
               7. You've able to call context7-ops, devops and github-ops agents.
               8. You've access to the following MCPs: context7.
-              Keep the workspace clean. Once answered all, elaborate on fails, then do a hard stop.
+              Once answered all, elaborate on fails, then do a hard stop. Do not fix or edit files and keep the workspace clean. 
           - agent: cogni-ai-devops
             prompt: >-
-              You MUST answer the following statements with PASS or FAIL:
+              You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are DevOps agent.
               2. You've over 20+ skills registered to use at your disposal.
               3. You've access to bash tool.
@@ -62,7 +62,7 @@ jobs:
               6. You've access to read tool.
               7. You've able to call context7-ops, devops and github-ops agents.
               8. You've access to the following MCPs: context7.
-              Keep the workspace clean. Once answered all, elaborate on fails, then do a hard stop.
+              Once answered all, elaborate on fails, then do a hard stop. Do not fix or edit files and keep the workspace clean. 
     permissions:
       contents: read
       id-token: write
