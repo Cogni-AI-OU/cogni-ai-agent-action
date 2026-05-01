@@ -34,15 +34,15 @@ bool: global_skills_path_provisioning = true;
 % --- Requirements ---
 array[AGENTS] of set of SKILLS: required_skills = [
     {SKILL_GH, SKILL_GIT, SKILL_MERMAID, SKILL_MINIZINC, SKILL_SHELL},            % ARCHITECT
-    {SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_GH_RUN, SKILL_GIT, SKILL_GITHUB, SKILL_GITHUB_ACTIONS, SKILL_GITHUB_SCRIPT, SKILL_MINIZINC}, % BRAIN_OPS
-    {SKILL_GH, SKILL_GH_PR, SKILL_GITHUB, SKILL_GIT},                            % CODE_REVIEWER
-    {SKILL_GH, SKILL_GH_API, SKILL_GIT, SKILL_MINIZINC, SKILL_ANSIBLE, SKILL_MOLECULE, SKILL_SHELL}, % DEVOPS
-    {SKILL_GH, SKILL_GH_API, SKILL_GH_PR, SKILL_GITHUB, SKILL_GIT},               % GITHUB_OPS
+    {SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_GH_RUN, SKILL_GIT, SKILL_GITHUB, SKILL_GITHUB_ACTIONS, SKILL_GITHUB_SCRIPT, SKILL_MINIZINC, SKILL_MERMAID, SKILL_MERMAID_BETA}, % BRAIN_OPS
+    {SKILL_GH, SKILL_GH_PR, SKILL_GITHUB, SKILL_GIT, SKILL_MERMAID, SKILL_MERMAID_BETA}, % CODE_REVIEWER
+    {SKILL_GH, SKILL_GH_API, SKILL_GIT, SKILL_MINIZINC, SKILL_ANSIBLE, SKILL_MOLECULE, SKILL_SHELL, SKILL_MERMAID, SKILL_MERMAID_BETA}, % DEVOPS
+    {SKILL_GH, SKILL_GH_API, SKILL_GH_PR, SKILL_GITHUB, SKILL_GIT, SKILL_MERMAID, SKILL_MERMAID_BETA}, % GITHUB_OPS
     {SKILL_GH, SKILL_GIT, SKILL_MERMAID, SKILL_MERMAID_BETA},                    % PLAN_REVIEWER
-    {SKILL_GH, SKILL_GIT, SKILL_SHELL},                                          % PYTHON_DEV
-    {SKILL_GH, SKILL_GIT, SKILL_MOLECULE, SKILL_SHELL},                          % TESTER
-    {SKILL_GH, SKILL_GIT, SKILL_FACT_WRITER},                                    % FACT_OPS
-    {SKILL_GH, SKILL_GIT, SKILL_CONTEXT_AWARE_OPS}                               % CONTEXT7_OPS
+    {SKILL_GH, SKILL_GIT, SKILL_SHELL, SKILL_MERMAID, SKILL_MERMAID_BETA},       % PYTHON_DEV
+    {SKILL_GH, SKILL_GIT, SKILL_MOLECULE, SKILL_SHELL, SKILL_MERMAID, SKILL_MERMAID_BETA}, % TESTER
+    {SKILL_GH, SKILL_GIT, SKILL_FACT_WRITER, SKILL_MERMAID, SKILL_MERMAID_BETA}, % FACT_OPS
+    {SKILL_GH, SKILL_GIT, SKILL_CONTEXT_AWARE_OPS, SKILL_MERMAID, SKILL_MERMAID_BETA} % CONTEXT7_OPS
 ];
 
 array[AGENTS] of set of TOOLS: required_tools = [
@@ -96,10 +96,9 @@ constraint forall(a in AGENTS)(
 
 % Tool and Bash provisioning (modeled based on action.yml overrides)
 % Required sets must be subsets of provisioned sets.
-% Note: Using subset or == to represent subseteq logic.
 constraint forall(a in AGENTS)(
-    (required_tools[a] subset provisioned_tools[a] \/ required_tools[a] == provisioned_tools[a]) /\
-    (required_bash[a] subset provisioned_bash[a] \/ required_bash[a] == provisioned_bash[a])
+    required_tools[a] subseteq provisioned_tools[a] /\
+    required_bash[a] subseteq provisioned_bash[a]
 );
 
 % For the sake of this model, we assume provisioned tools/bash match exactly what's required
@@ -149,10 +148,13 @@ constraint is_budget_exhausted <-> (
     elapsed_time >= MAX_TIME_TTL
 );
 
+string: flaw_verdict = if is_globally_dumping_runner_temp_skills_flawed then "YES" else "NO" endif;
+
 % Output formatting
 output [
   "Environment Isolation Intact: \(isolated_environment_integrity)\n",
   "Least Privilege Maintained: \(principle_of_least_privilege_maintained)\n",
-  "Is globally dumping runner.temp/.skills flawed? \(is_globally_dumping_runner_temp_skills_flawed ? "YES" : "NO").\n",
+  "Is globally dumping runner.temp/.skills flawed? \(flaw_verdict).\n",
   "Global Skills Path Provisioning (action.yml flaw active): \(global_skills_path_provisioning)\n"
 ];
+

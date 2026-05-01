@@ -107,6 +107,7 @@ inputs:
         todowrite: allow
       cogni-ai-architect:
         bash:
+          <<: *default-bash
           # Explicitly deny devops tools so legacy flat lists don't leak them
           ansible*: deny
           ansible-galaxy*: deny

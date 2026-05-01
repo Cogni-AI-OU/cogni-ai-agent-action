@@ -53,6 +53,18 @@ inputs:
           vim*: allow
         glob: allow
         read: allow
+      cogni-ai-brain-ops:
+        bash:
+          # Brain-ops is a context-gathering agent; gathering context via GH/git is allowed.
+          gh api*: allow
+          gh pr checks*: allow
+          gh pr view*: allow
+          gh run view*: allow
+          git log*: allow
+          git show*: allow
+        glob: allow
+        read: allow
+        edit: deny
       cogni-ai-code-reviewer:
         bash: deny
         glob: allow
