@@ -3,7 +3,16 @@
 # Triggered by /oc, /opencode, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  ${{
+    format(
+      'Agent on #{0}',
+      github.event.issue.number
+      || github.event.pull_request.number
+      || github.event.discussion.number
+      || github.run_id
+    )
+  }}
 on:
   issue_comment:
     types:
@@ -148,14 +157,63 @@ jobs:
       contains(github.event.comment.body || '', '@')
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
+      discussions: write
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
       pull-requests: write
-      discussions: write
     steps:
+      # See: <https://github.com/actions/github-script>
+      - name: Check for active Cogni run
+        id: cross-workflow-guard
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const subjectNumber =
+              context.payload.issue?.number
+              ?? context.payload.pull_request?.number
+              ?? context.payload.discussion?.number;
+            if (!subjectNumber) {
+              core.info('Cross-workflow guard: skipped (no issue, PR, or discussion number)');
+              core.setOutput('skip', 'false');
+              return;
+            }
+            const displayTitle = 'Agent on ' + '#' + subjectNumber;
+            const threadLabel = `#${subjectNumber}`;
+            const activeRuns = [];
+            for (const status of ['in_progress', 'queued']) {
+              const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                per_page: 100,
+                repo: context.repo.repo,
+                status,
+                workflow_id: 'cogni-ai-agent-local.yml',
+              });
+              activeRuns.push(
+                ...workflow_runs.filter(
+                  run => run.id !== context.runId
+                    && run.display_title === displayTitle
+                )
+              );
+            }
+            if (activeRuns.length > 0) {
+              const ids = activeRuns.map(run => run.id).join(', ');
+              core.notice(
+                `Cross-workflow guard: skipping because Cogni run(s) are already active ` +
+                `for ${threadLabel} (IDs: ${ids})`
+              );
+              core.setOutput('skip', 'true');
+              return;
+            }
+            core.info(`Cross-workflow guard: no active Cogni runs found for ${threadLabel}`);
+            core.setOutput('skip', 'false');
+      - name: Skip because Cogni run is active
+        if: ${{ steps.cross-workflow-guard.outputs.skip == 'true' }}
+        run: echo "Skipping OpenCode Agent Local because Cogni AI Agent Local is already active for this thread."
       # See: <https://github.com/actions/checkout>
       - uses: actions/checkout@v6
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         with:
           persist-credentials: false  # Prevents duplicate Authorization header
           ref: >-
@@ -172,29 +230,38 @@ jobs:
               github.ref
             }}
       - uses: actions/cache@v5.0.1
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         with:
           path: ~/.cache/pre-commit
           key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
           restore-keys: |
             pre-commit|
       - uses: actions/setup-python@v6.1.0
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         with:
           cache: pip
           cache-dependency-path: .devcontainer/requirements.txt
           python-version: '3.12'
       - name: Install pre-commit
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         run: pip install pre-commit
       - name: Cache installed dependencies
         id: cache-dependencies
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         uses: actions/cache@v5.0.1
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
       - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        if: >-
+          ${{
+            steps.cross-workflow-guard.outputs.skip != 'true'
+            && steps.cache-dependencies.outputs.cache-hit != 'true'
+          }}
         run: pip install -r .devcontainer/requirements.txt
       - name: Run OpenCode Agent Local
         id: opencode
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         uses: ./opencode
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -203,8 +270,16 @@ jobs:
             ${{ inputs.agent || '' }}
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt
+              || github.event.comment.body
+              || github.event.issue.body
+              || github.event.pull_request.body
+              || github.event.discussion.body
+            }}
       - name: Annotate prompt and output
+        if: ${{ steps.cross-workflow-guard.outputs.skip != 'true' }}
         env:
           OPENCODE_PROMPT: ${{ steps.opencode.outputs.prompt }}
           OPENCODE_OUTPUT: ${{ steps.opencode.outputs.response }}
@@ -220,5 +295,5 @@ jobs:
           echo "::notice title=OpenCode Agent Local prompt::$(escape "$OPENCODE_PROMPT")"
           echo "::notice title=OpenCode Agent Local output::$(escape "${OPENCODE_OUTPUT:-}")"
       - name: Print logs
-        if: cancelled() || failure()
+        if: ${{ (cancelled() || failure()) && steps.cross-workflow-guard.outputs.skip != 'true' }}
         run: grep -v INFO ~/.local/share/opencode/log/* || true
