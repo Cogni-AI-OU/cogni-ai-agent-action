@@ -5,7 +5,30 @@
 name: Cogni AI Agent Test
 run-name: 'Agent Test: Count skills and agents'
 on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
+      - review_requested
+  pull_request_review:
+    types:
+      - submitted
+      - edited
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
   workflow_dispatch:
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
 jobs:
   cogni-ai:
     name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
@@ -19,26 +42,49 @@ jobs:
           - cogni-ai-devops
         model:
           - opencode/gpt-5-nano
-          - opencode/nemotron-3-super-free
         include:
           - agent: cogni-ai-architect
             prompt: >-
-              As Architect, answer with 1 or few words:
-              1. Count skills available via tool?
-              2. How many agents available to dispatch?
-              Hard stop.
+              You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
+              1. You are Architect agent.
+              2. You have 19 skills registered at your disposal.
+              3. You have access to the bash tool.
+              4. You have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              Once you have answered all of the above, elaborate on any fails (avoid using #), then do a hard stop.
           - agent: cogni-ai-brain-ops
             prompt: >-
-              As Brain Ops, answer with 1 or few words:
-              1. Count skills available via tool?
-              2. How many agents available to dispatch?
-              Hard stop.
+              You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
+              1. You are BrainOps agent.
+              2. You have 19 skills registered at your disposal.
+              3. You have access to the bash tool.
+              4. You do NOT have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              Once you have answered all of the above, elaborate on any fails (avoid using #), then do a hard stop.
           - agent: cogni-ai-devops
             prompt: >-
-              As DevOps, answer with 1 or few words:
-              1. Count skills available via tool?
-              2. How many agents available to dispatch?
-              Hard stop.
+              You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
+              1. You are DevOps agent.
+              2. You have 19 skills registered at your disposal.
+              3. You have access to the bash tool.
+              4. You have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              Once you have answered all of the above, elaborate on any fails (avoid using #), then do a hard stop.
     permissions:
       contents: read
       id-token: write
@@ -97,8 +143,8 @@ jobs:
           COGNI_AI_RESPONSE: ${{ steps.cogni-ai.outputs.response }}
         name: Check for failure in output
         run: |
-          if echo "$COGNI_AI_RESPONSE" | grep -q "FAIL"; then
-            echo "::error::Agent output contains 'FAIL' keyword"
+          if echo "$COGNI_AI_RESPONSE" | grep -Ei "FAIL|sorry|cannot"; then
+            echo "::error::Agent output contains failure keyword (FAIL, sorry, or cannot)"
             exit 1
           fi
       - if: cancelled() || failure()
