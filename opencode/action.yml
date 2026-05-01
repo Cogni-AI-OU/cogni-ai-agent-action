@@ -22,6 +22,7 @@ inputs:
     required: true
   permissions:
     default: |-
+      # Keep in alphabetical order.
       default:
         bash:
           '*': deny
@@ -54,7 +55,6 @@ inputs:
         read: allow
       cogni-ai-devops:
         bash:
-          # Keep in alphabetical order.
           ansible*: allow
           molecule*: allow
           terraform*: allow
@@ -62,7 +62,6 @@ inputs:
         read: allow
       cogni-ai-tester:
         bash:
-          # Keep in alphabetical order.
           molecule*: allow
           npm test*: allow
           pytest*: allow

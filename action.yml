@@ -26,9 +26,9 @@ inputs:
     required: true
   permissions:
     default: |-
+      # Keep in alphabetical order.
       default:
         bash:
-          # Keep in alphabetical order.
           '*': deny
           awk*: allow
           base64*: allow
@@ -107,7 +107,6 @@ inputs:
         todowrite: allow
       cogni-ai-brain-ops:
         bash:
-          # Keep in alphabetical order.
           gh api*: allow
           gh pr checks*: allow
           gh run view*: allow
@@ -133,7 +132,6 @@ inputs:
         edit: deny
       cogni-ai-devops:
         bash:
-          # Keep in alphabetical order.
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
@@ -146,7 +144,6 @@ inputs:
         read: allow
       cogni-ai-github-ops:
         bash:
-          # Keep in alphabetical order.
           gh api graphql*: allow  # Can also modify/delete issues/discussions
           gh issue close*: allow
           gh issue comment*: allow
@@ -180,7 +177,6 @@ inputs:
         edit: deny
       cogni-ai-python-dev:
         bash:
-          # Keep in alphabetical order.
           jinja2*: allow
           python*: allow
           python3*: allow
@@ -188,7 +184,6 @@ inputs:
         read: allow
       cogni-ai-tester:
         bash:
-          # Keep in alphabetical order.
           molecule*: allow
           npm test*: allow
           pytest*: allow
