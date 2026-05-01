@@ -409,6 +409,9 @@ runs:
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
         } >> "$GITHUB_OUTPUT"
+        if [ -f "${{ github.workspace }}/AGENTS.md" ]; then
+          echo "has_agents=true" >> "$GITHUB_OUTPUT"
+        fi
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
@@ -596,7 +599,8 @@ runs:
               "batch_tool": true
             },
             "instructions": [
-              "AGENTS-RUNTIME.md",
+              ${{ steps.prompt.outputs.has_agents == 'true' && '"AGENTS.md",' || '' }}
+              "${{ github.action_path }}/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.mmd",
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
