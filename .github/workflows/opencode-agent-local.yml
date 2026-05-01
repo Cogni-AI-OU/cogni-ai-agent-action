@@ -128,24 +128,27 @@ jobs:
   opencode:
     name: OpenCode Agent Local
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'workflow_call' ||
+      github.event.sender.type != 'Bot' &&
       (
-        github.event_name == 'issues' &&
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
         (
-          contains(github.event.issue.body || '', '/') ||
-          contains(github.event.issue.body || '', '@')
-        )
-      ) ||
-      (
-        github.event_name == 'discussion' &&
+          github.event_name == 'issues' &&
+          (
+            contains(github.event.issue.body || '', '/') ||
+            contains(github.event.issue.body || '', '@')
+          )
+        ) ||
         (
-          contains(github.event.discussion.body || '', '/') ||
-          contains(github.event.discussion.body || '', '@')
-        )
-      ) ||
-      contains(github.event.comment.body || '', '/') ||
-      contains(github.event.comment.body || '', '@')
+          github.event_name == 'discussion' &&
+          (
+            contains(github.event.discussion.body || '', '/') ||
+            contains(github.event.discussion.body || '', '@')
+          )
+        ) ||
+        contains(github.event.comment.body || '', '/') ||
+        contains(github.event.comment.body || '', '@')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
