@@ -26,7 +26,7 @@ jobs:
         include:
           - agent: cogni-ai-architect
             prompt: >-
-              You MUST answer the following statements with PASS or opposite (F-word):
+              You MUST answer the following statements with PASS or FAIL:
               1. You are Architect agent.
               2. You've over 20+ skills registered to use at your disposal.
               3. You've access to bash tool.
@@ -38,7 +38,7 @@ jobs:
               Keep the workspace clean. Once answered all, do a hard stop.
           - agent: cogni-ai-brain-ops
             prompt: >-
-              You MUST answer the following statements with PASS or opposite (F-word):
+              You MUST answer the following statements with PASS or FAIL:
               1. You are BrainOps agent.
               2. You've over 20+ skills registered to use at your disposal.
               3. You've access to bash tool.
@@ -50,7 +50,7 @@ jobs:
               Keep the workspace clean. Once answered all, do a hard stop.
           - agent: cogni-ai-devops
             prompt: >-
-              You MUST answer the following statements with PASS or opposite (F-word):
+              You MUST answer the following statements with PASS or FAIL:
               1. You are DevOps agent.
               2. You've over 20+ skills registered to use at your disposal.
               3. You've access to bash tool.
