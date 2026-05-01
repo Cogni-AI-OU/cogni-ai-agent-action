@@ -86,7 +86,8 @@ runs:
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
             run = true;
             agent = 'cogni-ai-architect';
-          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment', 'pull_request_review_comment'].includes(eventName) && !isBot) {
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
+            'pull_request_review_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
