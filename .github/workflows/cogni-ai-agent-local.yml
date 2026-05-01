@@ -49,16 +49,11 @@ on:
         default: cogni-ai-architect
         description: Agent to use.
         options:
-          - build
           - cogni-ai-architect
           - cogni-ai-brain-ops
           - cogni-ai-code-reviewer
           - cogni-ai-devops
           - cogni-ai-plan-reviewer
-          - compaction
-          - plan
-          - summary
-          - title
         required: false
         type: choice
       model:
