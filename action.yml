@@ -409,6 +409,12 @@ runs:
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
         } >> "$GITHUB_OUTPUT"
+        if [ -f "AGENTS.md" ]; then
+          echo "agents_entry=\"AGENTS.md\"," >> "$GITHUB_OUTPUT"
+        fi
+        if [ -f "AGENTS-RUNTIME.md" ]; then
+          echo "agents_runtime_entry=\"AGENTS-RUNTIME.md\"," >> "$GITHUB_OUTPUT"
+        fi
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
@@ -596,7 +602,8 @@ runs:
               "batch_tool": true
             },
             "instructions": [
-              "AGENTS-RUNTIME.md",
+              ${{ steps.prompt.outputs.agents_entry }}
+              ${{ steps.prompt.outputs.agents_runtime_entry }}
               "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
               "${{ runner.temp }}/.agents/AGENTS.mmd",
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
