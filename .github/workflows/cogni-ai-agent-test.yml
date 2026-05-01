@@ -6,11 +6,7 @@ name: Cogni AI Agent Test
 run-name: 'Agent Test: Count skills and agents'
 on:
   workflow_dispatch:
-concurrency:
-  cancel-in-progress: false
-  group: opencode-test-${{ github.workflow }}
 env:
-  OPENCODE_AGENT_DEFAULT: cogni-ai-architect
   OPENCODE_PROMPT_DEFAULT: >-
     You MUST answer the following questions with 1 or few words:
     1. Count how many skills are available via tool?
@@ -18,11 +14,15 @@ env:
     After all answers, do hard stop.
 jobs:
   cogni-ai:
-    name: Agent Test (${{ matrix.model }})
+    name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        agent:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-devops
         model:
           - opencode/gpt-5-nano
           - opencode/nemotron-3-super-free
@@ -61,7 +61,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          agent: ${{ env.OPENCODE_AGENT_DEFAULT }}
+          agent: ${{ matrix.agent }}
           model: ${{ matrix.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ env.OPENCODE_PROMPT_DEFAULT }}
