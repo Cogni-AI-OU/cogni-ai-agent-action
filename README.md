@@ -281,6 +281,21 @@ Define granular permissions per agent type using a hierarchical YAML structure. 
 | `prompt`   | The resolved prompt sent to the agent |
 | `response` | The response from the agent           |
 
+## Codespaces
+
+When working in Codespaces,
+you can follow these steps to set up the required agents, instructions, and skills in the repository:
+
+```bash
+# Clone agents, instructions, and skills.
+git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agents .github/agents
+git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions .github/instructions
+git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills .github/skills
+
+# Symlink individual agents from their subdirectories to the discovery directory.
+for d in .github/agents/*/ ; do ln -fsv "$(basename "$d")/$(basename "$d").agent.md" .github/agents/ ; done
+```
+
 <!-- Named links -->
 
 [gh-edit-badge]: https://img.shields.io/badge/GitHub-edit-purple.svg?logo=github
