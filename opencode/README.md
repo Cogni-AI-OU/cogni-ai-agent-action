@@ -10,7 +10,7 @@ The OpenCode workflow runs a generic OpenCode agent without loading any speciali
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR
-comments using commands like `/oc`, `/opencode`, or `/review`.
+comments using commands like `/oc` or `/opencode`.
 
 ### Basic workflow
 
@@ -163,7 +163,7 @@ jobs:
 | Input              | Description                 | Default                   | Required |
 | ------------------ | --------------------------- | ------------------------- | -------- |
 | `agent`            | Agent to use                | —                         | No       |
-| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
+| `mentions`         | Comma-separated mentions    | `/oc,/opencode`           | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
 | `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
 | `permissions`      | Permissions configuration   | —                         | No       |
