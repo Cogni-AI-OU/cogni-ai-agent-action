@@ -32,14 +32,15 @@ jobs:
               You only TASK now is to answer the following statements with PASS or FAIL:
               1. You are Architect agent.
               2. You've over 20+ skills registered to use at your disposal.
-                 Do not scan action.yml for answers, you should have them already mentioned in the system prompt.
               3. You've access to bash tool.
               4. You've access to edit tool.
               5. You've access to glob tool.
               6. You've access to read tool.
               7. You've able to call context7-ops, devops and github-ops agents.
               8. You've access to the following MCPs: context7.
-              Once answered all, elaborate on fails, then do a hard stop. Do not fix or edit files and keep the workspace clean. 
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers, you should based your answers on your actual runtime.
+              Once answered all above, elaborate on fails, then do a hard stop.
           - agent: cogni-ai-brain-ops
             prompt: >-
               You only TASK now is to answer the following statements with PASS or FAIL:
@@ -52,7 +53,9 @@ jobs:
               6. You've access to read tool.
               7. You've able to call context7-ops, devops and github-ops agents.
               8. You've access to the following MCPs: context7.
-              Once answered all, elaborate on fails, then do a hard stop. Do not fix or edit files and keep the workspace clean. 
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers, you should based your answers on your actual runtime.
+              Once answered all above, elaborate on fails, then do a hard stop.
           - agent: cogni-ai-devops
             prompt: >-
               You only TASK now is to answer the following statements with PASS or FAIL:
@@ -65,7 +68,9 @@ jobs:
               6. You've access to read tool.
               7. You've able to call context7-ops, devops and github-ops agents.
               8. You've access to the following MCPs: context7.
-              Once answered all, elaborate on fails, then do a hard stop. Do not fix or edit files and keep the workspace clean. 
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers, you should based your answers on your actual runtime.
+              Once answered all above, elaborate on fails, then do a hard stop.
     permissions:
       contents: read
       id-token: write
