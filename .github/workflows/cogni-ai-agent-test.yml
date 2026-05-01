@@ -10,6 +10,9 @@ on:
       - created
       - edited
   workflow_dispatch:
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
 jobs:
   cogni-ai:
     name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
