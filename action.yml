@@ -74,6 +74,7 @@ inputs:
         question: deny
         read: allow
         # Skills are limited to a curated list from the upstream cogni-ai-agent-skills repository.
+        # Note: Changes here should be synchronized with agent-specific skill allowlists.
         skill:
           ansible: allow
           context-aware-ops: allow
@@ -164,20 +165,6 @@ inputs:
           gh pr review*: allow
           gh pr unlock*: allow
           gh pr update-branch*: allow
-      cogni-ai-minizinc:
-        edit: deny
-        skill:
-          '*': deny
-          gh: allow
-          gh-api: allow
-          gh-models: allow
-          gh-pr: allow
-          gh-run: allow
-          git: allow
-          github: allow
-          github-actions: allow
-          github-script: allow
-          minizinc: allow
       cogni-ai-plan-reviewer:
         bash: deny
         edit: deny
