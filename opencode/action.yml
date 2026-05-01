@@ -53,11 +53,19 @@ inputs:
           vim*: allow
         glob: allow
         read: allow
+      cogni-ai-context7-ops:
+        bash: deny
+        glob: allow
+        read: allow
       cogni-ai-devops:
         bash:
           ansible*: allow
           molecule*: allow
           terraform*: allow
+        glob: allow
+        read: allow
+      cogni-ai-fact-ops:
+        bash: deny
         glob: allow
         read: allow
       cogni-ai-tester:

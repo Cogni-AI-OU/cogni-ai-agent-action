@@ -130,6 +130,10 @@ inputs:
         glob: allow
         read: allow
         edit: deny
+      cogni-ai-context7-ops:
+        bash: deny
+        glob: allow
+        read: allow
       cogni-ai-devops:
         bash:
           ansible*: allow
@@ -140,6 +144,10 @@ inputs:
           pulumi*: allow
           terraform*: allow
           terragrunt*: allow
+        glob: allow
+        read: allow
+      cogni-ai-fact-ops:
+        bash: deny
         glob: allow
         read: allow
       cogni-ai-github-ops:
