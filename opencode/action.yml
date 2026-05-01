@@ -14,7 +14,7 @@ inputs:
     description: Model to use for OpenCode.
     required: false
   mentions:
-    default: /oc,/opencode,/review
+    default: /oc,/opencode,/review  # Note: Do not change default triggers.
     description: Comma-separated trigger mentions for OpenCode.
     required: false
   opencode-api-key:
