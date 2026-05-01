@@ -3,10 +3,10 @@
 % Used to verify if action.yml provides strict principle of least privilege.
 
 % --- Sets & Enums ---
-enum AGENTS = { ARCHITECT, BRAIN_OPS, CODE_REVIEWER, DEVOPS, PLAN_REVIEWER, PYTHON_DEV, TESTER, FACT_OPS, CONTEXT7_OPS };
+enum AGENTS = { ARCHITECT, BRAIN_OPS, CODE_REVIEWER, DEVOPS, GITHUB_OPS, PLAN_REVIEWER, PYTHON_DEV, TESTER, FACT_OPS, CONTEXT7_OPS };
 enum SKILLS = { SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_MERMAID, SKILL_MINIZINC };
 enum TOOLS = { BASH, GLOB, READ, EDIT, SKILL };
-enum BASH_CMDS = { CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_NPM_TEST, CMD_PYTEST, CMD_GH, CMD_GIT, CMD_PYTHON };
+enum BASH_CMDS = { CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_PULUMI, CMD_NPM_TEST, CMD_PYTEST, CMD_GH, CMD_GIT, CMD_PYTHON };
 
 % --- Inputs from action.yml logic ---
 % In action.yml, skills.paths is a global array injected into the opencode config.
@@ -16,6 +16,7 @@ array[AGENTS] of set of SKILLS: required_skills = [
     {SKILL_GH, SKILL_GH_API, SKILL_GH_MODELS, SKILL_GH_PR, SKILL_MINIZINC}, % BRAIN_OPS
     {SKILL_GH, SKILL_GH_PR},                        % CODE_REVIEWER
     {SKILL_GH, SKILL_GH_API, SKILL_MINIZINC},             % DEVOPS
+    {SKILL_GH, SKILL_GH_API, SKILL_GH_PR},                % GITHUB_OPS
     {SKILL_GH, SKILL_MERMAID},                      % PLAN_REVIEWER
     {SKILL_GH},                               % PYTHON_DEV
     {SKILL_GH},                               % TESTER
@@ -28,6 +29,7 @@ array[AGENTS] of set of TOOLS: required_tools = [
     {BASH, GLOB, READ, SKILL},          % BRAIN_OPS
     {GLOB, READ},                       % CODE_REVIEWER
     {BASH, GLOB, READ, SKILL},          % DEVOPS
+    {BASH, GLOB, READ, SKILL},          % GITHUB_OPS
     {GLOB, READ},                       % PLAN_REVIEWER
     {BASH, GLOB, READ, SKILL},          % PYTHON_DEV
     {BASH, GLOB, READ, SKILL},          % TESTER
@@ -39,7 +41,8 @@ array[AGENTS] of set of BASH_CMDS: required_bash = [
     {CMD_GH, CMD_GIT},                          % ARCHITECT
     {CMD_GH, CMD_GIT},                          % BRAIN_OPS
     {},                                 % CODE_REVIEWER
-    {CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_GH, CMD_GIT}, % DEVOPS
+    {CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_PULUMI, CMD_GH, CMD_GIT}, % DEVOPS
+    {CMD_GH},                           % GITHUB_OPS
     {},                                 % PLAN_REVIEWER
     {CMD_PYTHON, CMD_GH, CMD_GIT},                  % PYTHON_DEV
     {CMD_MOLECULE, CMD_NPM_TEST, CMD_PYTEST, CMD_GH, CMD_GIT}, % TESTER

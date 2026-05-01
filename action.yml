@@ -152,11 +152,11 @@ inputs:
         read: allow
       cogni-ai-github-ops:
         bash:
-          gh api graphql*: allow  # Can also modify/delete issues/discussions
+          gh api graphql*: allow  # Can also modify issues/discussions
           gh issue close*: allow
           gh issue comment*: allow
           gh issue create*: allow
-          gh issue delete*: allow
+          gh issue delete*: deny
           gh issue edit*: allow
           gh issue lock*: allow
           gh issue pin*: allow
@@ -178,6 +178,7 @@ inputs:
           gh pr update-branch*: allow
         glob: allow
         read: allow
+        edit: deny
       cogni-ai-plan-reviewer:
         bash: deny
         glob: allow

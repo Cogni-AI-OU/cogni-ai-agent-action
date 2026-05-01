@@ -53,6 +53,11 @@ inputs:
           vim*: allow
         glob: allow
         read: allow
+      cogni-ai-code-reviewer:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
       cogni-ai-context7-ops:
         bash: deny
         glob: allow
@@ -62,12 +67,35 @@ inputs:
           ansible*: allow
           molecule*: allow
           terraform*: allow
+          pulumi*: allow
         glob: allow
         read: allow
       cogni-ai-fact-ops:
         bash: deny
         glob: allow
         read: allow
+      cogni-ai-github-ops:
+        bash:
+          gh api graphql*: allow
+          gh issue close*: allow
+          gh issue comment*: allow
+          gh issue create*: allow
+          gh issue delete*: deny
+          gh issue edit*: allow
+          gh pr close*: allow
+          gh pr comment*: allow
+          gh pr create*: allow
+          gh pr edit*: allow
+          gh pr merge*: allow
+          gh pr review*: allow
+        glob: allow
+        read: allow
+        edit: deny
+      cogni-ai-plan-reviewer:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
       cogni-ai-tester:
         bash:
           molecule*: allow
