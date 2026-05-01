@@ -29,7 +29,9 @@ jobs:
       - name: Download MiniZinc bundle
         if: steps.cache-minizinc.outputs.cache-hit != 'true'
         run: |
-          wget "https://github.com/MiniZinc/MiniZincIDE/releases/download/${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
+          URL="https://github.com/MiniZinc/MiniZincIDE/releases/download/" \
+            "${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
+          wget "$URL"
           tar xzf "MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
       - name: Add MiniZinc to PATH
         run: |
