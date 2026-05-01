@@ -7,6 +7,7 @@ on:
   push:
 jobs:
   test:
+    if: ${{ github.event.sender.type != 'Bot' }}
     name: AI Inference Test
     runs-on: ubuntu-latest
     permissions:

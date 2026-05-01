@@ -12,6 +12,7 @@ on:
         default: Count to 10.
 jobs:
   test:
+    if: ${{ github.event.sender.type != 'Bot' }}
     name: AI Inference Local
     runs-on: ubuntu-latest
     permissions:
