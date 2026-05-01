@@ -73,58 +73,34 @@ array[AGENTS] of set of BASH_CMDS: required_bash = [
 
 % --- State Variables ---
 % Representing what the action.yml actually provisions
-array[AGENTS] of set of SKILLS: provisioned_skills;
-array[AGENTS] of set of TOOLS: provisioned_tools;
-array[AGENTS] of set of BASH_CMDS: provisioned_bash;
+array[AGENTS] of set of SKILLS: provisioned_skills = [
+    if global_skills_path_provisioning then { s | s in SKILLS } else required_skills[a] endif
+    | a in AGENTS
+];
 
-var bool: principle_of_least_privilege_maintained;
-var bool: isolated_environment_integrity;
-var bool: is_globally_dumping_runner_temp_skills_flawed;
+array[AGENTS] of set of TOOLS: provisioned_tools = required_tools;
+array[AGENTS] of set of BASH_CMDS: provisioned_bash = required_bash;
 
-% --- Constraints ---
-
-% 1. Provisioning Logic (Reflecting action.yml configuration)
-constraint forall(a in AGENTS)(
-    if global_skills_path_provisioning then
-        % Flaw: All agents get everything in the skills path
-        provisioned_skills[a] = { s | s in SKILLS }
-    else
-        % Fixed: Provisioning is restricted to what's required (or explicitly allowed)
-        provisioned_skills[a] = required_skills[a]
-    endif
-);
-
-% Tool and Bash provisioning (modeled based on action.yml overrides)
-% Required sets must be subsets of provisioned sets.
-constraint forall(a in AGENTS)(
-    required_tools[a] subseteq provisioned_tools[a] /\
-    required_bash[a] subseteq provisioned_bash[a]
-);
-
-% For the sake of this model, we assume provisioned tools/bash match exactly what's required
-% UNLESS inherited from default.
-constraint forall(a in AGENTS)(
-    provisioned_tools[a] = required_tools[a] /\
-    provisioned_bash[a] = required_bash[a]
-);
-
-% 2. Principle of Least Privilege
-% An agent should only be provisioned the exact skills/tools/bash it requires, no more.
-constraint principle_of_least_privilege_maintained <-> (
+bool: principle_of_least_privilege_maintained = (
     forall(a in AGENTS)(provisioned_skills[a] == required_skills[a]) /\
     forall(a in AGENTS)(provisioned_tools[a] == required_tools[a]) /\
     forall(a in AGENTS)(provisioned_bash[a] == required_bash[a])
 );
 
-% 3. Vulnerability Map
-constraint is_globally_dumping_runner_temp_skills_flawed <-> (
+bool: is_globally_dumping_runner_temp_skills_flawed = (
     exists(a in AGENTS)(provisioned_skills[a] != required_skills[a])
 );
 
-% If isolated integrity is violated, it means an agent has access to skills it shouldn't.
-constraint isolated_environment_integrity <-> (
+bool: isolated_environment_integrity = (
     principle_of_least_privilege_maintained /\
     (not (SKILL_GH_MODELS in provisioned_skills[CODE_REVIEWER])) % Example invariant
+);
+
+% --- Constraints ---
+% Required sets must be subsets of provisioned sets.
+constraint forall(a in AGENTS)(
+    required_tools[a] <= provisioned_tools[a] /\
+    required_bash[a] <= provisioned_bash[a]
 );
 
 % --- Solve Directive ---
