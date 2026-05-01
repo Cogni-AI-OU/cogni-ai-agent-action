@@ -24,7 +24,7 @@ inputs:
     default: |-
       # Keep in alphabetical order.
       default:
-        bash:
+        bash: &default-bash
           '*': deny
           awk*: allow
           base64*: allow
@@ -62,20 +62,24 @@ inputs:
         bash: deny
         glob: allow
         read: allow
+        edit: deny
       cogni-ai-devops:
         bash:
+          <<: *default-bash
           ansible*: allow
           molecule*: allow
-          terraform*: allow
           pulumi*: allow
+          terraform*: allow
         glob: allow
         read: allow
       cogni-ai-fact-ops:
         bash: deny
         glob: allow
         read: allow
+        edit: deny
       cogni-ai-github-ops:
         bash:
+          <<: *default-bash
           gh api graphql*: allow
           gh issue close*: allow
           gh issue comment*: allow
@@ -98,6 +102,7 @@ inputs:
         edit: deny
       cogni-ai-tester:
         bash:
+          <<: *default-bash
           molecule*: allow
           npm test*: allow
           pytest*: allow
@@ -343,12 +348,15 @@ runs:
         import os
         import json
         import yaml
+        REPLACE_PERMISSION_MAPS = {'bash', 'skill', 'task'}
         def deep_merge(base, override):
             if not isinstance(base, dict) or not isinstance(override, dict):
                 return override
             res = base.copy()
             for k, v in override.items():
-                if k in res and isinstance(res[k], dict) and isinstance(v, dict):
+                if k in REPLACE_PERMISSION_MAPS and isinstance(v, dict):
+                    res[k] = v.copy()
+                elif k in res and isinstance(res[k], dict) and isinstance(v, dict):
                     res[k] = deep_merge(res[k], v)
                 else:
                     res[k] = v

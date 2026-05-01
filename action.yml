@@ -28,7 +28,7 @@ inputs:
     default: |-
       # Keep in alphabetical order.
       default:
-        bash:
+        bash: &default-bash
           '*': deny
           awk*: allow
           base64*: allow
@@ -75,7 +75,7 @@ inputs:
         read: allow
         # Skills are limited to a curated list from the upstream cogni-ai-agent-skills repository.
         # Note: Changes here should be synchronized with agent-specific skill allowlists.
-        skill:
+        skill: &default-skill
           ansible: allow
           context-aware-ops: allow
           fact-writer: allow
@@ -107,35 +107,34 @@ inputs:
         todowrite: allow
       cogni-ai-brain-ops:
         bash:
+          # Brain-ops is a context-gathering agent; gathering context via GH/git is allowed.
           gh api*: allow
           gh pr checks*: allow
+          gh pr view*: allow
           gh run view*: allow
+          git log*: allow
+          git show*: allow
         glob: allow
         read: allow
         edit: deny
         skill:
+          <<: *default-skill
           '*': deny
-          gh: allow
-          gh-api: allow
-          gh-models: allow
-          gh-pr: allow
-          gh-run: allow
-          git: allow
-          github: allow
-          github-actions: allow
-          github-script: allow
-          minizinc: allow
       cogni-ai-code-reviewer:
         bash: deny
         glob: allow
         read: allow
         edit: deny
+        skill: *default-skill
       cogni-ai-context7-ops:
         bash: deny
         glob: allow
         read: allow
+        edit: deny
+        skill: *default-skill
       cogni-ai-devops:
         bash:
+          <<: *default-bash
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
@@ -146,12 +145,16 @@ inputs:
           terragrunt*: allow
         glob: allow
         read: allow
+        skill: *default-skill
       cogni-ai-fact-ops:
         bash: deny
         glob: allow
         read: allow
+        edit: deny
+        skill: *default-skill
       cogni-ai-github-ops:
         bash:
+          <<: *default-bash
           gh api graphql*: allow  # Can also modify issues/discussions
           gh issue close*: allow
           gh issue comment*: allow
@@ -179,25 +182,31 @@ inputs:
         glob: allow
         read: allow
         edit: deny
+        skill: *default-skill
       cogni-ai-plan-reviewer:
         bash: deny
         glob: allow
         read: allow
         edit: deny
+        skill: *default-skill
       cogni-ai-python-dev:
         bash:
+          <<: *default-bash
           jinja2*: allow
           python*: allow
           python3*: allow
         glob: allow
         read: allow
+        skill: *default-skill
       cogni-ai-tester:
         bash:
+          <<: *default-bash
           molecule*: allow
           npm test*: allow
           pytest*: allow
         glob: allow
         read: allow
+        skill: *default-skill
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
@@ -468,12 +477,15 @@ runs:
         import os
         import json
         import yaml
+        REPLACE_PERMISSION_MAPS = {'bash', 'skill', 'task'}
         def deep_merge(base, override):
             if not isinstance(base, dict) or not isinstance(override, dict):
                 return override
             res = base.copy()
             for k, v in override.items():
-                if k in res and isinstance(res[k], dict) and isinstance(v, dict):
+                if k in REPLACE_PERMISSION_MAPS and isinstance(v, dict):
+                    res[k] = v.copy()
+                elif k in res and isinstance(res[k], dict) and isinstance(v, dict):
                     res[k] = deep_merge(res[k], v)
                 else:
                     res[k] = v
