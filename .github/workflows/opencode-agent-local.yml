@@ -1,6 +1,6 @@
 ---
 # OpenCode Agent Local workflow — runs the local composite action (./opencode/action.yml) as a wrapper for OpenCode.
-# Triggered by /oc, /opencode, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
+# Triggered by /oc or /opencode commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode Agent Local
 run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
@@ -133,19 +133,19 @@ jobs:
       (
         github.event_name == 'issues' &&
         (
-          contains(github.event.issue.body || '', '/') ||
-          contains(github.event.issue.body || '', '@')
+          contains(github.event.issue.body || '', '/oc') ||
+          contains(github.event.issue.body || '', '/opencode')
         )
       ) ||
       (
         github.event_name == 'discussion' &&
         (
-          contains(github.event.discussion.body || '', '/') ||
-          contains(github.event.discussion.body || '', '@')
+          contains(github.event.discussion.body || '', '/oc') ||
+          contains(github.event.discussion.body || '', '/opencode')
         )
       ) ||
-      contains(github.event.comment.body || '', '/') ||
-      contains(github.event.comment.body || '', '@')
+      contains(github.event.comment.body || '', '/oc') ||
+      contains(github.event.comment.body || '', '/opencode')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -201,6 +201,7 @@ jobs:
         with:
           agent: >-
             ${{ inputs.agent || '' }}
+          mentions: /oc,/opencode
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
