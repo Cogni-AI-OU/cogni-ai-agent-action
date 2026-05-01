@@ -12,7 +12,7 @@ For a human-readable overview, see [README.md](README.md).
 - **[ai-inference-test.yml](ai-inference-test.yml)**: Tests the local `ai-inference/action.yml` action on push.
 - **[check.yml](check.yml)**: Linting and quality gates via org-level reusable workflow.
 - **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**: Runs local `action.yml` as a wrapper for OpenCode.
-- **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**: Tests the local `action.yml` action manually with pre-defined settings.
+- **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**: Tests the local `action.yml` action manually with predefined settings.
 - **[copilot-setup-steps.yml](copilot-setup-steps.yml)**: Environment setup utility.
 - **[opencode-agent-local.yml](opencode-agent-local.yml)**: Runs local `./opencode/action.yml` as a wrapper for OpenCode.
 - **[opencode.yml](opencode.yml)**: Invokes org-level reusable OpenCode workflow manually.
@@ -38,12 +38,13 @@ For a human-readable overview, see [README.md](README.md).
 ### cogni-ai-agent-local.yml
 
 - Purpose: Runs local `action.yml` wrapper.
-- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`, `workflow_call`.
 - Commands: `/co`, `/cogni`, `/review`, `/brainstorm`.
 
 ### cogni-ai-agent-test.yml
 
-- Purpose: Tests the local `action.yml` action manually with pre-defined settings.
+- Purpose: Tests the local `action.yml` action manually with predefined settings.
 - Triggers: `workflow_dispatch`.
 
 ### copilot-setup-steps.yml
@@ -55,7 +56,8 @@ For a human-readable overview, see [README.md](README.md).
 ### opencode-agent-local.yml
 
 - Purpose: Runs local `./opencode/action.yml` wrapper.
-- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`, `workflow_call`.
 - Commands: `/oc`, `/opencode`, `/review`.
 
 ### opencode.yml

@@ -1,27 +1,29 @@
 ---
 # Cogni AI Agent Test workflow — triggered manually by user only.
-# No user inputs, uses pre-defined settings for testing.
+# No user inputs, uses predefined settings for testing.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Test
-run-name: "Agent Test: Count skills and agents"
+run-name: 'Agent Test: Count skills and agents'
 on:
   workflow_dispatch:
 concurrency:
   cancel-in-progress: false
-  group: opencode-test-${{ github.run_id }}
+  group: opencode-test-${{ github.workflow }}
 env:
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+  OPENCODE_PROMPT_DEFAULT: >-
+    You MUST answer the following questions with 1 or few words:
+    1. Count how many skills are available via tool?
+    2. How many agents are available to dispatch?
+    After all answers, do hard stop.
 jobs:
   cogni-ai:
     name: Cogni AI Agent Test
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       id-token: write
-      issues: write
-      pull-requests: write
-      discussions: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -57,7 +59,7 @@ jobs:
           agent: ${{ env.OPENCODE_AGENT_DEFAULT }}
           model: ${{ env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: "You MUST answer the following questions with 1 or few words: 1. Count how many skills are available via tool? 2. How many agents are available to dispatch? After all answers, do hard stop."
+          prompt: ${{ env.OPENCODE_PROMPT_DEFAULT }}
       - name: Annotate prompt and output
         env:
           COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
