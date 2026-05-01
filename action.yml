@@ -342,7 +342,7 @@ runs:
           // Centralized effective agent logic
           core.setOutput('effective_agent', process.env.AGENT_INPUT || agent || 'cogni-ai-architect');
     - name: Collect PR changed files
-      if: steps.check.outputs.run == 'true' && github.event.pull_request.number != ''
+      if: steps.check.outputs.run == 'true' && (github.event.pull_request || github.event.issue.pull_request)
       id: changed_files
       uses: actions/github-script@v7
       with:
@@ -352,7 +352,7 @@ runs:
             {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
+              pull_number: context.issue.number,
               per_page: 100,
             }
           );
