@@ -17,6 +17,7 @@ For a human-readable overview, see [README.md](README.md).
 - **[copilot-setup-steps.yml](copilot-setup-steps.yml)**: Environment setup utility.
 - **[opencode-agent-local.yml](opencode-agent-local.yml)**: Runs local `./opencode/action.yml` as a wrapper for OpenCode.
 - **[opencode.yml](opencode.yml)**: Invokes org-level reusable OpenCode workflow manually.
+- **[test-constraints.yml](test-constraints.yml)**: Runs MiniZinc constraints check to verify least privilege.
 
 ## Details
 
@@ -66,6 +67,11 @@ For a human-readable overview, see [README.md](README.md).
 
 - Purpose: Invokes org-level reusable OpenCode workflow.
 - Triggers: `workflow_dispatch`.
+
+### test-constraints.yml
+
+- Purpose: Runs MiniZinc constraints check to verify least privilege and isolation.
+- Triggers: `push`, `pull_request`, `workflow_dispatch`.
 
 ## Notes
 

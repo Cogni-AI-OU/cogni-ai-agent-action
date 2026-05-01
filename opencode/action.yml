@@ -22,8 +22,9 @@ inputs:
     required: true
   permissions:
     default: |-
+      # Keep in alphabetical order.
       default:
-        bash:
+        bash: &default-bash
           '*': deny
           awk*: allow
           base64*: allow
@@ -50,18 +51,75 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
+        glob: allow
+        read: allow
+      cogni-ai-brain-ops:
+        bash:
+          # Brain-ops is a context-gathering agent; gathering context via GH/git is allowed.
+          gh api*: allow
+          gh pr checks*: allow
+          gh pr view*: allow
+          gh run view*: allow
+          git log*: allow
+          git show*: allow
+        glob: allow
+        read: allow
+        edit: deny
+      cogni-ai-code-reviewer:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+      cogni-ai-context7-ops:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
       cogni-ai-devops:
         bash:
-          # Keep in alphabetical order.
+          <<: *default-bash
           ansible*: allow
           molecule*: allow
+          pulumi*: allow
           terraform*: allow
+        glob: allow
+        read: allow
+      cogni-ai-fact-ops:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+      cogni-ai-github-ops:
+        bash:
+          <<: *default-bash
+          gh api graphql*: allow
+          gh issue close*: allow
+          gh issue comment*: allow
+          gh issue create*: allow
+          gh issue delete*: deny
+          gh issue edit*: allow
+          gh pr close*: allow
+          gh pr comment*: allow
+          gh pr create*: allow
+          gh pr edit*: allow
+          gh pr merge*: allow
+          gh pr review*: allow
+        glob: allow
+        read: allow
+        edit: deny
+      cogni-ai-plan-reviewer:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
       cogni-ai-tester:
         bash:
-          # Keep in alphabetical order.
+          <<: *default-bash
           molecule*: allow
           npm test*: allow
           pytest*: allow
+        glob: allow
+        read: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
@@ -302,12 +360,15 @@ runs:
         import os
         import json
         import yaml
+        REPLACE_PERMISSION_MAPS = {'bash', 'skill', 'task'}
         def deep_merge(base, override):
             if not isinstance(base, dict) or not isinstance(override, dict):
                 return override
             res = base.copy()
             for k, v in override.items():
-                if k in res and isinstance(res[k], dict) and isinstance(v, dict):
+                if k in REPLACE_PERMISSION_MAPS and isinstance(v, dict):
+                    res[k] = v.copy()
+                elif k in res and isinstance(res[k], dict) and isinstance(v, dict):
                     res[k] = deep_merge(res[k], v)
                 else:
                     res[k] = v

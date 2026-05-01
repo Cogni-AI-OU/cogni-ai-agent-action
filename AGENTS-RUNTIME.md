@@ -13,7 +13,7 @@ The use of the `task` tool and spawning sub-agents is permitted for complex, mul
 
 ## Initialization Project Sequence
 
-1. **Agent Contract Alignment**: Locate, read, and strictly enforce the invariants defined in the current project workspace's main `AGENTS.md` and any of its directory-specific `AGENTS.md`. Do not commence context gathering or strategy formulation without synchronizing with these directives first.
+1. **Agent Contract Alignment**: Locate, read, and strictly enforce the invariants defined in the current project workspace's main `AGENTS.md`, `CONSTRAINTS.mzn`, and any of its directory-specific `AGENTS.md`. Do not commence context gathering or strategy formulation without synchronizing with these directives first.
 2. **Skill & Instruction Loading**: Autonomously discover and load `.github/copilot-instructions.md`, relevant `.instructions.md` rules, and applicable `SKILL.md` workflows.
 3. **Context Gathering for Ambiguity**: For ambiguous queries, you MUST load the project's `README.md`, relevant documentation, and files from the project codebase to establish sufficient context.
 
@@ -30,6 +30,7 @@ You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub ac
 ### Action Runtime Internals
 
 - **Internal Flow Reference**: ONLY when explicitly asked about the internal step-by-step logic, concurrency polling, or execution flow of the `cogni-ai-agent-action` runtime itself, you MUST refer to [FLOWS.mmd](./FLOWS.mmd) for the complete architectural mapping.
+- **Formal Constraint Model**: Refer to [CONSTRAINTS.mzn](./CONSTRAINTS.mzn) for the formal definition of runtime bounds, budgets, and logical enforcing functions.
 
 ### OpenCode PR Context & Response Routing
 
