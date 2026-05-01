@@ -21,11 +21,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libegl1
 
+      - name: Cache MiniZinc bundle
+        id: cache-minizinc
+        uses: actions/cache@v4
+        with:
+          path: MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64
+          key: minizinc-${{ env.MINIZINC_VERSION }}
+
       - name: Download MiniZinc bundle
+        if: steps.cache-minizinc.outputs.cache-hit != 'true'
         run: |
           wget https://github.com/MiniZinc/MiniZincIDE/releases/download/${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz
           tar xzf MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz
-          echo "$PWD/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64/bin" >> $GITHUB_PATH
+
+      - name: Add MiniZinc to PATH
+        run: |
+          echo "$PWD/MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64/bin" >> $GITHUB_PATH
 
       - name: Verify MiniZinc installation
         run: |
