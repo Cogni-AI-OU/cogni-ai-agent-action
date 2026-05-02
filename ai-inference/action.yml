@@ -268,7 +268,7 @@ runs:
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
-        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }} # Takes precedence over system-prompt.
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
         top-p: ${{ inputs.top-p }}
