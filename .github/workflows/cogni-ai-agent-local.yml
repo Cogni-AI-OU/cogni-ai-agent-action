@@ -1,6 +1,7 @@
 ---
 # Cogni AI Agent Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
-# Triggered by /co, /cogni, /review, or /brainstorm commands in comments, or manually via workflow_dispatch/workflow_call.
+# Triggered by /co, /cogni, /review, or /brainstorm commands in comments,
+# or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Local
 run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'

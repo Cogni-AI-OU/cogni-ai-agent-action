@@ -29,7 +29,7 @@ enum BASH_CMDS = { CMD_ANSIBLE, CMD_MOLECULE, CMD_TERRAFORM, CMD_PULUMI, CMD_NPM
 
 % --- Model parameters (derived from action.yml) ---
 % Flaw: skills.paths = ["${{ runner.temp }}/.skills"] gives ALL agents access to ALL discovered skills.
-bool: global_skills_path_provisioning = true; 
+bool: global_skills_path_provisioning = true;
 
 % --- Requirements ---
 array[AGENTS] of set of SKILLS: required_skills = [
@@ -133,4 +133,3 @@ output [
   "Is globally dumping runner.temp/.skills flawed? \(flaw_verdict).\n",
   "Global Skills Path Provisioning (action.yml flaw active): \(global_skills_path_provisioning)\n"
 ];
-

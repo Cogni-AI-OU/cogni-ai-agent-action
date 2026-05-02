@@ -7,17 +7,27 @@ For a human-readable overview, see [README.md](README.md).
 
 ## Workflow catalog
 
-- **[FLOWS.mmd](../../FLOWS.mmd)**: Mermaid diagram describing the logic of `action.yml`.
-- **[ai-inference-local.yml](ai-inference-local.yml)**: Tests the local `ai-inference/action.yml` action manually.
-- **[ai-inference-test.yml](ai-inference-test.yml)**: Tests the local `ai-inference/action.yml` action on push.
-- **[check.yml](check.yml)**: Linting and quality gates via org-level reusable workflow.
-- **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**: Runs local `action.yml` as a wrapper for OpenCode.
-- **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**: Tests the local `action.yml` action manually with predefined settings
+- **[FLOWS.mmd](../../FLOWS.mmd)**:
+  Mermaid diagram describing the logic of `action.yml`.
+- **[ai-inference-local.yml](ai-inference-local.yml)**:
+  Tests the local `ai-inference/action.yml` action manually.
+- **[ai-inference-test.yml](ai-inference-test.yml)**:
+  Tests the local `ai-inference/action.yml` action on push.
+- **[check.yml](check.yml)**:
+  Linting and quality gates via org-level reusable workflow.
+- **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
+  Runs local `action.yml` as a wrapper for OpenCode.
+- **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**:
+  Tests the local `action.yml` action manually with predefined settings
   and matrices for agents, models, and prompts.
-- **[copilot-setup-steps.yml](copilot-setup-steps.yml)**: Environment setup utility.
-- **[opencode-agent-local.yml](opencode-agent-local.yml)**: Runs local `./opencode/action.yml` as a wrapper for OpenCode.
-- **[opencode.yml](opencode.yml)**: Invokes org-level reusable OpenCode workflow manually.
-- **[test-constraints.yml](test-constraints.yml)**: Runs MiniZinc constraints check to verify least privilege.
+- **[copilot-setup-steps.yml](copilot-setup-steps.yml)**:
+  Environment setup utility.
+- **[opencode-agent-local.yml](opencode-agent-local.yml)**:
+  Runs local `./opencode/action.yml` as a wrapper for OpenCode.
+- **[opencode.yml](opencode.yml)**:
+  Invokes org-level reusable OpenCode workflow manually.
+- **[test-constraints.yml](test-constraints.yml)**:
+  Runs MiniZinc constraints check to verify least privilege.
 
 ## Details
 
