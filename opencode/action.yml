@@ -299,11 +299,16 @@ runs:
             `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
             `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
+    - name: Checkout cogni-ai-agents
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
       shell: bash
       env:
+        AGENT: ${{ steps.check.outputs.effective_agent }}
         COMMENT_BODY: >-
           ${{ github.event.comment.body ||
               github.event.issue.body ||
@@ -335,6 +340,17 @@ runs:
             prompt="$header"
           fi
         fi
+
+        # Prepend agent content if specified and not 'default'
+        if [ -n "${AGENT}" ] && [ "${AGENT}" != "default" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            echo "Prepending agent prompt from $agent_file"
+            agent_content=$(cat "$agent_file")
+            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
+          fi
+        fi
+
         if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then
           prev_attempt=$(( GITHUB_RUN_ATTEMPT - 1 ))
           previous_build_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${prev_attempt}"
