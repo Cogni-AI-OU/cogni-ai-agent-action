@@ -33,6 +33,14 @@ on:
         description: Agent to use.
         required: false
         type: string
+      maxCompletionTokens:
+        description: The maximum number of tokens to generate
+        required: false
+        type: number
+      maxTokens:
+        description: The maximum number of tokens to generate (deprecated)
+        required: false
+        type: number
       model:
         default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
         description: Model to use for OpenCode
@@ -43,6 +51,14 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         type: string
+      temperature:
+        description: The sampling temperature to use (0-1)
+        required: false
+        type: number
+      topP:
+        description: The nucleus sampling parameter to use (0-1)
+        required: false
+        type: number
   workflow_dispatch:
     inputs:
       agent:
@@ -50,6 +66,14 @@ on:
         description: Agent to use.
         required: false
         type: string
+      maxCompletionTokens:
+        description: The maximum number of tokens to generate
+        required: false
+        type: number
+      maxTokens:
+        description: The maximum number of tokens to generate (deprecated)
+        required: false
+        type: number
       model:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
@@ -106,6 +130,14 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         default: ''
+      temperature:
+        description: The sampling temperature to use (0-1)
+        required: false
+        type: number
+      topP:
+        description: The nucleus sampling parameter to use (0-1)
+        required: false
+        type: number
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 # When a new run is triggered, it will queue until the previous pending run completes.
 # On the default branch each run gets a unique group (github.run_id) so runs can
@@ -204,10 +236,14 @@ jobs:
         with:
           agent: >-
             ${{ inputs.agent || '' }}
+          maxCompletionTokens: ${{ inputs.maxCompletionTokens }}
+          maxTokens: ${{ inputs.maxTokens }}
           mentions: /oc,/opencode
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          temperature: ${{ inputs.temperature }}
+          topP: ${{ inputs.topP }}
       - name: Annotate prompt and output
         env:
           OPENCODE_PROMPT: ${{ steps.opencode.outputs.prompt }}
