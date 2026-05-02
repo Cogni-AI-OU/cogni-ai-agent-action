@@ -6,14 +6,6 @@ name: Cogni AI Agent Test
 run-name: 'Agent Test: Count skills and agents'
 on:
   pull_request:
-    paths:
-      - '.devcontainer/requirements.txt'
-      - '.github/workflows/cogni-ai-agent-test.yml'
-      - '.pre-commit-config.yaml'
-      - 'AGENTS-RUNTIME.md'
-      - 'CONSTRAINTS.mzn'
-      - 'FLOWS.mmd'
-      - 'action.yml'
     types:
       - opened
       - edited
@@ -30,14 +22,6 @@ on:
       - created
       - edited
   pull_request_target:
-    paths:
-      - '.devcontainer/requirements.txt'
-      - '.github/workflows/cogni-ai-agent-test.yml'
-      - '.pre-commit-config.yaml'
-      - 'AGENTS-RUNTIME.md'
-      - 'CONSTRAINTS.mzn'
-      - 'FLOWS.mmd'
-      - 'action.yml'
     types:
       - opened
       - synchronize
@@ -47,6 +31,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
 jobs:
   cogni-ai:
+    if: ${{ github.event.sender.type != 'Bot' }}
     name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
     runs-on: ubuntu-latest
     strategy:
