@@ -81,7 +81,7 @@ on:
           - openai/o3
           - openai/o3-mini # OpenAI GPT-o3 mini (Max size: 4000 tokens)
           - openai/o4-mini # OpenAI GPT-o4 mini (Max size: 4000 tokens)
-          - xai/grok-3
+          - xai/grok-3 # @todo: Error: 500 Model service is unavailable?
           - xai/grok-3-mini # @todo: Error: 500 Model service is unavailable?
         required: false
         type: choice
