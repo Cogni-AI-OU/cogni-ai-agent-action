@@ -150,7 +150,7 @@ jobs:
       actions: write
       contents: read
       discussions: read
-      id-token: read
+      id-token: write
       issues: read
       packages: write
       pull-requests: read
