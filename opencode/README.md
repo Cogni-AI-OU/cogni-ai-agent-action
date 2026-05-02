@@ -32,8 +32,8 @@ jobs:
       github.event.sender.type != 'Bot' &&
       (
         github.event_name == 'workflow_dispatch' ||
-        contains(github.event.comment.body, '/') ||
-        contains(github.event.comment.body, '@')
+        contains(github.event.comment.body || '', '/') ||
+        contains(github.event.comment.body || '', '@')
       )
     runs-on: ubuntu-latest
     permissions:
