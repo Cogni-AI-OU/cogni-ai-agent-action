@@ -110,7 +110,11 @@ runs:
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          core.setOutput('effective_agent', process.env.AGENT_INPUT || agent || 'cogni-ai-architect');
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
+          if (effectiveAgent === 'default') {
+            effectiveAgent = '';
+          }
+          core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
       if: steps.check.outputs.run == 'true'
       id: concurrency
