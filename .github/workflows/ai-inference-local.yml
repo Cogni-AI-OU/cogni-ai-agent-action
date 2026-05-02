@@ -38,16 +38,23 @@ on:
           - cogni-ai-devops
         required: false
         type: choice
+      enable-github-mcp:
+        default: false
+        description: >-
+          Enable Model Context Protocol integration with GitHub tools.
+          Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
+        required: false
+        type: boolean
       model:
-        default: openai/gpt-5-mini
+        default: openai/gpt-4o-mini
         description: Model to use for inference
         options:
           - ai21-labs/jamba-1.5-large
           - cohere/command-a
           - cohere/command-r-08-2024
           - cohere/command-r-plus-08-2024
-          - deepseek/deepseek-r1
-          - deepseek/deepseek-r1-0528
+          - deepseek/deepseek-r1 # Note: Using tool is not supported by this model.
+          - deepseek/deepseek-r1-0528 # Note: Using tool is not supported by this model.
           - deepseek/deepseek-v3-0324
           - meta/llama-3.2-11b-vision-instruct
           - meta/llama-3.2-90b-vision-instruct
@@ -73,16 +80,16 @@ on:
           - openai/gpt-4o-mini
           - openai/gpt-5 # OpenAI GPT-5
           - openai/gpt-5-chat # OpenAI GPT-5-Chat (preview)
-          - openai/gpt-5-mini # OpenAI GPT-5-mini (Max size: 4000 tokens)
-          - openai/gpt-5-nano # OpenAI GPT-5-nano
+          - openai/gpt-5-mini # OpenAI GPT-5-mini (Max size: 4000 tokens); @todo: Error: 400 Unavailable model?
+          - openai/gpt-5-nano # OpenAI GPT-5-nano (Max size: 4000 tokens)
           - openai/o1
           - openai/o1-mini
           - openai/o1-preview
           - openai/o3
-          - openai/o3-mini
-          - openai/o4-mini
-          - xai/grok-3
-          - xai/grok-3-mini
+          - openai/o3-mini # OpenAI GPT-o3 mini (Max size: 4000 tokens)
+          - openai/o4-mini # OpenAI GPT-o4 mini (Max size: 4000 tokens)
+          - xai/grok-3 # @todo: Error: 500 Model service is unavailable?
+          - xai/grok-3-mini # @todo: Error: 500 Model service is unavailable?
         required: false
         type: choice
       prompt:
@@ -120,11 +127,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      discussions: write
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
-      pull-requests: write
-      discussions: write
       models: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -147,6 +154,7 @@ jobs:
         uses: ./ai-inference
         with:
           agent: ${{ inputs.agent }}
+          enable-github-mcp: ${{ inputs.enable-github-mcp }}
           model: ${{ inputs.model || 'openai/gpt-5-mini' }}
           prompt: ${{ inputs.prompt || '' }}
           token: ${{ secrets.GITHUB_TOKEN }}
