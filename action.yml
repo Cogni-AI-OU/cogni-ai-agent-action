@@ -77,10 +77,12 @@ inputs:
         # Note: Changes here should be synchronized with agent-specific skill allowlists.
         skill: &default-skill
           ansible: allow
+          cat: allow
           context-aware-ops: allow
           fact-writer: allow
           gh: allow
           gh-api: allow
+          gh-issue: allow
           gh-models: allow
           gh-pr: allow
           gh-run: allow
@@ -88,6 +90,8 @@ inputs:
           git-expert: allow
           github: allow
           github-actions: allow
+          github-issue: allow
+          github-pr: allow
           github-script: allow
           mermaid: allow
           mermaid-beta: allow

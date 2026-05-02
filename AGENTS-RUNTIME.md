@@ -59,12 +59,12 @@ Check `github.event_name` and payload to identify trigger source:
   Note that when a user asks to "resolve comments", it can be ambiguous and it could mean marking unresolved/outdated PR thread comments as resolved when they're already addressed.
 - **General PR comment** (`issue_comment`):
   - Condition: `if: ${{ github.event.issue.pull_request }}`
-  - Reply Method: `gh pr comment` or `gh pr review` for batching broad feedback and setting state.
+  - Reply Method: `gh pr comment` (preferred) or `gh pr review` (if permitted) for batching broad feedback and setting state.
 - **Issue comment** (`issue_comment`):
   - Condition: `if: ${{ !github.event.issue.pull_request }}`
   - Reply Method: `gh issue comment`
 - **Inline code review** (`pull_request_review_comment`):
-  - Reply Method: Use `gh pr review` to submit batched inline feedback, or `gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."` for single-line replies.
+  - Reply Method: Use `gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."` for single-line replies. Use `gh pr review` only if permitted by the runtime allowlist.
 
 **Routing Invariants**:
 
