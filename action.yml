@@ -440,7 +440,7 @@ runs:
           if [ -n "${DISCUSSION_NUMBER:-}" ]; then
             entity_type="discussion"
           fi
-          header="Related to $entity_type #$ISSUE_NUMBER"
+          header="Runtime related to $entity_type #$ISSUE_NUMBER, so must load github-pr or github-issue skill."
           if [ -n "$prompt" ]; then
             prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
