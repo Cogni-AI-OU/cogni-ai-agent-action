@@ -27,7 +27,7 @@ inputs:
     description: Prompt to pass to the model.
     required: false
   enable-github-mcp:
-    default: 'true'
+    default: 'false'
     description: Enable Model Context Protocol integration with GitHub tools
     required: false
   github-mcp-toolsets:

@@ -9,6 +9,10 @@ inputs:
   agent:
     description: Agent to use.
     required: false
+  enable-github-mcp:
+    default: 'false'
+    description: Enable Model Context Protocol integration with GitHub tools.
+    required: false
   model:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
@@ -685,6 +689,7 @@ runs:
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
