@@ -33,7 +33,7 @@ override or extend these defaults. See [action.yml](action.yml) for default perm
 
 The agent can be triggered via `workflow_dispatch`, or via issue/PR comments
 using commands like `/co`, `/cogni`, `/review`, or `/brainstorm`. The `mentions` input
-(default: `/co,/cogni,/review`) controls which keywords activate the agent.
+(default: `/co,/cogni,/review,/brainstorm`) controls which keywords activate the agent.
 
 ## Directory structure
 
