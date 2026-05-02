@@ -81,6 +81,7 @@ Check `github.event_name` and payload to identify trigger source:
 - **Symmetric Routing**: ALWAYS reply via the exact originating channel. When asked to post or comment without providing a code fix,
   you MUST communicate back via the API without modifying any files (this includes temporary files created for analysis).
 - Parse `github.event.comment.id` and `in_reply_to_id` to maintain thread continuity.
+- If replying to an inline comment, your response MUST appear as a reply in that same thread.
 
 ### Branch Sync Policy (No Rebase During Runtime)
 
@@ -140,7 +141,9 @@ upstream changes so the post-run auto-push does not get rejected with
 ### General Constraints
 
 - **Contextual Continuity**: Maintain conversation context within the originating thread.
-- If replying to an inline comment, your response MUST appear as a reply in that same thread.
+- **Minimal Scope & Focused Execution**: ALWAYS narrow down your focus strictly to the original user prompt or task.
+  Perform minimal refactoring and avoid broad or massive changes outside the explicitly requested scope.
+  Do not auto-discover and modify unrelated files.
 
 ### Workspace & Syncing Invariants
 
