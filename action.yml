@@ -499,6 +499,69 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+    - name: Resolve instructions
+      if: steps.check.outputs.run == 'true'
+      id: instructions
+      shell: python
+      env:
+        CHANGED_FILES: ${{ steps.changed_files.outputs.text }}
+      run: |
+        import os
+        import yaml
+        import json
+        import fnmatch
+
+        def extract_apply_to(file_path):
+            try:
+                with open(file_path, 'r') as f:
+                    content = f.read()
+                if content.startswith('---'):
+                    parts = content.split('---')
+                    if len(parts) >= 3:
+                        data = yaml.safe_load(parts[1])
+                        if data and 'applyTo' in data:
+                            return data['applyTo']
+            except Exception:
+                pass
+            return None
+
+        changed_files = os.environ.get('CHANGED_FILES', '').split('\n')
+        changed_files = [f.strip() for f in changed_files if f.strip()]
+
+        runner_temp = os.environ.get('RUNNER_TEMP', os.environ.get('TMPDIR', '/tmp'))
+        instructions_root = os.path.join(runner_temp, '.instructions')
+        skills_root = os.path.join(runner_temp, '.skills')
+
+        matched_paths = []
+        for root_dir in [instructions_root, skills_root]:
+            if not os.path.exists(root_dir):
+                continue
+            for root, dirs, files in os.walk(root_dir):
+                for file in files:
+                    if file.endswith('.md'):
+                        file_path = os.path.join(root, file)
+                        apply_to = extract_apply_to(file_path)
+                        if apply_to:
+                            if isinstance(apply_to, str):
+                                apply_to = [apply_to]
+
+                            is_matched = False
+                            for pattern in apply_to:
+                                for changed_file in changed_files:
+                                    if fnmatch.fnmatch(changed_file, pattern):
+                                        is_matched = True
+                                        break
+                                if is_matched:
+                                    break
+
+                            if is_matched:
+                                matched_paths.append(file_path)
+
+        if matched_paths:
+            print(f"Matched instructions: {', '.join(matched_paths)}")
+        matched_json = ",".join([f'"{p}"' for p in matched_paths])
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"matched={matched_json}\n")
     - name: Install gh-models extension
       if: steps.check.outputs.run == 'true' && inputs.gh-models-enabled == 'true'
       shell: bash
@@ -678,7 +741,8 @@ runs:
               "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
               "${{ runner.temp }}/.agents/FLOWS.mmd",
               "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
+              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"${{ steps.instructions.outputs.matched != '' && ',' || '' }}
+              ${{ steps.instructions.outputs.matched }}
             ],
             "mcp": {
               "context7": {
