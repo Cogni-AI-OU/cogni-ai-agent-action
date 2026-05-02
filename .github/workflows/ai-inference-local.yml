@@ -53,7 +53,7 @@ on:
         type: boolean
       model:
         default: openai/gpt-4o-mini
-        description: Model to use for inference. All models below are verified as available.
+        description: Model to use for inference.
         options:
           - cohere/command-r-08-2024  # Tools: Yes.
           - cohere/command-r-plus-08-2024  # Tools: Yes.
