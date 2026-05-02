@@ -249,7 +249,7 @@ runs:
       id: inference
       uses: actions/ai-inference@v2
       with:
-        enable-github-mcp: ${{ inputs.enable-github-mcp }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         model: ${{ inputs.model || 'openai/gpt-5-mini' }}
