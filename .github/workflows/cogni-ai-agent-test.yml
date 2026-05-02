@@ -57,7 +57,7 @@ jobs:
               8. You have access to the context7 MCP.
               Do not fix or edit files and keep the workspace clean.
               Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
-              Once you have answered all of the above, elaborate on any fails (avoid using  #), then do a hard stop.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
           - agent: cogni-ai-brain-ops
             prompt: >-
               You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
@@ -71,7 +71,7 @@ jobs:
               8. You have access to the context7 MCP.
               Do not fix or edit files and keep the workspace clean.
               Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
-              Once you have answered all of the above, elaborate on any fails (avoid using  #), then do a hard stop.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
           - agent: cogni-ai-devops
             prompt: >-
               You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
@@ -85,7 +85,7 @@ jobs:
               8. You have access to the context7 MCP.
               Do not fix or edit files and keep the workspace clean.
               Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
-              Once you have answered all of the above, elaborate on any fails (avoid using  #), then do a hard stop.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
     permissions:
       contents: read
       id-token: write
