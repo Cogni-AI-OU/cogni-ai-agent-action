@@ -42,7 +42,7 @@ on:
         default: false
         description: >-
           Enable Model Context Protocol integration with GitHub tools.
-          Some models won't support it (such as nano, mini or deepseek).
+          Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
         required: false
         type: boolean
       model:
