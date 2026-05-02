@@ -227,7 +227,7 @@ inputs:
         skill: *default-skill
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides (e.g., 'default',
+      with 'default' and agent-specific overrides (e.g.,
       'cogni-ai-architect', 'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer',
       'cogni-ai-devops', 'cogni-ai-fact-ops', 'cogni-ai-github-ops',
       'cogni-ai-tester', 'cogni-ai-brain-ops', etc.).
@@ -346,7 +346,7 @@ runs:
           // Centralized effective agent logic
           let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
           if (effectiveAgent === 'default') {
-            effectiveAgent = 'cogni-ai-architect';
+            effectiveAgent = '';
           }
           core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
