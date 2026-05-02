@@ -43,7 +43,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
-      actions: write
+      actions: read
       contents: write # create/edit/delete files
       id-token: write # required for OIDC
       issues: write # create/edit/delete issues
@@ -185,7 +185,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
-      actions: write
+      actions: read
       contents: write # create/edit/delete files
       id-token: write # required for OIDC token
       issues: write # create/edit/delete issues
