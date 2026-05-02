@@ -10,6 +10,17 @@ inputs:
     default: default
     description: Agent to use for system prompt.
     required: false
+  enable-github-mcp:
+    default: 'false'
+    description: Whether to enable GitHub MCP server.
+    required: false
+  github-mcp-token:
+    description: Token to use for GitHub MCP server.
+    required: false
+  github-mcp-toolsets:
+    default: repos,issues,pull_requests,actions,code_security
+    description: Toolsets to enable for GitHub MCP server.
+    required: false
   mentions:
     default: /ai
     description: Comma-separated trigger mentions for AI Inference.
@@ -18,24 +29,13 @@ inputs:
     default: openai/gpt-5-mini
     description: Model to use for inference.
     required: false
-  system-prompt:
-    default: You are a helpful assistant
-    description: The system prompt to send to the model.
-    required: false
   prompt:
     default: ''
     description: Prompt to pass to the model.
     required: false
-  github-mcp-toolsets:
-    default: repos,issues,pull_requests,actions,code_security
-    description: Toolsets to enable for GitHub MCP server.
-    required: false
-  enable-github-mcp:
-    default: 'false'
-    description: Whether to enable GitHub MCP server.
-    required: false
-  github-mcp-token:
-    description: Token to use for GitHub MCP server.
+  system-prompt:
+    default: You are a helpful assistant
+    description: The system prompt to send to the model.
     required: false
   token:
     description: Token to use for inference. Typically the GITHUB_TOKEN secret.
@@ -55,8 +55,8 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/ai' }}
         AGENT_INPUT: ${{ inputs.agent }}
+        MENTIONS: ${{ inputs.mentions || '/ai' }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
@@ -192,12 +192,12 @@ runs:
               github.event.pull_request.body ||
               github.event.discussion.body ||
               '' }}
+        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         ISSUE_NUMBER: >-
           ${{ github.event.issue.number ||
               github.event.pull_request.number ||
               github.event.discussion.number ||
               '' }}
-        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail
@@ -247,13 +247,13 @@ runs:
       id: inference
       uses: actions/ai-inference@v2
       with:
+        enable-github-mcp: ${{ inputs.enable-github-mcp }}
+        github-mcp-token: ${{ inputs.github-mcp-token }}
+        github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         model: ${{ inputs.model || 'openai/gpt-5-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
-        enable-github-mcp: ${{ inputs.enable-github-mcp }}
-        github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
-        github-mcp-token: ${{ inputs.github-mcp-token }}
         token: ${{ inputs.token || github.token }}
     - name: Write response to summary
       if: always() && steps.inference.outputs.response != ''

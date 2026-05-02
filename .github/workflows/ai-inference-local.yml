@@ -38,6 +38,11 @@ on:
           - cogni-ai-devops
         required: false
         type: choice
+      enable-github-mcp:
+        default: false
+        description: Whether to enable GitHub MCP server
+        required: false
+        type: boolean
       model:
         default: openai/gpt-5-mini
         description: Model to use for inference
@@ -89,11 +94,6 @@ on:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
-      enable-github-mcp:
-        default: false
-        description: Whether to enable GitHub MCP server
-        required: false
-        type: boolean
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
@@ -125,11 +125,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      discussions: write
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
-      pull-requests: write
-      discussions: write
       models: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6
