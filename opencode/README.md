@@ -29,11 +29,11 @@ on:
 jobs:
   agent:
     if: |
-      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
-        contains(github.event.comment.body, '/') ||
-        contains(github.event.comment.body, '@')
+        contains(github.event.comment.body || '', '/') ||
+        contains(github.event.comment.body || '', '@')
       )
     runs-on: ubuntu-latest
     permissions:
@@ -129,7 +129,7 @@ jobs:
   opencode-agent:
     name: Run OpenCode agent
     if: |
-      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'issues' ||
