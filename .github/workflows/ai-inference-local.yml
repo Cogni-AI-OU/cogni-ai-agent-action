@@ -3,7 +3,13 @@
 # Triggered by /ai command in comments, or manually via workflow_dispatch.
 # Note: Keep keys and envs in alphabetical order.
 name: AI Inference Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on  #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
 on:
   issue_comment:
     types:
@@ -47,49 +53,34 @@ on:
         type: boolean
       model:
         default: openai/gpt-4o-mini
-        description: Model to use for inference
+        description: Model to use for inference.
         options:
-          - ai21-labs/jamba-1.5-large
-          - cohere/command-a
-          - cohere/command-r-08-2024
-          - cohere/command-r-plus-08-2024
-          - deepseek/deepseek-r1 # Note: Using tool is not supported by this model.
-          - deepseek/deepseek-r1-0528 # Note: Using tool is not supported by this model.
-          - deepseek/deepseek-v3-0324
-          - meta/llama-3.2-11b-vision-instruct
-          - meta/llama-3.2-90b-vision-instruct
-          - meta/llama-3.3-70b-instruct
-          - meta/llama-4-maverick-17b-128e-instruct-fp8
-          - meta/llama-4-scout-17b-16e-instruct
-          - meta/meta-llama-3.1-405b-instruct
-          - meta/meta-llama-3.1-8b-instruct
-          - microsoft/mai-ds-r1
-          - microsoft/phi-4
-          - microsoft/phi-4-mini-instruct
-          - microsoft/phi-4-mini-reasoning
-          - microsoft/phi-4-multimodal-instruct
-          - microsoft/phi-4-reasoning
-          - mistral-ai/codestral-2501
-          - mistral-ai/ministral-3b
-          - mistral-ai/mistral-medium-2505
-          - mistral-ai/mistral-small-2503
-          - openai/gpt-4.1
-          - openai/gpt-4.1-mini
-          - openai/gpt-4.1-nano
-          - openai/gpt-4o
-          - openai/gpt-4o-mini
-          - openai/gpt-5 # OpenAI GPT-5
-          - openai/gpt-5-chat # OpenAI GPT-5-Chat (preview)
-          - openai/gpt-5-mini # OpenAI GPT-5-mini (Max size: 4000 tokens); @todo: Error: 400 Unavailable model?
-          - openai/gpt-5-nano # OpenAI GPT-5-nano (Max size: 4000 tokens)
-          - openai/o1
-          - openai/o1-mini
-          - openai/o1-preview
-          - openai/o3
-          - openai/o3-mini # OpenAI GPT-o3 mini (Max size: 4000 tokens)
-          - openai/o4-mini # OpenAI GPT-o4 mini (Max size: 4000 tokens)
-          - xai/grok-3 # @todo: Error: 500 Model service is unavailable?
-          - xai/grok-3-mini # @todo: Error: 500 Model service is unavailable?
+          - cohere/command-r-08-2024  # Tools: Yes.
+          - cohere/command-r-plus-08-2024  # Tools: Yes.
+          - deepseek/deepseek-r1  # Tools: No.
+          - deepseek/deepseek-r1-0528  # Tools: No.
+          - deepseek/deepseek-v3-0324  # Tools: Yes.
+          - meta/llama-3.2-11b-vision-instruct  # Tools: Yes.
+          - meta/llama-3.2-90b-vision-instruct  # Tools: Yes.
+          - meta/llama-3.3-70b-instruct  # Tools: Yes.
+          - meta/llama-4-maverick-17b-128e-instruct-fp8  # Tools: Yes.
+          - meta/llama-4-scout-17b-16e-instruct  # Tools: Yes.
+          - meta/meta-llama-3.1-405b-instruct  # Tools: Yes.
+          - meta/meta-llama-3.1-8b-instruct  # Tools: Yes.
+          - microsoft/phi-4  # Tools: Yes.
+          - microsoft/phi-4-mini-instruct  # Tools: Yes.
+          - microsoft/phi-4-mini-reasoning  # Tools: Yes.
+          - microsoft/phi-4-multimodal-instruct  # Tools: Yes.
+          - microsoft/phi-4-reasoning  # Tools: Yes.
+          - mistral-ai/codestral-2501  # Tools: Yes.
+          - mistral-ai/ministral-3b  # Tools: Yes.
+          - mistral-ai/mistral-medium-2505  # Tools: Yes.
+          - mistral-ai/mistral-small-2503  # Tools: Yes.
+          - openai/gpt-4.1  # Tools: Yes.
+          - openai/gpt-4.1-mini  # Tools: Yes.
+          - openai/gpt-4.1-nano  # Tools: Yes.
+          - openai/gpt-4o  # Tools: Yes.
+          - openai/gpt-4o-mini  # Tools: Yes.
         required: false
         type: choice
       prompt:
