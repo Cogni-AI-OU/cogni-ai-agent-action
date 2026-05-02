@@ -275,6 +275,11 @@ runs:
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
         top-p: ${{ inputs.top-p }}
+    - name: Print Response File
+      if: steps.check.outputs.run == 'true' && steps.inference.outputs.response-file != ''
+      shell: bash
+      run: |
+        echo "Response saved to: ${{ steps.inference.outputs.response-file }}"
     - name: Write response to summary
       if: always() && steps.inference.outputs.response != ''
       shell: bash
