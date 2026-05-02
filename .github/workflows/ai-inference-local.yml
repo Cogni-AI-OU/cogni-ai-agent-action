@@ -31,7 +31,6 @@ on:
       model:
         default: openai/gpt-5-mini
         description: Model to use for inference
-        required: false
         options:
           - ai21-labs/jamba-1.5-large
           - cohere/command-a
@@ -74,6 +73,8 @@ on:
           - openai/o4-mini
           - xai/grok-3
           - xai/grok-3-mini
+        required: false
+        type: choice
       prompt:
         description: Prompt to pass to the model
         required: false
