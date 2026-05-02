@@ -21,12 +21,6 @@ inputs:
     default: /co,/cogni,/review,/brainstorm
     description: Comma-separated trigger mentions for OpenCode.
     required: false
-  maxCompletionTokens:
-    description: The maximum number of tokens to generate
-    required: false
-  maxTokens:
-    description: The maximum number of tokens to generate (deprecated)
-    required: false
   opencode-api-key:
     description: API key for OpenCode.
     required: true
@@ -249,12 +243,6 @@ inputs:
   prompt:
     default: ''
     description: Prompt to pass to the agent.
-    required: false
-  temperature:
-    description: The sampling temperature to use (0-1)
-    required: false
-  topP:
-    description: The nucleus sampling parameter to use (0-1)
     required: false
 name: Cogni AI Agent
 outputs:
@@ -697,13 +685,9 @@ runs:
         OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
-        maxCompletionTokens: ${{ inputs.maxCompletionTokens }}
-        maxTokens: ${{ inputs.maxTokens }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        temperature: ${{ inputs.temperature }}
-        topP: ${{ inputs.topP }}
         use_github_token: false
     - name: Write response to summary
       if: always() && steps.opencode.outputs.response != ''

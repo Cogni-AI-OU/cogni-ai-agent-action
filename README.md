@@ -270,15 +270,11 @@ to avoid accidental or malicious destructive actions.
 | Input                  | Description                                   | Default                        | Required |
 | ---------------------- | --------------------------------------------- | ------------------------------ | -------- |
 | `agent`                | Agent to use                                  | `cogni-ai-architect`           | No       |
-| `maxCompletionTokens`   | The maximum number of tokens to generate      | —                              | No       |
-| `maxTokens`            | Max tokens to generate (deprecated)           | —                              | No       |
 | `mentions`             | Comma-separated mentions                      | `/co,/cogni,/review`           | No       |
 | `model`                | Model to use for OpenCode                     | `opencode/gemini-3-flash`      | No       |
 | `opencode-api-key`     | API key for OpenCode                          | —                              | **Yes**  |
 | `permissions`          | Permissions configuration                     | —                              | No       |
 | `prompt`               | Prompt to pass to the agent                   | `''`                           | No       |
-| `temperature`          | The sampling temperature to use (0-1)         | —                              | No       |
-| `topP`                 | The nucleus sampling parameter to use (0-1)   | —                              | No       |
 
 ### Hierarchical Permissions
 
