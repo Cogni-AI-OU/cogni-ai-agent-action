@@ -21,9 +21,6 @@ jobs:
         uses: ./ai-inference
         with:
           agent: default
-          maxCompletionTokens: 100
           model: openai/gpt-4o-mini
           prompt: Count to 10.
-          temperature: 0.1
           token: ${{ secrets.GITHUB_TOKEN }}
-          topP: 0.1

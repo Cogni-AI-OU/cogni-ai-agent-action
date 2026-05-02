@@ -256,6 +256,49 @@ runs:
           fi
         fi
         echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
+    - name: Resolve inference parameters
+      id: params
+      shell: bash
+      env:
+        MAX_COMPLETION_TOKENS: ${{ inputs.maxCompletionTokens }}
+        MAX_TOKENS: ${{ inputs.maxTokens }}
+        TEMPERATURE: ${{ inputs.temperature }}
+        TOP_P: ${{ inputs.topP }}
+      run: |
+        # Precedence: maxCompletionTokens > maxTokens
+        max_completion_tokens="$MAX_COMPLETION_TOKENS"
+        if [ -n "$MAX_TOKENS" ] && [ -n "$MAX_COMPLETION_TOKENS" ]; then
+          echo "::warning::Both maxCompletionTokens and maxTokens provided. Using maxCompletionTokens."
+        fi
+        if [ -z "$max_completion_tokens" ]; then
+          max_completion_tokens="$MAX_TOKENS"
+        fi
+        echo "max_completion_tokens=$max_completion_tokens" >> "$GITHUB_OUTPUT"
+
+        # Validation/Normalization for temperature and topP (0-1)
+        validate_range() {
+          local val="$1"
+          local name="$2"
+          if [ -z "$val" ]; then
+            echo ""
+            return
+          fi
+          # Use awk for float comparison and clamping
+          echo "$val" | awk -v name="$name" '{
+            if ($1 < 0) {
+              print "::warning::" name " clamped to 0." > "/dev/stderr"
+              print 0
+            } else if ($1 > 1) {
+              print "::warning::" name " clamped to 1." > "/dev/stderr"
+              print 1
+            } else {
+              print $1
+            }
+          }'
+        }
+
+        echo "temperature=$(validate_range "$TEMPERATURE" "temperature")" >> "$GITHUB_OUTPUT"
+        echo "top_p=$(validate_range "$TOP_P" "topP")" >> "$GITHUB_OUTPUT"
     - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
       id: inference
@@ -264,15 +307,14 @@ runs:
         enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
-        maxCompletionTokens: ${{ inputs.maxCompletionTokens }}
-        maxTokens: ${{ inputs.maxTokens }}
+        maxCompletionTokens: ${{ steps.params.outputs.max_completion_tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
-        temperature: ${{ inputs.temperature }}
+        temperature: ${{ steps.params.outputs.temperature }}
         token: ${{ inputs.token || github.token }}
-        topP: ${{ inputs.topP }}
+        topP: ${{ steps.params.outputs.top_p }}
     - name: Write response to summary
       if: always() && steps.inference.outputs.response != ''
       shell: bash

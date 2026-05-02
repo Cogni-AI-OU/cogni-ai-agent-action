@@ -89,7 +89,7 @@ jobs:
     permissions:
       contents: read
       discussions: write
-      id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
+      id-token: write  # Needed for OIDC token for GitHub Models API calls
       issues: write
       models: read
       pull-requests: write
