@@ -19,6 +19,7 @@ jobs:
       - name: Run AI Inference
         uses: ./ai-inference
         with:
-          prompt: Count to 10.
+          agent: default
           model: openai/gpt-5-mini
+          prompt: Count to 10.
           token: ${{ secrets.GITHUB_TOKEN }}
