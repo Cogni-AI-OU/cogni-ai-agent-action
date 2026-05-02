@@ -290,7 +290,7 @@ runs:
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        prompt-file: ${{ inputs.prompt-file }}
+        prompt-file: ${{ inputs.prompt-file }} # Takes precedence over prompt.
         input: ${{ inputs.input }}
         file_input: ${{ inputs.file_input }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
