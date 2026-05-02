@@ -6,27 +6,6 @@
     "code-runner.saveFileBeforeRun": true,
     "code-runner.fileDirectoryAsCwd": true,
     "chat.tools.terminal.autoApprove": {
-        "ansible": true,
-        "ansible-galaxy": true,
-        "ansible-playbook": true,
-        "awk": true,
-        "continue": true,
-        "cp": true,
-        "ex": true,
-        "gh": true,
-        "git": true,
-        "hexdump": true,
-        "links": true,
-        "mawk": true,
-        "mkdir": true,
-        "pipx": true,
-        "printf": true,
-        "pre-commit": true,
-        "set": true,
-        "time": true,
-        "timeout": true,
-        "touch": true,
-        "true": true,
-        "vim": true
+        "pre-commit": true
     }
 }

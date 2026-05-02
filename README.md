@@ -298,7 +298,11 @@ git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions .
 git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills .github/skills
 
 # Symlink individual agents from their subdirectories to the discovery directory.
-for d in .github/agents/*/ ; do ln -fsv "$(basename "$d")/$(basename "$d").agent.md" .github/agents/ ; done
+cd .github/agents
+for d in */; do
+  ln -fsv "$d${d%/}.agent.md" .
+done
+cd -
 ```
 
 <!-- Named links -->
