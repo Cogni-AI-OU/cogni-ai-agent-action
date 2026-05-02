@@ -129,7 +129,7 @@ env:
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
   cogni-ai:
-    name: Cogni AI Agent Sudo Local
+name: Cogni AI Agent Local Sudo
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
