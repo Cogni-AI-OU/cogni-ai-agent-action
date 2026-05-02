@@ -120,7 +120,7 @@ jobs:
 | `github-mcp-token`     | Token to use for GitHub MCP server            | —                         | No       |
 | `github-mcp-toolsets`  | Toolsets to enable for GitHub MCP server      | `repos,issues,pull_requests,actions,code_security` | No       |
 | `max-completion-tokens` | The maximum number of tokens to generate      | —                         | No       |
-| `max-tokens`            | Max tokens to generate (deprecated)           | —                         | No       |
+| `max-tokens`            | Max tokens to generate (deprecated)           | `20000`                   | No       |
 | `mentions`             | Comma-separated triggers                      | `/ai`                     | No       |
 | `model`                | Model to use for inference                    | `openai/gpt-4o-mini`      | No       |
 | `prompt`               | Prompt to pass to the model                   | `''`                      | No       |
