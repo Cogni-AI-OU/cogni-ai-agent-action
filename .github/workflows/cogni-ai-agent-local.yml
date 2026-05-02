@@ -55,6 +55,7 @@ on:
           - cogni-ai-code-reviewer
           - cogni-ai-devops
           - cogni-ai-plan-reviewer
+          - default
         required: false
         type: choice
       model:
