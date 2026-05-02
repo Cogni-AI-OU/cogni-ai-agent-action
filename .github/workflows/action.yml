@@ -11,6 +11,7 @@ jobs:
     name: Run Action
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: write
       id-token: write
       issues: write

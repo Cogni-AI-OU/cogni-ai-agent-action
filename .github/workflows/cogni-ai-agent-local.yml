@@ -159,6 +159,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: write
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
