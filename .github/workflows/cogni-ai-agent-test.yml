@@ -24,6 +24,22 @@ on:
       - opened
       - synchronize
   workflow_dispatch:
+    inputs:
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
+      version_instructions:
+        default: main
+        description: Version of cogni-ai-agent-instructions to use.
+        required: false
+        type: string
+      version_skills:
+        default: main
+        description: Version of cogni-ai-agent-skills to use.
+        required: false
+        type: string
 concurrency:
   cancel-in-progress: false
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
@@ -126,6 +142,9 @@ jobs:
           model: ${{ matrix.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ matrix.prompt }}
+          version_agents: ${{ inputs.version_agents || 'main' }}
+          version_instructions: ${{ inputs.version_instructions || 'main' }}
+          version_skills: ${{ inputs.version_skills || 'main' }}
       - env:
           COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
           COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}

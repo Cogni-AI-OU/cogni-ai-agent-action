@@ -244,6 +244,18 @@ inputs:
     default: ''
     description: Prompt to pass to the agent.
     required: false
+  version_agents:
+    default: main
+    description: Version of cogni-ai-agents to use.
+    required: false
+  version_instructions:
+    default: main
+    description: Version of cogni-ai-agent-instructions to use.
+    required: false
+  version_skills:
+    default: main
+    description: Version of cogni-ai-agent-skills to use.
+    required: false
 name: Cogni AI Agent
 outputs:
   prompt:
@@ -471,18 +483,27 @@ runs:
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_agents || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
+          ${{ runner.temp }}/.agents
     - name: Checkout cogni-ai-agent-instructions
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: |
         git clone --depth 1 \
+          -b ${{ inputs.version_instructions || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
           ${{ runner.temp }}/.instructions
     - name: Checkout cogni-ai-agent-skills
       if: steps.check.outputs.run == 'true'
       shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_skills || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
+          ${{ runner.temp }}/.skills
     - name: Install gh-models extension
       if: steps.check.outputs.run == 'true' && inputs.gh-models-enabled == 'true'
       shell: bash
