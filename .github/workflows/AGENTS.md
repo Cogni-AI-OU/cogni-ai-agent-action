@@ -17,6 +17,8 @@ For a human-readable overview, see [README.md](README.md).
   Linting and quality gates via org-level reusable workflow.
 - **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
   Runs local `action.yml` as a wrapper for OpenCode.
+- **[cogni-ai-agent-sudo-local.yml](cogni-ai-agent-sudo-local.yml)**:
+  Runs local `action.yml` as a wrapper for OpenCode with elevated permissions.
 - **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**:
   Tests the local `action.yml` action manually with predefined settings
   and matrices for agents, models, and prompts.
@@ -55,6 +57,13 @@ For a human-readable overview, see [README.md](README.md).
 - Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
   `workflow_dispatch`, `workflow_call`.
 - Commands: `/co`, `/cogni`, `/review`, `/brainstorm`.
+
+### cogni-ai-agent-sudo-local.yml
+
+- Purpose: Runs local `action.yml` wrapper with elevated permissions.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`, `workflow_call`.
+- Commands: `/sudo`.
 
 ### cogni-ai-agent-test.yml
 
