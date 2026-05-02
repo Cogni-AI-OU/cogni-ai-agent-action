@@ -116,6 +116,7 @@ runs:
           }
           core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
+
       if: steps.check.outputs.run == 'true'
       id: concurrency
       uses: actions/github-script@v7

@@ -411,27 +411,11 @@ runs:
             `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
             `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
-    - name: Checkout cogni-ai-agents
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
-    - name: Checkout cogni-ai-agent-instructions
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: |
-        git clone --depth 1 \
-          https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
-          ${{ runner.temp }}/.instructions
-    - name: Checkout cogni-ai-agent-skills
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
       shell: bash
       env:
-        AGENT: ${{ steps.check.outputs.effective_agent }}
         COMMENT_BODY: >-
           ${{ github.event.comment.body ||
               github.event.issue.body ||
@@ -472,17 +456,6 @@ runs:
           rerun_note+=" ${previous_build_url}"
           prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
         fi
-
-        # Prepend agent content if specified and not 'default'
-        if [ -n "${AGENT}" ]; then
-          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
-          if [ -f "$agent_file" ]; then
-            echo "Prepending agent content from $agent_file"
-            agent_content=$(cat "$agent_file")
-            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
-          fi
-        fi
-
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
@@ -495,6 +468,21 @@ runs:
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
+    - name: Checkout cogni-ai-agents
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
+    - name: Checkout cogni-ai-agent-instructions
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
+          ${{ runner.temp }}/.instructions
+    - name: Checkout cogni-ai-agent-skills
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
     - name: Install gh-models extension
       if: steps.check.outputs.run == 'true' && inputs.gh-models-enabled == 'true'
       shell: bash
@@ -582,64 +570,77 @@ runs:
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
               },
               "cogni-ai-context7-ops": {
                 "description": "Uses Context7-backed documentation context for research and delegation tasks.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
               },
               "cogni-ai-devops": {
                 "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
               },
               "cogni-ai-fact-ops": {
                 "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
               },
               "cogni-ai-github-ops": {
                 "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
               },
               "cogni-ai-keeper": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
               },
               "cogni-ai-python-dev": {
                 "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
               },
               "cogni-ai-code-reviewer": {
                 "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
               },
               "cogni-ai-plan-reviewer": {
                 "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
               },
               "cogni-ai-tester": {
                 "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
               },
               "cogni-ai-weaver": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
               },
               "cogni-ai-brain-ops": {
                 "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash"
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
               },
               "explore": {
                 "disable": true,
