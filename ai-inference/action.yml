@@ -26,10 +26,6 @@ inputs:
     default: ''
     description: Prompt to pass to the model.
     required: false
-  enable-github-mcp:
-    default: 'false'
-    description: Enable Model Context Protocol integration with GitHub tools
-    required: false
   github-mcp-toolsets:
     default: repos,issues,pull_requests,actions,code_security
     description: Toolsets to enable for GitHub MCP server.
@@ -251,7 +247,6 @@ runs:
         prompt: ${{ steps.prompt.outputs.prompt }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
-        enable-github-mcp: ${{ inputs.enable-github-mcp }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         token: ${{ inputs.token || github.token }}

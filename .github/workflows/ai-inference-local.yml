@@ -38,13 +38,6 @@ on:
           - cogni-ai-devops
         required: false
         type: choice
-      enable-github-mcp:
-        default: false
-        description: >-
-          Enable Model Context Protocol integration with GitHub tools.
-          Some models won't support it (such as nano, mini or deepseek).
-        required: false
-        type: boolean
       model:
         default: openai/gpt-5-mini
         description: Model to use for inference
@@ -154,7 +147,6 @@ jobs:
         uses: ./ai-inference
         with:
           agent: ${{ inputs.agent }}
-          enable-github-mcp: ${{ inputs.enable-github-mcp }}
           model: ${{ inputs.model || 'openai/gpt-5-mini' }}
           prompt: ${{ inputs.prompt || '' }}
           token: ${{ secrets.GITHUB_TOKEN }}

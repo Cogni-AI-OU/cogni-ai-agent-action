@@ -18,11 +18,6 @@ on:
           - title
         required: false
         type: choice
-      enable-github-mcp:
-        default: false
-        description: Enable Model Context Protocol integration with GitHub tools
-        required: false
-        type: boolean
       model:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
@@ -91,7 +86,6 @@ jobs:
       pull-requests: write
     with:
       agent: ${{ inputs.agent || '' }}
-      enable-github-mcp: ${{ inputs.enable-github-mcp }}
       model: ${{ inputs.model || '' }}
       prompt: ${{ inputs.prompt || '' }}
     secrets: inherit  # pragma: allowlist secret

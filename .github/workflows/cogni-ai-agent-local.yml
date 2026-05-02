@@ -34,11 +34,6 @@ on:
         description: Agent to use.
         required: false
         type: string
-      enable-github-mcp:
-        default: false
-        description: Enable Model Context Protocol integration with GitHub tools
-        required: false
-        type: boolean
       model:
         default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
         description: Model to use for OpenCode
@@ -63,11 +58,6 @@ on:
           - default
         required: false
         type: choice
-      enable-github-mcp:
-        default: false
-        description: Enable Model Context Protocol integration with GitHub tools
-        required: false
-        type: boolean
       model:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
@@ -222,7 +212,6 @@ jobs:
         with:
           agent: >-
             ${{ inputs.agent || '' }}
-          enable-github-mcp: ${{ inputs.enable-github-mcp }}
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
