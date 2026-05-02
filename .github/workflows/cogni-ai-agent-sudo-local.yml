@@ -1,19 +1,10 @@
 ---
-# Cogni AI Agent Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
-# Triggered by /co, /cogni, /review, or /brainstorm commands in comments,
-# or manually via workflow_dispatch/workflow_call.
+# Cogni AI Agent Sudo Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
+# Triggered only by /sudo command in comments, or manually via workflow_dispatch.
 # Note: Keep keys and envs in alphabetical order.
-name: Cogni AI Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+name: Cogni AI Agent Sudo Local
+run-name: 'Sudo Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
 on:
-  issue_comment:
-    types:
-      - created
-      - edited
-  pull_request_review_comment:
-    types:
-      - created
-      - edited
   discussion:
     types:
       - created
@@ -23,9 +14,17 @@ on:
     types:
       - created
       - edited
+  issue_comment:
+    types:
+      - created
+      - edited
   issues:
     types:
       - opened
+      - edited
+  pull_request_review_comment:
+    types:
+      - created
       - edited
   workflow_call:
     inputs:
@@ -115,14 +114,10 @@ on:
         required: false
         default: ''
 # Prevent concurrent runs on the same branch to avoid push conflicts.
-# When a new run is triggered, it will queue until the previous pending run completes.
-# On the default branch each run gets a unique group (github.run_id) so runs can
-# proceed in parallel, since each one branches off to its own new branch.
-# See: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
 concurrency:
   cancel-in-progress: false
   group: >-
-    opencode-${{
+    opencode-sudo-${{
       github.event.issue.number
       || github.event.pull_request.number
       || github.event.discussion.number
@@ -134,7 +129,7 @@ env:
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
   cogni-ai:
-    name: Cogni AI Agent Local
+    name: Cogni AI Agent Sudo Local
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
@@ -142,30 +137,23 @@ jobs:
         github.event_name == 'workflow_call' ||
         (
           github.event_name == 'issues' &&
-          (
-            contains(github.event.issue.body || '', '/') ||
-            contains(github.event.issue.body || '', '@')
-          )
+          contains(github.event.issue.body || '', '/sudo')
         ) ||
         (
           github.event_name == 'discussion' &&
-          (
-            contains(github.event.discussion.body || '', '/') ||
-            contains(github.event.discussion.body || '', '@')
-          )
+          contains(github.event.discussion.body || '', '/sudo')
         ) ||
-        contains(github.event.comment.body || '', '/') ||
-        contains(github.event.comment.body || '', '@')
+        contains(github.event.comment.body || '', '/sudo')
       )
     runs-on: ubuntu-latest
     permissions:
-      actions: read
-      contents: write
+      actions: write
+      contents: read
       discussions: read
-      id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
-      issues: write
-      packages: read
-      pull-requests: write
+      id-token: write
+      issues: read
+      packages: write
+      pull-requests: read
     steps:
       # See: <https://github.com/actions/checkout>
       - uses: actions/checkout@v6
@@ -214,6 +202,7 @@ jobs:
         with:
           agent: >-
             ${{ inputs.agent || '' }}
+          mentions: /sudo
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
@@ -230,8 +219,8 @@ jobs:
             value=${value//$'\n'/'%0A'}
             printf '%s' "$value"
           }
-          echo "::notice title=Cogni AI Agent Local prompt::$(escape "$COGNI_AI_PROMPT")"
-          echo "::notice title=Cogni AI Agent Local output::$(escape "${COGNI_AI_OUTPUT:-}")"
+          echo "::notice title=Cogni AI Agent Sudo Local prompt::$(escape "$COGNI_AI_PROMPT")"
+          echo "::notice title=Cogni AI Agent Sudo Local output::$(escape "${COGNI_AI_OUTPUT:-}")"
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true

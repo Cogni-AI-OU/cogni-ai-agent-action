@@ -37,6 +37,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
       id-token: write
       issues: write
@@ -138,6 +139,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
       id-token: write
       issues: write

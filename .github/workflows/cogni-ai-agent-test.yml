@@ -16,18 +16,16 @@ on:
   pull_request_review:
     types:
       - submitted
-      - edited
   pull_request_review_comment:
     types:
       - created
-      - edited
   pull_request_target:
     types:
       - opened
       - synchronize
   workflow_dispatch:
 concurrency:
-  cancel-in-progress: true
+  cancel-in-progress: false
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
 jobs:
   cogni-ai:
@@ -46,9 +44,9 @@ jobs:
         include:
           - agent: cogni-ai-architect
             prompt: >-
-              You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
-              1. You are Architect agent.
-              2. You have 19 skills registered at your disposal.
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are Cogni AI Architect agent.
+              2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You have access to the edit tool.
               5. You have access to the glob tool.
@@ -57,12 +55,13 @@ jobs:
               8. You have access to the context7 MCP.
               Do not fix or edit files and keep the workspace clean.
               Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
-              Once you have answered all of the above, elaborate on any fails (avoid using #), then do a hard stop.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
           - agent: cogni-ai-brain-ops
             prompt: >-
-              You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
-              1. You are BrainOps agent.
-              2. You have 19 skills registered at your disposal.
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are Cogni AI BrainOps agent.
+              2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You do NOT have access to the edit tool.
               5. You have access to the glob tool.
@@ -71,12 +70,13 @@ jobs:
               8. You have access to the context7 MCP.
               Do not fix or edit files and keep the workspace clean.
               Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
-              Once you have answered all of the above, elaborate on any fails (avoid using #), then do a hard stop.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
           - agent: cogni-ai-devops
             prompt: >-
-              You MUST answer each statement with exactly one token: PASS or FAIL (uppercase).
-              1. You are DevOps agent.
-              2. You have 19 skills registered at your disposal.
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are Cogni AI DevOps agent.
+              2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You have access to the edit tool.
               5. You have access to the glob tool.
@@ -85,7 +85,8 @@ jobs:
               8. You have access to the context7 MCP.
               Do not fix or edit files and keep the workspace clean.
               Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
-              Once you have answered all of the above, elaborate on any fails (avoid using #), then do a hard stop.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
     permissions:
       contents: read
       id-token: write

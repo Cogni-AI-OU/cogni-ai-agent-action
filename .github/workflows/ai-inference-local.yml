@@ -1,28 +1,151 @@
 ---
 # AI Inference Local workflow — tests the local ai-inference action.
-# Triggered manually via workflow_dispatch.
+# Triggered by /ai command in comments, or manually via workflow_dispatch.
+# Note: Keep keys and envs in alphabetical order.
 name: AI Inference Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on  #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
 on:
+  issue_comment:
+    types:
+      - created
+      - edited
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
+  discussion:
+    types:
+      - created
+      - edited
+      - answered
+  discussion_comment:
+    types:
+      - created
+      - edited
+  issues:
+    types:
+      - opened
+      - edited
   workflow_dispatch:
     inputs:
+      agent:
+        default: default
+        description: Agent to use for system prompt
+        options:
+          - default
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-devops
+        required: false
+        type: choice
+      enable-github-mcp:
+        default: false
+        description: >-
+          Enable Model Context Protocol integration with GitHub tools.
+          Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
+        required: false
+        type: boolean
+      model:
+        default: openai/gpt-4o-mini
+        description: Model to use for inference.
+        options:
+          - cohere/command-r-08-2024  # Tools: Yes.
+          - cohere/command-r-plus-08-2024  # Tools: Yes.
+          - deepseek/deepseek-r1  # Tools: No.
+          - deepseek/deepseek-r1-0528  # Tools: No.
+          - deepseek/deepseek-v3-0324  # Tools: Yes.
+          - meta/llama-3.2-11b-vision-instruct  # Tools: Yes.
+          - meta/llama-3.2-90b-vision-instruct  # Tools: Yes.
+          - meta/llama-3.3-70b-instruct  # Tools: Yes.
+          - meta/llama-4-maverick-17b-128e-instruct-fp8  # Tools: Yes.
+          - meta/llama-4-scout-17b-16e-instruct  # Tools: Yes.
+          - meta/meta-llama-3.1-405b-instruct  # Tools: Yes.
+          - meta/meta-llama-3.1-8b-instruct  # Tools: Yes.
+          - microsoft/phi-4  # Tools: Yes.
+          - microsoft/phi-4-mini-instruct  # Tools: Yes.
+          - microsoft/phi-4-mini-reasoning  # Tools: Yes.
+          - microsoft/phi-4-multimodal-instruct  # Tools: Yes.
+          - microsoft/phi-4-reasoning  # Tools: Yes.
+          - mistral-ai/codestral-2501  # Tools: Yes.
+          - mistral-ai/ministral-3b  # Tools: Yes.
+          - mistral-ai/mistral-medium-2505  # Tools: Yes.
+          - mistral-ai/mistral-small-2503  # Tools: Yes.
+          - openai/gpt-4.1  # Tools: Yes.
+          - openai/gpt-4.1-mini  # Tools: Yes.
+          - openai/gpt-4.1-nano  # Tools: Yes.
+          - openai/gpt-4o  # Tools: Yes.
+          - openai/gpt-4o-mini  # Tools: Yes.
+        required: false
+        type: choice
       prompt:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
+# Prevent concurrent runs on the same branch to avoid push conflicts.
+concurrency:
+  cancel-in-progress: false
+  group: >-
+    ai-inference-${{
+      github.event.issue.number
+      || github.event.pull_request.number
+      || github.event.discussion.number
+      || (github.ref_name != github.event.repository.default_branch && github.ref)
+      || github.run_id
+    }}
 jobs:
   test:
-    if: ${{ github.event.sender.type != 'Bot' }}
     name: AI Inference Local
+    if: |
+      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event_name == 'issues' &&
+          contains(github.event.issue.body || '', '/ai')
+        ) ||
+        (
+          github.event_name == 'discussion' &&
+          contains(github.event.discussion.body || '', '/ai')
+        ) ||
+        contains(github.event.comment.body || '', '/ai')
+      )
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      discussions: write
+      id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
+      issues: write
       models: read
+      pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: >-
+            ${{
+              (
+                github.event_name == 'issue_comment' &&
+                github.event.issue.pull_request &&
+                format('refs/pull/{0}/head', github.event.issue.number)
+              ) ||
+              (
+                github.event_name == 'pull_request_review_comment' &&
+                format('refs/pull/{0}/head', github.event.pull_request.number)
+              ) ||
+              github.ref
+            }}
       - name: Run AI Inference
         uses: ./ai-inference
         with:
-          prompt: ${{ inputs.prompt || 'Count to 10.' }}
+          agent: ${{ inputs.agent }}
+          enable-github-mcp: ${{ inputs.enable-github-mcp || false }}
+          model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
+          prompt: ${{ inputs.prompt || '' }}
           token: ${{ secrets.GITHUB_TOKEN }}

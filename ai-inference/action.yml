@@ -7,34 +7,37 @@ branding:
 description: Runs AI inference using GitHub Models
 inputs:
   agent:
+    default: default
     description: Agent to use for system prompt.
+    required: false
+  enable-github-mcp:
+    default: 'false'
+    description: >-
+      Enable Model Context Protocol integration with GitHub tools.
+      Some models won't support it (such as nano, mini or deepseek).
+    required: false
+  github-mcp-token:
+    description: Token to use for GitHub MCP server.
+    required: false
+  github-mcp-toolsets:
+    default: repos,issues,pull_requests,actions,code_security
+    description: Toolsets to enable for GitHub MCP server.
     required: false
   mentions:
     default: /ai
     description: Comma-separated trigger mentions for AI Inference.
     required: false
   model:
-    default: openai/gpt-4o
+    default: openai/gpt-4o-mini
     description: Model to use for inference.
-    required: false
-  system-prompt:
-    default: You are a helpful assistant
-    description: The system prompt to send to the model.
     required: false
   prompt:
     default: ''
     description: Prompt to pass to the model.
     required: false
-  enable-github-mcp:
-    default: 'true'
-    description: Enable Model Context Protocol integration with GitHub tools
-    required: false
-  github-mcp-toolsets:
-    default: repos,issues,pull_requests,actions,code_security
-    description: Toolsets to enable for GitHub MCP server.
-    required: false
-  github-mcp-token:
-    description: Token to use for GitHub MCP server.
+  system-prompt:
+    default: You are a helpful assistant
+    description: The system prompt to send to the model.
     required: false
   token:
     description: Token to use for inference. Typically the GITHUB_TOKEN secret.
@@ -54,8 +57,8 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/ai' }}
         AGENT_INPUT: ${{ inputs.agent }}
+        MENTIONS: ${{ inputs.mentions || '/ai' }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
@@ -86,7 +89,8 @@ runs:
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
             run = true;
             agent = 'cogni-ai-architect';
-          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment', 'pull_request_review_comment'].includes(eventName) && !isBot) {
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
+            'pull_request_review_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
@@ -108,7 +112,11 @@ runs:
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          core.setOutput('effective_agent', process.env.AGENT_INPUT || agent || 'cogni-ai-architect');
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
+          if (effectiveAgent === 'default') {
+            effectiveAgent = '';
+          }
+          core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
       if: steps.check.outputs.run == 'true'
       id: concurrency
@@ -171,6 +179,10 @@ runs:
             `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
             `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
+    - name: Checkout cogni-ai-agents
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
@@ -182,12 +194,12 @@ runs:
               github.event.pull_request.body ||
               github.event.discussion.body ||
               '' }}
+        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         ISSUE_NUMBER: >-
           ${{ github.event.issue.number ||
               github.event.pull_request.number ||
               github.event.discussion.number ||
               '' }}
-        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
       run: |
         set -euo pipefail
@@ -216,47 +228,34 @@ runs:
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
-    - name: Checkout cogni-ai-agents
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
-    - name: Resolve system prompt
+    - name: Resolve system prompt file
       if: steps.check.outputs.run == 'true'
       id: system-prompt
       shell: bash
       env:
         AGENT: ${{ steps.check.outputs.effective_agent }}
-        SYSTEM_PROMPT_INPUT: ${{ inputs.system-prompt }}
       run: |
         set -euo pipefail
-        # Default to the input if provided and not equal to the default assistant message
-        system_prompt="${SYSTEM_PROMPT_INPUT}"
-
-        # If agent is specified, try to load its prompt file
-        agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
-        if [ -f "$agent_file" ]; then
-          echo "Loading system prompt from $agent_file"
-          system_prompt=$(cat "$agent_file")
-        else
-          echo "Agent file $agent_file not found, using default or input system prompt"
+        if [ -n "${AGENT}" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            echo "system-prompt-file=$agent_file" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
         fi
-        EOF_TOKEN="EOF_$(openssl rand -hex 10)"
-        {
-          echo "system-prompt<<$EOF_TOKEN"
-          printf '%s\n' "$system_prompt"
-          echo "$EOF_TOKEN"
-        } >> "$GITHUB_OUTPUT"
+        echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
     - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
       id: inference
       uses: actions/ai-inference@v2
       with:
-        model: ${{ inputs.model || 'openai/gpt-4o' }}
-        prompt: ${{ steps.prompt.outputs.prompt }}
-        system-prompt: ${{ steps.system-prompt.outputs.system-prompt }}
-        enable-github-mcp: ${{ inputs.enable-github-mcp }}
-        github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
+        github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
+        model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
+        prompt: ${{ steps.prompt.outputs.prompt }}
+        system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
         token: ${{ inputs.token || github.token }}
     - name: Write response to summary
       if: always() && steps.inference.outputs.response != ''

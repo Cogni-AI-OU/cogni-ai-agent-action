@@ -77,10 +77,12 @@ inputs:
         # Note: Changes here should be synchronized with agent-specific skill allowlists.
         skill: &default-skill
           ansible: allow
+          cat: allow
           context-aware-ops: allow
           fact-writer: allow
           gh: allow
           gh-api: allow
+          gh-issue: allow
           gh-models: allow
           gh-pr: allow
           gh-run: allow
@@ -88,6 +90,8 @@ inputs:
           git-expert: allow
           github: allow
           github-actions: allow
+          github-issue: allow
+          github-pr: allow
           github-script: allow
           mermaid: allow
           mermaid-beta: allow
@@ -223,10 +227,10 @@ inputs:
         skill: *default-skill
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer', 'cogni-ai-devops',
-      'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-tester',
-      'cogni-ai-brain-ops', etc.).
+      with 'default' and agent-specific overrides (e.g.,
+      'cogni-ai-architect', 'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer',
+      'cogni-ai-devops', 'cogni-ai-fact-ops', 'cogni-ai-github-ops',
+      'cogni-ai-tester', 'cogni-ai-brain-ops', etc.).
       Example:
         default:
           bash:
@@ -340,7 +344,11 @@ runs:
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          core.setOutput('effective_agent', process.env.AGENT_INPUT || agent || 'cogni-ai-architect');
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
+          if (effectiveAgent === 'default') {
+            effectiveAgent = '';
+          }
+          core.setOutput('effective_agent', effectiveAgent);
     - name: Collect PR changed files
       if: steps.check.outputs.run == 'true' && (github.event.pull_request || github.event.issue.pull_request)
       id: changed_files
