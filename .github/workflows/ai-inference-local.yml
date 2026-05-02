@@ -46,8 +46,8 @@ on:
           - cohere/command-a
           - cohere/command-r-08-2024
           - cohere/command-r-plus-08-2024
-          - deepseek/deepseek-r1
-          - deepseek/deepseek-r1-0528
+          - deepseek/deepseek-r1 # Note: Using tool is not supported by this model.
+          - deepseek/deepseek-r1-0528 # Note: Using tool is not supported by this model.
           - deepseek/deepseek-v3-0324
           - meta/llama-3.2-11b-vision-instruct
           - meta/llama-3.2-90b-vision-instruct
