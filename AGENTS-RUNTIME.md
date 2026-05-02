@@ -141,7 +141,9 @@ upstream changes so the post-run auto-push does not get rejected with
 ### General Constraints
 
 - **Contextual Continuity**: Maintain conversation context within the originating thread.
-- **Minimal Scope & Focused Execution**: ALWAYS narrow down your focus strictly to the original user prompt or task. Perform minimal refactoring and avoid broad or massive changes outside the explicitly requested scope. Do not auto-discover and modify unrelated files.
+- **Minimal Scope & Focused Execution**: ALWAYS narrow down your focus strictly to the original user prompt or task.
+  Perform minimal refactoring and avoid broad or massive changes outside the explicitly requested scope.
+  Do not auto-discover and modify unrelated files.
 
 ### Workspace & Syncing Invariants
 
