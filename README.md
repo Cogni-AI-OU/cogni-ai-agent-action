@@ -256,6 +256,10 @@ on:
 jobs:
   cogni-ai-agent-sudo:
     name: Run Cogni AI agent (Sudo)
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
+      !endsWith(github.actor, '[bot]')
     runs-on: ubuntu-latest
     permissions:
       actions: write

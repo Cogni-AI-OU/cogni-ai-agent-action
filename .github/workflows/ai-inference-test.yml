@@ -2,22 +2,13 @@
 # AI Inference Test workflow — tests the local ai-inference action.
 # Triggered on push.
 name: AI Inference Test
-run-name: >-
-  Agent on  #${{
-    github.event.issue.number ||
-    github.event.pull_request.number ||
-    github.event.discussion.number ||
-    github.run_id
-  }}
+run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
 on:
   push:
   pull_request:
 jobs:
   test:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'workflow_call' ||
-      !endsWith(github.actor, '[bot]')
+    if: ${{ github.event.sender.type != 'Bot' }}
     name: AI Inference Test
     runs-on: ubuntu-latest
     permissions:

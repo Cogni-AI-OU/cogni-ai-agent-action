@@ -29,10 +29,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
 jobs:
   cogni-ai:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'workflow_call' ||
-      !endsWith(github.actor, '[bot]')
+    if: ${{ github.event.sender.type != 'Bot' }}
     name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
     runs-on: ubuntu-latest
     strategy:
