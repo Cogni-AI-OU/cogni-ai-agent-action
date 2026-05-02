@@ -43,6 +43,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write # create/edit/delete files
       id-token: write # required for OIDC
       issues: write # create/edit/delete issues
@@ -184,6 +185,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write # create/edit/delete files
       id-token: write # required for OIDC token
       issues: write # create/edit/delete issues
@@ -236,6 +238,7 @@ jobs:
     if: ${{ github.event.sender.type != 'Bot' }}
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: write # create/edit/delete files
       id-token: write # required for OIDC token
       issues: write # create/edit/delete issues

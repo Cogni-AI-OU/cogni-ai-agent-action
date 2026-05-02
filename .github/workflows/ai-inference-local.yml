@@ -111,7 +111,6 @@ jobs:
   test:
     name: AI Inference Local
     if: |
-      github.event.sender.type != 'Bot' &&
       (
         github.event_name == 'workflow_dispatch' ||
         (
