@@ -7,6 +7,7 @@ branding:
 description: Runs AI inference using GitHub Models
 inputs:
   agent:
+    default: default
     description: Agent to use for system prompt.
     required: false
   mentions:
@@ -233,13 +234,17 @@ runs:
         # Default to the input if provided and not equal to the default assistant message
         system_prompt="${SYSTEM_PROMPT_INPUT}"
 
-        # If agent is specified, try to load its prompt file
-        agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
-        if [ -f "$agent_file" ]; then
-          echo "Loading system prompt from $agent_file"
-          system_prompt=$(cat "$agent_file")
+        # If agent is specified and not 'default', try to load its prompt file
+        if [ "${AGENT}" != "default" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            echo "Loading system prompt from $agent_file"
+            system_prompt=$(cat "$agent_file")
+          else
+            echo "Agent file $agent_file not found, using default or input system prompt"
+          fi
         else
-          echo "Agent file $agent_file not found, using default or input system prompt"
+          echo "Using default system prompt (agent is 'default')"
         fi
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
