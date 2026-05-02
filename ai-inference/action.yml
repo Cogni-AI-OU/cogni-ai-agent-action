@@ -29,6 +29,18 @@ inputs:
   max-tokens:
     description: The maximum number of tokens to generate (deprecated)
     required: false
+  prompt-file:
+    description: >-
+      Path to a file containing the prompt (supports .txt and .prompt.yml
+      formats). If both prompt and prompt-file are provided, prompt-file
+      takes precedence.
+    required: false
+  input:
+    description: Template variables in YAML format for .prompt.yml files.
+    required: false
+  file_input:
+    description: Template variables in YAML where values are file paths.
+    required: false
   mentions:
     default: /ai
     description: Comma-separated trigger mentions for AI Inference.
@@ -216,22 +228,28 @@ runs:
               github.event.discussion.number ||
               '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        PROMPT_FILE_INPUT: ${{ inputs.prompt-file }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
-        if [ -z "$prompt" ]; then
-          prompt="${COMMENT_BODY:-}"
-        fi
-        if [ -n "${ISSUE_NUMBER:-}" ]; then
-          entity_type="issue/PR"
-          if [ -n "${DISCUSSION_NUMBER:-}" ]; then
-            entity_type="discussion"
+        prompt_file="${PROMPT_FILE_INPUT:-}"
+        if [ -n "$prompt_file" ]; then
+          prompt="Using prompt from file: $prompt_file"
+        else
+          if [ -z "$prompt" ]; then
+            prompt="${COMMENT_BODY:-}"
           fi
-          header="Related to $entity_type #$ISSUE_NUMBER"
-          if [ -n "$prompt" ]; then
-            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
-          else
-            prompt="$header"
+          if [ -n "${ISSUE_NUMBER:-}" ]; then
+            entity_type="issue/PR"
+            if [ -n "${DISCUSSION_NUMBER:-}" ]; then
+              entity_type="discussion"
+            fi
+            header="Related to $entity_type #$ISSUE_NUMBER"
+            if [ -n "$prompt" ]; then
+              prompt=$(printf '%s\n\n%s' "$header" "$prompt")
+            else
+              prompt="$header"
+            fi
           fi
         fi
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
@@ -272,6 +290,9 @@ runs:
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        prompt-file: ${{ inputs.prompt-file }}
+        input: ${{ inputs.input }}
+        file_input: ${{ inputs.file_input }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }} # Takes precedence over system-prompt.
         temperature: ${{ inputs.temperature }}

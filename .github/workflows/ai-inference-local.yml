@@ -95,6 +95,18 @@ on:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
+      prompt-file:
+        description: Path to a file containing the prompt
+        required: false
+        type: string
+      input:
+        description: Template variables for .prompt.yml files
+        required: false
+        type: string
+      file_input:
+        description: File-based template variables
+        required: false
+        type: string
       temperature:
         description: The sampling temperature to use (0-1)
         required: false
@@ -166,6 +178,9 @@ jobs:
           max-tokens: ${{ inputs.max-tokens }}
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
           prompt: ${{ inputs.prompt || '' }}
+          prompt-file: ${{ inputs.prompt-file }}
+          input: ${{ inputs.input }}
+          file_input: ${{ inputs.file_input }}
           temperature: ${{ inputs.temperature }}
           token: ${{ secrets.GITHUB_TOKEN }}
           top-p: ${{ inputs.top-p }}

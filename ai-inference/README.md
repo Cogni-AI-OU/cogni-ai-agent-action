@@ -124,6 +124,9 @@ jobs:
 | `mentions`             | Comma-separated triggers                      | `/ai`                     | No       |
 | `model`                | Model to use for inference                    | `openai/gpt-4o-mini`      | No       |
 | `prompt`               | Prompt to pass to the model                   | `''`                      | No       |
+| `prompt-file`          | Path to a file containing the prompt          | `''`                      | No       |
+| `input`                | Template variables for .prompt.yml files      | `''`                      | No       |
+| `file_input`           | File-based template variables                 | `''`                      | No       |
 | `system-prompt`        | The system prompt to send                     | `You are a helpful assistant` | No       |
 | `temperature`          | The sampling temperature to use (0-1)         | —                         | No       |
 | `token`                | Token to use for inference                    | `github.token`            | No       |
