@@ -32,8 +32,23 @@ on:
       agent:
         default: cogni-ai-architect
         description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-context7-ops
+          - cogni-ai-devops
+          - cogni-ai-elite
+          - cogni-ai-fact-ops
+          - cogni-ai-github-ops
+          - cogni-ai-keeper
+          - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
+          - cogni-ai-weaver
+          - default
         required: false
-        type: string
+        type: choice
       model:
         default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
         description: Model to use for OpenCode
@@ -53,8 +68,17 @@ on:
           - cogni-ai-architect
           - cogni-ai-brain-ops
           - cogni-ai-code-reviewer
+          - cogni-ai-context7-ops
           - cogni-ai-devops
+          - cogni-ai-elite
+          - cogni-ai-fact-ops
+          - cogni-ai-github-ops
+          - cogni-ai-keeper
           - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
+          - cogni-ai-weaver
+          - default
         required: false
         type: choice
       model:
