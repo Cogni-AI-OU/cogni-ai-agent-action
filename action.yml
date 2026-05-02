@@ -463,17 +463,6 @@ runs:
             prompt="$header"
           fi
         fi
-
-        # Prepend agent content if specified and not 'default'
-        if [ -n "${AGENT}" ] && [ "${AGENT}" != "default" ]; then
-          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
-          if [ -f "$agent_file" ]; then
-            echo "Prepending agent prompt from $agent_file"
-            agent_content=$(cat "$agent_file")
-            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
-          fi
-        fi
-
         if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then
           prev_attempt=$(( GITHUB_RUN_ATTEMPT - 1 ))
           previous_build_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${prev_attempt}"
@@ -483,6 +472,17 @@ runs:
           rerun_note+=" ${previous_build_url}"
           prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
         fi
+
+        # Prepend agent content if specified and not 'default'
+        if [ -n "${AGENT}" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            echo "Prepending agent content from $agent_file"
+            agent_content=$(cat "$agent_file")
+            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
+          fi
+        fi
+
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
@@ -582,77 +582,64 @@ runs:
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-context7-ops": {
                 "description": "Uses Context7-backed documentation context for research and delegation tasks.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-devops": {
                 "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-fact-ops": {
                 "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-github-ops": {
                 "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-keeper": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-python-dev": {
                 "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-code-reviewer": {
                 "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-plan-reviewer": {
                 "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-tester": {
                 "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-weaver": {
                 "mode": "primary",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "cogni-ai-brain-ops": {
                 "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
                 "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+                "model": "opencode/gemini-3-flash"
               },
               "explore": {
                 "disable": true,

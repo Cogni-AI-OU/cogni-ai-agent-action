@@ -340,17 +340,6 @@ runs:
             prompt="$header"
           fi
         fi
-
-        # Prepend agent content if specified and not 'default'
-        if [ -n "${AGENT}" ] && [ "${AGENT}" != "default" ]; then
-          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
-          if [ -f "$agent_file" ]; then
-            echo "Prepending agent prompt from $agent_file"
-            agent_content=$(cat "$agent_file")
-            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
-          fi
-        fi
-
         if [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then
           prev_attempt=$(( GITHUB_RUN_ATTEMPT - 1 ))
           previous_build_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${prev_attempt}"
@@ -360,6 +349,17 @@ runs:
           rerun_note+=" ${previous_build_url}"
           prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")
         fi
+
+        # Prepend agent content if specified and not 'default'
+        if [ -n "${AGENT}" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            echo "Prepending agent content from $agent_file"
+            agent_content=$(cat "$agent_file")
+            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
+          fi
+        fi
+
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
