@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - 'CONSTRAINTS.mzn'
-      - '.github/workflows/test-constraints.yml'
+      - CONSTRAINTS.mzn
+      - .github/workflows/test-constraints.yml
   pull_request:
     branches:
       - main
     paths:
-      - 'CONSTRAINTS.mzn'
-      - '.github/workflows/test-constraints.yml'
+      - CONSTRAINTS.mzn
+      - .github/workflows/test-constraints.yml
   workflow_dispatch:
 jobs:
   test-constraints:

@@ -23,6 +23,12 @@ inputs:
     default: repos,issues,pull_requests,actions,code_security
     description: Toolsets to enable for GitHub MCP server.
     required: false
+  max-completion-tokens:
+    description: The maximum number of tokens to generate
+    required: false
+  max-tokens:
+    description: The maximum number of tokens to generate (deprecated)
+    required: false
   mentions:
     default: /ai
     description: Comma-separated trigger mentions for AI Inference.
@@ -39,8 +45,14 @@ inputs:
     default: You are a helpful assistant
     description: The system prompt to send to the model.
     required: false
+  temperature:
+    description: The sampling temperature to use (0-1)
+    required: false
   token:
     description: Token to use for inference. Typically the GITHUB_TOKEN secret.
+    required: false
+  top-p:
+    description: The nucleus sampling parameter to use (0-1)
     required: false
 name: Cogni AI Inference
 outputs:
@@ -252,11 +264,14 @@ runs:
         enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
+        max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
+        temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
+        top-p: ${{ inputs.top-p }}
     - name: Write response to summary
       if: always() && steps.inference.outputs.response != ''
       shell: bash
