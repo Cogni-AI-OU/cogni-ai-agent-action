@@ -40,3 +40,8 @@ using commands like `/co`, `/cogni`, `/review`, or `/brainstorm`. The `mentions`
 - **[action.yml](action.yml)**: The root composite action.
 - **[ai-inference/](ai-inference/)**: Specialized action for AI inference using GitHub Models.
 - **[opencode/](opencode/)**: Specialized action for OpenCode Agent.
+
+## References
+
+- <https://github.com/actions/ai-inference>
+- <https://github.com/anomalyco/opencode>
