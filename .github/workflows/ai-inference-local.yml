@@ -40,7 +40,9 @@ on:
         type: choice
       enable-github-mcp:
         default: false
-        description: Whether to enable GitHub MCP server
+        description: >-
+          Enable Model Context Protocol integration with GitHub tools.
+          Some models won't support it (such as nano, mini or deepseek).
         required: false
         type: boolean
       model:
