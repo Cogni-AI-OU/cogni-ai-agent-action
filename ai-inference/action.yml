@@ -62,6 +62,9 @@ outputs:
   response:
     description: The response from the model.
     value: ${{ steps.inference.outputs.response }}
+  response-file:
+    description: The file path where the response is saved (useful for larger responses).
+    value: ${{ steps.inference.outputs.response-file }}
 runs:
   using: composite
   steps:

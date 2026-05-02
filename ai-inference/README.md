@@ -131,7 +131,8 @@ jobs:
 
 ### Outputs
 
-| Output     | Description                           |
-| ---------- | ------------------------------------- |
-| `prompt`   | The resolved prompt sent to the model |
-| `response` | The response from the model           |
+| Output          | Description                                                                  |
+| --------------- | ---------------------------------------------------------------------------- |
+| `prompt`        | The resolved prompt sent to the model                                        |
+| `response`      | The response from the model                                                  |
+| `response-file` | The file path where the response is saved (useful for larger responses)      |
