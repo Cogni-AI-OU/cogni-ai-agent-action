@@ -35,7 +35,7 @@ on:
         required: false
         type: string
       model:
-        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
+        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'openai/gpt-4o-mini' }}
         description: Model to use for OpenCode
         required: false
         type: string
@@ -59,9 +59,10 @@ on:
         required: false
         type: choice
       model:
-        default: opencode/gemini-3-flash
+        default: openai/gpt-4o-mini
         description: Model to use for OpenCode
         options:
+          - openai/gpt-4o-mini
           - opencode/big-pickle
           - opencode/claude-3-5-haiku
           - opencode/claude-haiku-4-5
@@ -131,7 +132,7 @@ concurrency:
     }}
 env:
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
-  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+  OPENCODE_MODEL_DEFAULT: openai/gpt-4o-mini
 jobs:
   cogni-ai:
     name: Cogni AI Agent Local

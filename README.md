@@ -121,9 +121,10 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        default: opencode/gemini-3-flash
+        default: openai/gpt-4o-mini
         description: Model to use for OpenCode
         options:
+          - openai/gpt-4o-mini
           - opencode/big-pickle
           - opencode/claude-3-5-haiku
           - opencode/claude-haiku-4-5
@@ -218,7 +219,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        default: opencode/gemini-3-flash
+        default: openai/gpt-4o-mini
         description: Model to use for OpenCode
         options:
           - opencode/gemini-3.1-pro
@@ -264,14 +265,14 @@ to avoid accidental or malicious destructive actions.
 
 ### Inputs
 
-| Input              | Description                 | Default                            | Required |
-| ------------------ | --------------------------- | ---------------------------------- | -------- |
-| `agent`            | Agent to use                | `cogni-ai-architect`                | No       |
-| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review,/brainstorm`    | No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash`           | No       |
-| `opencode-api-key` | API key for OpenCode        | —                                  | **Yes**  |
-| `permissions`      | Permissions configuration   | —                                  | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                               | No       |
+| Input              | Description                 | Default                          | Required |
+| ------------------ | --------------------------- | -------------------------------- | -------- |
+| `agent`            | Agent to use                | `cogni-ai-architect`             | No       |
+| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review,/brainstorm` | No       |
+| `model`            | Model to use for OpenCode   | `openai/gpt-4o-mini`             | No       |
+| `opencode-api-key` | API key for OpenCode        | —                                | **Yes**  |
+| `permissions`      | Permissions configuration   | —                                | No       |
+| `prompt`           | Prompt to pass to the agent | `''`                             | No       |
 
 ### Hierarchical Permissions
 
