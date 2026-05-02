@@ -159,12 +159,13 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
-      actions: write
+      actions: read
       contents: write
+      discussions: read
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
+      packages: read
       pull-requests: write
-      discussions: write
     steps:
       # See: <https://github.com/actions/checkout>
       - uses: actions/checkout@v6
