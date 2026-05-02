@@ -1,28 +1,93 @@
 ---
 # AI Inference Local workflow — tests the local ai-inference action.
-# Triggered manually via workflow_dispatch.
+# Triggered by /ai command in comments, or manually via workflow_dispatch.
+# Note: Keep keys and envs in alphabetical order.
 name: AI Inference Local
 run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
 on:
+  issue_comment:
+    types:
+      - created
+      - edited
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
+  discussion:
+    types:
+      - created
+      - edited
+      - answered
+  discussion_comment:
+    types:
+      - created
+      - edited
+  issues:
+    types:
+      - opened
+      - edited
   workflow_dispatch:
     inputs:
       prompt:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
+# Prevent concurrent runs on the same branch to avoid push conflicts.
+concurrency:
+  cancel-in-progress: false
+  group: >-
+    ai-inference-${{
+      github.event.issue.number
+      || github.event.pull_request.number
+      || github.event.discussion.number
+      || (github.ref_name != github.event.repository.default_branch && github.ref)
+      || github.run_id
+    }}
 jobs:
   test:
-    if: ${{ github.event.sender.type != 'Bot' }}
     name: AI Inference Local
+    if: |
+      github.event.sender.type != 'Bot' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event_name == 'issues' &&
+          contains(github.event.issue.body || '', '/ai')
+        ) ||
+        (
+          github.event_name == 'discussion' &&
+          contains(github.event.discussion.body || '', '/ai')
+        ) ||
+        contains(github.event.comment.body || '', '/ai')
+      )
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
+      issues: write
+      pull-requests: write
+      discussions: write
       models: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: >-
+            ${{
+              (
+                github.event_name == 'issue_comment' &&
+                github.event.issue.pull_request &&
+                format('refs/pull/{0}/head', github.event.issue.number)
+              ) ||
+              (
+                github.event_name == 'pull_request_review_comment' &&
+                format('refs/pull/{0}/head', github.event.pull_request.number)
+              ) ||
+              github.ref
+            }}
       - name: Run AI Inference
         uses: ./ai-inference
         with:
-          prompt: ${{ inputs.prompt || 'Count to 10.' }}
+          prompt: ${{ inputs.prompt || '' }}
           token: ${{ secrets.GITHUB_TOKEN }}

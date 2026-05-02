@@ -34,7 +34,9 @@ For a human-readable overview, see [README.md](README.md).
 ### ai-inference-local.yml
 
 - Purpose: Tests the local `ai-inference/action.yml` action manually.
-- Triggers: `workflow_dispatch`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`.
+- Commands: `/ai`.
 
 ### ai-inference-test.yml
 
