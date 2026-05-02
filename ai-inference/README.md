@@ -119,15 +119,15 @@ jobs:
 | `enable-github-mcp`    | Enable Model Context Protocol integration      | `false`                   | No       |
 | `github-mcp-token`     | Token to use for GitHub MCP server            | —                         | No       |
 | `github-mcp-toolsets`  | Toolsets to enable for GitHub MCP server      | `repos,issues,pull_requests,actions,code_security` | No       |
-| `maxCompletionTokens`   | The maximum number of tokens to generate      | —                         | No       |
-| `maxTokens`            | Max tokens to generate (deprecated)           | —                         | No       |
+| `max-completion-tokens` | The maximum number of tokens to generate      | —                         | No       |
+| `max-tokens`            | Max tokens to generate (deprecated)           | —                         | No       |
 | `mentions`             | Comma-separated triggers                      | `/ai`                     | No       |
 | `model`                | Model to use for inference                    | `openai/gpt-4o-mini`      | No       |
 | `prompt`               | Prompt to pass to the model                   | `''`                      | No       |
 | `system-prompt`        | The system prompt to send                     | `You are a helpful assistant` | No       |
 | `temperature`          | The sampling temperature to use (0-1)         | —                         | No       |
 | `token`                | Token to use for inference                    | `github.token`            | No       |
-| `topP`                 | The nucleus sampling parameter to use (0-1)   | —                         | No       |
+| `top-p`                 | The nucleus sampling parameter to use (0-1)   | —                         | No       |
 
 ### Outputs
 

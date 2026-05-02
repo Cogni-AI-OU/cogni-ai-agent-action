@@ -51,11 +51,11 @@ on:
           Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
         required: false
         type: boolean
-      maxCompletionTokens:
+      max-completion-tokens:
         description: The maximum number of tokens to generate
         required: false
         type: number
-      maxTokens:
+      max-tokens:
         description: The maximum number of tokens to generate (deprecated)
         required: false
         type: number
@@ -99,7 +99,7 @@ on:
         description: The sampling temperature to use (0-1)
         required: false
         type: number
-      topP:
+      top-p:
         description: The nucleus sampling parameter to use (0-1)
         required: false
         type: number
@@ -162,10 +162,10 @@ jobs:
         with:
           agent: ${{ inputs.agent }}
           enable-github-mcp: ${{ inputs.enable-github-mcp || false }}
-          maxCompletionTokens: ${{ inputs.maxCompletionTokens }}
-          maxTokens: ${{ inputs.maxTokens }}
+          max-completion-tokens: ${{ inputs.max-completion-tokens }}
+          max-tokens: ${{ inputs.max-tokens }}
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
           prompt: ${{ inputs.prompt || '' }}
           temperature: ${{ inputs.temperature }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          topP: ${{ inputs.topP }}
+          top-p: ${{ inputs.top-p }}

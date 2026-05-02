@@ -6,7 +6,7 @@ Authoritative, agent-facing catalog of protocols and invariants for the reposito
 
 - **Action Differentiation**:
   The `opencode` and `ai-inference` actions serve different purposes and support different sets of inputs.
-  - `ai-inference` supports LLM-specific parameters such as `maxCompletionTokens`, `maxTokens`, `temperature`, and `topP`.
+  - `ai-inference` supports LLM-specific parameters such as `max-completion-tokens`, `max-tokens`, `temperature`, and `top-p`.
   - `opencode` related actions focus on agent orchestration and use `opencode-api-key` and `permissions`.
 - **Breaking Changes**:
   Do NOT add AI inference-specific inputs to `opencode` related actions as they are considered breaking changes and are not valid for those actions.
