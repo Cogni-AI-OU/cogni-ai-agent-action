@@ -267,14 +267,14 @@ to avoid accidental or malicious destructive actions.
 
 ### Inputs
 
-| Input                  | Description                                   | Default                        | Required |
-| ---------------------- | --------------------------------------------- | ------------------------------ | -------- |
-| `agent`                | Agent to use                                  | `cogni-ai-architect`           | No       |
-| `mentions`             | Comma-separated mentions                      | `/co,/cogni,/review`           | No       |
-| `model`                | Model to use for OpenCode                     | `opencode/gemini-3-flash`      | No       |
-| `opencode-api-key`     | API key for OpenCode                          | —                              | **Yes**  |
-| `permissions`          | Permissions configuration                     | —                              | No       |
-| `prompt`               | Prompt to pass to the agent                   | `''`                           | No       |
+| Input                  | Description                                   | Default                                    | Required |
+| ---------------------- | --------------------------------------------- | ------------------------------------------ | -------- |
+| `agent`                | Agent to use                                  | `cogni-ai-architect`                       | No       |
+| `mentions`             | Comma-separated mentions                      | `/co,/cogni,/review,/brainstorm`           | No       |
+| `model`                | Model to use for OpenCode                     | `opencode/gemini-3-flash`                  | No       |
+| `opencode-api-key`     | API key for OpenCode                          | —                                          | **Yes**  |
+| `permissions`          | Permissions configuration                     | —                                          | No       |
+| `prompt`               | Prompt to pass to the agent                   | `''`                                       | No       |
 
 ### Hierarchical Permissions
 
