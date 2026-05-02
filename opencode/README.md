@@ -29,11 +29,14 @@ on:
 jobs:
   agent:
     if: |
-      github.event.sender.type != 'Bot' &&
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
       (
-        github.event_name == 'workflow_dispatch' ||
-        contains(github.event.comment.body, '/') ||
-        contains(github.event.comment.body, '@')
+        !endsWith(github.actor, '[bot]') &&
+        (
+          contains(github.event.comment.body, '/') ||
+          contains(github.event.comment.body, '@')
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -129,13 +132,16 @@ jobs:
   opencode-agent:
     name: Run OpenCode agent
     if: |
-      github.event.sender.type != 'Bot' &&
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
       (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'issues' ||
-        github.event_name == 'pull_request' ||
-        contains(github.event.comment.body || '', '/') ||
-        contains(github.event.comment.body || '', '@')
+        !endsWith(github.actor, '[bot]') &&
+        (
+          github.event_name == 'issues' ||
+          github.event_name == 'pull_request' ||
+          contains(github.event.comment.body || '', '/') ||
+          contains(github.event.comment.body || '', '@')
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -179,7 +185,9 @@ jobs:
 
 ### Hierarchical Permissions
 
-You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-code-reviewer`) can override or extend these defaults.
+You can define granular permissions per agent type using a hierarchical YAML structure. The
+`default` section applies to all agents, while agent-specific sections (e.g.,
+`cogni-ai-architect`, `cogni-ai-code-reviewer`) can override or extend these defaults.
 
 ```yaml
 with:

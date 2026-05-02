@@ -77,7 +77,10 @@ on:
         default: ''
 jobs:
   opencode:
-    if: ${{ github.event.sender.type != 'Bot' }}
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
+      !endsWith(github.actor, '[bot]')
     uses: Cogni-AI-OU/.github/.github/workflows/opencode.yml@main
     permissions:
       contents: write

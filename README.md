@@ -35,11 +35,14 @@ on:
 jobs:
   agent:
     if: |
-      github.event.sender.type != 'Bot' &&
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
       (
-        github.event_name == 'workflow_dispatch' ||
-        contains(github.event.comment.body, '/') ||
-        contains(github.event.comment.body, '@')
+        !endsWith(github.actor, '[bot]') &&
+        (
+          contains(github.event.comment.body, '/') ||
+          contains(github.event.comment.body, '@')
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -60,7 +63,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt ||
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body
+            }}
     timeout-minutes: 60
 ```
 
@@ -72,7 +82,8 @@ For the formal constraint model covering skill and tool permission constraints, 
 ### Task delegation
 
 `cogni-ai-context7-ops`, `cogni-ai-devops`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`,
-`cogni-ai-python-dev`, `cogni-ai-code-reviewer`, `cogni-ai-plan-reviewer`, `cogni-ai-tester`, and `cogni-ai-brain-ops` are configured with `mode: all`, so
+`cogni-ai-python-dev`, `cogni-ai-code-reviewer`, `cogni-ai-plan-reviewer`,
+`cogni-ai-tester`, and `cogni-ai-brain-ops` are configured with `mode: all`, so
 they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 
@@ -162,26 +173,29 @@ jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
     if: |
-      github.event.sender.type != 'Bot' &&
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
       (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'pull_request' ||
+        !endsWith(github.actor, '[bot]') &&
         (
-          github.event_name == 'issues' &&
+          github.event_name == 'pull_request' ||
           (
-            contains(github.event.issue.body || '', '/') ||
-            contains(github.event.issue.body || '', '@')
-          )
-        ) ||
-        (
-          github.event_name == 'discussion' &&
+            github.event_name == 'issues' &&
+            (
+              contains(github.event.issue.body || '', '/') ||
+              contains(github.event.issue.body || '', '@')
+            )
+          ) ||
           (
-            contains(github.event.discussion.body || '', '/') ||
-            contains(github.event.discussion.body || '', '@')
-          )
-        ) ||
-        contains(github.event.comment.body || '', '/') ||
-        contains(github.event.comment.body || '', '@')
+            github.event_name == 'discussion' &&
+            (
+              contains(github.event.discussion.body || '', '/') ||
+              contains(github.event.discussion.body || '', '@')
+            )
+          ) ||
+          contains(github.event.comment.body || '', '/') ||
+          contains(github.event.comment.body || '', '@')
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -204,7 +218,14 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt ||
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body
+            }}
     timeout-minutes: 60
 ```
 
@@ -235,7 +256,6 @@ on:
 jobs:
   cogni-ai-agent-sudo:
     name: Run Cogni AI agent (Sudo)
-    if: ${{ github.event.sender.type != 'Bot' }}
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -267,20 +287,21 @@ to avoid accidental or malicious destructive actions.
 
 ### Inputs
 
-| Input              | Description                 | Default                            | Required |
-| ------------------ | --------------------------- | ---------------------------------- | -------- |
-| `agent`            | Agent to use                | `cogni-ai-architect`                | No       |
-| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review,/brainstorm`    | No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash`           | No       |
-| `opencode-api-key` | API key for OpenCode        | —                                  | **Yes**  |
-| `permissions`      | Permissions configuration   | —                                  | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                               | No       |
+| Input              | Description                 | Default                          | Required |
+| ------------------ | --------------------------- | -------------------------------- | -------- |
+| `agent`            | Agent to use                | `cogni-ai-architect`             | No       |
+| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review,/brainstorm` | No       |
+| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash`        | No       |
+| `opencode-api-key` | API key for OpenCode        | —                                | **Yes**  |
+| `permissions`      | Permissions configuration   | —                                | No       |
+| `prompt`           | Prompt to pass to the agent | `''`                             | No       |
 
 ### Hierarchical Permissions
 
-Define granular permissions per agent type using a hierarchical YAML structure. The `default`
-section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-code-reviewer`)
-override or extend these defaults. See [action.yml](action.yml) for default permissions.
+You can define granular permissions per agent type using a hierarchical YAML structure. The
+`default` section applies to all agents, while agent-specific sections (e.g.,
+`cogni-ai-architect`, `cogni-ai-code-reviewer`) override or extend these defaults. See
+[action.yml](action.yml) for default permissions.
 
 ### Outputs
 

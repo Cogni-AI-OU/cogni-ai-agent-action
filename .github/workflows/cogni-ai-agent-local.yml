@@ -4,7 +4,13 @@
 # or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on  #${{
+    github.event.issue.number ||
+    github.event.pull_request.number ||
+    github.event.discussion.number ||
+    github.run_id
+  }}
 on:
   issue_comment:
     types:
@@ -136,26 +142,28 @@ jobs:
   cogni-ai:
     name: Cogni AI Agent Local
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
       (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'workflow_call' ||
+        !endsWith(github.actor, '[bot]') &&
         (
-          github.event_name == 'issues' &&
           (
-            contains(github.event.issue.body || '', '/') ||
-            contains(github.event.issue.body || '', '@')
-          )
-        ) ||
-        (
-          github.event_name == 'discussion' &&
+            github.event_name == 'issues' &&
+            (
+              contains(github.event.issue.body || '', '/') ||
+              contains(github.event.issue.body || '', '@')
+            )
+          ) ||
           (
-            contains(github.event.discussion.body || '', '/') ||
-            contains(github.event.discussion.body || '', '@')
-          )
-        ) ||
-        contains(github.event.comment.body || '', '/') ||
-        contains(github.event.comment.body || '', '@')
+            github.event_name == 'discussion' &&
+            (
+              contains(github.event.discussion.body || '', '/') ||
+              contains(github.event.discussion.body || '', '@')
+            )
+          ) ||
+          contains(github.event.comment.body || '', '/') ||
+          contains(github.event.comment.body || '', '@')
+        )
       )
     runs-on: ubuntu-latest
     permissions:

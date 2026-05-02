@@ -3,7 +3,13 @@
 # Triggered only by /sudo command in comments, or manually via workflow_dispatch.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Sudo Local
-run-name: 'Sudo Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Sudo Agent on  #${{
+    github.event.issue.number ||
+    github.event.pull_request.number ||
+    github.event.discussion.number ||
+    github.run_id
+  }}
 on:
   discussion:
     types:
@@ -131,19 +137,21 @@ jobs:
   cogni-ai:
     name: Cogni AI Agent Sudo Local
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
       (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'workflow_call' ||
+        !endsWith(github.actor, '[bot]') &&
         (
-          github.event_name == 'issues' &&
-          contains(github.event.issue.body || '', '/sudo')
-        ) ||
-        (
-          github.event_name == 'discussion' &&
-          contains(github.event.discussion.body || '', '/sudo')
-        ) ||
-        contains(github.event.comment.body || '', '/sudo')
+          (
+            github.event_name == 'issues' &&
+            contains(github.event.issue.body || '', '/sudo')
+          ) ||
+          (
+            github.event_name == 'discussion' &&
+            contains(github.event.discussion.body || '', '/sudo')
+          ) ||
+          contains(github.event.comment.body || '', '/sudo')
+        )
       )
     runs-on: ubuntu-latest
     permissions:
