@@ -187,7 +187,6 @@ runs:
       id: prompt
       shell: bash
       env:
-        AGENT: ${{ steps.check.outputs.effective_agent }}
         COMMENT_BODY: >-
           ${{ github.event.comment.body ||
               github.event.issue.body ||
@@ -220,16 +219,6 @@ runs:
           fi
         fi
 
-        # Prepend agent content if specified and not 'default'
-        if [ -n "${AGENT}" ]; then
-          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
-          if [ -f "$agent_file" ]; then
-            echo "Prepending agent content from $agent_file"
-            agent_content=$(cat "$agent_file")
-            prompt=$(printf '%s\n\n%s' "$agent_content" "$prompt")
-          fi
-        fi
-
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
@@ -244,16 +233,26 @@ runs:
       id: system-prompt
       shell: bash
       env:
+        AGENT: ${{ steps.check.outputs.effective_agent }}
         SYSTEM_PROMPT_INPUT: ${{ inputs.system-prompt }}
       run: |
         set -euo pipefail
         system_prompt="${SYSTEM_PROMPT_INPUT}"
-        EOF_TOKEN="EOF_$(openssl rand -hex 10)"
-        {
-          echo "system-prompt<<$EOF_TOKEN"
-          printf '%s\n' "$system_prompt"
-          echo "$EOF_TOKEN"
-        } >> "$GITHUB_OUTPUT"
+
+        # Load agent content if specified and not 'default'
+        if [ -n "${AGENT}" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            echo "Loading agent content from $agent_file"
+            agent_content=$(cat "$agent_file")
+            system_prompt=$(printf '%s\n\n%s' "$agent_content" "$system_prompt")
+          fi
+        fi
+
+        # Write to separate dedicated system-prompt-file
+        mkdir -p .ai-inference
+        printf '%s\n' "$system_prompt" > .ai-inference/system-prompt.txt
+        echo "system-prompt-file=.ai-inference/system-prompt.txt" >> "$GITHUB_OUTPUT"
     - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
       id: inference
@@ -261,7 +260,7 @@ runs:
       with:
         model: ${{ inputs.model || 'openai/gpt-5-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        system-prompt: ${{ steps.system-prompt.outputs.system-prompt }}
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
         enable-github-mcp: ${{ inputs.enable-github-mcp }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
