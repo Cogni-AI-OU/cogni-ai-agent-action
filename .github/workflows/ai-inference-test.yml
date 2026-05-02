@@ -5,6 +5,7 @@ name: AI Inference Test
 run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
 on:
   push:
+  pull_request:
 jobs:
   test:
     if: ${{ github.event.sender.type != 'Bot' }}
@@ -19,6 +20,7 @@ jobs:
       - name: Run AI Inference
         uses: ./ai-inference
         with:
-          prompt: Count to 10.
+          agent: default
           model: openai/gpt-5-mini
+          prompt: Count to 10.
           token: ${{ secrets.GITHUB_TOKEN }}
