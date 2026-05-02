@@ -129,7 +129,6 @@ env:
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
   cogni-ai:
-    name: Cogni AI Agent Sudo Local
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
@@ -145,6 +144,7 @@ jobs:
         ) ||
         contains(github.event.comment.body || '', '/sudo')
       )
+    name: Cogni AI Agent Local Sudo
     runs-on: ubuntu-latest
     permissions:
       actions: write
