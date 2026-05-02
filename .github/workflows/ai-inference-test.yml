@@ -5,9 +5,15 @@ name: AI Inference Test
 run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
 on:
   push:
+    paths:
+      - '.github/workflows/ai-inference-test.yml'
+      - 'ai-inference/action.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/ai-inference-test.yml'
+      - 'ai-inference/action.yml'
 jobs:
   test:
-    if: ${{ github.event.sender.type != 'Bot' }}
     name: AI Inference Test
     runs-on: ubuntu-latest
     permissions:
