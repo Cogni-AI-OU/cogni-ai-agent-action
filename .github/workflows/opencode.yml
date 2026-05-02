@@ -19,10 +19,9 @@ on:
         required: false
         type: choice
       model:
-        default: openai/gpt-4o-mini
+        default: opencode/gemini-3-flash
         description: Model to use for OpenCode
         options:
-          - openai/gpt-4o-mini
           - opencode/big-pickle
           - opencode/claude-3-5-haiku
           - opencode/claude-haiku-4-5

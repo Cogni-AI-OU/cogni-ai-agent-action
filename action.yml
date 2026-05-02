@@ -10,7 +10,7 @@ inputs:
     description: Agent to use.
     required: false
   model:
-    default: openai/gpt-4o-mini
+    default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
   gh-models-enabled:
@@ -570,76 +570,76 @@ runs:
             "agent": {
               "cogni-ai-architect": {
                 "mode": "primary",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
               },
               "cogni-ai-context7-ops": {
                 "description": "Uses Context7-backed documentation context for research and delegation tasks.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
               },
               "cogni-ai-devops": {
                 "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
               },
               "cogni-ai-fact-ops": {
                 "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
               },
               "cogni-ai-github-ops": {
                 "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
               },
               "cogni-ai-keeper": {
                 "mode": "primary",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
               },
               "cogni-ai-python-dev": {
                 "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
               },
               "cogni-ai-code-reviewer": {
                 "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
               },
               "cogni-ai-plan-reviewer": {
                 "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
               },
               "cogni-ai-tester": {
                 "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
               },
               "cogni-ai-weaver": {
                 "mode": "primary",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
               },
               "cogni-ai-brain-ops": {
                 "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
                 "mode": "all",
-                "model": "openai/gpt-4o-mini",
+                "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
               },
               "explore": {
@@ -686,7 +686,7 @@ runs:
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
-        model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
+        model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
         use_github_token: false
     - name: Write response to summary

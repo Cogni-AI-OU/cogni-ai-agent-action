@@ -88,10 +88,9 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        default: openai/gpt-4o-mini
+        default: opencode/gemini-3-flash
         description: Model to use for OpenCode
         options:
-          - openai/gpt-4o-mini
           - opencode/big-pickle
           - opencode/claude-3-5-haiku
           - opencode/claude-haiku-4-5
@@ -167,14 +166,14 @@ jobs:
 
 ### Inputs
 
-| Input              | Description                 | Default                 | Required |
-| ------------------ | --------------------------- | ----------------------- | -------- |
-| `agent`            | Agent to use                | —                       | No       |
-| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review` | No       |
-| `model`            | Model to use for OpenCode   | `openai/gpt-4o-mini`     | No       |
-| `opencode-api-key` | API key for OpenCode        | —                       | **Yes**  |
-| `permissions`      | Permissions configuration   | —                       | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                    | No       |
+| Input              | Description                 | Default                   | Required |
+| ------------------ | --------------------------- | ------------------------- | -------- |
+| `agent`            | Agent to use                | —                         | No       |
+| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
+| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
+| `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
+| `permissions`      | Permissions configuration   | —                         | No       |
+| `prompt`           | Prompt to pass to the agent | `''`                      | No       |
 
 ### Hierarchical Permissions
 

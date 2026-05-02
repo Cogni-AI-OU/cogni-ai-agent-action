@@ -42,7 +42,7 @@ jobs:
           - cogni-ai-brain-ops
           - cogni-ai-devops
         model:
-          - openai/gpt-4o-mini
+          - opencode/gpt-5-nano
         include:
           - agent: cogni-ai-architect
             prompt: >-
