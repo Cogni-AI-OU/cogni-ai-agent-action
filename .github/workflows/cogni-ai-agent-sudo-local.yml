@@ -131,7 +131,7 @@ jobs:
   cogni-ai:
     name: Cogni AI Agent Sudo Local
     if: |
-      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
