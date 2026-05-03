@@ -96,31 +96,6 @@ on:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
-      prompt-file:
-        description: Path to a file containing the prompt
-        required: false
-        type: string
-      input:
-        description: Template variables for .prompt.yml files
-        required: false
-        type: string
-      file_input:
-        description: File-based template variables
-        required: false
-        type: string
-      temperature:
-        description: The sampling temperature to use (0-1)
-        required: false
-        type: number
-      top-p:
-        description: The nucleus sampling parameter to use (0-1)
-        required: false
-        type: number
-      version_agents:
-        default: main
-        description: Version of cogni-ai-agents to use.
-        required: false
-        type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
