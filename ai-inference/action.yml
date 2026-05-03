@@ -67,6 +67,10 @@ inputs:
   top-p:
     description: The nucleus sampling parameter to use (0-1)
     required: false
+  version_agents:
+    default: main
+    description: Version of cogni-ai-agents to use.
+    required: false
 name: Cogni AI Inference
 outputs:
   prompt:
@@ -210,7 +214,11 @@ runs:
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_agents || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
+          ${{ runner.temp }}/.agents
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt

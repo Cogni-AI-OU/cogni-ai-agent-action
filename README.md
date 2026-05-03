@@ -275,6 +275,9 @@ to avoid accidental or malicious destructive actions.
 | `opencode-api-key`     | API key for OpenCode                          | —                                          | **Yes**  |
 | `permissions`          | Permissions configuration                     | —                                          | No       |
 | `prompt`               | Prompt to pass to the agent                   | `''`                                       | No       |
+| `version_agents`       | Version of cogni-ai-agents to use             | `main`                                     | No       |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main`                                     | No       |
+| `version_skills`       | Version of cogni-ai-agent-skills to use       | `main`                                     | No       |
 
 ### Hierarchical Permissions
 

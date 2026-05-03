@@ -21,7 +21,9 @@ The use of the `task` tool and spawning sub-agents is permitted for complex, mul
    Locate, read, and strictly enforce the invariants defined in the current project workspace's main `AGENTS.md`, `CONSTRAINTS.mzn`, and any of its directory-specific `AGENTS.md`. Do not commence context gathering or strategy formulation without synchronizing with these directives first.
 2. **Skill & Instruction Loading**:
    Autonomously discover and load `.github/copilot-instructions.md`, relevant `.instructions.md` rules, and applicable `SKILL.md` workflows.
-3. **Context Gathering for Ambiguity**:
+3. **URL & Link Processing**:
+   For any URLs or links provided in the user prompt, you MUST load and analyze their content using available web retrieval tools to ensure the most up-to-date context is incorporated into your strategy.
+4. **Context Gathering for Ambiguity**:
    For ambiguous queries, you MUST load the project's `README.md`, relevant documentation, and files from the project codebase to establish sufficient context.
 
 ## Path Resolution for Instructions and Skills
