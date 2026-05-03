@@ -127,6 +127,7 @@ env:
 jobs:
   opencode:
     name: OpenCode Agent Local
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
