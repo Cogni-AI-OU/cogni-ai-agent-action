@@ -138,6 +138,39 @@ messages:
           Agent-->>-Workflow: Task Complete (Response)
       ```
 
+      ### **Agent System Architecture (Architecture Diagram)**
+      You MUST generate a Mermaid `architecture-beta` diagram visualizing the system topology and action hierarchy for the session. 
+      This is critical for identifying disconnected outputs, wrapper misconfigurations, or tool boundaries.
+
+      Use standardized groups to represent logical boundaries:
+      - `runner` (The GitHub Actions Runner / Workspace)
+      - `action` (The hierarchical layers of the GitHub Action)
+      - `tools` (The utilities the agent has access to)
+
+      Use standard icons for services (e.g., `server`, `cloud`, `disk`, `internet`).
+      Map the connections (`L`, `R`, `T`, `B`) to show how the components interact or where data/outputs flow. If a connection is broken or problematic (like a dropped output), note it in the surrounding markdown text.
+
+      ### Output Format Example for the Diagram:
+      ```mermaid
+      architecture-beta
+          group runner(cloud)[GitHub Runner]
+          group action(server)[Action Hierarchy] in runner
+
+          service workflow(server)[Workflow Step] in action
+          service wrapper(server)[Wrapper Action] in action
+          service base(server)[Base Agent Action] in action
+          
+          service llm(internet)[LLM Provider]
+          service fs(disk)[File System] in runner
+          service bash(server)[Bash Executor] in runner
+
+          workflow:B -- T:wrapper
+          wrapper:B -- T:base
+          base:R -- L:llm
+          base:B -- T:bash
+          bash:R -- L:fs
+      ```
+
 model: openai/gpt-4o-mini
 modelParameters:
   maxCompletionTokens: 10000
