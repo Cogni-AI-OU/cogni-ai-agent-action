@@ -160,19 +160,11 @@ env:
 jobs:
   cogni-ai:
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
+      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        (
-          github.event_name == 'issues' &&
-          contains(github.event.issue.body || '', '/sudo')
-        ) ||
-        (
-          github.event_name == 'discussion' &&
-          contains(github.event.discussion.body || '', '/sudo')
-        ) ||
-        contains(github.event.comment.body || '', '/sudo')
+        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/sudo')
       )
     name: Cogni AI Agent Local Sudo
     runs-on: ubuntu-latest
