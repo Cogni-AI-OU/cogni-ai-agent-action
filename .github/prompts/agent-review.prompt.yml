@@ -103,6 +103,40 @@ messages:
       Session Logs:
       {{logs}}
 
+      ### **Agent Execution Flow (Sequence Diagram)**
+      You MUST generate a Mermaid `sequenceDiagram` that visualizes the chronological sequence of actions the agent took during the session.
+      
+      Use the following standardized participants:
+
+      - `Workflow` (The GitHub Action or User triggering the task)
+      - `Agent` (The AI Agent / LLM)
+      - `Tools` (Tool executors like Bash, todowrite, Glob)
+      - `FileSystem` (The local repository files)
+      - `GitHub` (External GitHub APIs or gh cli)
+
+      Focus on the major steps: Initialization, Context Gathering, Execution, and Verification. Group repetitive actions (like reading 5 files) into a single logical step to keep the diagram readable. Use activations (`+` and `-`) to show when the agent is actively processing or waiting for a tool.
+
+      ### Output Format Example for the Diagram:
+      ```mermaid
+      sequenceDiagram
+          participant Workflow
+          participant Agent
+          participant Tools
+          participant FileSystem
+          
+          Workflow->>+Agent: Initialize Task (Prompt)
+          Agent->>+Tools: Read Constraints & Flows
+          Tools->>FileSystem: Read CONSTRAINTS.mzn
+          FileSystem-->>Tools: Return contents
+          Tools-->>-Agent: Constraints loaded
+          
+          Agent->>+Tools: Execute command
+          Tools-->>-Agent: stdout/stderr
+          
+          Agent->>+Tools: Verify state (git status)
+          Tools-->>-Agent: Clean working tree
+          Agent-->>-Workflow: Task Complete (Response)
+      ```
 
 model: openai/gpt-4o-mini
 modelParameters:
