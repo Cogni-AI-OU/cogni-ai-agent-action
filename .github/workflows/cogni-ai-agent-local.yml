@@ -145,6 +145,19 @@ concurrency:
       || github.run_id
     }}
 env:
+  GITHUB_REF_RESOLVED: >-
+    ${{
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        format('refs/pull/{0}/head', github.event.issue.number)
+      ) ||
+      (
+        github.event_name == 'pull_request_review_comment' &&
+        format('refs/pull/{0}/head', github.event.pull_request.number)
+      ) ||
+      github.ref
+    }}
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
@@ -186,19 +199,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false  # Prevents duplicate Authorization header
-          ref: >-
-            ${{
-              (
-                github.event_name == 'issue_comment' &&
-                github.event.issue.pull_request &&
-                format('refs/pull/{0}/head', github.event.issue.number)
-              ) ||
-              (
-                github.event_name == 'pull_request_review_comment' &&
-                format('refs/pull/{0}/head', github.event.pull_request.number)
-              ) ||
-              github.ref
-            }}
+          ref: ${{ env.GITHUB_REF_RESOLVED }}
       - uses: actions/cache@v5.0.1
         with:
           path: ~/.cache/pre-commit
@@ -260,29 +261,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
-      contents: write
-      discussions: read
+      contents: read
       id-token: write
-      issues: write
-      packages: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-          ref: >-
-            ${{
-              (
-                github.event_name == 'issue_comment' &&
-                github.event.issue.pull_request &&
-                format('refs/pull/{0}/head', github.event.issue.number)
-              ) ||
-              (
-                github.event_name == 'pull_request_review_comment' &&
-                format('refs/pull/{0}/head', github.event.pull_request.number)
-              ) ||
-              github.ref
-            }}
+          ref: ${{ env.GITHUB_REF_RESOLVED }}
       - name: Run Cogni AI Agent Review Local
         id: cogni-ai-reviewer
         uses: ./
@@ -301,5 +286,10 @@ jobs:
       - name: Post summary to GITHUB_STEP_SUMMARY
         if: steps.cogni-ai-reviewer.outputs.response != ''
         run: |-
-          echo "## Agent Session Summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "${{ steps.cogni-ai-reviewer.outputs.response }}" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Agent Session Summary"
+            echo ""
+            cat << 'EOF'
+          ${{ steps.cogni-ai-reviewer.outputs.response }}
+          EOF
+          } >> "$GITHUB_STEP_SUMMARY"
