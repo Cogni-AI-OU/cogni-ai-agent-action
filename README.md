@@ -34,6 +34,7 @@ on:
 
 jobs:
   agent:
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
@@ -162,6 +163,7 @@ on:
 jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
