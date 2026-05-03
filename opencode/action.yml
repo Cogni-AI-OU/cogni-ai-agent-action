@@ -38,15 +38,34 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Get opencode version
+      id: version
+      shell: bash
+      run: |
+        VERSION=$(curl -sf https://api.github.com/repos/anomalyco/opencode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
+        echo "version=${VERSION:-latest}" >> $GITHUB_OUTPUT
+    - name: Cache opencode
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.opencode/bin
+        key: opencode-${{ runner.os }}-${{ runner.arch }}-${{ steps.version.outputs.version }}
+    - name: Install opencode
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: curl -fsSL https://opencode.ai/install | bash
+    - name: Add opencode to PATH
+      shell: bash
+      run: echo "$HOME/.opencode/bin" >> $GITHUB_PATH
     - name: Run opencode
       id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
+      shell: bash
+      run: opencode github run
       env:
+        AGENT: ${{ inputs.agent }}
+        MENTIONS: ${{ inputs.mentions }}
+        MODEL: ${{ inputs.model }}
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ inputs.permissions || env.OPENCODE_PERMISSION }}
-      with:
-        agent: ${{ inputs.agent }}
-        mentions: ${{ inputs.mentions }}
-        model: ${{ inputs.model }}
-        prompt: ${{ inputs.prompt }}
-        use_github_token: false
+        PROMPT: ${{ inputs.prompt }}
+        USE_GITHUB_TOKEN: false
