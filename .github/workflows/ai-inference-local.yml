@@ -51,15 +51,6 @@ on:
           Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
         required: false
         type: boolean
-      max-completion-tokens:
-        description: The maximum number of tokens to generate
-        required: false
-        type: number
-      max-tokens:
-        default: 16000
-        description: The maximum number of tokens to generate (deprecated)
-        required: false
-        type: number
       model:
         default: openai/gpt-4o-mini
         description: Model to use for inference.
