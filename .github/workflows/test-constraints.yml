@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - 'CONSTRAINTS.mzn'
-      - '.github/workflows/test-constraints.yml'
+      - CONSTRAINTS.mzn
+      - .github/workflows/test-constraints.yml
   pull_request:
     branches:
       - main
     paths:
-      - 'CONSTRAINTS.mzn'
-      - '.github/workflows/test-constraints.yml'
+      - CONSTRAINTS.mzn
+      - .github/workflows/test-constraints.yml
   workflow_dispatch:
 jobs:
   test-constraints:
@@ -28,7 +28,7 @@ jobs:
           sudo apt-get install -y libegl1
       - name: Cache MiniZinc bundle
         id: cache-minizinc
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64
           key: minizinc-${{ env.MINIZINC_VERSION }}

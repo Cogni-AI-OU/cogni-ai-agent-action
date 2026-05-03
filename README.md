@@ -35,11 +35,11 @@ on:
 jobs:
   agent:
     if: |
-      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
-        contains(github.event.comment.body, '/') ||
-        contains(github.event.comment.body, '@')
+        contains(github.event.comment.body || '', '/') ||
+        contains(github.event.comment.body || '', '@')
       )
     runs-on: ubuntu-latest
     permissions:
@@ -162,7 +162,7 @@ jobs:
   cogni-ai-agent:
     name: Run Cogni AI agent
     if: |
-      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'pull_request' ||
@@ -267,14 +267,17 @@ to avoid accidental or malicious destructive actions.
 
 ### Inputs
 
-| Input              | Description                 | Default                            | Required |
-| ------------------ | --------------------------- | ---------------------------------- | -------- |
-| `agent`            | Agent to use                | `cogni-ai-architect`                | No       |
-| `mentions`         | Comma-separated mentions    | `/co,/cogni,/review,/brainstorm`    | No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash`           | No       |
-| `opencode-api-key` | API key for OpenCode        | —                                  | **Yes**  |
-| `permissions`      | Permissions configuration   | —                                  | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                               | No       |
+| Input                  | Description                                   | Default                                    | Required |
+| ---------------------- | --------------------------------------------- | ------------------------------------------ | -------- |
+| `agent`                | Agent to use                                  | `cogni-ai-architect`                       | No       |
+| `mentions`             | Comma-separated mentions                      | `/co,/cogni,/review,/brainstorm`           | No       |
+| `model`                | Model to use for OpenCode                     | `opencode/gemini-3-flash`                  | No       |
+| `opencode-api-key`     | API key for OpenCode                          | —                                          | **Yes**  |
+| `permissions`          | Permissions configuration                     | —                                          | No       |
+| `prompt`               | Prompt to pass to the agent                   | `''`                                       | No       |
+| `version_agents`       | Version of cogni-ai-agents to use             | `main`                                     | No       |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main`                                     | No       |
+| `version_skills`       | Version of cogni-ai-agent-skills to use       | `main`                                     | No       |
 
 ### Hierarchical Permissions
 

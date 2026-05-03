@@ -51,6 +51,14 @@ on:
           Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
         required: false
         type: boolean
+      max-completion-tokens:
+        description: The maximum number of tokens to generate
+        required: false
+        type: number
+      max-tokens:
+        description: The maximum number of tokens to generate (deprecated)
+        required: false
+        type: number
       model:
         default: openai/gpt-4o-mini
         description: Model to use for inference.
@@ -87,6 +95,19 @@ on:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
+      temperature:
+        description: The sampling temperature to use (0-1)
+        required: false
+        type: number
+      top-p:
+        description: The nucleus sampling parameter to use (0-1)
+        required: false
+        type: number
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
@@ -146,6 +167,11 @@ jobs:
         with:
           agent: ${{ inputs.agent }}
           enable-github-mcp: ${{ inputs.enable-github-mcp || false }}
+          max-completion-tokens: ${{ inputs.max-completion-tokens }}
+          max-tokens: ${{ inputs.max-tokens }}
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
           prompt: ${{ inputs.prompt || '' }}
+          temperature: ${{ inputs.temperature }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          top-p: ${{ inputs.top-p }}
+          version_agents: ${{ inputs.version_agents || 'main' }}

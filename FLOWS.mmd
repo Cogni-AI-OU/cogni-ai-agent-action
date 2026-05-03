@@ -1,55 +1,55 @@
 flowchart TD
-    Start([GitHub Action Triggered]) --> CheckConditions
-
-    subgraph Step 1: Check conditions
-        CheckConditions{Event Type}
-        CheckConditions -->|workflow_dispatch / workflow_call| SetDefault[run=true<br/>agent=cogni-ai-architect]
-        CheckConditions -->|issues / issue_comment / discussion / discussion_comment / pull_request_review_comment| CommentCheck{Check Role & Mentions}
-        CheckConditions -->|pull_request / pull_request_target| PRCheck{Check Role}
-
-        CommentCheck -->|Matches REVIEW_TRIGGERS| SetReviewer[run=true<br/>agent=cogni-ai-code-reviewer]
-        CommentCheck -->|Matches TRIGGERS or BotMention| SetParsed[run=true<br/>agent=getAgent body]
-        CommentCheck -->|No Match| Skip[run=false]
-
-        PRCheck -->|Allowed Role / Copilot Login| SetDefaultPR[run=true<br/>agent=cogni-ai-architect]
-        PRCheck -->|Not Allowed| Skip
-
-        SetDefault --> FinalAgent[Output: run & effective_agent]
-        SetReviewer --> FinalAgent
-        SetParsed --> FinalAgent
-        SetDefaultPR --> FinalAgent
-        Skip --> FinalAgent
+    %% --------------------------------------------------------
+    %% 1. Cogni AI Agent (action.yml)
+    %% --------------------------------------------------------
+    subgraph Flow_Cogni_AI_Agent ["1. Cogni AI Agent (action.yml)"]
+        direction TB
+        A1([Trigger Events]) --> A2{Check conditions}
+        A2 -- "run=true" --> A3["Wait for concurrent runs"]
+        A2 -- "run=false" --> A_EndSkip([Action Skipped])
+        
+        A3 --> A4["Resolve prompt"]
+        A4 --> A5["Checkout Repositories<br/>(agents, instructions, skills)"]
+        
+        A5 -- "gh-models-enabled=true" --> A6["Install gh-models extension"]
+        A5 -- "default" --> A7["Convert permissions to JSON"]
+        A6 --> A7
+        
+        A7 --> A8["Run opencode"]
+        
+        A8 --> A9(["Write response to summary<br/>(on success)"])
+        A8 --> A10["Print logs (on failure/cancelled)"]
     end
 
-    FinalAgent --> ShouldRun{run == 'true'?}
-    ShouldRun -->|No| EndSkipped([End - Action Skipped])
-    ShouldRun -->|Yes| WaitConcurrency
-
-    subgraph Step 2: Wait for concurrent runs
-        WaitConcurrency[Poll for older runs]
-        WaitConcurrency --> |Older active runs found| Delay[Wait 30s]
-        Delay --> WaitConcurrency
-        WaitConcurrency --> |No older runs or Timeout 20m| ResolvePrompt[Resolve prompt]
+    %% --------------------------------------------------------
+    %% 2. OpenCode Agent (opencode/action.yml)
+    %% --------------------------------------------------------
+    subgraph Flow_OpenCode_Agent ["2. OpenCode Agent (opencode/action.yml)"]
+        direction TB
+        O1([Trigger Events]) --> O2{Check conditions}
+        O2 -- "run=true" --> O3["Wait for concurrent runs"]
+        O2 -- "run=false" --> O_EndSkip([Action Skipped])
+        
+        O3 --> O4["Resolve prompt"]
+        O4 --> O5["Convert permissions to JSON"]
+        O5 --> O6["Run opencode"]
+        
+        O6 --> O7(["Write response to summary<br/>(on success)"])
+        O6 --> O8["Print logs (on failure/cancelled)"]
     end
 
-    subgraph Step 3: Prepare Environment
-        ResolvePrompt --> |Builds Prompt text<br/>adds Re-run notes| Checkout[Clone Dependencies]
-        Checkout --> |Checkout cogni-ai-agents / instructions / skills| permissions[Convert permissions to JSON]
-        permissions --> |Merges default & agent perms| opencode[Run opencode]
-    end
-
-    subgraph Step 4: Agent Execution
-        opencode -->|Executes configured agent| EvaluateResult
-    end
-
-    subgraph Step 5: Post-Run
-        EvaluateResult{Response exists?}
-        EvaluateResult -->|Yes| WriteSummary[Write response to summary]
-        EvaluateResult -->|No| CheckFailure
-        WriteSummary --> CheckFailure
-
-        CheckFailure{Job Failed or Cancelled?}
-        CheckFailure -->|Yes| PrintLogs[Print logs]
-        CheckFailure -->|No| End([End])
-        PrintLogs --> End
+    %% --------------------------------------------------------
+    %% 3. AI Inference (ai-inference/action.yml)
+    %% --------------------------------------------------------
+    subgraph Flow_AI_Inference ["3. AI Inference (ai-inference/action.yml)"]
+        direction TB
+        I1([Trigger Events]) --> I2{Check conditions}
+        I2 -- "run=true" --> I3["Wait for concurrent runs"]
+        I2 -- "run=false" --> I_EndSkip([Action Skipped])
+        
+        I3 --> I4["Checkout cogni-ai-agents"]
+        I4 --> I5["Resolve prompt"]
+        I5 --> I6["Resolve system prompt file"]
+        I6 --> I7["Run AI Inference"]
+        I7 --> I8(["Write response to summary<br/>(on success)"])
     end
