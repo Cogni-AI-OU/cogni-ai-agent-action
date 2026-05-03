@@ -6,9 +6,9 @@ Authoritative, agent-facing catalog of protocols and invariants for the `opencod
 
 - **Default Triggers**:
   Do NOT change the default triggers for the OpenCode action in `opencode/action.yml`.
-  The current default triggers are `/oc`, `/opencode`, and `/review`.
+  The current default triggers are `/oc` and `/opencode`.
 - **Scope**:
-  The OpenCode action in this directory is intended to be a generic wrapper for OpenCode and should remain decoupled from specialized Cogni AI agent triggers (like `/brainstorm`) unless explicitly requested.
+  The OpenCode action in this directory is intended to be a generic wrapper for OpenCode and should remain decoupled from specialized Cogni AI agent triggers (like `/brainstorm` or `/review`) unless explicitly requested.
 
 ## Directory structure
 

@@ -27,7 +27,7 @@ The `opencode.yml` workflow calls the org-level reusable OpenCode workflow. It i
 ### OpenCode Agent Local Workflow (`opencode-agent-local.yml`)
 
 The `opencode-agent-local.yml` workflow runs the local composite action (`./opencode/action.yml`) as a wrapper for OpenCode.
-It is triggered by `/oc`, `/opencode`, or `/review` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
+It is triggered by `/oc` or `/opencode` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
 
 ### Copilot Setup Steps Workflow (`copilot-setup-steps.yml`)
 

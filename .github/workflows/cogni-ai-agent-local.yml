@@ -171,19 +171,31 @@ jobs:
         (
           github.event_name == 'issues' &&
           (
-            contains(github.event.issue.body || '', '/') ||
-            contains(github.event.issue.body || '', '@')
+            contains(github.event.issue.body || '', '/co') ||
+            contains(github.event.issue.body || '', '/cogni') ||
+            contains(github.event.issue.body || '', '/review') ||
+            contains(github.event.issue.body || '', '/brainstorm') ||
+            contains(github.event.issue.body || '', '@opencode-agent') ||
+            contains(github.event.issue.body || '', '@OpenCode-Agent')
           )
         ) ||
         (
           github.event_name == 'discussion' &&
           (
-            contains(github.event.discussion.body || '', '/') ||
-            contains(github.event.discussion.body || '', '@')
+            contains(github.event.discussion.body || '', '/co') ||
+            contains(github.event.discussion.body || '', '/cogni') ||
+            contains(github.event.discussion.body || '', '/review') ||
+            contains(github.event.discussion.body || '', '/brainstorm') ||
+            contains(github.event.discussion.body || '', '@opencode-agent') ||
+            contains(github.event.discussion.body || '', '@OpenCode-Agent')
           )
         ) ||
-        contains(github.event.comment.body || '', '/') ||
-        contains(github.event.comment.body || '', '@')
+        contains(github.event.comment.body || '', '/co') ||
+        contains(github.event.comment.body || '', '/cogni') ||
+        contains(github.event.comment.body || '', '/review') ||
+        contains(github.event.comment.body || '', '/brainstorm') ||
+        contains(github.event.comment.body || '', '@opencode-agent') ||
+        contains(github.event.comment.body || '', '@OpenCode-Agent')
       )
     runs-on: ubuntu-latest
     permissions:
