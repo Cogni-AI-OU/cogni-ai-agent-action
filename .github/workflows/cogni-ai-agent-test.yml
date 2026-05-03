@@ -61,7 +61,7 @@ jobs:
           - agent: cogni-ai-architect
             prompt: >-
               You MUST answer each statement with either PASS or FAIL (uppercase).
-              1. You are OpenCode running as Cogni AI Architect agent.
+              1. You are the Cogni AI Architect agent operating on the OpenCode runtime.
               2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You have access to the edit tool.
@@ -76,7 +76,7 @@ jobs:
           - agent: cogni-ai-brain-ops
             prompt: >-
               You MUST answer each statement with either PASS or FAIL (uppercase).
-              1. You are OpenCode running as Cogni AI BrainOps agent.
+              1. You are the Cogni AI BrainOps agent operating on the OpenCode runtime.
               2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You do NOT have access to the edit tool.
@@ -91,7 +91,7 @@ jobs:
           - agent: cogni-ai-devops
             prompt: >-
               You MUST answer each statement with either PASS or FAIL (uppercase).
-              1. You are OpenCode running as Cogni AI DevOps agent.
+              1. You are the Cogni AI DevOps agent operating on the OpenCode runtime.
               2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You have access to the edit tool.
