@@ -43,6 +43,21 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         type: string
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
+      version_instructions:
+        default: main
+        description: Version of cogni-ai-agent-instructions to use.
+        required: false
+        type: string
+      version_skills:
+        default: main
+        description: Version of cogni-ai-agent-skills to use.
+        required: false
+        type: string
   workflow_dispatch:
     inputs:
       agent:
@@ -113,6 +128,21 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         default: ''
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
+      version_instructions:
+        default: main
+        description: Version of cogni-ai-agent-instructions to use.
+        required: false
+        type: string
+      version_skills:
+        default: main
+        description: Version of cogni-ai-agent-skills to use.
+        required: false
+        type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
@@ -206,6 +236,9 @@ jobs:
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          version_agents: ${{ inputs.version_agents || 'main' }}
+          version_instructions: ${{ inputs.version_instructions || 'main' }}
+          version_skills: ${{ inputs.version_skills || 'main' }}
       - name: Annotate prompt and output
         env:
           COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
