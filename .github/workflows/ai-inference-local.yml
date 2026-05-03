@@ -174,7 +174,7 @@ jobs:
         uses: ./ai-inference
         with:
           agent: ${{ inputs.agent }}
-          enable-github-mcp: ${{ inputs.enable-github-mcp || true }}
+          enable-github-mcp: ${{ inputs.enable-github-mcp != '' && inputs.enable-github-mcp || true }}
           max-completion-tokens: ${{ inputs.max-completion-tokens }}
           max-tokens: ${{ inputs.max-tokens }}
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}

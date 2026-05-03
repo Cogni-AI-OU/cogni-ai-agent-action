@@ -234,25 +234,36 @@ runs:
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
         prompt_file="${PROMPT_FILE_INPUT:-}"
+
+        # Build header
+        header=""
+        if [ -n "${ISSUE_NUMBER:-}" ]; then
+          entity_type="issue/PR"
+          if [ -n "${DISCUSSION_NUMBER:-}" ]; then
+            entity_type="discussion"
+          fi
+          header="Related to $entity_type #$ISSUE_NUMBER"
+        fi
+
         if [ -n "$prompt_file" ]; then
+          # For file-based prompts, we just note it in the resolved prompt output
           prompt="Using prompt from file: $prompt_file"
         else
+          # For inline prompts, use the input prompt or fallback to comment body
           if [ -z "$prompt" ]; then
             prompt="${COMMENT_BODY:-}"
           fi
-          if [ -n "${ISSUE_NUMBER:-}" ]; then
-            entity_type="issue/PR"
-            if [ -n "${DISCUSSION_NUMBER:-}" ]; then
-              entity_type="discussion"
-            fi
-            header="Related to $entity_type #$ISSUE_NUMBER"
-            if [ -n "$prompt" ]; then
-              prompt=$(printf '%s\n\n%s' "$header" "$prompt")
-            else
-              prompt="$header"
-            fi
+        fi
+
+        # Prepend header if we have one
+        if [ -n "$header" ]; then
+          if [ -n "$prompt" ]; then
+            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
+          else
+            prompt="$header"
           fi
         fi
+
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
