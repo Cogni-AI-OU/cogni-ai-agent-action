@@ -44,6 +44,21 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         type: string
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
+      version_instructions:
+        default: main
+        description: Version of cogni-ai-agent-instructions to use.
+        required: false
+        type: string
+      version_skills:
+        default: main
+        description: Version of cogni-ai-agent-skills to use.
+        required: false
+        type: string
   workflow_dispatch:
     inputs:
       agent:
@@ -114,21 +129,7 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         default: ''
-      version_agents:
-        default: main
-        description: Version of cogni-ai-agents to use.
-        required: false
-        type: string
-      version_instructions:
-        default: main
-        description: Version of cogni-ai-agent-instructions to use.
-        required: false
-        type: string
-      version_skills:
-        default: main
-        description: Version of cogni-ai-agent-skills to use.
-        required: false
-        type: string
+
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 # When a new run is triggered, it will queue until the previous pending run completes.
 # On the default branch each run gets a unique group (github.run_id) so runs can
