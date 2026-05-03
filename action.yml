@@ -586,10 +586,12 @@ runs:
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: ${{ github.action_path }}/opencode
+      uses: anomalyco/opencode/github@v1.4.3
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
+        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
+        OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
         # @see: https://opencode.ai/docs/zen
         # For full list of available models: https://opencode.ai/zen/v1/models
         # Schema: https://opencode.ai/config.json
@@ -714,9 +716,8 @@ runs:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
-        opencode-api-key: ${{ inputs.opencode-api-key }}
-        permissions: ${{ steps.permissions.outputs.json }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        use_github_token: false
     - name: Write response to summary
       if: always() && steps.opencode.outputs.response != ''
       shell: bash
