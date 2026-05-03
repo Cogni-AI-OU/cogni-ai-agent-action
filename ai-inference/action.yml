@@ -33,6 +33,10 @@ inputs:
     default: /ai
     description: Comma-separated trigger mentions for AI Inference.
     required: false
+  mentions_bots:
+    default: ''
+    description: Comma-separated bot mentions for AI Inference.
+    required: false
   model:
     default: openai/gpt-4o-mini
     description: Model to use for inference.
@@ -75,10 +79,11 @@ runs:
       env:
         AGENT_INPUT: ${{ inputs.agent }}
         MENTIONS: ${{ inputs.mentions || '/ai' }}
+        MENTIONS_BOTS: ${{ inputs.mentions_bots }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
-          const BOT_MENTIONS = [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           function matchesTrigger(body, triggers) {
             if (!body) return false;
