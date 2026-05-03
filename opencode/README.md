@@ -6,7 +6,7 @@ The OpenCode workflow runs a generic OpenCode agent. It acts as a lean pass-thro
 
 ### Prerequisites
 
-1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR
@@ -51,7 +51,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 ```
@@ -153,7 +153,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ inputs.model }}
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: >-
             ${{
               github.event.comment.body ||
@@ -171,7 +171,7 @@ jobs:
 | `agent`            | Agent to use                | —                         | No       |
 | `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
+| `opencode-api-key` | API key for OpenCode (see [opencode.ai/auth](https://opencode.ai/auth)) | —                         | **Yes**  |
 | `permissions`      | Permissions (JSON string)   | —                         | No       |
 | `prompt`           | Prompt to pass to the agent | `''`                      | No       |
 
