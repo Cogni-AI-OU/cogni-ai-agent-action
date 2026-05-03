@@ -203,6 +203,35 @@ messages:
             Check workspace state (git status): 5: Agent, Bash
       ```
 
+      ### **Agent Execution Alignment (Venn Diagram)**
+      You MUST generate a Mermaid `venn-beta` diagram visualizing how well the agent's actions aligned with the user's intent and the system's strict protocols.
+
+      Use these three standard sets:
+      - `set Intent`: The user's explicit prompt or objective.
+      - `set Actions`: The actual tool executions and decisions made by the agent.
+      - `set Rules`: The mandatory project constraints and protocols (e.g., CONSTRAINTS.mzn, self-verification).
+
+      Label the intersections based on the session's outcome. 
+      - If the agent succeeded perfectly, label the central union (`Intent,Actions,Rules`) with "Perfect Alignment".
+      - If the agent did something unprompted, label `union Actions,Rules` with "Unprompted but Compliant".
+      - If the agent hallucinated or broke rules, label `set Actions` or `union Intent,Actions` to indicate it fell outside the Rules.
+
+      ### Output Format Example for the Diagram:
+      ```mermaid
+      venn-beta
+          title "Agent Alignment Analysis"
+          set Intent "User Request"
+          set Actions "Agent Tool Calls"
+          set Rules "System Protocols"
+          
+          union Intent,Actions["Attempted Task"]
+          union Actions,Rules["Compliant Execution"]
+          union Intent,Rules["Theoretical Perfect State"]
+          union Intent,Actions,Rules["Perfect Alignment (Success)"]
+          
+          style Intent,Actions,Rules fill:lightgreen, color:black
+      ```
+
 model: openai/gpt-4o-mini
 modelParameters:
   maxCompletionTokens: 10000
