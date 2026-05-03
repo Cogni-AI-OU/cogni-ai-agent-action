@@ -232,6 +232,36 @@ messages:
           style Intent,Actions,Rules fill:lightgreen, color:black
       ```
 
+      ### **Agent Cognitive & Execution Loop (State Diagram)**
+      You MUST generate a Mermaid `stateDiagram-v2` that models the agent's internal state machine during the session.
+      This should visualize how the agent transitioned between different phases of reasoning and execution, and specifically highlight if it entered an error/retry loop.
+
+      Use standard agent states such as:
+      - `Initializing` (Loading constraints and instructions)
+      - `ContextGathering` (Reading files, checking logs)
+      - `Executing` (Running bash commands, writing code)
+      - `ErrorRecovery` (Handling a failed tool call or syntax error)
+      - `Verifying` (Running git status, checking output)
+      
+      Use transition labels to explain *why* the agent moved from one state to another (e.g., "Tool Output Received", "Syntax Error Detected"). Include a composite state if the agent used the `todowrite` task tracker to manage its sub-tasks.
+
+      ### Output Format Example for the Diagram:
+      ```mermaid
+      stateDiagram-v2
+          [*] --> Initializing
+          Initializing --> ContextGathering : Loaded CONSTRAINTS.mzn
+          
+          state Task_In_Progress {
+              [*] --> Executing
+              Executing --> ErrorRecovery : Command Failed
+              ErrorRecovery --> Executing : Self-Corrected Prompt
+              Executing --> Verifying : Command Succeeded
+          }
+          
+          ContextGathering --> Task_In_Progress : Marked Task 'in_progress'
+          Task_In_Progress --> [*] : Verified Clean Workspace (Success)
+      ```
+
 model: openai/gpt-4o-mini
 modelParameters:
   maxCompletionTokens: 10000
