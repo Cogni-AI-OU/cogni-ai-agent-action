@@ -441,11 +441,20 @@ runs:
               '' }}
         DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        EFFECTIVE_AGENT: ${{ steps.check.outputs.effective_agent }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
         if [ -z "$prompt" ]; then
           prompt="${COMMENT_BODY:-}"
+        fi
+        if [ -n "${EFFECTIVE_AGENT:-}" ]; then
+          header="You are operating as the ${EFFECTIVE_AGENT} agent."
+          if [ -n "$prompt" ]; then
+            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
+          else
+            prompt="$header"
+          fi
         fi
         if [ -n "${ISSUE_NUMBER:-}" ]; then
           entity_type="issue/PR"
