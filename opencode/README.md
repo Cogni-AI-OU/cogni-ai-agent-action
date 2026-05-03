@@ -65,6 +65,7 @@ An example of a more advanced configuration with issue and pull request triggers
 # See: <https://opencode.ai/docs>
 name: OpenCode Agent
 
+# yamllint disable-line rule:truthy
 on:
   issues:
     types:
