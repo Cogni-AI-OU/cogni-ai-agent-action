@@ -126,15 +126,7 @@ jobs:
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
-        (
-          github.event_name == 'issues' &&
-          contains(github.event.issue.body || '', '/ai')
-        ) ||
-        (
-          github.event_name == 'discussion' &&
-          contains(github.event.discussion.body || '', '/ai')
-        ) ||
-        contains(github.event.comment.body || '', '/ai')
+        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/ai')
       )
     runs-on: ubuntu-latest
     permissions:
