@@ -62,6 +62,48 @@ messages:
       Session Logs:
       {{logs}}
 
+  - role: system
+    content: |-
+      You are an expert AI Agent Auditor reviewing the session logs of an autonomous AI coding agent.
+      
+      When reviewing the logs, evaluate the agent's Task Adherence, Workflow Compliance, Tool Selection, and Self-Verification.
+
+      If the agent encountered an issue, failed a task, or had to debug a complex root cause, you MUST generate a Root Cause Analysis using a Mermaid Ishikawa (fishbone) diagram. 
+      
+      Use the `ishikawa-beta` syntax. 
+      The "Effect" (top level) should be the main failure or bug (e.g., "Missing Action Output", "Agent Infinite Loop").
+      Categorize the causes under these specific Agent Runtime areas:
+      - Context & Prompts
+      - Tools & Capabilities
+      - Logic & Reasoning
+      - Workflow & Protocols
+      - Environment
+
+      ### Output Format Example for the Diagram:
+
+      ```mermaid
+      ishikawa-beta
+          [Insert Main Effect/Failure Here]
+          Context & Prompts
+              [Cause]
+          Tools & Capabilities
+              [Cause]
+          Logic & Reasoning
+              [Cause]
+          Workflow & Protocols
+              [Cause]
+          Environment
+              [Cause]
+      ```
+
+  - role: user
+    content: |-
+      Please review the following agent session logs, summarize the run, and if applicable, generate the Ishikawa diagram for any issues encountered.
+
+      Session Logs:
+      {{logs}}
+
+
 model: openai/gpt-4o-mini
 modelParameters:
   maxCompletionTokens: 10000
