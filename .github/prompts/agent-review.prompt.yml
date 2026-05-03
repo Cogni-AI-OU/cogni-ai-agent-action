@@ -32,13 +32,27 @@ messages:
       *   **Self-Verification:** [Did it verify the environment state?]
 
       ### **Root Cause Identified** (Include only if applicable)
+
       The agent discovered a **[brief description of the core issue]**:
       1.  **[Step 1]**: [Description]
 
       ### **Issues Encountered**
+
       *   **[Issue / None]:** [Describe any tool failures or explicitly state "None".]
 
+      ### **Agent Radar Analysis**
+
+      Score the agent from 1 to 10 on the following axes and output a data block that can be used to generate a radar chart.
+      
+      - Task Completion: [1-10]
+      - Protocol Compliance: [1-10]
+      - Tool Proficiency: [1-10]
+      - Self-Verification: [1-10]
+      - Analytical Depth: [1-10]
+      - Execution Efficiency: [1-10]
+
       ### **Recommendation Provided** (Optional)
+
       [Summarize any recommendations]
 
   - role: user
