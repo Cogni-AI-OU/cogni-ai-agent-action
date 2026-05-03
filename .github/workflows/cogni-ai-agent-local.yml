@@ -268,7 +268,8 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ env.GITHUB_REF_RESOLVED }}
-      - name: Print previous job logs
+      - name: Print and extract previous job logs
+        id: extract-logs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -277,19 +278,33 @@ jobs:
             echo "Job ID not found for 'Cogni AI Agent Local'"
             exit 1
           fi
-          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { $1=""; print substr($0,2); found=1 } END { if (!found) print "No logs found between markers." }'
+          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { $1=""; print substr($0,2); found=1 } END { if (!found) print "No logs found between markers." }' | tee agent.log
+      - name: Prepare review prompt
+        id: prepare-prompt
+        run: |
+          python3 -c "
+          import os
+          template_path = '.github/prompts/agent-log-analysis.prompt.yml'
+          logs_path = 'agent.log'
+          with open(template_path, 'r') as f: template = f.read()
+          with open(logs_path, 'r') as f: logs = f.read()
+          indented_logs = '\n'.join([('      ' + l if i > 0 else l) for i, l in enumerate(logs.splitlines())])
+          content = template.replace('{{logs}}', indented_logs)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('prompt<<EOF\n')
+              f.write(content)
+              f.write('\nEOF\n')
+          "
       - name: Run Cogni AI Agent Review Local
         id: cogni-ai-reviewer
         uses: ./
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          agent: cogni-ai-architect
+          agent: default
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: >-
-            Review the agent log for github.run_id ${{ github.run_id }} (attempt ${{ github.run_attempt }}).
-            Summarize the agent session and highlight key actions, decisions, and any issues encountered.
+          prompt: ${{ steps.prepare-prompt.outputs.prompt }}
           version_agents: ${{ inputs.version_agents || 'main' }}
           version_instructions: ${{ inputs.version_instructions || 'main' }}
           version_skills: ${{ inputs.version_skills || 'main' }}
