@@ -129,7 +129,6 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         default: ''
-
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 # When a new run is triggered, it will queue until the previous pending run completes.
 # On the default branch each run gets a unique group (github.run_id) so runs can
@@ -146,6 +145,19 @@ concurrency:
       || github.run_id
     }}
 env:
+  GITHUB_REF_RESOLVED: >-
+    ${{
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        format('refs/pull/{0}/head', github.event.issue.number)
+      ) ||
+      (
+        github.event_name == 'pull_request_review_comment' &&
+        format('refs/pull/{0}/head', github.event.pull_request.number)
+      ) ||
+      github.ref
+    }}
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
   OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
 jobs:
@@ -187,19 +199,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false  # Prevents duplicate Authorization header
-          ref: >-
-            ${{
-              (
-                github.event_name == 'issue_comment' &&
-                github.event.issue.pull_request &&
-                format('refs/pull/{0}/head', github.event.issue.number)
-              ) ||
-              (
-                github.event_name == 'pull_request_review_comment' &&
-                format('refs/pull/{0}/head', github.event.pull_request.number)
-              ) ||
-              github.ref
-            }}
+          ref: ${{ env.GITHUB_REF_RESOLVED }}
       - uses: actions/cache@v5.0.1
         with:
           path: ~/.cache/pre-commit
@@ -254,3 +254,42 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
+  review:
+    name: Cogni AI Agent Review Local
+    needs: cogni-ai
+    if: always() && needs.cogni-ai.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: ${{ env.GITHUB_REF_RESOLVED }}
+      - name: Run Cogni AI Agent Review Local
+        id: cogni-ai-reviewer
+        uses: ./
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          agent: cogni-ai-architect
+          model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: >-
+            Review the agent log for github.run_id ${{ github.run_id }} (attempt ${{ github.run_attempt }}).
+            Summarize the agent session and highlight key actions, decisions, and any issues encountered.
+          version_agents: ${{ inputs.version_agents || 'main' }}
+          version_instructions: ${{ inputs.version_instructions || 'main' }}
+          version_skills: ${{ inputs.version_skills || 'main' }}
+      - name: Post summary to GITHUB_STEP_SUMMARY
+        if: steps.cogni-ai-reviewer.outputs.response != ''
+        run: |-
+          {
+            echo "## Agent Session Summary"
+            echo ""
+            cat << 'EOF'
+          ${{ steps.cogni-ai-reviewer.outputs.response }}
+          EOF
+          } >> "$GITHUB_STEP_SUMMARY"
