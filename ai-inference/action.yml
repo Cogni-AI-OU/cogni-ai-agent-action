@@ -27,7 +27,7 @@ inputs:
     description: The maximum number of tokens to generate
     required: false
   max-tokens:
-    default: 20000
+    default: 16000
     description: The maximum number of tokens to generate (deprecated)
     required: false
   prompt-file:
