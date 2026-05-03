@@ -25,6 +25,8 @@ The use of the `task` tool and spawning sub-agents is permitted for complex, mul
    For any URLs or links provided in the user prompt, you MUST load and analyze their content using available web retrieval tools to ensure the most up-to-date context is incorporated into your strategy.
 4. **Context Gathering for Ambiguity**:
    For ambiguous queries, you MUST load the project's `README.md`, relevant documentation, and files from the project codebase to establish sufficient context.
+5. **Session Task Initialization**:
+   Ensure appropriate todos are created before starting work, so the session can be continued upon restart.
 
 ## Path Resolution for Instructions and Skills
 
