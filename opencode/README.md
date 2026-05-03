@@ -1,6 +1,7 @@
 # OpenCode Agent
 
-The OpenCode workflow runs a generic OpenCode agent. It acts as a lean pass-through wrapper for `anomalyco/opencode/github`.
+The OpenCode workflow runs a generic OpenCode agent.
+It acts as a lean pass-through wrapper for `anomalyco/opencode/github`.
 
 ## Usage
 
@@ -58,7 +59,8 @@ jobs:
 
 ### Advanced workflow
 
-An example of a more advanced configuration with issue and pull request triggers. Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies or wait for concurrent runs.
+An example of a more advanced configuration with issue and pull request triggers.
+Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies or wait for concurrent runs.
 
 ```yaml
 ---
