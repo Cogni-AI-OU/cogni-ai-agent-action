@@ -1,12 +1,13 @@
 # OpenCode Agent
 
-The OpenCode workflow runs a generic OpenCode agent without loading any specialized Cogni AI agents, skills, or instructions.
+The OpenCode workflow runs a generic OpenCode agent.
+It acts as a lean pass-through wrapper for `anomalyco/opencode/github`.
 
 ## Usage
 
 ### Prerequisites
 
-1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR
@@ -51,14 +52,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 ```
 
 ### Advanced workflow
 
-An example of a more advanced configuration with issue and pull request triggers:
+An example of a more advanced configuration with issue and pull request triggers.
+Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies or wait for concurrent runs.
 
 ```yaml
 ---
@@ -147,15 +149,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
-      # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action/tree/main/opencode>
+          persist-credentials: false
       - name: Run OpenCode Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ inputs.model }}
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: >-
             ${{
               github.event.comment.body ||
@@ -168,47 +169,18 @@ jobs:
 
 ### Inputs
 
-| Input                  | Description                                   | Default                   | Required |
-| ---------------------- | --------------------------------------------- | ------------------------- | -------- |
-| `agent`                | Agent to use                                  | —                         | No       |
-| `mentions`             | Comma-separated mentions                      | `/oc,/opencode,/review`   | No       |
-| `model`                | Model to use for OpenCode                     | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key`     | API key for OpenCode                          | —                         | **Yes**  |
-| `permissions`          | Permissions configuration                     | —                         | No       |
-| `prompt`               | Prompt to pass to the agent                   | `''`                      | No       |
-
-### Hierarchical Permissions
-
-You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-code-reviewer`) can override or extend these defaults.
-
-```yaml
-with:
-  permissions: |
-    default:
-      bash:
-        ls*: allow
-        grep*: allow
-    cogni-ai-architect:
-      bash:
-        git*: allow
-        write*: allow
-    cogni-ai-code-reviewer:
-      bash:
-        git*: deny
-    cogni-ai-devops:
-      bash:
-        ansible*: allow
-        molecule*: allow
-        terraform*: allow
-    cogni-ai-tester:
-      bash:
-        molecule*: allow
-        npm test*: allow
-        pytest*: allow
-```
+| Input              | Description                 | Default                   | Required |
+| ------------------ | --------------------------- | ------------------------- | -------- |
+| `agent`            | Agent to use                | —                         | No       |
+| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
+| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
+| `opencode-api-key` | API key for OpenCode         | —                         | **Yes**  |
+| `permissions`      | Permissions (JSON string)   | —                         | No       |
+| `prompt`           | Prompt to pass to the agent | `''`                      | No       |
 
 ### Outputs
 
-| Output     | Description                 |
-| ---------- | --------------------------- |
-| `response` | The response from the agent |
+| Output     | Description                           |
+| ---------- | ------------------------------------- |
+| `prompt`   | The resolved prompt sent to the agent |
+| `response` | The response from the agent           |

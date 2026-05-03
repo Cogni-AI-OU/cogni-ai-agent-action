@@ -10,7 +10,7 @@ Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a
 
 ### Prerequisites
 
-1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR comments
@@ -59,8 +59,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
+          # Note: Prompt is automatically resolved from comment/issue/PR body if omitted.
+          prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 ```
 
@@ -204,7 +205,7 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 ```
 
@@ -254,7 +255,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ inputs.model }}
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           permissions: |-
             bash:
               '*': allow

@@ -26,16 +26,8 @@ flowchart TD
     %% --------------------------------------------------------
     subgraph Flow_OpenCode_Agent ["2. OpenCode Agent (opencode/action.yml)"]
         direction TB
-        O1([Trigger Events]) --> O2{Check conditions}
-        O2 -- "run=true" --> O3["Wait for concurrent runs"]
-        O2 -- "run=false" --> O_EndSkip([Action Skipped])
-        
-        O3 --> O4["Resolve prompt"]
-        O4 --> O5["Convert permissions to JSON"]
-        O5 --> O6["Run opencode"]
-        
-        O6 --> O7(["Write response to summary<br/>(on success)"])
-        O6 --> O8["Print logs (on failure/cancelled)"]
+        O1([Trigger Events]) --> O2["Run opencode"]
+        O2 --> O3(["anomalyco/opencode/github@v1.4.3"])
     end
 
     %% --------------------------------------------------------
