@@ -171,6 +171,38 @@ messages:
           bash:R -- L:fs
       ```
 
+      ### **Agent Execution Journey (Friction & Success Map)**
+
+      You MUST generate a Mermaid `journey` diagram that visualizes the agent's problem-solving process and the friction it encountered at each step.
+
+      Use the 1-5 scoring system to represent the "Smoothness" or "Success" of the agent's actions:
+      - 5: Flawless execution, immediate success.
+      - 4: Standard execution with minor effort.
+      - 3: Neutral, or the agent had to pause and re-evaluate.
+      - 2: High friction, encountered an error, required a retry or self-correction.
+      - 1: Hard failure, broken chain, hallucination, or unrecoverable error.
+
+      Use sections to represent the phases of the session (e.g., `Initialization`, `Investigation`, `Execution`, `Verification`).
+      Use actors to denote what was interacting (e.g., `Agent`, `Bash`, `GitHubAPI`, `FileSystem`).
+
+      ### Output Format Example for the Diagram:
+
+      ```mermaid
+      journey
+          title Agent Session: [Insert Task Name]
+          section Initialization
+            Read Copilot Instructions: 5: Agent, FileSystem
+            Load Project Constraints: 5: Agent, FileSystem
+          section Context Gathering
+            Query Run Metadata (gh api): 4: Agent, GitHubAPI
+            Search logs for output (grep): 2: Agent, Bash
+          section Root Cause Analysis
+            Audit wrapper action.yml: 5: Agent, FileSystem
+            Identify broken output chain: 1: Agent, Workflow
+          section Verification
+            Check workspace state (git status): 5: Agent, Bash
+      ```
+
 model: openai/gpt-4o-mini
 modelParameters:
   maxCompletionTokens: 10000
