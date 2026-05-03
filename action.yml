@@ -586,7 +586,7 @@ runs:
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
+      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
@@ -716,8 +716,9 @@ runs:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
+        opencode-api-key: ${{ inputs.opencode-api-key }}
+        permissions: ${{ steps.permissions.outputs.json }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        use_github_token: false
     - name: Write response to summary
       if: always() && steps.opencode.outputs.response != ''
       shell: bash
