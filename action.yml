@@ -586,7 +586,7 @@ runs:
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: ./opencode
+      uses: ${{ github.action_path }}/opencode
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
