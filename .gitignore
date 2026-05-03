@@ -21,5 +21,6 @@ actionlint
 
 # Temporary or backup files
 *.bak
+*.log
 *.orig
 *.swp
