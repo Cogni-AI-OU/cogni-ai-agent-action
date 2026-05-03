@@ -171,7 +171,7 @@ jobs:
 | `agent`            | Agent to use                | —                         | No       |
 | `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
 | `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key` | API key for OpenCode (see [opencode.ai/auth](https://opencode.ai/auth)) | —                         | **Yes**  |
+| `opencode-api-key` | API key for OpenCode         | —                         | **Yes**  |
 | `permissions`      | Permissions (JSON string)   | —                         | No       |
 | `prompt`           | Prompt to pass to the agent | `''`                      | No       |
 

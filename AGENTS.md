@@ -15,6 +15,7 @@ Authoritative, agent-facing catalog of protocols and invariants for the reposito
 
 - **Execution Flow**: For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](FLOWS.mmd).
 - **Formal Constraint Model**: For the formal constraint model covering skill and tool permission constraints, see [CONSTRAINTS.mzn](CONSTRAINTS.mzn).
+- **Checkout Invariant**: Always use `persist-credentials: false` with `actions/checkout` to prevent "Duplicate header: Authorization" errors during agent execution.
 
 ## Task Delegation
 
