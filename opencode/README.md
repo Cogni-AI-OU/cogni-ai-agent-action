@@ -29,6 +29,7 @@ on:
 
 jobs:
   agent:
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
@@ -130,6 +131,7 @@ on:
 jobs:
   opencode-agent:
     name: Run OpenCode agent
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
