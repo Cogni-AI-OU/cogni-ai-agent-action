@@ -1,0 +1,109 @@
+PROMPT: You are operating as the cogni-ai-architect agent.
+
+job failed: https://github.com/Cogni-AI-OU/cogni-ai-agent-skills/actions/runs/25330725232/job/74263440184 after recent PR merges: Error: Can't find 'action.yml', 'action.yaml' or 'Dockerfile' under '/home/runner/work/cogni-ai-agent-skills/cogni-ai-agent-skills/opencode'. Did you forget to run actions/checkout before running your local action?
+USE_GITHUB_TOKEN: false
+MENTIONS: /co,/cogni,/review,/brainstorm
+VARIANT:
+OIDC_BASE_URL:
+##[endgroup]
+Performing one time database migration, may take a few minutes...
+sqlite-migration:done
+Database migration complete.
+Configuring git...
+opencode session ses_20c268da6ffet7dJc3GcWLDm67
+Triggered by: cogni-ai-ee
+Checking out new branch...
+Sending message to opencode...
+
+[94m[1m| [0m[90m skill [0m{"name":"github-actions"}
+[94m[1m| [0m[90m skill [0m{"name":"gh-run"}
+
+[94m[1m| [0m[90m Glob [0m{"pattern":".github/workflows/*.yml"}
+
+[94m[1m| [0m[90m Glob [0m{"pattern":"opencode/*"}
+
+[91m[1m| [0m[90m Bash [0m{"command":"ls -la","description":"List repo contents"}
+
+[96m[1m| [0m[90m Read [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/action.yml"}
+
+[91m[1m| [0m[90m Bash [0m{"description":"View failed run logs from the user prompt","command":"gh run view 25330725232 --repo Cogni-AI-OU/cogni-ai-agent-skills --log-failed"}
+
+[91m[1m| [0m[90m Bash [0m{"description":"Search for github actions issue","command":"gh search issues \"Can't find 'action.yml' under\" --repo actions/runner"}
+
+[91m[1m| [0m[90m Bash [0m{"command":"git log -n 5 --stat","description":"Check recent git changes to action.yml"}
+
+[90m[1m| [0m[90m Search [0m{"query":"github actions composite action uses local action \"Did you forget to run actions/checkout before running your local action?\""}
+
+[96m[1m| [0m[90m Read [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/opencode/action.yml"}
+
+[92m[1m| [0m[90m Edit [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/action.yml","newString":" - name: Run opencode\n id: opencode\n if: steps.check.outputs.run == 'true'\n uses: anomalyco/opencode/github@v1.4.3\n env:","replaceAll":false,"oldString":" - name: Run opencode\n id: opencode\n if: steps.check.outputs.run == 'true'\n uses: ./opencode\n env:"}
+
+[91m[1m| [0m[90m Bash [0m{"description":"Check arguments expected by opencode action","command":"cat opencode/action.yml | grep -A 15 \"uses: anomalyco/opencode/github@v1.4.3\""}
+
+[91m[1m| [0m[90m Bash [0m{"command":"grep -A 20 \"uses: anomalyco/opencode/github@v1.4.3\" action.yml","description":"Show the updated opencode block"}
+
+[96m[1m| [0m[90m Read [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/action.yml","offset":620,"limit":200}
+
+[92m[1m| [0m[90m Edit [0m{"newString":" - name: Run opencode\n id: opencode\n if: steps.check.outputs.run == 'true'\n uses: anomalyco/opencode/github@v1.4.3\n env:\n OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}\n OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}\n GH_TOKEN: ${{ github.token }}\n GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}","replaceAll":false,"oldString":" - name: Run opencode\n id: opencode\n if: steps.check.outputs.run == 'true'\n uses: anomalyco/opencode/github@v1.4.3\n env:\n GH_TOKEN: ${{ github.token }}\n GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}","filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/action.yml"}
+
+
+[96m[1m| [0m[90m Read [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/action.yml","limit":20,"offset":760}
+[92m[1m| [0m[90m Edit [0m{"replaceAll":false,"oldString":" with:\n agent: ${{ steps.check.outputs.effective_agent }}\n mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}\n mentions_bots: ${{ inputs.mentions_bots || '@opencode-agent,@OpenCode-Agent' }}\n model: ${{ inputs.model || 'opencode/gemini-3-flash' }}\n opencode-api-key: ${{ inputs.opencode-api-key }}\n permissions: ${{ steps.permissions.outputs.json }}\n prompt: ${{ steps.prompt.outputs.prompt }}","filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/action.yml","newString":" with:\n agent: ${{ steps.check.outputs.effective_agent }}\n mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}\n model: ${{ inputs.model || 'opencode/gemini-3-flash' }}\n prompt: ${{ steps.prompt.outputs.prompt }}\n use_github_token: false"}
+
+[91m[1m| [0m[90m Bash [0m{"description":"Check git diff of action.yml","command":"git diff"}
+
+[96m[1m| [0m[90m Read [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/ai-inference/action.yml"}
+
+
+[94m[1m| [0m[90m Grep [0m{"pattern":"uses: \\./opencode"}
+[96m[1m| [0m[90m Read [0m{"filePath":"/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action/.github/workflows/opencode-agent-local.yml","offset":170,"limit":50}
+
+[91m[1m| [0m[90m Bash [0m{"command":"git status","description":"Check git status"}
+
+[0m
+The issue is caused by a known limitation in GitHub Actions regarding composite actions.
+
+When the root `action.yml` was recently updated to use a local composite action via `uses: ./opencode`, it broke for consumers (like `cogni-ai-agent-skills`). In GitHub Actions, when a remote composite action calls another local action using `./`, the runner incorrectly tries to resolve that path relative to the **consumer's** workspace rather than the action's repository. This is why the runner complained that it couldn't find `action.yml` under `/home/runner/work/cogni-ai-agent-skills/cogni-ai-agent-skills/opencode`.
+
+I've fixed this by editing the root `action.yml`. Instead of routing through the internal `./opencode` wrapper, it now directly invokes `uses: anomalyco/opencode/github@v1.4.3` and explicitly forwards all the necessary variables (`OPENCODE_API_KEY`, `OPENCODE_PERMISSION`, inputs, etc.) just as the wrapper did. This completely bypasses the buggy local-composite-action resolution while keeping your checks and logic intact.
+
+I have made the necessary code changes locally. Would you like me to commit these changes?
+[0m
+Checking if branch is dirty...
+Sending message to opencode...
+Fix local action path resolution bug
+[0m
+Pushing to new branch...
+Creating pull request...
+Created PR #170
+##[group]Run set -euo pipefail
+[36;1mset -euo pipefail[0m
+[36;1mescape() {[0m
+[36;1m local value="$1"[0m
+[36;1m value=${value//'%'/'%25'}[0m
+[36;1m value=${value//$'\r'/'%0D'}[0m
+[36;1m value=${value//$'\n'/'%0A'}[0m
+[36;1m printf '%s' "$value"[0m
+[36;1m}[0m
+[36;1mecho "::notice title=Cogni AI Agent Local prompt::$(escape "$COGNI_AI_PROMPT")"[0m
+[36;1mecho "::notice title=Cogni AI Agent Local output::$(escape "${COGNI_AI_OUTPUT:-}")"[0m
+shell: /usr/bin/bash -e {0}
+env:
+GITHUB_REF_RESOLVED: refs/heads/main
+OPENCODE_AGENT_DEFAULT: cogni-ai-architect
+OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+COGNI_AI_PROMPT: You are operating as the cogni-ai-architect agent.
+
+job failed: https://github.com/Cogni-AI-OU/cogni-ai-agent-skills/actions/runs/25330725232/job/74263440184 after recent PR merges: Error: Can't find 'action.yml', 'action.yaml' or 'Dockerfile' under '/home/runner/work/cogni-ai-agent-skills/cogni-ai-agent-skills/opencode'. Did you forget to run actions/checkout before running your local action?
+COGNI_AI_OUTPUT:
+##[endgroup]
+##[notice]You are operating as the cogni-ai-architect agent.
+
+job failed: https://github.com/Cogni-AI-OU/cogni-ai-agent-skills/actions/runs/25330725232/job/74263440184 after recent PR merges: Error: Can't find 'action.yml', 'action.yaml' or 'Dockerfile' under '/home/runner/work/cogni-ai-agent-skills/cogni-ai-agent-skills/opencode'. Did you forget to run actions/checkout before running your local action?
+Post job cleanup.
