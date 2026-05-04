@@ -79,7 +79,9 @@ inputs:
         read: allow
         # Skills are limited to a curated list from the upstream cogni-ai-agent-skills repository.
         # Note: Changes here should be synchronized with agent-specific skill allowlists.
+        # Note: Keep in alphabetical order.
         skill: &default-skill
+          agent-log-analysis: deny
           ansible: allow
           cat: allow
           context-aware-ops: allow
