@@ -52,13 +52,166 @@ flowchart TD
     subgraph Flow_Agent_Delegation ["Agent Delegation Protocol"]
         direction TB
         Arch((Cogni AI Architect))
-        Arch -->|task tool| DevOps[cogni-ai-devops<br/>Task automation, CI/CD, IaC]
-        Arch -->|task tool| FactOps[cogni-ai-fact-ops<br/>Maintain facts & info consistency]
-        Arch -->|task tool| PyDev[cogni-ai-python-dev<br/>Write, test, debug Python]
+        Arch -->|task tool| Auditor[cogni-ai-agent-auditor<br/>Analyze logs, evaluate reasoning]
         Arch -->|task tool| BrainOps[cogni-ai-brain-ops<br/>Gather facts, constraints, plan]
-        Arch -->|task tool| GHOps[cogni-ai-github-ops<br/>Modify comments, issues, discussions]
         Arch -->|task tool| CodeRev[cogni-ai-code-reviewer<br/>PR analysis, quality, security]
-        Arch -->|task tool| PlanRev[cogni-ai-plan-reviewer<br/>Architectural & plan validation]
-        Arch -->|task tool| Tester[cogni-ai-tester<br/>Execute tests, verify behavior]
         Arch -->|task tool| C7Ops[cogni-ai-context7-ops<br/>Retrieve & filter documentation]
+        Arch -->|task tool| DevOps[cogni-ai-devops<br/>Task automation, CI/CD, IaC]
+        Arch -->|task tool| DocsEdit[cogni-ai-docs-editor<br/>Maintain project documentation]
+        Arch -->|task tool| FactOps[cogni-ai-fact-ops<br/>Maintain facts & info consistency]
+        Arch -->|task tool| GHOps[cogni-ai-github-ops<br/>Modify comments, issues, discussions]
+        Arch -->|task tool| PlanRev[cogni-ai-plan-reviewer<br/>Architectural & plan validation]
+        Arch -->|task tool| PyDev[cogni-ai-python-dev<br/>Write, test, debug Python]
+        Arch -->|task tool| SecAudit[cogni-ai-security-auditor<br/>Threat modeling, vulnerability detection]
+        Arch -->|task tool| Tester[cogni-ai-tester<br/>Execute tests, verify behavior]
+    end
+
+    %% --------------------------------------------------------
+    %% Internal Agent Protocols
+    %% --------------------------------------------------------
+    subgraph Command_Failure_Recovery_Protocol [Command Failure Recovery Protocol - Bounded Scheduler v3]
+        direction TB
+        CFR1["Command Fails"] --> CFR_GE_INVOKE["Invoke Guardrail_Executor<br/>(Pre: memo + growth + progress + budget + ImmutablePlanVersion check)"]
+
+        CFR_GE_INVOKE --> CFR_TAX["Failure Taxonomy Classification<br/>(POLICY_DENIED | PATH_MUTATION_GROWTH | TRANSIENT | LOG_ACCESS | AUTH_ENV | NOT_FOUND | OTHER)"]
+
+        CFR_TAX --> CFR_MEMO_PROG["Progress + Memo Gate<br/>(NewArtifact / HypothesisNarrowed / TerminationSignal ?)<br/>+ Sliding-Window Repetition (RepetitionWindow)"]
+
+        CFR_MEMO_PROG -->|No Progress, Repetition >=3, OR BudgetExhausted| CFR_ARREST["Loop Arrest v3<br/>-> Hard Stop / Terminal Escalation"]
+        CFR_MEMO_PROG -->|Progress OK| CFR_LAYER{"Recovery Layer? (3-Layer Escalation Protocol)"}
+
+        CFR_LAYER -->|Layer 1: Retry Transient| CFR_BOUNDED["Bounded Retry + Backoff<br/>(per-objective budget; ImmutablePlanVersion preserved)"]
+        CFR_LAYER -->|Layer 2: Local Patch| CFR_REWIND_PATH["Rewind to Last Known-Valid + Patch<br/>(repo-discovered only)"]
+        CFR_LAYER -->|Layer 3: Full Escalate| CFR_ESCALATE["Immediate Escalation<br/>(Extrinsic Gate 3; closed loop - no LLM feedback)"]
+
+        CFR_BOUNDED --> CFR_REMEDY["Execute Contextual Remedies<br/>(Verify Access -> Pivot Fallbacks -> Safe Installs)"]
+        CFR_REWIND_PATH --> CFR_REMEDY
+        CFR_ESCALATE --> CFR9
+
+        CFR_REMEDY --> CFR5{"Upstream CI/CD Issue?"}
+
+        CFR5 -->|Yes| CFR6["Halt & Escalate (Extrinsic Gate 3)"]
+        CFR5 -->|No| CFR8{"Hit Iteration Limits or Blockers?"}
+
+        CFR8 -->|Yes| CFR9["Blocker Reporting (state, impact, mitigations)"]
+        CFR8 -->|No| CFR11["Retry Execution (Re-execute Command)"]
+        CFR11 -->|Failure| CFR_GE_INVOKE
+        CFR11 -->|Success| CFR12(["Recovery Complete<br/>+ Telemetry: repeated_hits, stagnation_events, drift_detected, budget_exhausted, loop_arrest_activations"])
+    end
+
+    subgraph Core_Initialization_Sequence [Initialization Sequence]
+        direction TB
+        IS_FL["Execute Mandatory_Facts_Loading_Protocol (FACTS.mmd)"] --> FL1
+        FL1 --> IS1["Agent Contract Alignment (AGENTS.mmd, FLOWS.mmd)"]
+        IS1 --> IS_CL["Execute Mandatory_Constraints_Loading_Protocol (CONSTRAINTS.mzn)"]
+        IS_CL --> CL1
+        CL1 --> IS_AL["Agent Contract Alignment (Root AGENTS.md + Local AGENTS.md)"]
+        IS_AL --> IS2["Load [.github/copilot-instructions.md](.github/copilot-instructions.md)"]
+        IS2 --> IS_IL["Execute Mandatory_Instructions_Loading_Protocol"]
+        IS_IL --> IL1
+        IL1 --> IS_SL["Execute Mandatory_Skill_Loading_Protocol"]
+        IS_SL --> SL1
+        SL1 --> IS5
+
+        IS5["Context Intake (Read project memory, trackers, and docs guided by loaded instructions)"] --> IS6
+
+        IS6["Pre-Flight Snapshot (Synthesize into single entropy-minimized sentence)"] --> IS7
+
+        IS7["Strategy Initialization (Design-It-Twice & sequence-linked #todos)"] --> IS8
+
+        IS8["Task Refinement (Decompose into atomic sub-tasks, no artificial grouping)"] --> IS9
+
+        IS9["Autonomous Engagement (Immediately transition to Workflow Contract execution)"] --> ADP1
+    end
+
+    subgraph Design_by_Contract_Enforcement [Design-by-Contract Enforcement]
+        direction TB
+        DbC1["Intend State Mutation"] --> DbC2
+        DbC2["Emit Precondition Assertion (Pre: constraints_satisfied)"] --> DbC3
+        DbC3["Perform Mutation"] --> DbC4
+        DbC4["Emit Postcondition Assertion (Post: verified)"] --> DbC5
+        DbC5["Perform Chain-of-Verification (Crash-early semantics)"] --> DbC6
+        DbC6{"Hard Checkpoint reached?"}
+        DbC6 -->|Yes| DbC7["Emit Invariant Checksum Vectors"]
+        DbC7 --> DbC8{"Mismatch with prior checkpoints?"}
+        DbC8 -->|Yes| DbC9["Trigger Metacognitive Rewind Protocol"]
+        DbC8 -->|No| DbC10(["Continue Execution"])
+        DbC6 -->|No| DbC10
+    end
+
+    subgraph Defensive_Blast_Radius_Containment_Protocol [Defensive Blast-Radius Containment Protocol]
+        direction TB
+        BR1["Identify wide-ranging, destructive, or high-risk modification"] --> BR2
+        BR2["Perform strict impact assessment (Explicitly model the blast radius)"] --> BR3
+        BR3["Define robust rollback strategy and ensure state backup"] --> BR4
+        BR4{"High-risk vector?"}
+        BR4 -->|Yes| BR5["Pause for explicit validation (Trigger Escalation Gate as needed)"]
+        BR4 -->|No| BR6["Commit to execution"]
+        BR5 -->|Validation Received| BR6
+        BR6 --> BR7["Execute operation"]
+        BR7 --> BR8["Verify target environments and corresponding tests"]
+    end
+
+    subgraph Design_It_Twice_Protocol [Design-It-Twice Protocol]
+        direction TB
+        DT1["Identify non-trivial strategy/component"] --> DT2
+        DT2["Generate Design A"] --> DT3
+        DT3["Generate Design B (substantially different)"] --> DT4
+        DT4["Rigorously compare via explicit trade-off matrix"] --> DT5
+        DT5["Select and commit to optimal path"]
+    end
+
+    subgraph Global_Budget_Protocol ["Global Budget Protocol"]
+        direction TB
+        GBP1["Per-run / Per-objective Budgets<br/>(max_steps=20, max_tool_calls=N, token_budget, time_TTL)"] --> GBP2{"Budget Exhausted?"}
+        GBP2 -->|Yes| GBP3["Hard Stop + Escalate<br/>(override any internal loop)"]
+        GBP2 -->|No| GBP4["Decrement & Continue"]
+    end
+
+    subgraph Guardrail_Executor ["Guardrail Executor"]
+        direction TB
+        GE1["Every Tool Invocation Routes Here"] --> GE2["Global_Budget_Protocol Check"]
+        GE2 --> GE3["Loop_Arrest_Protocol Check"]
+        GE3 --> GE4["Memo + Growth + Progress Pre-flight"]
+        GE4 -->|All Pass| GE5["Execute Tool"]
+        GE4 -->|Any Fail| GE6["Immediate Arrest / Rewind"]
+    end
+
+    subgraph Loop_Arrest_Protocol ["Loop Arrest Protocol v3"]
+        direction TB
+        LAP1["Pre-Retry: Fingerprint + Sliding Window (last 5 steps)"] --> LAP2{"Memo Hit OR Repetition >=3?"}
+        LAP2 -->|Yes| LAP3["Hard-Stop This Branch -> Escalation / Rewind"]
+        LAP2 -->|No| LAP4["Progress Growth Detector + Budget Check"]
+        LAP4 -->|No Growth OR Budget Exceeded| LAP5["Rewind / Halt"]
+        LAP4 -->|Growth Exists / OK| LAP6["Non-Progress Counter (2 consecutive)"]
+        LAP6 -->|Threshold Exceeded| LAP3
+        LAP6 -->|OK| LAP7["Proceed to Progress Contract"]
+    end
+
+    subgraph Metacognitive_Rewind_Protocol [Metacognitive Rewind Protocol]
+        direction TB
+        MR1["Contradiction Detected"] --> MR2
+        MR2["Emit 'CONTRADICTION at step N' (No in-place patching)"] --> MR3
+        MR3["Rewind to last matching Pre/Post pair"] --> MR4
+        MR4["Discard all downstream derivations"] --> MR5
+        MR5["Restart the proof/logic chain"] --> MR6
+        MR6["Verify every step anomaly-free before claiming solution"]
+    end
+
+    subgraph State_Compression_Protocol [State-Compression Protocol]
+        direction TB
+        CP1["Partition task into <= 8 steps"] --> CP2
+        CP2["Execute single step"] --> CP3
+        CP3["Emit Mini-Checkpoint"] --> CP4
+        CP4["Verify Invariants"] --> CP5
+        CP5{"Step count?"}
+        CP5 -->|>= 5 steps| CP6["Emit Hard Checkpoint"]
+        CP6 --> CP7["Clean Re-serialization"]
+        CP5 -->|< 5 steps| CP8{"Contradiction detected?"}
+        CP7 --> CP8
+        CP8 -->|Yes| CP9["Metacognitive Rewind Protocol"]
+        CP9 --> CP2
+        CP8 -->|No| CP10{"More steps?"}
+        CP10 -->|Yes| CP2
+        CP10 -->|No| CP11(["Batch Complete"])
     end
