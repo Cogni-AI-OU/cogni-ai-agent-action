@@ -141,7 +141,13 @@ inputs:
           <<: *default-skill
           '*': deny
       cogni-ai-code-reviewer:
-        bash: deny
+        bash:
+          <<: *default-bash
+          gh api*: allow
+          gh pr checks*: allow
+          gh pr comment*: allow
+          gh pr review*: allow
+          gh pr view*: allow
         glob: allow
         read: allow
         edit: deny
