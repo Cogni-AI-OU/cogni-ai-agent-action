@@ -123,14 +123,6 @@ inputs:
         skill:
           <<: *default-skill
           agent-log-analysis: allow
-      cogni-ai-security-auditor:
-        bash: deny
-        glob: allow
-        read: allow
-        edit: deny
-        skill:
-          <<: *default-skill
-          security-auditing: allow
       cogni-ai-architect:
         bash:
           <<: *default-bash
@@ -244,6 +236,14 @@ inputs:
         glob: allow
         read: allow
         skill: *default-skill
+      cogni-ai-security-auditor:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          security-auditing: allow
       cogni-ai-tester:
         bash:
           <<: *default-bash
@@ -256,10 +256,11 @@ inputs:
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g.,
-      'cogni-ai-architect', 'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer',
-      'cogni-ai-devops', 'cogni-ai-fact-ops', 'cogni-ai-github-ops',
-      'cogni-ai-tester', 'cogni-ai-brain-ops', 'cogni-ai-agent-auditor',
-      'cogni-ai-security-auditor', etc.).
+      'cogni-ai-agent-auditor', 'cogni-ai-architect', 'cogni-ai-brain-ops',
+      'cogni-ai-code-reviewer', 'cogni-ai-context7-ops', 'cogni-ai-devops',
+      'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-plan-reviewer',
+      'cogni-ai-python-dev', 'cogni-ai-security-auditor', 'cogni-ai-tester',
+      etc.).
       Example:
         default:
           bash:
@@ -633,16 +634,22 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
               },
-              "cogni-ai-security-auditor": {
-                "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
-                "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
-              },
               "cogni-ai-architect": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+              },
+              "cogni-ai-brain-ops": {
+                "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+              },
+              "cogni-ai-code-reviewer": {
+                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
               },
               "cogni-ai-context7-ops": {
                 "description": "Uses Context7-backed documentation context for research and delegation tasks.",
@@ -678,23 +685,23 @@ runs:
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
               },
+              "cogni-ai-plan-reviewer": {
+                "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+              },
               "cogni-ai-python-dev": {
                 "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
               },
-              "cogni-ai-code-reviewer": {
-                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+              "cogni-ai-security-auditor": {
+                "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
-              },
-              "cogni-ai-plan-reviewer": {
-                "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
-                "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
               },
               "cogni-ai-tester": {
                 "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
@@ -706,12 +713,6 @@ runs:
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
-              },
-              "cogni-ai-brain-ops": {
-                "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
-                "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
               },
               "explore": {
                 "disable": true,
