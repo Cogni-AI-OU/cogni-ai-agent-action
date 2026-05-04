@@ -109,7 +109,7 @@ runs:
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
             run = true;
-            agent = 'cogni-ai-architect';
+            agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
             'pull_request_review_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
@@ -120,20 +120,20 @@ runs:
             );
             if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
             if (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           }
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
           if (effectiveAgent === 'default') {
             effectiveAgent = '';
           }
