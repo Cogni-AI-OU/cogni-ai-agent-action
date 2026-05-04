@@ -113,6 +113,16 @@ inputs:
           explore: deny
           general: deny
         todowrite: allow
+      cogni-ai-agent-auditor:
+        bash:
+          <<: *default-bash
+          gh run view*: allow
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          agent-log-analysis: allow
       cogni-ai-architect:
         bash:
           <<: *default-bash
