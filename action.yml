@@ -186,6 +186,12 @@ inputs:
         skill:
           <<: *default-skill
           molecule: allow
+      cogni-ai-docs-editor:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: allow
+        skill: *default-skill
       cogni-ai-fact-ops:
         bash: deny
         glob: allow
@@ -260,7 +266,7 @@ inputs:
       with 'default' and agent-specific overrides (e.g.,
       'cogni-ai-agent-auditor', 'cogni-ai-architect', 'cogni-ai-brain-ops',
       'cogni-ai-code-reviewer', 'cogni-ai-context7-ops', 'cogni-ai-devops',
-      'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-plan-reviewer',
+      'cogni-ai-docs-editor', 'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-plan-reviewer',
       'cogni-ai-python-dev', 'cogni-ai-security-auditor', 'cogni-ai-tester',
       etc.).
       Example:
@@ -669,6 +675,12 @@ runs:
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+              },
+              "cogni-ai-docs-editor": {
+                "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
