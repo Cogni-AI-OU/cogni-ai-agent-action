@@ -289,5 +289,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: cogni-ai-agent-auditor
-          model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
+          model: openai/gpt-4o-mini
           prompt: ${{ steps.prepare-prompt.outputs.prompt }}
