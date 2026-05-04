@@ -296,5 +296,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: openai/gpt-4o-mini
+          max-completion-tokens: 8192
+          temperature: 0.2
+          top-p: 0.9
           prompt: ${{ steps.prepare-prompt.outputs.prompt }}
           system-prompt: ${{ steps.prepare-prompt.outputs.system_prompt }}
