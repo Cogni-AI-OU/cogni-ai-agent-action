@@ -123,6 +123,14 @@ inputs:
         skill:
           <<: *default-skill
           agent-log-analysis: allow
+      cogni-ai-security-auditor:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          security-auditing: allow
       cogni-ai-architect:
         bash:
           <<: *default-bash
@@ -250,7 +258,8 @@ inputs:
       with 'default' and agent-specific overrides (e.g.,
       'cogni-ai-architect', 'cogni-ai-code-reviewer', 'cogni-ai-plan-reviewer',
       'cogni-ai-devops', 'cogni-ai-fact-ops', 'cogni-ai-github-ops',
-      'cogni-ai-tester', 'cogni-ai-brain-ops', etc.).
+      'cogni-ai-tester', 'cogni-ai-brain-ops', 'cogni-ai-agent-auditor',
+      'cogni-ai-security-auditor', etc.).
       Example:
         default:
           bash:
@@ -618,6 +627,18 @@ runs:
           {
             "$schema": "https://opencode.ai/config.json",
             "agent": {
+              "cogni-ai-agent-auditor": {
+                "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+              },
+              "cogni-ai-security-auditor": {
+                "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+              },
               "cogni-ai-architect": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
