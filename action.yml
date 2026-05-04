@@ -107,6 +107,7 @@ inputs:
           shell: allow
           skill-writer: allow
           vim-ex: allow
+          agent-log-analysis: deny
         # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
         task:
           '*': allow
