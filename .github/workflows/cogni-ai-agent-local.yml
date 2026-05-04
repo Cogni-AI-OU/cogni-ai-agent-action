@@ -260,25 +260,23 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          JOB_ID=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs" --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id')
+          JOB_ID=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}/jobs" --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id')
           if [ -z "$JOB_ID" ]; then
             echo "Job ID not found for 'Cogni AI Agent Local'"
             exit 1
           fi
-          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { $1=""; print substr($0,2); found=1 } END { if (!found) print "No logs found between markers." }' | tee agent.log
+          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { $1=""; print substr($0,2); found=1 } END { if (!found) print "No logs found between markers." }' | tee .agent.log
       - name: Prepare review prompt
         id: prepare-prompt
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
-          python3 -c "
-          import os
-          logs_path = 'agent.log'
-          with open(logs_path, 'r') as f: logs = f.read()
-          prompt = f'<logs>\n{logs}\n</logs>\n<prompt>Analyze agent session logs and write comprehensive visual audit report using mermaid diagrams and data.</prompt>'
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('prompt<<EOF\n')
-              f.write(prompt)
-              f.write('\nEOF\n')
-          "
+          echo "prompt<<EOF" >> "$GITHUB_OUTPUT"
+          echo "<prompt>Please read the \`.agent.log\` file in the workspace containing logs from \
+          GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT). Analyze the agent session logs and write \
+          a comprehensive visual audit report using mermaid diagrams and data.</prompt>" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
       - name: Run Agent Auditor
         id: cogni-ai-agent-auditor
         uses: ./ai-inference/
