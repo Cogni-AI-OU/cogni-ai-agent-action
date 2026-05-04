@@ -271,12 +271,16 @@ jobs:
         run: |
           python3 -c "
           import os
+          import urllib.request
           template_path = '.github/prompts/agent-log-analysis.prompt.yml'
           logs_path = 'agent.log'
+          skill_url = 'https://raw.githubusercontent.com/Cogni-AI-OU/cogni-ai-agent-skills/refs/heads/main/agent-log-analysis/SKILL.md'
+          with urllib.request.urlopen(skill_url) as response: skill_content = response.read().decode('utf-8')
           with open(template_path, 'r') as f: template = f.read()
           with open(logs_path, 'r') as f: logs = f.read()
           indented_logs = '\n'.join([('      ' + l if i > 0 else l) for i, l in enumerate(logs.splitlines())])
           content = template.replace('{{logs}}', indented_logs)
+          content = f'{skill_content}\n\n{content}'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write('prompt<<EOF\n')
               f.write(content)
