@@ -53,7 +53,9 @@ runs:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
           const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
-          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
