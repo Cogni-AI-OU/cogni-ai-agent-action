@@ -31,11 +31,13 @@ jobs:
       - name: Read prompt
         id: read-prompt
         run: |
-          PROMPT=$(cat .github/prompts/task-check-consistency-docs.prompt.md)
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          echo "prompt<<$EOF" >> "$GITHUB_OUTPUT"
-          echo "$PROMPT" >> "$GITHUB_OUTPUT"
-          echo "$EOF" >> "$GITHUB_OUTPUT"
+          {
+            PROMPT=$(cat .github/prompts/task-check-consistency-docs.prompt.md)
+            EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+            echo "prompt<<$EOF"
+            echo "$PROMPT"
+            echo "$EOF"
+          } >> "$GITHUB_OUTPUT"
       - name: Run Cogni AI Agent
         uses: ./
         env:

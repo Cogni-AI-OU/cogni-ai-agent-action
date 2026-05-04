@@ -312,7 +312,6 @@ runs:
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
-
           function matchesTrigger(body, triggers) {
             if (!body) return false;
             return triggers.some(t => {
@@ -322,12 +321,10 @@ runs:
               return pattern.test(body);
             });
           }
-
           function matchesBotMention(body) {
             if (!body) return false;
             return BOT_MENTIONS.some(m => body.includes(m));
           }
-
           function getAgent(body) {
             if (!body) return 'default';
             // Stricter pattern for /review to avoid misclassification
@@ -335,14 +332,11 @@ runs:
             if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
             return 'default';
           }
-
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
           let run = false;
           let agent = '';
-
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'default';
@@ -351,7 +345,6 @@ runs:
             const assoc = payload?.author_association;
             const body = payload?.body;
             console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
-
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -365,7 +358,6 @@ runs:
             const assoc = payload?.author_association;
             const body = payload?.body;
             console.log(`PR Review Comment - Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
-
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -385,14 +377,11 @@ runs:
               agent = 'default';
             }
           }
-
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
-
           // Centralized effective agent logic
           let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
           core.setOutput('effective_agent', effectiveAgent);
-
     - name: Wait for concurrent runs
       id: concurrency
       if: steps.check.outputs.run == 'true'
