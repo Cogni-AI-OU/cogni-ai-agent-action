@@ -75,11 +75,11 @@ runs:
             return BOT_MENTIONS.some(m => body.includes(m));
           }
           function getAgent(body) {
-            if (!body) return 'cogni-ai-architect';
+            if (!body) return 'default';
             // Stricter pattern for /review to avoid misclassification
             if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
             if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
-            return 'cogni-ai-architect';
+            return 'default';
           }
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
@@ -88,7 +88,7 @@ runs:
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
-            agent = 'cogni-ai-architect';
+            agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
@@ -126,13 +126,13 @@ runs:
               (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
             if (isAllowed) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           }
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
           if (effectiveAgent === 'default') {
             effectiveAgent = '';
           }

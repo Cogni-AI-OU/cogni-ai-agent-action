@@ -349,7 +349,7 @@ runs:
               '' }}
         DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
-        EFFECTIVE_AGENT: ${{ inputs.agent || 'cogni-ai-architect' }}
+        EFFECTIVE_AGENT: ${{ inputs.agent || 'default' }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
@@ -430,7 +430,7 @@ runs:
       id: permissions
       shell: python
       env:
-        AGENT_NAME: ${{ inputs.agent || 'cogni-ai-architect' }}
+        AGENT_NAME: ${{ inputs.agent || 'default' }}
         PERMISSIONS_YAML: ${{ inputs.permissions }}
       run: |
         import os
@@ -461,7 +461,7 @@ runs:
             except Exception as e:
                 print(f"Warning: Failed to load default permissions from action.yml: {e}")
         raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
-        agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
+        agent = os.environ.get('AGENT_NAME', 'default')
         try:
             user_permissions = yaml.safe_load(raw_yaml) or {}
         except Exception:
