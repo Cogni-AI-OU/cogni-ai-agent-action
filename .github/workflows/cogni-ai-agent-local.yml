@@ -279,7 +279,8 @@ jobs:
           with urllib.request.urlopen(agent_url) as response: agent_content = response.read().decode('utf-8')
           with open(logs_path, 'r') as f: logs = f.read()
           system_prompt = f'{agent_content}\n\n<skill>\n{skill_content}\n</skill>'
-          prompt = f'<logs>\n{logs}\n</logs><prompt>Analyze agent session logs and provide write report.</prompt>'
+          prompt = f'<logs>\n{logs}\n</logs>'
+          prompt += f'<prompt>Analyze agent session logs and write report both text and visual.</prompt>'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write('system_prompt<<EOF\n')
               f.write(system_prompt)
