@@ -1,8 +1,8 @@
 flowchart TD
     %% --------------------------------------------------------
-    %% 1. Cogni AI Agent (action.yml)
+    %% Cogni AI Agent (action.yml)
     %% --------------------------------------------------------
-    subgraph Flow_Cogni_AI_Agent ["1. Cogni AI Agent (action.yml)"]
+    subgraph Flow_Cogni_AI_Agent ["Cogni AI Agent (action.yml)"]
         direction TB
         A1([Trigger Events]) --> A2{Check conditions}
         A2 -- "run=true" --> A3["Wait for concurrent runs"]
@@ -22,18 +22,18 @@ flowchart TD
     end
 
     %% --------------------------------------------------------
-    %% 2. OpenCode Agent (opencode/action.yml)
+    %% OpenCode Agent (opencode/action.yml)
     %% --------------------------------------------------------
-    subgraph Flow_OpenCode_Agent ["2. OpenCode Agent (opencode/action.yml)"]
+    subgraph Flow_OpenCode_Agent ["OpenCode Agent (opencode/action.yml)"]
         direction TB
         O1([Trigger Events]) --> O2["Run opencode"]
         O2 --> O3(["anomalyco/opencode/github@v1.4.3"])
     end
 
     %% --------------------------------------------------------
-    %% 3. AI Inference (ai-inference/action.yml)
+    %% AI Inference (ai-inference/action.yml)
     %% --------------------------------------------------------
-    subgraph Flow_AI_Inference ["3. AI Inference (ai-inference/action.yml)"]
+    subgraph Flow_AI_Inference ["AI Inference (ai-inference/action.yml)"]
         direction TB
         I1([Trigger Events]) --> I2{Check conditions}
         I2 -- "run=true" --> I3["Wait for concurrent runs"]
@@ -47,9 +47,9 @@ flowchart TD
     end
 
     %% --------------------------------------------------------
-    %% 4. Agent Delegation Protocol
+    %% Agent Delegation Protocol
     %% --------------------------------------------------------
-    subgraph Flow_Agent_Delegation ["4. Agent Delegation Protocol"]
+    subgraph Flow_Agent_Delegation ["Agent Delegation Protocol"]
         direction TB
         Arch((Cogni AI Architect))
         Arch -->|task tool| DevOps[cogni-ai-devops<br/>Task automation, CI/CD, IaC]
