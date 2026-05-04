@@ -241,8 +241,8 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
-  review:
-    name: Cogni AI Agent Review Local
+  postrun-audit:
+    name: Agent session audit (post-run)
     needs: cogni-ai
     if: always() && needs.cogni-ai.result != 'skipped'
     runs-on: ubuntu-latest
