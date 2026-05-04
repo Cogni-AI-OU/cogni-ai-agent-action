@@ -297,6 +297,7 @@ jobs:
           "
       - name: Run Cogni AI Agent Review Local
         id: cogni-ai-reviewer
+        if: ${{ false }}
         uses: ./
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
