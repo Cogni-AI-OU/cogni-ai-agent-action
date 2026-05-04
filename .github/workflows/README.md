@@ -29,6 +29,12 @@ The `opencode.yml` workflow calls the org-level reusable OpenCode workflow. It i
 The `opencode-agent-local.yml` workflow runs the local composite action (`./opencode/action.yml`) as a wrapper for OpenCode.
 It is triggered by `/oc`, `/opencode`, or `/review` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
 
+### Task - Update Docs (`task-update-docs.yml`)
+
+The `task-update-docs.yml` workflow is a manual task that updates core architecture and documentation files
+for mutual consistency and accuracy. It uses the `task-update-docs.prompt.md` prompt.
+It is triggered manually via `workflow_dispatch`.
+
 ### Copilot Setup Steps Workflow (`copilot-setup-steps.yml`)
 
 The `copilot-setup-steps.yml` workflow is a utility workflow that checks out the repository, sets up Python 3.12,
