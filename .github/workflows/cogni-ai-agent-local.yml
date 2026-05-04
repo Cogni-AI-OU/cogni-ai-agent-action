@@ -271,20 +271,10 @@ jobs:
         run: |
           python3 -c "
           import os
-          import urllib.request
           logs_path = 'agent.log'
-          skill_url = 'https://raw.githubusercontent.com/Cogni-AI-OU/cogni-ai-agent-skills/refs/heads/main/agent-log-analysis/SKILL.md'
-          agent_url = 'https://raw.githubusercontent.com/Cogni-AI-OU/cogni-ai-agents/refs/heads/main/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md'
-          with urllib.request.urlopen(skill_url) as response: skill_content = response.read().decode('utf-8')
-          with urllib.request.urlopen(agent_url) as response: agent_content = response.read().decode('utf-8')
           with open(logs_path, 'r') as f: logs = f.read()
-          system_prompt = f'{agent_content}\n\n<skill>\n{skill_content}\n</skill>'
-          prompt = f'<logs>\n{logs}\n</logs>'
-          prompt += f'<prompt>Analyze agent session logs and write comprehensive visual audit report using mermaid diagrams and data.</prompt>'
+          prompt = f'<logs>\n{logs}\n</logs>\n<prompt>Analyze agent session logs and write comprehensive visual audit report using mermaid diagrams and data.</prompt>'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('system_prompt<<EOF\n')
-              f.write(system_prompt)
-              f.write('\nEOF\n')
               f.write('prompt<<EOF\n')
               f.write(prompt)
               f.write('\nEOF\n')
@@ -295,9 +285,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          agent: cogni-ai-agent-auditor
           model: openai/gpt-4o-mini
-          max-completion-tokens: 8192  # Gives the model plenty of room to generate complex mermaid markup.
-          temperature: 0.2  # Forces a more deterministic and structured output.
-          top-p: 0.9  # Sharpens token sampling suitable for coding metrics.
+          max-completion-tokens: 8192
           prompt: ${{ steps.prepare-prompt.outputs.prompt }}
-          system-prompt: ${{ steps.prepare-prompt.outputs.system_prompt }}
+          skills: agent-log-analysis
+          temperature: 0.2
+          top-p: 0.9

@@ -45,6 +45,10 @@ inputs:
     default: ''
     description: Prompt to pass to the model.
     required: false
+  skills:
+    default: ''
+    description: Comma-separated list of skills to load into system prompt.
+    required: false
   system-prompt:
     default: You are a helpful assistant
     description: The system prompt to send to the model.
@@ -61,6 +65,10 @@ inputs:
   version_agents:
     default: main
     description: Version of cogni-ai-agents to use.
+    required: false
+  version_skills:
+    default: main
+    description: Version of cogni-ai-agent-skills to use.
     required: false
 name: Cogni AI Inference
 outputs:
@@ -208,6 +216,14 @@ runs:
           -b ${{ inputs.version_agents || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
           ${{ runner.temp }}/.agents
+    - name: Checkout cogni-ai-agent-skills
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_skills || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
+          ${{ runner.temp }}/.skills
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
@@ -259,16 +275,44 @@ runs:
       shell: bash
       env:
         AGENT: ${{ steps.check.outputs.effective_agent }}
+        SKILLS: ${{ inputs.skills }}
       run: |
         set -euo pipefail
+        prompt_file="${{ runner.temp }}/.system_prompt.md"
+        touch "$prompt_file"
+
         if [ -n "${AGENT}" ]; then
           agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
           if [ -f "$agent_file" ]; then
-            echo "system-prompt-file=$agent_file" >> "$GITHUB_OUTPUT"
-            exit 0
+            cat "$agent_file" >> "$prompt_file"
+            echo "" >> "$prompt_file"
           fi
         fi
-        echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
+
+        if [ -n "${SKILLS}" ]; then
+          echo "<skills>" >> "$prompt_file"
+          IFS=',' read -ra SKILL_ARRAY <<< "$SKILLS"
+          for skill in "${SKILL_ARRAY[@]}"; do
+            skill=$(echo "$skill" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            if [ -n "$skill" ]; then
+              skill_file="${{ runner.temp }}/.skills/${skill}/SKILL.md"
+              if [ -f "$skill_file" ]; then
+                echo "<skill>" >> "$prompt_file"
+                cat "$skill_file" >> "$prompt_file"
+                echo "</skill>" >> "$prompt_file"
+                echo "" >> "$prompt_file"
+              fi
+            fi
+          done
+          echo "</skills>" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
+
+        if [ -s "$prompt_file" ]; then
+          echo "system-prompt-file=$prompt_file" >> "$GITHUB_OUTPUT"
+        else
+          echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
+        fi
     - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
       id: inference
