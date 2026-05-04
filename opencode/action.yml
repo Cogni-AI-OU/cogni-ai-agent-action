@@ -75,10 +75,6 @@ runs:
             return BOT_MENTIONS.some(m => body.includes(m));
           }
           function getAgent(body) {
-            if (!body) return 'default';
-            // Stricter pattern for /review to avoid misclassification
-            if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
-            if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
             return 'default';
           }
           const isBot = context.actor.endsWith('[bot]');
