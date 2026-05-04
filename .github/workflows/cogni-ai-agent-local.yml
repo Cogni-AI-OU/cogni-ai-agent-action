@@ -274,12 +274,18 @@ jobs:
           import urllib.request
           logs_path = 'agent.log'
           skill_url = 'https://raw.githubusercontent.com/Cogni-AI-OU/cogni-ai-agent-skills/refs/heads/main/agent-log-analysis/SKILL.md'
+          agent_url = 'https://raw.githubusercontent.com/Cogni-AI-OU/cogni-ai-agents/refs/heads/main/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md'
           with urllib.request.urlopen(skill_url) as response: skill_content = response.read().decode('utf-8')
+          with urllib.request.urlopen(agent_url) as response: agent_content = response.read().decode('utf-8')
           with open(logs_path, 'r') as f: logs = f.read()
-          content = f'<skill>{skill_content}</skill>\n\n<logs>\n{logs}\n</logs>'
+          system_prompt = f'{agent_content}\n\n<skill>\n{skill_content}\n</skill>'
+          prompt = f'<logs>\n{logs}\n</logs><prompt>Analyze agent session logs and provide write report.</prompt>'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('system_prompt<<EOF\n')
+              f.write(system_prompt)
+              f.write('\nEOF\n')
               f.write('prompt<<EOF\n')
-              f.write(content)
+              f.write(prompt)
               f.write('\nEOF\n')
           "
       - name: Run Agent Auditor
@@ -288,6 +294,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          agent: cogni-ai-agent-auditor
           model: openai/gpt-4o-mini
           prompt: ${{ steps.prepare-prompt.outputs.prompt }}
+          system-prompt: ${{ steps.prepare-prompt.outputs.system_prompt }}
