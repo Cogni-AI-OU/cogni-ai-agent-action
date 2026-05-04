@@ -1,26 +1,40 @@
-mindmap
-  root((Cogni AI Agent Action))
-    Architecture
-      "Agent::Cogni AI Architect"
-      "Orchestrator::OpenCode"
-      "Runtime::GitHub Actions"
-    Context
-      "Agents_MD::/AGENTS.md"
-      "Constraints_MZN::/CONSTRAINTS.mzn"
-      "Flows_MMD::/FLOWS.mmd"
-      "Mentions::/co, /cogni, /review, /brainstorm"
-    Ecosystem
-      "Checkout_Invariant::persist-credentials: false"
-      "Integrations::GitHub, Context7, OpenCode"
-    Subagents
-      "cogni-ai-agent-auditor::Analyze logs & generate reports"
-      "cogni-ai-brain-ops::Gather facts, constraints, plan"
-      "cogni-ai-code-reviewer::PR analysis, quality, security"
-      "cogni-ai-context7-ops::Retrieve & filter documentation"
-      "cogni-ai-devops::Task automation, CI/CD, IaC"
-      "cogni-ai-fact-ops::Maintain facts & info consistency"
-      "cogni-ai-github-ops::Modify comments, issues, discussions"
-      "cogni-ai-plan-reviewer::Architectural & plan validation"
-      "cogni-ai-python-dev::Write, test, debug Python"
-      "cogni-ai-security-auditor::Zero-defect threat modeling"
-      "cogni-ai-tester::Execute tests, verify behavior"
+flowchart TD
+    subgraph Facts ["Cogni AI Agent Action Facts"]
+        direction TB
+
+        subgraph Architecture ["Architecture"]
+            direction LR
+            A1["Agent: Cogni AI Architect"]
+            A2["Orchestrator: OpenCode"]
+            A3["Runtime: GitHub Actions"]
+        end
+
+        subgraph Context ["Context"]
+            direction LR
+            C1["Agents MD: /AGENTS.md"]
+            C2["Constraints MZN: /CONSTRAINTS.mzn"]
+            C3["Flows MMD: /FLOWS.mmd"]
+            C4["Mentions: /co, /cogni, /review, /brainstorm"]
+        end
+
+        subgraph Ecosystem ["Ecosystem"]
+            direction LR
+            E1["Checkout Invariant: persist-credentials: false"]
+            E2["Integrations: GitHub, Context7, OpenCode"]
+        end
+
+        subgraph Subagents ["Subagents"]
+            direction TB
+            S1["cogni-ai-agent-auditor<br/>Analyze logs & generate reports"]
+            S2["cogni-ai-brain-ops<br/>Gather facts, constraints, plan"]
+            S3["cogni-ai-code-reviewer<br/>PR analysis, quality, security"]
+            S4["cogni-ai-context7-ops<br/>Retrieve & filter documentation"]
+            S5["cogni-ai-devops<br/>Task automation, CI/CD, IaC"]
+            S6["cogni-ai-fact-ops<br/>Maintain facts & info consistency"]
+            S7["cogni-ai-github-ops<br/>Modify comments, issues, discussions"]
+            S8["cogni-ai-plan-reviewer<br/>Architectural & plan validation"]
+            S9["cogni-ai-python-dev<br/>Write, test, debug Python"]
+            S10["cogni-ai-security-auditor<br/>Zero-defect threat modeling"]
+            S11["cogni-ai-tester<br/>Execute tests, verify behavior"]
+        end
+    end
