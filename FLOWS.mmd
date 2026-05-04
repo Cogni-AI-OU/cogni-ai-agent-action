@@ -4,9 +4,7 @@ flowchart TD
     %% --------------------------------------------------------
     subgraph Flow_Cogni_AI_Agent ["1. Cogni AI Agent (action.yml)"]
         direction TB
-        A1([Trigger Events]) --> A2{Check conditions}
-        A2 -- "run=true" --> A3["Wait for concurrent runs"]
-        A2 -- "run=false" --> A_EndSkip([Action Skipped])
+        A1([Trigger Events]) --> A3["Wait for concurrent runs"]
 
         A3 --> A4["Resolve prompt"]
         A4 --> A5["Checkout Repositories<br/>(agents, instructions, skills)"]
@@ -26,8 +24,10 @@ flowchart TD
     %% --------------------------------------------------------
     subgraph Flow_OpenCode_Agent ["2. OpenCode Agent (opencode/action.yml)"]
         direction TB
-        O1([Trigger Events]) --> O2["Run opencode"]
-        O2 --> O3(["anomalyco/opencode/github@v1.4.3"])
+        O1([Trigger Events]) --> O2{Check conditions}
+        O2 -- "run=true" --> O3["Run opencode"]
+        O2 -- "run=false" --> O_EndSkip([Action Skipped])
+        O3 --> O4(["anomalyco/opencode/github@v1.4.3"])
     end
 
     %% --------------------------------------------------------
