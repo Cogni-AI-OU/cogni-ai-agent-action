@@ -1,11 +1,10 @@
 ---
-description: Check core architecture and documentation files for mutual consistency
+description: Update core architecture and documentation files
 ---
 
-# Check Consistency Docs
+# Update Docs
 
-Please review the following core architecture, documentation, and constraint files in this repository for mutual
-consistency and accuracy:
+Please review and update the following core architecture, documentation, and constraint files in this repository:
 
 - `*.mmd`
 - `*.mzn`

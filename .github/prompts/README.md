@@ -4,6 +4,6 @@ This directory contains prompt templates used by the Cogni AI agents for specifi
 
 ## Prompts
 
-### Check Consistency Docs (`task-check-consistency-docs.prompt.md`)
+### Update Docs (`task-update-docs.prompt.md`)
 
-This prompt is used by the `task-check-consistency-docs.yml` workflow to instruct the agent to review core architecture, documentation, and constraint files for mutual consistency and accuracy.
+This prompt is used by the `task-update-docs.yml` workflow to instruct the agent to review and update core architecture, documentation, and constraint files for mutual consistency and accuracy.

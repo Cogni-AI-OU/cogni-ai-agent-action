@@ -28,8 +28,8 @@ For a human-readable overview, see [README.md](README.md).
   Runs local `./opencode/action.yml` as a wrapper for OpenCode.
 - **[opencode.yml](opencode.yml)**:
   Invokes org-level reusable OpenCode workflow manually.
-- **[task-check-consistency-docs.yml](task-check-consistency-docs.yml)**:
-  Check core architecture and documentation files for mutual consistency.
+- **[task-update-docs.yml](task-update-docs.yml)**:
+  Update core architecture and documentation files.
 - **[test-constraints.yml](test-constraints.yml)**:
   Runs MiniZinc constraints check to verify least privilege.
 
@@ -91,9 +91,9 @@ For a human-readable overview, see [README.md](README.md).
 - Purpose: Invokes org-level reusable OpenCode workflow.
 - Triggers: `workflow_dispatch`.
 
-### task-check-consistency-docs.yml
+### task-update-docs.yml
 
-- Purpose: Check core architecture and documentation files for mutual consistency.
+- Purpose: Update core architecture and documentation files.
 - Triggers: `workflow_dispatch`.
 
 ### test-constraints.yml

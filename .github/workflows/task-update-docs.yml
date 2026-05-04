@@ -1,10 +1,10 @@
 ---
-name: Task - Check Consistency Docs
+name: Task - Update Docs
 on:
   workflow_dispatch:
 jobs:
   cogni-ai:
-    name: Check Consistency Docs
+    name: Update Docs
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -32,7 +32,7 @@ jobs:
         id: read-prompt
         run: |
           {
-            PROMPT=$(cat .github/prompts/task-check-consistency-docs.prompt.md)
+            PROMPT=$(cat .github/prompts/task-update-docs.prompt.md)
             EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
             echo "prompt<<$EOF"
             echo "$PROMPT"
