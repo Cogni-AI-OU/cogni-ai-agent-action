@@ -69,7 +69,7 @@ For a human-readable overview, see [README.md](README.md).
 
 - Purpose: Tests the local `action.yml` action manually with predefined settings
   and matrices for agents, models, and prompts.
-- Triggers: `workflow_dispatch`.
+- Triggers: `pull_request`, `pull_request_review_comment`, `pull_request_target`, `workflow_dispatch`.
 
 ### copilot-setup-steps.yml
 
