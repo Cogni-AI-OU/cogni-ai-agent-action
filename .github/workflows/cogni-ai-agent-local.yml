@@ -296,8 +296,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: openai/gpt-4o-mini
-          max-completion-tokens: 8192
-          temperature: 0.2
-          top-p: 0.9
+          max-completion-tokens: 8192  # Gives the model plenty of room to generate complex mermaid markup.
+          temperature: 0.2  # Forces a more deterministic and structured output.
+          top-p: 0.9  # Sharpens token sampling suitable for coding metrics.
           prompt: ${{ steps.prepare-prompt.outputs.prompt }}
           system-prompt: ${{ steps.prepare-prompt.outputs.system_prompt }}
