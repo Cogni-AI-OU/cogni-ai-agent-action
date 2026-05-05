@@ -144,6 +144,9 @@ jobs:
 | `temperature` | The sampling temperature to use (0-1) | — | No |
 | `token` | Token to use for inference | `github.token` | No |
 | `top-p` | The nucleus sampling parameter to use (0-1) | — | No |
+| `version_agents` | Version of cogni-ai-agents to use | `main` | No |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main` | No |
+| `version_skills` | Version of cogni-ai-agent-skills to use | `main` | No |
 
 ### Outputs
 

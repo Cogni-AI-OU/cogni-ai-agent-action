@@ -11,7 +11,7 @@ inputs:
     description: Agent to use for system prompt.
     required: false
   enable-github-mcp:
-    default: 'false'
+    default: 'true'
     description: >-
       Enable Model Context Protocol integration with GitHub tools.
       Some models won't support it (such as nano, mini or deepseek).
@@ -308,13 +308,9 @@ runs:
 
         # Handle prompt-file specifically for outputs
         if [ -n "$prompt_file" ]; then
-          # For file-based prompts, we avoid including the file content in the output
-          # as it might be too large. We just note the source.
-          if [ -n "$header" ]; then
-             prompt="$header (Prompt loaded from file: $prompt_file)"
-          else
-             prompt="(Prompt loaded from file: $prompt_file)"
-          fi
+          # For file-based prompts, we show the context header if available,
+          # but avoid including the file content in the output as it might be too large.
+          prompt="${header:-}"
         fi
 
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
@@ -322,6 +318,7 @@ runs:
           echo "prompt<<$EOF_TOKEN"
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
+          echo "prompt_file=$prompt_file"
         } >> "$GITHUB_OUTPUT"
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
@@ -395,7 +392,7 @@ runs:
       id: inference
       uses: actions/ai-inference@v2
       with:
-        enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp || 'true' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
@@ -419,14 +416,22 @@ runs:
       shell: bash
       env:
         PROMPT: ${{ steps.prompt.outputs.prompt }}
+        PROMPT_FILE: ${{ steps.prompt.outputs.prompt_file }}
         RESPONSE: ${{ steps.inference.outputs.response }}
       run: |-
         {
-          if [ -n "${PROMPT:-}" ]; then
+          if [ -n "${PROMPT:-}" ] || [ -n "${PROMPT_FILE:-}" ]; then
             echo "## Prompt"
             echo ""
-            echo "$PROMPT"
-            echo ""
+            if [ -n "${PROMPT:-}" ]; then
+              echo "$PROMPT"
+              echo ""
+            fi
+            if [ -n "${PROMPT_FILE:-}" ]; then
+              echo "> [!NOTE]"
+              echo "> Prompt loaded from file: \`${PROMPT_FILE}\`"
+              echo ""
+            fi
           fi
           echo "## Agent Response"
           echo ""
