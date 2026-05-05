@@ -306,7 +306,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: cogni-ai-agent-auditor
-          max-completion-tokens: 8192
+          max-completion-tokens: 12000
           model: openai/gpt-4o-mini
           prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
           skills: agent-log-analysis
