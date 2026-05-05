@@ -283,7 +283,7 @@ runs:
       run: |
         set -euo pipefail
         prompt_file="${{ runner.temp }}/.system_prompt.md"
-        touch "$prompt_file"
+        : > "$prompt_file"
 
         if [ -n "${AGENT}" ]; then
           agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
