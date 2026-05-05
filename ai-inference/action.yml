@@ -212,7 +212,7 @@ runs:
             `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
     - name: Checkout cogni-ai-agents
-      if: steps.check.outputs.run == 'true'
+      if: steps.check.outputs.run == 'true' && steps.check.outputs.effective_agent != ''
       shell: bash
       run: |
         git clone --depth 1 \
@@ -220,7 +220,7 @@ runs:
           https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
           ${{ runner.temp }}/.agents
     - name: Checkout cogni-ai-agent-skills
-      if: steps.check.outputs.run == 'true'
+      if: steps.check.outputs.run == 'true' && inputs.skills != ''
       shell: bash
       run: |
         git clone --depth 1 \
@@ -280,10 +280,15 @@ runs:
       env:
         AGENT: ${{ steps.check.outputs.effective_agent }}
         SKILLS: ${{ inputs.skills }}
+        SYSTEM_PROMPT: ${{ inputs.system-prompt }}
       run: |
         set -euo pipefail
-        prompt_file="${{ runner.temp }}/.system_prompt.md"
-        : > "$prompt_file"
+        prompt_file=$(mktemp "${{ runner.temp }}/system_prompt.XXXXXX.md")
+
+        if [ -n "${SYSTEM_PROMPT}" ] && [ "${SYSTEM_PROMPT}" != "You are a helpful assistant" ]; then
+          echo "${SYSTEM_PROMPT}" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
 
         if [ -n "${AGENT}" ]; then
           agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
