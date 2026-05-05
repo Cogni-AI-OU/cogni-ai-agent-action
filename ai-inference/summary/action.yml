@@ -39,13 +39,13 @@ runs:
           WORKFLOW_PATH=$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq .path)
           FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" --jq .content | base64 -d | awk -v id="$AGENT_JOB_ID" '
             $0 ~ "^  " id ":" { found=1; next }
-            found && $0 ~ "^    name:" {
+            found && !done && $0 ~ "^    name:" {
               sub(/^[ ]*name:[ ]*/, "");
-              gsub(/^["'\'']|["'\'']$/, "");
+              gsub(/^["'\''"]|["'\''"]$/, "");
               print;
-              exit
+              done=1
             }
-            found && $0 ~ "^  [^ ]" { exit }
+            found && $0 ~ "^  [^ ]" { found=0 }
           ')
           if [ -n "$FETCHED_NAME" ]; then
             AGENT_JOB_NAME="$FETCHED_NAME"
@@ -61,7 +61,7 @@ runs:
                 (.name | startswith(\"$AGENT_JOB_NAME\")) or 
                 (any(.steps[]; .name | contains(\"Run Cogni AI Agent\")))
               ) | .id" \
-            | awk 'NR==1{print; exit}'
+            | awk 'NR==1{print}'
         )
         if [ -z "$JOB_ID" ]; then
           echo "::notice title=Job ID not found::No job matched '$AGENT_JOB_NAME' (run=$RUN_ID attempt=$ATTEMPT)."
