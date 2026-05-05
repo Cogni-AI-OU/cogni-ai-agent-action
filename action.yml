@@ -18,6 +18,10 @@ inputs:
     default: 'true'
     description: Whether to enable gh-models extension.
     required: false
+  force-run:
+    default: 'false'
+    description: Whether to force the agent to run regardless of condition checks.
+    required: false
   mentions:
     default: /co,/cogni,/review,/brainstorm
     description: Comma-separated trigger mentions for OpenCode.
@@ -313,6 +317,7 @@ runs:
         MENTIONS: ${{ inputs.mentions }}
         MENTIONS_BOTS: ${{ inputs.mentions_bots }}
         AGENT_INPUT: ${{ inputs.agent }}
+        FORCE_RUN: ${{ inputs.force-run }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
@@ -345,10 +350,13 @@ runs:
           }
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
-          let run = false;
+          let run = process.env.FORCE_RUN === 'true';
           let agent = '';
-          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+          console.log(`### CHECK_CONDITIONS_RESULTS ###`);
+          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
+          if (run) {
+            agent = 'default';
+          } else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
             agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
@@ -383,11 +391,14 @@ runs:
             const login = pr?.user?.login;
             const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
               (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            console.log(`PR - Assoc: ${assoc}, Login: ${login}, IsAllowed: ${isAllowed}`);
             if (isAllowed) {
               run = true;
               agent = 'default';
             }
           }
+          console.log(`Run: ${run}, Agent: ${agent}`);
+          console.log(`################################`);
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic

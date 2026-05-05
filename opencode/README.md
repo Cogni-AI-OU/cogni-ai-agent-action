@@ -70,13 +70,13 @@ jobs:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run OpenCode Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
-```
 
 ### Advanced workflow
 
@@ -194,6 +194,7 @@ jobs:
           persist-credentials: false
       - name: Run OpenCode Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -207,6 +208,25 @@ jobs:
               inputs.prompt
             }}
     timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: opencode-agent
+    if: always() && needs.opencode-agent.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: opencode-agent
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Inputs

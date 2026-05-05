@@ -134,21 +134,6 @@ on:
         description: Custom prompt to override the default prompt
         required: false
         default: ''
-      version_agents:
-        default: main
-        description: Version of cogni-ai-agents to use.
-        required: false
-        type: string
-      version_instructions:
-        default: main
-        description: Version of cogni-ai-agent-instructions to use.
-        required: false
-        type: string
-      version_skills:
-        default: main
-        description: Version of cogni-ai-agent-skills to use.
-        required: false
-        type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
@@ -273,3 +258,34 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
+  summary:
+    name: Generate Summary (post-run)
+    needs: cogni-ai
+    if: always() && needs.cogni-ai.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: >-
+            ${{
+              (
+                github.event_name == 'issue_comment' &&
+                github.event.issue.pull_request &&
+                format('refs/pull/{0}/head', github.event.issue.number)
+              ) ||
+              (
+                github.event_name == 'pull_request_review_comment' &&
+                format('refs/pull/{0}/head', github.event.pull_request.number)
+              ) ||
+              github.ref
+            }}
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: cogni-ai
+          github_token: ${{ secrets.GITHUB_TOKEN }}

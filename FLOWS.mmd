@@ -52,16 +52,29 @@ flowchart TD
     subgraph Flow_Agent_Delegation ["Agent Delegation Protocol"]
         direction TB
         Arch((Cogni AI Architect))
-        Arch -->|task tool| Auditor[cogni-ai-agent-auditor<br/>Analyze logs, evaluate reasoning]
+        Arch -->|task tool| Auditor[cogni-ai-agent-auditor<br/>Analyze logs & generate reports]
         Arch -->|task tool| BrainOps[cogni-ai-brain-ops<br/>Gather facts, constraints, plan]
         Arch -->|task tool| CodeRev[cogni-ai-code-reviewer<br/>PR analysis, quality, security]
         Arch -->|task tool| C7Ops[cogni-ai-context7-ops<br/>Retrieve & filter documentation]
         Arch -->|task tool| DevOps[cogni-ai-devops<br/>Task automation, CI/CD, IaC]
-        Arch -->|task tool| DocsEdit[cogni-ai-docs-editor<br/>Maintain project documentation]
         Arch -->|task tool| FactOps[cogni-ai-fact-ops<br/>Maintain facts & info consistency]
         Arch -->|task tool| GHOps[cogni-ai-github-ops<br/>Modify comments, issues, discussions]
         Arch -->|task tool| PlanRev[cogni-ai-plan-reviewer<br/>Architectural & plan validation]
         Arch -->|task tool| PyDev[cogni-ai-python-dev<br/>Write, test, debug Python]
-        Arch -->|task tool| SecAudit[cogni-ai-security-auditor<br/>Threat modeling, vulnerability detection]
+        Arch -->|task tool| SecAudit[cogni-ai-security-auditor<br/>Zero-defect threat modeling]
         Arch -->|task tool| Tester[cogni-ai-tester<br/>Execute tests, verify behavior]
+    end
+
+    %% --------------------------------------------------------
+    %% Subagent Interaction Sequence
+    %% --------------------------------------------------------
+    subgraph Interaction_Sequence ["Subagent Interaction Sequence"]
+        direction TB
+        subgraph Interaction_Sequence_Inner [ ]
+            direction TB
+            ISQ1[Architect: Formulate sub-task prompt] --> ISQ2[Architect: Call Task Tool with subagent_type]
+            ISQ2 --> ISQ3[Subagent: Execute specialized logic]
+            ISQ3 --> ISQ4[Subagent: Return result/artifacts]
+            ISQ4 --> ISQ5[Architect: Synthesize results into final response]
+        end
     end

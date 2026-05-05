@@ -28,6 +28,7 @@ jobs:
     steps:
       - name: Run AI Inference
         uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
+        id: inference
         with:
           prompt: ${{ inputs.prompt }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -112,6 +113,7 @@ jobs:
             }}
       - name: Run AI Inference
         uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
+        id: inference
         with:
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
           prompt: >-
@@ -129,7 +131,7 @@ jobs:
 | Input | Description | Default | Required |
 | :--- | :--- | :--- | :--- |
 | `agent` | Agent to use for system prompt | `default` | No |
-| `enable-github-mcp` | Enable Model Context Protocol integration | `false` | No |
+| `enable-github-mcp` | Enable Model Context Protocol integration | `true` | No |
 | `github-mcp-token` | Token to use for GitHub MCP server | — | No |
 | `github-mcp-toolsets` | Toolsets to enable for GitHub MCP | `repos,issues,pull_requests,actions,code_security` | No |
 | `max-completion-tokens` | The maximum number of tokens to generate | — | No |

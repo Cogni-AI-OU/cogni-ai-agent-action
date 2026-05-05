@@ -76,6 +76,10 @@ inputs:
   token:
     description: Token to use for inference. Typically the GITHUB_TOKEN secret.
     required: false
+  force-run:
+    default: 'false'
+    description: Whether to force the agent to run regardless of condition checks.
+    required: false
   top-p:
     description: The nucleus sampling parameter to use (0-1)
     required: false
@@ -110,6 +114,7 @@ runs:
       uses: actions/github-script@v7
       env:
         AGENT_INPUT: ${{ inputs.agent }}
+        FORCE_RUN: ${{ inputs.force-run }}
         MENTIONS: ${{ inputs.mentions || '/ai' }}
         MENTIONS_BOTS: ${{ inputs.mentions_bots }}
       with:
@@ -138,10 +143,13 @@ runs:
           }
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
-          let run = false;
+          let run = process.env.FORCE_RUN === 'true';
           let agent = '';
-          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
+          console.log(`### CHECK_CONDITIONS_RESULTS ###`);
+          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
+          if (run) {
+            agent = 'default';
+          } else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
             run = true;
             agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
@@ -159,11 +167,14 @@ runs:
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
+            console.log(`PR - Assoc: ${assoc}`);
             if (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) {
               run = true;
               agent = 'default';
             }
           }
+          console.log(`Run: ${run}, Agent: ${agent}`);
+          console.log(`################################`);
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
@@ -411,7 +422,7 @@ runs:
       shell: bash
       run: |
         echo "Response saved to: ${{ steps.inference.outputs.response-file }}"
-    - name: Write response to summary
+    - name: Write response to step summary
       if: always() && steps.inference.outputs.response != ''
       shell: bash
       env:
