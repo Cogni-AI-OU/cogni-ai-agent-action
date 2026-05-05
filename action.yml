@@ -282,6 +282,13 @@ inputs:
     default: ''
     description: Prompt to pass to the agent.
     required: false
+  prompt-file:
+    description: Path to a file containing the prompt (supports .txt and .prompt.yml formats)
+    required: false
+  skills:
+    default: ''
+    description: Comma-separated list of skills to load into system prompt.
+    required: false
   version_agents:
     default: main
     description: Version of cogni-ai-agents to use.
