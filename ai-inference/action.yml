@@ -73,6 +73,10 @@ inputs:
   top-p:
     description: The nucleus sampling parameter to use (0-1)
     required: false
+  concurrency:
+    default: 'true'
+    description: Whether to wait for concurrent runs.
+    required: false
   version_agents:
     default: main
     description: Version of cogni-ai-agents to use.
@@ -171,7 +175,7 @@ runs:
           }
           core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
-      if: steps.check.outputs.run == 'true'
+      if: steps.check.outputs.run == 'true' && inputs.concurrency == 'true'
       id: concurrency
       uses: actions/github-script@v7
       with:
