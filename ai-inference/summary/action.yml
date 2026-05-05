@@ -59,7 +59,8 @@ runs:
             --jq ".jobs[] | select(
                 .name == \"$AGENT_JOB_NAME\" or 
                 (.name | startswith(\"$AGENT_JOB_NAME\")) or 
-                (any(.steps[]; .name | contains(\"Run Cogni AI Agent\")))
+                (any(.steps[]; .name | contains(\"Run Cogni AI Agent\"))) or
+                (.name == \"$AGENT_JOB_ID\")
               ) | .id" \
             | awk 'NR==1{print; exit}'
         )
@@ -74,8 +75,9 @@ runs:
           } > .agent.log
         else
           gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
-            | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 }
-                   END { if (!found) print "No logs found between markers." }' \
+            | awk '/### CHECK_CONDITIONS_RESULTS ###/,/################################/ { print }
+                   /PROMPT:/,/Post job cleanup/ { print; found=1 }
+                   END { if (!found) print "No agent execution logs found. Check condition results above." }' \
             | tee .agent.log
         fi
     - name: Prepare summary prompt
@@ -95,6 +97,10 @@ runs:
           echo -n "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) "
           echo "and write a comprehensive visual audit report using mermaid diagrams and data."
           echo ""
+          echo "If the logs indicate that the agent was skipped due to condition results, "
+          echo "please explain the reason (e.g., actor association, bot mention, etc.) "
+          echo "and provide a concise 'Skipped' summary instead of a full audit."
+          echo ""
           echo "## Execution Context"
           echo "- **Event Name:** $EVENT_NAME"
           echo "- **Triggered By:** $ACTOR"
@@ -113,6 +119,7 @@ runs:
         GH_TOKEN: ${{ inputs.github_token }}
       with:
         agent: cogni-ai-agent-auditor
+        force-run: true
         max-completion-tokens: 12000
         model: openai/gpt-4o-mini
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
