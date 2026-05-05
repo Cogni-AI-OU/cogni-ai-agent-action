@@ -43,6 +43,9 @@ You can specify a different run or attempt if needed:
 
 ## Requirements
 
-- **Permissions**: The provided `github_token` must have `actions: read` permissions to fetch job logs.
+- **Permissions**: The provided `github_token` must have the following minimal permissions:
+  - `actions: read`: Required to fetch job logs from the repository.
+  - `id-token: write`: Required if using GitHub Models (for OIDC authentication).
+  - Note: This action does **not** require `issues: write` or `pull-requests: write` permissions as it only reads logs and outputs to the job summary.
 - **Job Name**: The action specifically looks for a job named `Cogni AI Agent Local`.
 - **Infrastructure**: This action depends on the `ai-inference` action located in the `ai-inference/` directory of this repository.
