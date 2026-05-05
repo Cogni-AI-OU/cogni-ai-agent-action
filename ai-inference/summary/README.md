@@ -38,6 +38,7 @@ You can specify a different run or attempt if needed:
 | Input | Description | Default | Required |
 | :--- | :--- | :--- | :--- |
 | `github_token` | GitHub Token with permissions to read job logs | — | Yes |
+| `agent_job_id` | Machine name (YAML key) of the job whose logs should be extracted. If provided, the action will try to resolve the display name from the workflow file. | — | No |
 | `agent_job_name` | Display name of the job whose logs should be extracted. The action searches by exact match, prefix, or by looking for a step named `Run Cogni AI Agent`. | `Cogni AI Agent` | No |
 | `run_id` | The ID of the workflow run to summarize | `${{ github.run_id }}` | No |
 | `run_attempt` | The attempt number of the workflow run | `${{ github.run_attempt }}` | No |
@@ -48,5 +49,5 @@ You can specify a different run or attempt if needed:
   - `actions: read`: Required to fetch job logs from the repository.
   - `id-token: write`: Required if using GitHub Models (for OIDC authentication).
   - Note: This action does **not** require `issues: write` or `pull-requests: write` permissions as it only reads logs and outputs to the job summary.
-- **Job Lookup**: The action looks for the target job using the configured `agent_job_name` (default `Cogni AI Agent`) or by identifying a job containing a step named `Run Cogni AI Agent`. This heuristic makes the lookup much more robust against dynamic job names.
+- **Job Lookup**: The action looks for the target job using the configured `agent_job_id` (by resolving it to a name), `agent_job_name` (default `Cogni AI Agent`), or by identifying a job containing a step named `Run Cogni AI Agent`. This multi-layered heuristic makes the lookup much more robust.
 - **Infrastructure**: This action depends on the `ai-inference` action located in the `ai-inference/` directory of this repository.

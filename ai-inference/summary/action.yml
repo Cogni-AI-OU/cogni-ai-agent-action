@@ -8,6 +8,9 @@ inputs:
     default: Cogni AI Agent
     description: Display name of the job whose logs should be extracted
     required: false
+  agent_job_id:
+    description: Machine name (YAML key) of the job whose logs should be extracted
+    required: false
   run_attempt:
     default: ${{ github.run_attempt }}
     description: Run Attempt
@@ -30,6 +33,24 @@ runs:
         RUN_ID="${{ inputs.run_id }}"
         ATTEMPT="${{ inputs.run_attempt }}"
         AGENT_JOB_NAME="${{ inputs.agent_job_name }}"
+        AGENT_JOB_ID="${{ inputs.agent_job_id }}"
+        if [ -n "$AGENT_JOB_ID" ]; then
+          # Fetch workflow file to get the display name for the job ID
+          WORKFLOW_PATH=$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq .path)
+          FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" --jq .content | base64 -d | awk -v id="$AGENT_JOB_ID" '
+            $0 ~ "^  " id ":" { found=1; next }
+            found && $0 ~ "^    name:" {
+              sub(/^[ ]*name:[ ]*/, "");
+              gsub(/^["'\'']|["'\'']$/, "");
+              print;
+              exit
+            }
+            found && $0 ~ "^  [^ ]" { exit }
+          ')
+          if [ -n "$FETCHED_NAME" ]; then
+            AGENT_JOB_NAME="$FETCHED_NAME"
+          fi
+        fi
         if [ -z "$AGENT_JOB_NAME" ]; then
           AGENT_JOB_NAME="Cogni AI Agent"
         fi
