@@ -177,5 +177,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           top-p: ${{ inputs.top-p }}
           version_agents: ${{ inputs.version_agents || 'main' }}
-
-          github_token: ${{ secrets.GITHUB_TOKEN }}
