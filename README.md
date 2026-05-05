@@ -77,6 +77,7 @@ jobs:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -84,6 +85,25 @@ jobs:
           # Note: Prompt is automatically resolved from comment/issue/PR body if omitted.
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: agent
+    if: always() && needs.agent.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: agent
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Execution flow
@@ -228,6 +248,7 @@ jobs:
       # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action>
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -235,6 +256,25 @@ jobs:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: cogni-ai-agent
+    if: always() && needs.cogni-ai-agent.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: cogni-ai-agent
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Sudo workflow
@@ -279,6 +319,7 @@ jobs:
           persist-credentials: false
       - name: Run Cogni AI Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -289,6 +330,25 @@ jobs:
               '*': allow
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: cogni-ai-agent-sudo
+    if: always() && needs.cogni-ai-agent-sudo.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: cogni-ai-agent-sudo
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 Important note: Only use this sudo workflow with trusted inputs and repositories

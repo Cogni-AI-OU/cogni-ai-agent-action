@@ -83,6 +83,7 @@ runs:
           const eventName = context.eventName;
           let run = false;
           let agent = '';
+          console.log(`### CHECK_CONDITIONS_RESULTS ###`);
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
@@ -122,11 +123,14 @@ runs:
             const login = pr?.user?.login;
             const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
               (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            console.log(`PR - Assoc: ${assoc}, Login: ${login}, IsAllowed: ${isAllowed}`);
             if (isAllowed) {
               run = true;
               agent = 'default';
             }
           }
+          console.log(`Run: ${run}, Agent: ${agent}`);
+          console.log(`################################`);
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic

@@ -54,17 +54,18 @@ runs:
         if [ -z "$AGENT_JOB_NAME" ]; then
           AGENT_JOB_NAME="Cogni AI Agent"
         fi
-        JOB_ID=$(
+        JOB_DATA=$(
           gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
             --jq ".jobs[] | select(
                 .name == \"$AGENT_JOB_NAME\" or 
                 (.name | startswith(\"$AGENT_JOB_NAME\")) or 
                 (any(.steps[]; .name | contains(\"Run Cogni AI Agent\"))) or
                 (.name == \"$AGENT_JOB_ID\")
-              ) | .id" \
-            | awk 'NR==1{print; exit}'
+              )" | jq -c 'select(.)' | head -n 1
         )
-        if [ -z "$JOB_ID" ]; then
+        JOB_ID=$(echo "$JOB_DATA" | jq -r .id // "")
+        JOB_CONCLUSION=$(echo "$JOB_DATA" | jq -r .conclusion // "")
+        if [ "$JOB_ID" = "null" ] || [ -z "$JOB_ID" ]; then
           echo "::notice title=Job ID not found::No job matched '$AGENT_JOB_NAME' (run=$RUN_ID attempt=$ATTEMPT)."
           AVAILABLE_JOBS=$(gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" --jq '.jobs[].name' | paste -sd ', ' -)
           {
@@ -74,6 +75,7 @@ runs:
             echo "Falling back to empty log extraction."
           } > .agent.log
         else
+          echo "job_conclusion=$JOB_CONCLUSION" >> "$GITHUB_OUTPUT"
           gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
             | awk '/### CHECK_CONDITIONS_RESULTS ###/,/################################/ { print }
                    /PROMPT:/,/Post job cleanup/ { print; found=1 }
@@ -87,6 +89,7 @@ runs:
         DISCUSSION_URL: ${{ github.event.discussion.html_url }}
         EVENT_NAME: ${{ github.event_name }}
         ISSUE_URL: ${{ github.event.issue.html_url }}
+        JOB_CONCLUSION: ${{ steps.extract-logs.outputs.job_conclusion }}
         PR_URL: ${{ github.event.pull_request.html_url }}
         RUN_ATTEMPT: ${{ inputs.run_attempt }}
         RUN_ID: ${{ inputs.run_id }}
@@ -95,15 +98,22 @@ runs:
         echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
         {
           echo -n "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) "
+          echo "which finished with status '$JOB_CONCLUSION', "
           echo "and write a comprehensive visual audit report using mermaid diagrams and data."
           echo ""
           echo "If the logs indicate that the agent was skipped due to condition results, "
           echo "please explain the reason (e.g., actor association, bot mention, etc.) "
           echo "and provide a concise 'Skipped' summary instead of a full audit."
           echo ""
+          if [ "$JOB_CONCLUSION" = "cancelled" ]; then
+            echo "Note: The job was cancelled. Please summarize what was achieved before cancellation "
+            echo "and mention that the execution was interrupted."
+            echo ""
+          fi
           echo "## Execution Context"
           echo "- **Event Name:** $EVENT_NAME"
           echo "- **Triggered By:** $ACTOR"
+          echo "- **Job Status:** $JOB_CONCLUSION"
           if [ -n "$ISSUE_URL" ]; then echo "- **Issue URL:** $ISSUE_URL"; fi
           if [ -n "$PR_URL" ]; then echo "- **Pull Request URL:** $PR_URL"; fi
           if [ -n "$DISCUSSION_URL" ]; then echo "- **Discussion URL:** $DISCUSSION_URL"; fi
