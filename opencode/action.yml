@@ -136,7 +136,7 @@ runs:
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
+      uses: anomalyco/opencode/github@v1.14.35
       env:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ inputs.permissions || env.OPENCODE_PERMISSION }}
