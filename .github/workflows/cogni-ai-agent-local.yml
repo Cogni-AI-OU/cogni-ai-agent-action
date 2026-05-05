@@ -272,11 +272,15 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
-          echo "prompt<<EOF" >> "$GITHUB_OUTPUT"
-          echo "<prompt>Please read the \`.agent.log\` file in the workspace containing logs from \
-          GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT). Analyze the agent session logs and write \
-          a comprehensive visual audit report using mermaid diagrams and data.</prompt>" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
+          
+          {
+            echo "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) and write a comprehensive visual audit report using mermaid diagrams and data."
+            echo ""
+            echo "<logs>"
+            cat .agent.log
+            echo "</logs>"
+          } > .agent.prompt.txt
       - name: Run Agent Auditor
         id: cogni-ai-agent-auditor
         uses: ./ai-inference/
@@ -286,7 +290,7 @@ jobs:
           agent: cogni-ai-agent-auditor
           model: openai/gpt-4o-mini
           max-completion-tokens: 8192
-          prompt: ${{ steps.prepare-prompt.outputs.prompt }}
+          prompt-file: ${{ steps.prepare-prompt.outputs.prompt_file }}
           skills: agent-log-analysis
           temperature: 0.2
           top-p: 0.9

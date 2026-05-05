@@ -45,6 +45,9 @@ inputs:
     default: ''
     description: Prompt to pass to the model.
     required: false
+  prompt-file:
+    description: Path to a file containing the prompt (supports .txt and .prompt.yml formats)
+    required: false
   skills:
     default: ''
     description: Comma-separated list of skills to load into system prompt.
@@ -242,13 +245,14 @@ runs:
               github.event.discussion.number ||
               '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        PROMPT_FILE_INPUT: ${{ inputs.prompt-file }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
-        if [ -z "$prompt" ]; then
+        if [ -z "$prompt" ] && [ -z "${PROMPT_FILE_INPUT:-}" ]; then
           prompt="${COMMENT_BODY:-}"
         fi
-        if [ -n "${ISSUE_NUMBER:-}" ]; then
+        if [ -n "${ISSUE_NUMBER:-}" ] && [ -z "${PROMPT_FILE_INPUT:-}" ]; then
           entity_type="issue/PR"
           if [ -n "${DISCUSSION_NUMBER:-}" ]; then
             entity_type="discussion"
@@ -324,6 +328,7 @@ runs:
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        prompt-file: ${{ inputs.prompt-file }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
         temperature: ${{ inputs.temperature }}
