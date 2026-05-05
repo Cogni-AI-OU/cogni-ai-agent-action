@@ -35,7 +35,11 @@ runs:
         fi
         JOB_ID=$(
           gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
-            --jq ".jobs[] | select(.name == \"$AGENT_JOB_NAME\" or (.name | startswith(\"$AGENT_JOB_NAME\"))) | .id" \
+            --jq ".jobs[] | select(
+                .name == \"$AGENT_JOB_NAME\" or 
+                (.name | startswith(\"$AGENT_JOB_NAME\")) or 
+                (any(.steps[]; .name | contains(\"Run Cogni AI Agent\")))
+              ) | .id" \
             | awk 'NR==1{print; exit}'
         )
         if [ -z "$JOB_ID" ]; then
