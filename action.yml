@@ -594,7 +594,7 @@ runs:
             return res
         def safe_get_dict(mapping, key):
             """Return mapping[key] if it exists and is a dict, otherwise return {}."""
-            value = mapping.get(key, {})
+            value = mapping.get(key)
             return value if isinstance(value, dict) else {}
         action_path = os.environ.get('GITHUB_ACTION_PATH', '')
         action_yaml_path = os.path.join(action_path, 'action.yml')
