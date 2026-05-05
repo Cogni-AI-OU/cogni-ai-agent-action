@@ -241,8 +241,8 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
-  postrun-audit:
-    name: Agent session audit (post-run)
+  summary:
+    name: Generate Summary (post-run)
     needs: cogni-ai
     if: always() && needs.cogni-ai.result != 'skipped'
     runs-on: ubuntu-latest
@@ -266,8 +266,8 @@ jobs:
             exit 1
           fi
           gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 } END { if (!found) print "No logs found between markers." }' | tee .agent.log
-      - name: Prepare review prompt
-        id: prepare-prompt
+      - name: Prepare summary prompt
+        id: prepare-summary-prompt
         env:
           ACTOR: ${{ github.actor }}
           DISCUSSION_URL: ${{ github.event.discussion.html_url }}
@@ -303,6 +303,6 @@ jobs:
           model: openai/gpt-4o-mini
           prompt-file: ${{ steps.prepare-prompt.outputs.prompt_file }}
           skills: agent-log-analysis
-          skills_version: f214760536acc42d590af08200f48c8d08f576fa
+          skills_version: main
           temperature: 0.2
           top-p: 0.9
