@@ -39,11 +39,11 @@ runs:
           WORKFLOW_PATH=$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq .path)
           FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" -H "Accept: application/vnd.github.raw" | awk -v id="$AGENT_JOB_ID" '
             $0 ~ "^  " id ":" { found=1; next }
-            found && $0 ~ "^    name:" {
+            found && !done && $0 ~ "^    name:" {
               sub(/^[ ]*name:[ ]*/, "");
-              gsub(/^["'\'']|["'\'']$/, "");
+              gsub(/^["'\''"]|["'\''"]$/, "");
               print;
-              found=0
+              done=1
             }
             found && $0 ~ "^  [^ ]" { found=0 }
           ')
@@ -61,7 +61,7 @@ runs:
                 (.name | startswith(\"$AGENT_JOB_NAME\")) or 
                 (any(.steps[]; .name | contains(\"Run Cogni AI Agent\"))) or
                 (.name == \"$AGENT_JOB_ID\")
-              )" | jq -c 'select(.)' | awk 'NR==1'
+              )" | awk 'NR==1'
         )
         JOB_ID=$(echo "$JOB_DATA" | jq -r .id // "")
         JOB_CONCLUSION=$(echo "$JOB_DATA" | jq -r .conclusion // "")
