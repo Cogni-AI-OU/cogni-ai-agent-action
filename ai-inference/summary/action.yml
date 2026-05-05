@@ -5,7 +5,7 @@ inputs:
     description: GitHub Token
     required: true
   agent_job_name:
-    default: Cogni AI Agent Local
+    default: Cogni AI Agent
     description: Display name of the job whose logs should be extracted
     required: false
   run_attempt:
@@ -31,7 +31,7 @@ runs:
         ATTEMPT="${{ inputs.run_attempt }}"
         AGENT_JOB_NAME="${{ inputs.agent_job_name }}"
         if [ -z "$AGENT_JOB_NAME" ]; then
-          AGENT_JOB_NAME="Cogni AI Agent Local"
+          AGENT_JOB_NAME="Cogni AI Agent"
         fi
         JOB_ID=$(
           gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
