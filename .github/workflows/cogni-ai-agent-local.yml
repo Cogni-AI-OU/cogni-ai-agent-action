@@ -169,6 +169,8 @@ env:
 jobs:
   cogni-ai:
     name: Cogni AI Agent Local
+    outputs:
+      run: ${{ steps.cogni-ai.outputs.run }}
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (
@@ -281,7 +283,7 @@ jobs:
   summary:
     name: Generate Summary (post-run)
     needs: cogni-ai
-    if: always() && needs.cogni-ai.result != 'skipped'
+    if: always() && needs.cogni-ai.result != 'skipped' && needs.cogni-ai.outputs.run == 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: read

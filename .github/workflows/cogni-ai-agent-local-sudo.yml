@@ -169,6 +169,8 @@ jobs:
         )
       )
     name: Cogni AI Agent Local Sudo
+    outputs:
+      run: ${{ steps.cogni-ai.outputs.run }}
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -261,7 +263,7 @@ jobs:
   summary:
     name: Generate Summary (post-run)
     needs: cogni-ai
-    if: always() && needs.cogni-ai.result != 'skipped'
+    if: always() && needs.cogni-ai.result != 'skipped' && needs.cogni-ai.outputs.run == 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: read
