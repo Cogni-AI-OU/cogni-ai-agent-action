@@ -39,6 +39,9 @@ outputs:
   response:
     description: The response from the agent.
     value: ${{ steps.opencode.outputs.response }}
+  run:
+    description: Whether the agent was executed.
+    value: ${{ steps.check.outputs.run }}
 runs:
   using: composite
   steps:
