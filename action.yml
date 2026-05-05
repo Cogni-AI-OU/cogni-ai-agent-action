@@ -593,7 +593,9 @@ runs:
                     res[k] = v
             return res
         def safe_get_dict(mapping, key):
-            """Return mapping[key] if it exists and is a dict, otherwise return {}."""
+            """Return mapping[key] if mapping is a dict and the value is a dict, otherwise return {}."""
+            if not isinstance(mapping, dict):
+                return {}
             value = mapping.get(key)
             return value if isinstance(value, dict) else {}
         action_path = os.environ.get('GITHUB_ACTION_PATH', '')
@@ -631,7 +633,10 @@ runs:
         final_perms = deep_merge(final_perms, user_agent_perms)
         github_output = os.environ.get('GITHUB_OUTPUT')
         if not github_output:
-            raise RuntimeError('GITHUB_OUTPUT is not set')
+            raise RuntimeError(
+                'GITHUB_OUTPUT environment variable is not set. '
+                'GitHub Actions should set this automatically.'
+            )
         with open(github_output, 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
