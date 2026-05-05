@@ -128,7 +128,7 @@ runs:
           let run = false;
           let agent = '';
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
+          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push' || process.env.AGENT_INPUT === 'cogni-ai-agent-auditor') {
             run = true;
             agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
@@ -288,6 +288,8 @@ runs:
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
         } >> "$GITHUB_OUTPUT"
+        echo "PROMPT:"
+        printf '%s\n' "$prompt"
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"

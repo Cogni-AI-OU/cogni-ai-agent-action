@@ -84,7 +84,7 @@ runs:
           let run = false;
           let agent = '';
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || process.env.AGENT_INPUT === 'cogni-ai-agent-auditor') {
             run = true;
             agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
@@ -135,6 +135,14 @@ runs:
             effectiveAgent = '';
           }
           core.setOutput('effective_agent', effectiveAgent);
+    - name: Print prompt
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      env:
+        PROMPT: ${{ inputs.prompt }}
+      run: |
+        echo "PROMPT:"
+        printf '%s\n' "$PROMPT"
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode

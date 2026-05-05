@@ -348,7 +348,7 @@ runs:
           let run = false;
           let agent = '';
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || process.env.AGENT_INPUT === 'cogni-ai-agent-auditor') {
             run = true;
             agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
@@ -522,6 +522,8 @@ runs:
         if [ -f "${{ github.workspace }}/AGENTS.md" ]; then
           echo "has_agents=true" >> "$GITHUB_OUTPUT"
         fi
+        echo "PROMPT:"
+        printf '%s\n' "$prompt"
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
