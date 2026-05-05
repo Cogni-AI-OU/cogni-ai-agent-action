@@ -382,6 +382,7 @@ runs:
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
+        top-p: ${{ inputs.top-p }}
     - name: Write response to step summary
       if: always() && steps.inference.outputs.response != ''
       shell: bash
@@ -400,4 +401,3 @@ runs:
           echo ""
           echo "$RESPONSE"
         } >> "$GITHUB_STEP_SUMMARY"
-        top-p: ${{ inputs.top-p }}
