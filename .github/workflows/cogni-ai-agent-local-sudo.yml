@@ -235,7 +235,7 @@ jobs:
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           permissions: |-
-            # /sudo intentionally allows unrestricted local binaries.
+            # /sudo intentionally allows execution of any local binary without restrictions.
             bash:
               '*': allow
           prompt: >-

@@ -592,7 +592,7 @@ runs:
                 else:
                     res[k] = v
             return res
-        def safe_get_dict(mapping, key):
+        def get_dict_value(mapping, key):
             """Return mapping[key] if mapping is a dict and the value is a dict, otherwise return {}."""
             if not isinstance(mapping, dict):
                 return {}
@@ -619,11 +619,11 @@ runs:
             user_permissions = {}
         categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
         is_hierarchical = any(k not in categories for k in user_permissions.keys())
-        default_base_perms = safe_get_dict(default_perms_hierarchical, 'default')
-        default_agent_perms = safe_get_dict(default_perms_hierarchical, agent)
+        default_base_perms = get_dict_value(default_perms_hierarchical, 'default')
+        default_agent_perms = get_dict_value(default_perms_hierarchical, agent)
         if is_hierarchical:
-            user_base_perms = safe_get_dict(user_permissions, 'default')
-            user_agent_perms = safe_get_dict(user_permissions, agent)
+            user_base_perms = get_dict_value(user_permissions, 'default')
+            user_agent_perms = get_dict_value(user_permissions, agent)
         else:
             user_base_perms = user_permissions if isinstance(user_permissions, dict) else {}
             user_agent_perms = {}
