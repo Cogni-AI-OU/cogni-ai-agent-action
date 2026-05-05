@@ -403,7 +403,7 @@ runs:
       id: inference
       uses: actions/ai-inference@v2
       with:
-        enable-github-mcp: ${{ inputs.enable-github-mcp || 'true' }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp != 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
