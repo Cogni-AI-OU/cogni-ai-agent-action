@@ -63,8 +63,8 @@ runs:
                 (.name == \"$AGENT_JOB_ID\")
               )" | awk 'NR==1'
         )
-        JOB_ID=$(echo "$JOB_DATA" | jq -r .id // "")
-        JOB_CONCLUSION=$(echo "$JOB_DATA" | jq -r .conclusion // "")
+        JOB_ID=$(echo "$JOB_DATA" | jq -r '.id // ""')
+        JOB_CONCLUSION=$(echo "$JOB_DATA" | jq -r '.conclusion // ""')
         if [ "$JOB_ID" = "null" ] || [ -z "$JOB_ID" ]; then
           echo "::notice title=Job ID not found::No job matched '$AGENT_JOB_NAME' (run=$RUN_ID attempt=$ATTEMPT)."
           AVAILABLE_JOBS=$(gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" --jq '.jobs[].name' | paste -sd ', ' -)
