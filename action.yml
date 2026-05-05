@@ -629,7 +629,10 @@ runs:
         final_perms = deep_merge(default_base_perms, default_agent_perms)
         final_perms = deep_merge(final_perms, user_base_perms)
         final_perms = deep_merge(final_perms, user_agent_perms)
-        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+        github_output = os.environ.get('GITHUB_OUTPUT')
+        if not github_output:
+            raise RuntimeError('GITHUB_OUTPUT is not set')
+        with open(github_output, 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
       id: opencode
