@@ -593,7 +593,7 @@ runs:
                     res[k] = v
             return res
         def safe_get_dict(mapping, key):
-            """Return a dict value for key, or {} when missing or not a dict."""
+            """Return mapping[key] if it exists and is a dict, otherwise return {}."""
             value = mapping.get(key, {})
             return value if isinstance(value, dict) else {}
         action_path = os.environ.get('GITHUB_ACTION_PATH', '')
