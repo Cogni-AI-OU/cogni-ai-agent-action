@@ -3,7 +3,13 @@
 # Triggered by /oc, /opencode, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
 on:
   issue_comment:
     types:
@@ -127,27 +133,34 @@ env:
 jobs:
   opencode:
     name: OpenCode Agent Local
+    outputs:
+      run: ${{ steps.opencode.outputs.run }}
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        (
-          github.event_name == 'issues' &&
-          (
-            contains(github.event.issue.body || '', '/') ||
-            contains(github.event.issue.body || '', '@')
-          )
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
         ) ||
-        (
-          github.event_name == 'discussion' &&
-          (
-            contains(github.event.discussion.body || '', '/') ||
-            contains(github.event.discussion.body || '', '@')
-          )
-        ) ||
-        contains(github.event.comment.body || '', '/') ||
-        contains(github.event.comment.body || '', '@')
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -207,7 +220,14 @@ jobs:
           mentions: /oc,/opencode
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt ||
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body
+            }}
       - name: Annotate prompt and output
         env:
           OPENCODE_PROMPT: ${{ steps.opencode.outputs.prompt }}
@@ -226,3 +246,34 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
+  summary:
+    name: Generate Summary (post-run)
+    needs: opencode
+    if: always() && needs.opencode.result != 'skipped' && needs.opencode.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: >-
+            ${{
+              (
+                github.event_name == 'issue_comment' &&
+                github.event.issue.pull_request &&
+                format('refs/pull/{0}/head', github.event.issue.number)
+              ) ||
+              (
+                github.event_name == 'pull_request_review_comment' &&
+                format('refs/pull/{0}/head', github.event.pull_request.number)
+              ) ||
+              github.ref
+            }}
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: opencode
+          github_token: ${{ secrets.GITHUB_TOKEN }}

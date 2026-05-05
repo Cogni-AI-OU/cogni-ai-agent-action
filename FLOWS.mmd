@@ -1,55 +1,80 @@
 flowchart TD
     %% --------------------------------------------------------
-    %% 1. Cogni AI Agent (action.yml)
+    %% Cogni AI Agent (action.yml)
     %% --------------------------------------------------------
-    subgraph Flow_Cogni_AI_Agent ["1. Cogni AI Agent (action.yml)"]
+    subgraph Flow_Cogni_AI_Agent ["Cogni AI Agent (action.yml)"]
         direction TB
-        A1([Trigger Events]) --> A2{Check conditions}
-        A2 -- "run=true" --> A3["Wait for concurrent runs"]
-        A2 -- "run=false" --> A_EndSkip([Action Skipped])
-        
+        A1([Trigger Events]) --> A3["Wait for concurrent runs"]
+
         A3 --> A4["Resolve prompt"]
         A4 --> A5["Checkout Repositories<br/>(agents, instructions, skills)"]
-        
+
         A5 -- "gh-models-enabled=true" --> A6["Install gh-models extension"]
         A5 -- "default" --> A7["Convert permissions to JSON"]
         A6 --> A7
-        
+
         A7 --> A8["Run opencode"]
-        
+
         A8 --> A9(["Write response to summary<br/>(on success)"])
         A8 --> A10["Print logs (on failure/cancelled)"]
     end
 
     %% --------------------------------------------------------
-    %% 2. OpenCode Agent (opencode/action.yml)
+    %% OpenCode Agent (opencode/action.yml)
     %% --------------------------------------------------------
-    subgraph Flow_OpenCode_Agent ["2. OpenCode Agent (opencode/action.yml)"]
+    subgraph Flow_OpenCode_Agent ["OpenCode Agent (opencode/action.yml)"]
         direction TB
         O1([Trigger Events]) --> O2{Check conditions}
-        O2 -- "run=true" --> O3["Wait for concurrent runs"]
+        O2 -- "run=true" --> O3["Run opencode"]
         O2 -- "run=false" --> O_EndSkip([Action Skipped])
-        
-        O3 --> O4["Resolve prompt"]
-        O4 --> O5["Convert permissions to JSON"]
-        O5 --> O6["Run opencode"]
-        
-        O6 --> O7(["Write response to summary<br/>(on success)"])
-        O6 --> O8["Print logs (on failure/cancelled)"]
+        O3 --> O4(["anomalyco/opencode/github@v1.4.3"])
     end
 
     %% --------------------------------------------------------
-    %% 3. AI Inference (ai-inference/action.yml)
+    %% AI Inference (ai-inference/action.yml)
     %% --------------------------------------------------------
-    subgraph Flow_AI_Inference ["3. AI Inference (ai-inference/action.yml)"]
+    subgraph Flow_AI_Inference ["AI Inference (ai-inference/action.yml)"]
         direction TB
         I1([Trigger Events]) --> I2{Check conditions}
         I2 -- "run=true" --> I3["Wait for concurrent runs"]
         I2 -- "run=false" --> I_EndSkip([Action Skipped])
-        
+
         I3 --> I4["Checkout cogni-ai-agents"]
         I4 --> I5["Resolve prompt"]
         I5 --> I6["Resolve system prompt file"]
         I6 --> I7["Run AI Inference"]
         I7 --> I8(["Write response to summary<br/>(on success)"])
+    end
+
+    %% --------------------------------------------------------
+    %% Agent Delegation Protocol
+    %% --------------------------------------------------------
+    subgraph Flow_Agent_Delegation ["Agent Delegation Protocol"]
+        direction TB
+        Arch((Cogni AI Architect))
+        Arch -->|task tool| Auditor[cogni-ai-agent-auditor<br/>Analyze logs & generate reports]
+        Arch -->|task tool| BrainOps[cogni-ai-brain-ops<br/>Gather facts, constraints, plan]
+        Arch -->|task tool| CodeRev[cogni-ai-code-reviewer<br/>PR analysis, quality, security]
+        Arch -->|task tool| C7Ops[cogni-ai-context7-ops<br/>Retrieve & filter documentation]
+        Arch -->|task tool| DevOps[cogni-ai-devops<br/>Task automation, CI/CD, IaC]
+        Arch -->|task tool| FactOps[cogni-ai-fact-ops<br/>Maintain facts & info consistency]
+        Arch -->|task tool| GHOps[cogni-ai-github-ops<br/>Modify comments, issues, discussions]
+        Arch -->|task tool| PlanRev[cogni-ai-plan-reviewer<br/>Architectural & plan validation]
+        Arch -->|task tool| PyDev[cogni-ai-python-dev<br/>Write, test, debug Python]
+        Arch -->|task tool| SecAudit[cogni-ai-security-auditor<br/>Zero-defect threat modeling]
+        Arch -->|task tool| Tester[cogni-ai-tester<br/>Execute tests, verify behavior]
+    end
+
+    %% --------------------------------------------------------
+    %% Subagent Interaction Sequence
+    %% --------------------------------------------------------
+    subgraph Interaction_Sequence ["Subagent Interaction Sequence"]
+        direction TB
+        subgraph Interaction_Sequence_Inner [ ]
+            direction TB
+            ISQ1[Architect: Formulate sub-task prompt] --> ISQ2[Architect: Call Task Tool with subagent_type]
+            ISQ2 --> ISQ3[Subagent: Execute specialized logic]
+            ISQ3 --> ISQ4[Subagent: Return result/artifacts]
+            ISQ4 --> ISQ5[Architect: Synthesize results into final response]
+        end
     end

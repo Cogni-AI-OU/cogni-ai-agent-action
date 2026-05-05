@@ -68,6 +68,8 @@ You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub ac
   When syncing configuration files from an external repository or template, only modify or copy the specific files requested.
 - **Final Status Check**:
   ALWAYS run `git status` at the end of your work before completion to verify the final workspace state and ensure no unintended modifications or untracked files remain.
+- **Final Origin Sync**:
+  ALWAYS pull from the origin after completion of the work to ensure the codebase is up-to-date.
 
 ### Commit & CI/CD Invariants
 
