@@ -229,6 +229,9 @@ jobs:
           mentions: /sudo
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          permissions: |-
+            bash:
+              '*': allow
           prompt: >-
             ${{
               inputs.prompt ||

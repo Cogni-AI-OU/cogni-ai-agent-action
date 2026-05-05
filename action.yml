@@ -613,21 +613,21 @@ runs:
             user_permissions = {}
         categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
         is_hierarchical = any(k not in categories for k in user_permissions.keys())
-        if user_permissions:
-            if is_hierarchical:
-                merged_hierarchical = deep_merge(default_perms_hierarchical, user_permissions)
-            else:
-                # Merge flat list into 'default' section
-                merged_default = deep_merge(default_perms_hierarchical.get('default', {}), user_permissions)
-                merged_hierarchical = default_perms_hierarchical.copy()
-                merged_hierarchical['default'] = merged_default
+        default_base_perms = default_perms_hierarchical.get('default', {})
+        default_agent_perms = default_perms_hierarchical.get(agent, {})
+        if not isinstance(default_base_perms, dict): default_base_perms = {}
+        if not isinstance(default_agent_perms, dict): default_agent_perms = {}
+        if is_hierarchical:
+            user_base_perms = user_permissions.get('default', {})
+            user_agent_perms = user_permissions.get(agent, {})
         else:
-            merged_hierarchical = default_perms_hierarchical
-        base_perms = merged_hierarchical.get('default', {})
-        agent_perms = merged_hierarchical.get(agent, {})
-        if not isinstance(base_perms, dict): base_perms = {}
-        if not isinstance(agent_perms, dict): agent_perms = {}
-        final_perms = deep_merge(base_perms, agent_perms)
+            user_base_perms = user_permissions
+            user_agent_perms = {}
+        if not isinstance(user_base_perms, dict): user_base_perms = {}
+        if not isinstance(user_agent_perms, dict): user_agent_perms = {}
+        final_perms = deep_merge(default_base_perms, default_agent_perms)
+        final_perms = deep_merge(final_perms, user_base_perms)
+        final_perms = deep_merge(final_perms, user_agent_perms)
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
