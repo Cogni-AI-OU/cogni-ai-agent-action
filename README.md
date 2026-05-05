@@ -86,26 +86,6 @@ jobs:
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 
-  summary:
-    name: Generate Summary (post-run)
-    needs: agent
-    if: always() && needs.agent.result != 'skipped'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-      - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
-        with:
-          agent_job_id: agent
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-```
-
 ### Execution flow
 
 For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](FLOWS.mmd).
