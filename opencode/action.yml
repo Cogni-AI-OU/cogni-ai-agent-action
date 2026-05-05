@@ -176,14 +176,19 @@ runs:
           while (Date.now() - start < MAX_WAIT_MS) {
             let olderActiveRuns = [];
             for (const status of ['in_progress', 'queued']) {
-              const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: workflowId,
-                status,
-              });
+              const workflowRuns = await github.paginate(
+                github.rest.actions.listWorkflowRuns,
+                {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: workflowId,
+                  status,
+                  per_page: 100,
+                },
+                response => response.data.workflow_runs
+              );
               olderActiveRuns.push(
-                ...workflow_runs.filter(
+                ...workflowRuns.filter(
                   run => run.id !== context.runId
                     && new Date(run.created_at).getTime() < currentCreatedAt
                     && run.display_title === currentRun.display_title
