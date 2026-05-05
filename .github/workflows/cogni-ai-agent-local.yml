@@ -269,13 +269,25 @@ jobs:
       - name: Prepare review prompt
         id: prepare-prompt
         env:
-          RUN_ID: ${{ github.run_id }}
+          ACTOR: ${{ github.actor }}
+          DISCUSSION_URL: ${{ github.event.discussion.html_url }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
           RUN_ATTEMPT: ${{ github.run_attempt }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
           
           {
             echo "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) and write a comprehensive visual audit report using mermaid diagrams and data."
+            echo ""
+            echo "## Execution Context"
+            echo "- **Event Name:** $EVENT_NAME"
+            echo "- **Triggered By:** $ACTOR"
+            if [ -n "$ISSUE_URL" ]; then echo "- **Issue URL:** $ISSUE_URL"; fi
+            if [ -n "$PR_URL" ]; then echo "- **Pull Request URL:** $PR_URL"; fi
+            if [ -n "$DISCUSSION_URL" ]; then echo "- **Discussion URL:** $DISCUSSION_URL"; fi
             echo ""
             echo "<logs>"
             cat .agent.log
@@ -288,8 +300,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: cogni-ai-agent-auditor
-          model: openai/gpt-4o-mini
           max-completion-tokens: 8192
+          model: openai/gpt-4o-mini
           prompt-file: ${{ steps.prepare-prompt.outputs.prompt_file }}
           skills: agent-log-analysis
           temperature: 0.2
