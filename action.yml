@@ -116,6 +116,14 @@ inputs:
           explore: deny
           general: deny
         todowrite: allow
+      cogni-ai-local-sudo:
+        bash:
+          <<: *default-bash
+          '*': allow
+        glob: allow
+        read: allow
+        edit: allow
+        skill: *default-skill
       cogni-ai-agent-auditor:
         bash:
           <<: *default-bash
@@ -695,6 +703,12 @@ runs:
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+              },
+              "cogni-ai-local-sudo": {
+                "description": "Local sudo agent for executing unrestricted commands.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-local-sudo/cogni-ai-local-sudo.agent.md"
               },
               "cogni-ai-plan-reviewer": {
                 "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
