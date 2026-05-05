@@ -352,7 +352,7 @@ runs:
           const eventName = context.eventName;
           let run = process.env.FORCE_RUN === 'true';
           let agent = '';
-          console.log(`### CHECK_CONDITIONS_RESULTS ###`);
+          console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
           if (run) {
             agent = 'default';

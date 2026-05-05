@@ -4,7 +4,7 @@
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Sudo Local
 run-name: >-
-  Sudo Agent on #${{
+  Sudo Agent on  #${{
     github.event.issue.number
     || github.event.pull_request.number
     || github.event.discussion.number
