@@ -241,8 +241,15 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
-  review:
-    name: Cogni AI Agent Review Local
+      # Debug with tmate on failure when debug logging is enabled.
+      - if: ${{ (cancelled() || failure()) && runner.debug == '1' }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          timeout-minutes: 15
+
+  summary:
+    name: Generate Summary (post-run)
     needs: cogni-ai
     if: always() && needs.cogni-ai.result != 'skipped'
     runs-on: ubuntu-latest
@@ -260,49 +267,49 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          JOB_ID=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs" --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id')
+          JOB_ID=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}/jobs" --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id')
           if [ -z "$JOB_ID" ]; then
             echo "Job ID not found for 'Cogni AI Agent Local'"
             exit 1
           fi
-          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { $1=""; print substr($0,2); found=1 } END { if (!found) print "No logs found between markers." }' | tee agent.log
-      - name: Prepare review prompt
-        id: prepare-prompt
+          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 } END { if (!found) print "No logs found between markers." }' | tee .agent.log
+      - name: Prepare summary prompt
+        id: prepare-summary-prompt
+        env:
+          ACTOR: ${{ github.actor }}
+          DISCUSSION_URL: ${{ github.event.discussion.html_url }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          RUN_ID: ${{ github.run_id }}
         run: |
-          python3 -c "
-          import os
-          template_path = '.github/prompts/agent-log-analysis.prompt.yml'
-          logs_path = 'agent.log'
-          with open(template_path, 'r') as f: template = f.read()
-          with open(logs_path, 'r') as f: logs = f.read()
-          indented_logs = '\n'.join([('      ' + l if i > 0 else l) for i, l in enumerate(logs.splitlines())])
-          content = template.replace('{{logs}}', indented_logs)
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('prompt<<EOF\n')
-              f.write(content)
-              f.write('\nEOF\n')
-          "
-      - name: Run Cogni AI Agent Review Local
-        id: cogni-ai-reviewer
-        if: ${{ false }}
-        uses: ./
+          echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
+          {
+            echo "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) and write a comprehensive visual audit report using mermaid diagrams and data."
+            echo ""
+            echo "## Execution Context"
+            echo "- **Event Name:** $EVENT_NAME"
+            echo "- **Triggered By:** $ACTOR"
+            if [ -n "$ISSUE_URL" ]; then echo "- **Issue URL:** $ISSUE_URL"; fi
+            if [ -n "$PR_URL" ]; then echo "- **Pull Request URL:** $PR_URL"; fi
+            if [ -n "$DISCUSSION_URL" ]; then echo "- **Discussion URL:** $DISCUSSION_URL"; fi
+            echo ""
+            echo "<logs>"
+            cat .agent.log
+            echo "</logs>"
+          } > .agent.prompt.txt
+      - name: Run Agent Auditor
+        id: cogni-ai-agent-auditor
+        uses: ./ai-inference/
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: cogni-ai-agent-auditor
-          model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ steps.prepare-prompt.outputs.prompt }}
-          version_agents: ${{ inputs.version_agents || 'main' }}
-          version_instructions: ${{ inputs.version_instructions || 'main' }}
-          version_skills: ${{ inputs.version_skills || 'main' }}
-      - name: Post summary to GITHUB_STEP_SUMMARY
-        if: steps.cogni-ai-reviewer.outputs.response != ''
-        run: |-
-          {
-            echo "## Agent Session Summary"
-            echo ""
-            cat << 'EOF'
-          ${{ steps.cogni-ai-reviewer.outputs.response }}
-          EOF
-          } >> "$GITHUB_STEP_SUMMARY"
+          max-completion-tokens: 8192
+          model: openai/gpt-4o-mini
+          prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
+          skills: agent-log-analysis
+          version_skills: main
+          temperature: 0.2
+          top-p: 0.9
