@@ -32,25 +32,6 @@ jobs:
         with:
           prompt: ${{ inputs.prompt }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  summary:
-    name: Generate Summary (post-run)
-    needs: inference
-    if: always() && needs.inference.result != 'skipped'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-      - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
-        with:
-          agent_job_id: inference
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Advanced workflow
@@ -143,25 +124,6 @@ jobs:
               github.event.discussion.body
             }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  summary:
-    name: Generate Summary (post-run)
-    needs: inference
-    if: always() && needs.inference.result != 'skipped'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-      - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
-        with:
-          agent_job_id: inference
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Inputs

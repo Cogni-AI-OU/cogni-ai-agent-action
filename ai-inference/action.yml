@@ -383,21 +383,3 @@ runs:
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
         top-p: ${{ inputs.top-p }}
-    - name: Write response to summary
-      if: always() && steps.inference.outputs.response != ''
-      shell: bash
-      env:
-        PROMPT: ${{ steps.prompt.outputs.prompt }}
-        RESPONSE: ${{ steps.inference.outputs.response }}
-      run: |-
-        {
-          if [ -n "${PROMPT:-}" ]; then
-            echo "## Prompt"
-            echo ""
-            echo "$PROMPT"
-            echo ""
-          fi
-          echo "## Agent Response"
-          echo ""
-          echo "$RESPONSE"
-        } >> "$GITHUB_STEP_SUMMARY"
