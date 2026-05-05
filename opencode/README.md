@@ -7,7 +7,8 @@ It acts as a lean pass-through wrapper for `anomalyco/opencode/github`.
 
 ### Prerequisites
 
-1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets (**Settings → Secrets and variables → Actions**).
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets
+   (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR
@@ -31,12 +32,30 @@ jobs:
   agent:
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -62,7 +81,8 @@ jobs:
 ### Advanced workflow
 
 An example of a more advanced configuration with issue and pull request triggers.
-Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies or wait for concurrent runs.
+Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies
+or wait for concurrent runs.
 
 ```yaml
 ---
@@ -134,14 +154,32 @@ jobs:
     name: Run OpenCode agent
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event.sender.type != 'Bot'
+      ) &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
         github.event_name == 'issues' ||
         github.event_name == 'pull_request' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -173,14 +211,14 @@ jobs:
 
 ### Inputs
 
-| Input              | Description                 | Default                   | Required |
-| ------------------ | --------------------------- | ------------------------- | -------- |
-| `agent`            | Agent to use                | —                         | No       |
-| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key` | API key for OpenCode         | —                         | **Yes**  |
-| `permissions`      | Permissions (JSON string)   | —                         | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                      | No       |
+| Input | Description | Default | Required |
+| :--- | :--- | :--- | :--- |
+| `agent` | Agent to use | — | No |
+| `mentions` | Comma-separated mentions | `/oc,/opencode,/review` | No |
+| `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
+| `opencode-api-key` | API key for OpenCode | — | **Yes** |
+| `permissions` | Permissions (JSON string) | — | No |
+| `prompt` | Prompt to pass to the agent | `''` | No |
 
 ### Outputs
 

@@ -4,7 +4,13 @@
 # or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
 on:
   issue_comment:
     types:
@@ -165,12 +171,30 @@ jobs:
     name: Cogni AI Agent Local
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -219,7 +243,14 @@ jobs:
             ${{ inputs.agent || '' }}
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt ||
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body
+            }}
           version_agents: ${{ inputs.version_agents || 'main' }}
           version_instructions: ${{ inputs.version_instructions || 'main' }}
           version_skills: ${{ inputs.version_skills || 'main' }}
@@ -247,7 +278,6 @@ jobs:
         with:
           limit-access-to-actor: true
           timeout-minutes: 15
-
   summary:
     name: Generate Summary (post-run)
     needs: cogni-ai
@@ -267,12 +297,21 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          JOB_ID=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}/jobs" --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id')
+          REPO="${{ github.repository }}"
+          RUN_ID="${{ github.run_id }}"
+          ATTEMPT="${{ github.run_attempt }}"
+          JOB_ID=$(
+            gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
+              --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id'
+          )
           if [ -z "$JOB_ID" ]; then
             echo "Job ID not found for 'Cogni AI Agent Local'"
             exit 1
           fi
-          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 } END { if (!found) print "No logs found between markers." }' | tee .agent.log
+          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
+            | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 }
+                END { if (!found) print "No logs found between markers." }' \
+            | tee .agent.log
       - name: Prepare summary prompt
         id: prepare-summary-prompt
         env:
@@ -286,7 +325,8 @@ jobs:
         run: |
           echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
           {
-            echo "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) and write a comprehensive visual audit report using mermaid diagrams and data."
+            echo -n "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) "
+            echo "and write a comprehensive visual audit report using mermaid diagrams and data."
             echo ""
             echo "## Execution Context"
             echo "- **Event Name:** $EVENT_NAME"

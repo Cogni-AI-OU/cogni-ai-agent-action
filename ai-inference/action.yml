@@ -102,7 +102,9 @@ runs:
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
-          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           function matchesTrigger(body, triggers) {
             if (!body) return false;
@@ -301,12 +303,10 @@ runs:
       run: |
         set -euo pipefail
         prompt_file=$(mktemp "${{ runner.temp }}/system_prompt.XXXXXX.md")
-
         if [ -n "${SYSTEM_PROMPT}" ] && [ "${SYSTEM_PROMPT}" != "You are a helpful assistant" ]; then
           echo "${SYSTEM_PROMPT}" >> "$prompt_file"
           echo "" >> "$prompt_file"
         fi
-
         if [ -n "${AGENT}" ]; then
           agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
           if [ -f "$agent_file" ]; then
@@ -314,7 +314,6 @@ runs:
             echo "" >> "$prompt_file"
           fi
         fi
-
         if [ -n "${INSTRUCTIONS}" ]; then
           echo "<instructions>" >> "$prompt_file"
           IFS=',' read -ra INSTR_ARRAY <<< "$INSTRUCTIONS"
@@ -333,7 +332,6 @@ runs:
           echo "</instructions>" >> "$prompt_file"
           echo "" >> "$prompt_file"
         fi
-
         if [ -n "${SKILLS}" ]; then
           echo "<skills>" >> "$prompt_file"
           IFS=',' read -ra SKILL_ARRAY <<< "$SKILLS"
@@ -352,7 +350,6 @@ runs:
           echo "</skills>" >> "$prompt_file"
           echo "" >> "$prompt_file"
         fi
-
         if [ -s "$prompt_file" ]; then
           echo "system-prompt-file=$prompt_file" >> "$GITHUB_OUTPUT"
         else
