@@ -4,12 +4,12 @@ inputs:
   github_token:
     description: GitHub Token
     required: true
+  agent_job_id:
+    description: Machine name (YAML key) of the job whose logs should be extracted
+    required: false
   agent_job_name:
     default: Cogni AI Agent
     description: Display name of the job whose logs should be extracted
-    required: false
-  agent_job_id:
-    description: Machine name (YAML key) of the job whose logs should be extracted
     required: false
   run_attempt:
     default: ${{ github.run_attempt }}
