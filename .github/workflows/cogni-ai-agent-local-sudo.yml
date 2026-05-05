@@ -1,5 +1,6 @@
 ---
 # Cogni AI Agent Sudo Local workflow — runs the local composite action (./action.yml) as a wrapper for OpenCode.
+# Security: This workflow intentionally grants unrestricted local bash execution; use only in trusted contexts.
 # Triggered only by /sudo command in comments, or manually via workflow_dispatch.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Sudo Local
