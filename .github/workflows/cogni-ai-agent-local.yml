@@ -4,7 +4,13 @@
 # or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: Cogni AI Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
 on:
   issue_comment:
     types:
@@ -165,12 +171,30 @@ jobs:
     name: Cogni AI Agent Local
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -219,7 +243,14 @@ jobs:
             ${{ inputs.agent || '' }}
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt ||
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body
+            }}
           version_agents: ${{ inputs.version_agents || 'main' }}
           version_instructions: ${{ inputs.version_instructions || 'main' }}
           version_skills: ${{ inputs.version_skills || 'main' }}
@@ -241,8 +272,14 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
-  review:
-    name: Cogni AI Agent Review Local
+      # Debug with tmate on failure when debug logging is enabled.
+      - if: ${{ (cancelled() || failure()) && runner.debug == '1' }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          timeout-minutes: 15
+  summary:
+    name: Generate Summary (post-run)
     needs: cogni-ai
     if: always() && needs.cogni-ai.result != 'skipped'
     runs-on: ubuntu-latest
@@ -255,28 +292,7 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ env.GITHUB_REF_RESOLVED }}
-      - name: Run Cogni AI Agent Review Local
-        id: cogni-ai-reviewer
-        uses: ./
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
         with:
-          agent: cogni-ai-architect
-          model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: >-
-            Review the agent log for github.run_id ${{ github.run_id }} (attempt ${{ github.run_attempt }}).
-            Summarize the agent session and highlight key actions, decisions, and any issues encountered.
-          version_agents: ${{ inputs.version_agents || 'main' }}
-          version_instructions: ${{ inputs.version_instructions || 'main' }}
-          version_skills: ${{ inputs.version_skills || 'main' }}
-      - name: Post summary to GITHUB_STEP_SUMMARY
-        if: steps.cogni-ai-reviewer.outputs.response != ''
-        run: |-
-          {
-            echo "## Agent Session Summary"
-            echo ""
-            cat << 'EOF'
-          ${{ steps.cogni-ai-reviewer.outputs.response }}
-          EOF
-          } >> "$GITHUB_STEP_SUMMARY"
+          github_token: ${{ secrets.GITHUB_TOKEN }}

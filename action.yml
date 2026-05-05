@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 # See: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 author: Cogni AI OU
 branding:
@@ -79,7 +80,9 @@ inputs:
         read: allow
         # Skills are limited to a curated list from the upstream cogni-ai-agent-skills repository.
         # Note: Changes here should be synchronized with agent-specific skill allowlists.
+        # Note: Keep in alphabetical order.
         skill: &default-skill
+          agent-log-analysis: deny
           ansible: allow
           cat: allow
           context-aware-ops: allow
@@ -184,6 +187,12 @@ inputs:
         skill:
           <<: *default-skill
           molecule: allow
+      cogni-ai-docs-editor:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: allow
+        skill: *default-skill
       cogni-ai-fact-ops:
         bash: deny
         glob: allow
@@ -258,7 +267,7 @@ inputs:
       with 'default' and agent-specific overrides (e.g.,
       'cogni-ai-agent-auditor', 'cogni-ai-architect', 'cogni-ai-brain-ops',
       'cogni-ai-code-reviewer', 'cogni-ai-context7-ops', 'cogni-ai-devops',
-      'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-plan-reviewer',
+      'cogni-ai-docs-editor', 'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-plan-reviewer',
       'cogni-ai-python-dev', 'cogni-ai-security-auditor', 'cogni-ai-tester',
       etc.).
       Example:
@@ -301,14 +310,16 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
-        MENTIONS_BOTS: ${{ inputs.mentions_bots || '@opencode-agent,@OpenCode-Agent' }}
+        MENTIONS: ${{ inputs.mentions }}
+        MENTIONS_BOTS: ${{ inputs.mentions_bots }}
         AGENT_INPUT: ${{ inputs.agent }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
           const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
-          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
@@ -316,11 +327,7 @@ runs:
             if (!body) return false;
             return triggers.some(t => {
               if (!t) return false;
-              // Escape trigger for safe use in RegExp
               const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-              // Match trigger with:
-              // - start of string or whitespace / common punctuation before it
-              // - end of string or whitespace / common punctuation (incl. newlines) after it
               const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
               return pattern.test(body);
             });
@@ -330,11 +337,11 @@ runs:
             return BOT_MENTIONS.some(m => body.includes(m));
           }
           function getAgent(body) {
-            if (!body) return 'cogni-ai-architect';
+            if (!body) return 'default';
             // Stricter pattern for /review to avoid misclassification
             if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
             if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
-            return 'cogni-ai-architect';
+            return 'default';
           }
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
@@ -343,7 +350,7 @@ runs:
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
-            agent = 'cogni-ai-architect';
+            agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
@@ -361,10 +368,7 @@ runs:
             const payload = context.payload.comment;
             const assoc = payload?.author_association;
             const body = payload?.body;
-            console.log(
-              `PR Review Comment - Assoc: ${assoc}, ` +
-              `BodyLength: ${body?.length || 0}`
-            );
+            console.log(`PR Review Comment - Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
@@ -381,20 +385,17 @@ runs:
               (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
             if (isAllowed) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           }
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
-          if (effectiveAgent === 'default') {
-            effectiveAgent = '';
-          }
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
           core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
-      if: steps.check.outputs.run == 'true'
       id: concurrency
+      if: steps.check.outputs.run == 'true'
       uses: actions/github-script@v7
       with:
         script: |
@@ -455,8 +456,8 @@ runs:
             `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
     - name: Resolve prompt
-      if: steps.check.outputs.run == 'true'
       id: prompt
+      if: steps.check.outputs.run == 'true'
       shell: bash
       env:
         COMMENT_BODY: >-
@@ -480,7 +481,11 @@ runs:
           prompt="${COMMENT_BODY:-}"
         fi
         if [ -n "${EFFECTIVE_AGENT:-}" ]; then
-          header="You are operating as the ${EFFECTIVE_AGENT} agent."
+          if [ "$EFFECTIVE_AGENT" = "default" ]; then
+            header="You are operating as the default agent."
+          else
+            header="You are operating as the ${EFFECTIVE_AGENT} agent."
+          fi
           if [ -n "$prompt" ]; then
             prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
@@ -553,8 +558,8 @@ runs:
         gh extension install github/gh-models || gh extension upgrade github/gh-models
         gh models list
     - name: Convert permissions to JSON
-      if: steps.check.outputs.run == 'true'
       id: permissions
+      if: steps.check.outputs.run == 'true'
       shell: python
       env:
         AGENT_NAME: ${{ steps.check.outputs.effective_agent }}
@@ -588,7 +593,7 @@ runs:
             except Exception as e:
                 print(f"Warning: Failed to load default permissions from action.yml: {e}")
         raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
-        agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
+        agent = os.environ.get('AGENT_NAME', 'default')
         try:
             user_permissions = yaml.safe_load(raw_yaml) or {}
         except Exception:
@@ -615,9 +620,9 @@ runs:
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
-      if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+      if: steps.check.outputs.run == 'true'
+      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main  # Note: Do not change this line to anomalyco/opencode.
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
@@ -662,6 +667,12 @@ runs:
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+              },
+              "cogni-ai-docs-editor": {
+                "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
@@ -756,12 +767,13 @@ runs:
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
+        mentions_bots: ${{ inputs.mentions_bots || '@opencode-agent,@OpenCode-Agent' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
         opencode-api-key: ${{ inputs.opencode-api-key }}
         permissions: ${{ steps.permissions.outputs.json }}
         prompt: ${{ steps.prompt.outputs.prompt }}
     - name: Write response to summary
-      if: always() && steps.opencode.outputs.response != ''
+      if: always() && steps.check.outputs.run == 'true' && steps.opencode.outputs.response != ''
       shell: bash
       env:
         PROMPT: ${{ steps.prompt.outputs.prompt }}

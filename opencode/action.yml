@@ -17,6 +17,10 @@ inputs:
     default: /oc,/opencode,/review  # Note: Do not change default triggers.
     description: Comma-separated trigger mentions for OpenCode.
     required: false
+  mentions_bots:
+    default: '@opencode-agent,@OpenCode-Agent'
+    description: Comma-separated bot mentions for OpenCode.
+    required: false
   opencode-api-key:
     description: API key for OpenCode.
     required: true
@@ -38,14 +42,108 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Check conditions
+      id: check
+      uses: actions/github-script@v7
+      env:
+        MENTIONS: ${{ inputs.mentions }}
+        MENTIONS_BOTS: ${{ inputs.mentions_bots }}
+        AGENT_INPUT: ${{ inputs.agent }}
+      with:
+        script: |
+          const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
+          const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
+          const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
+          const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
+          const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
+          function matchesTrigger(body, triggers) {
+            if (!body) return false;
+            return triggers.some(t => {
+              if (!t) return false;
+              // Escape trigger for safe use in RegExp
+              const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              // Match trigger with:
+              // - start of string or whitespace / common punctuation before it
+              // - end of string or whitespace / common punctuation (incl. newlines) after it
+              const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
+              return pattern.test(body);
+            });
+          }
+          function matchesBotMention(body) {
+            if (!body) return false;
+            return BOT_MENTIONS.some(m => body.includes(m));
+          }
+          function getAgent(body) {
+            return 'default';
+          }
+          const isBot = context.actor.endsWith('[bot]');
+          const eventName = context.eventName;
+          let run = false;
+          let agent = '';
+          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
+          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+            run = true;
+            agent = 'default';
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
+            const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
+            const assoc = payload?.author_association;
+            const body = payload?.body;
+            console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
+            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+            if (isReviewTrigger) {
+              run = true;
+              agent = 'cogni-ai-code-reviewer';
+            } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = getAgent(body);
+            }
+          } else if (eventName === 'pull_request_review_comment' && !isBot) {
+            const payload = context.payload.comment;
+            const assoc = payload?.author_association;
+            const body = payload?.body;
+            console.log(
+              `PR Review Comment - Assoc: ${assoc}, ` +
+              `BodyLength: ${body?.length || 0}`
+            );
+            const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+            if (isReviewTrigger) {
+              run = true;
+              agent = 'cogni-ai-code-reviewer';
+            } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = getAgent(body);
+            }
+          } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
+            const pr = context.payload.pull_request;
+            const assoc = pr?.author_association;
+            const login = pr?.user?.login;
+            const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+              (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            if (isAllowed) {
+              run = true;
+              agent = 'default';
+            }
+          }
+          core.setOutput('run', run ? 'true' : '');
+          core.setOutput('agent', agent);
+          // Centralized effective agent logic
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
+          if (effectiveAgent === 'default') {
+            effectiveAgent = '';
+          }
+          core.setOutput('effective_agent', effectiveAgent);
     - name: Run opencode
+      if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
+      uses: anomalyco/opencode/github@v1.14.35
       env:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ inputs.permissions || env.OPENCODE_PERMISSION }}
       with:
-        agent: ${{ inputs.agent }}
+        agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions }}
         model: ${{ inputs.model }}
         prompt: ${{ inputs.prompt }}

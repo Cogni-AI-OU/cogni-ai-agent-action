@@ -13,9 +13,6 @@ on:
       - synchronize
       - ready_for_review
       - review_requested
-  pull_request_review:
-    types:
-      - submitted
   pull_request_review_comment:
     types:
       - created

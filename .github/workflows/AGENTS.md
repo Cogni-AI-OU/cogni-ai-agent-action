@@ -28,6 +28,8 @@ For a human-readable overview, see [README.md](README.md).
   Runs local `./opencode/action.yml` as a wrapper for OpenCode.
 - **[opencode.yml](opencode.yml)**:
   Invokes org-level reusable OpenCode workflow manually.
+- **[task-update-docs.yml](task-update-docs.yml)**:
+  Update core architecture and documentation files.
 - **[test-constraints.yml](test-constraints.yml)**:
   Runs MiniZinc constraints check to verify least privilege.
 
@@ -69,7 +71,7 @@ For a human-readable overview, see [README.md](README.md).
 
 - Purpose: Tests the local `action.yml` action manually with predefined settings
   and matrices for agents, models, and prompts.
-- Triggers: `workflow_dispatch`.
+- Triggers: `pull_request`, `pull_request_review_comment`, `pull_request_target`, `workflow_dispatch`.
 
 ### copilot-setup-steps.yml
 
@@ -87,6 +89,11 @@ For a human-readable overview, see [README.md](README.md).
 ### opencode.yml
 
 - Purpose: Invokes org-level reusable OpenCode workflow.
+- Triggers: `workflow_dispatch`.
+
+### task-update-docs.yml
+
+- Purpose: Update core architecture and documentation files.
 - Triggers: `workflow_dispatch`.
 
 ### test-constraints.yml
