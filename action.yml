@@ -316,7 +316,9 @@ runs:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
           const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
-          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
@@ -619,7 +621,7 @@ runs:
     - name: Run opencode
       id: opencode
       if: steps.check.outputs.run == 'true'
-      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main # Note: Do not change this line to anomalyco/opencode.
+      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main  # Note: Do not change this line to anomalyco/opencode.
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
@@ -631,7 +633,9 @@ runs:
             "$schema": "https://opencode.ai/config.json",
             "agent": {
               "cogni-ai-agent-auditor": {
-                "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+                "description": >-
+                  Expert autonomous auditor specializing in analyzing agent session logs,
+                  evaluating reasoning workflows, and generating visual reports.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
@@ -642,31 +646,41 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
               },
               "cogni-ai-brain-ops": {
-                "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+                "description": >-
+                  Autonomous brainstorming agent responsible for gathering facts,
+                  describing constraints, and architecting suggested plans and tasks.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
               },
               "cogni-ai-code-reviewer": {
-                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+                "description": >-
+                  Elite autonomous code reviewer for PR analysis, quality enforcement,
+                  and deep code verification.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
               },
               "cogni-ai-context7-ops": {
-                "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+                "description": >-
+                  Uses Context7-backed documentation context for research and
+                  delegation tasks.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
               },
               "cogni-ai-devops": {
-                "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+                "description": >-
+                  Elite autonomous DevOps and Site Reliability Engineering agent focusing on
+                  task automation, CI/CD pipeline precision, and infrastructure-as-code.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
               },
               "cogni-ai-docs-editor": {
-                "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+                "description": >-
+                  Autonomous documentation editor responsible for creating, updating,
+                  and maintaining project documentation.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
@@ -677,13 +691,17 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
               },
               "cogni-ai-fact-ops": {
-                "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+                "description": >-
+                  Autonomous fact operator responsible for maintaining canonical fact files
+                  and information consistency.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
               },
               "cogni-ai-github-ops": {
-                "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+                "description": >-
+                  Autonomous GitHub Operator responsible for GitHub operations such as
+                  modifying comments, issues, or discussions on behalf of other agents.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
@@ -694,25 +712,33 @@ runs:
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
               },
               "cogni-ai-plan-reviewer": {
-                "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+                "description": >-
+                  Elite autonomous architectural reviewer for plan validation and ensuring
+                  strategic alignment.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
               },
               "cogni-ai-python-dev": {
-                "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+                "description": >-
+                  Autonomous Python Developer responsible for writing, testing, and
+                  debugging Python 3 code.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
               },
               "cogni-ai-security-auditor": {
-                "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+                "description": >-
+                  Elite autonomous security auditor specializing in zero-defect threat
+                  modeling, vulnerability detection, and hardening system boundaries.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
               },
               "cogni-ai-tester": {
-                "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+                "description": >-
+                  Autonomous Tester responsible for executing test tasks, ensuring quality,
+                  and verifying system behavior.
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
