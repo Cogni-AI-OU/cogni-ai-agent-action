@@ -295,4 +295,5 @@ jobs:
       - name: Generate Summary
         uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
         with:
+          agent_job_name: Cogni AI Agent Local
           github_token: ${{ secrets.GITHUB_TOKEN }}
