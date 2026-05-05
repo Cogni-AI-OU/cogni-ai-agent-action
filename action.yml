@@ -592,6 +592,9 @@ runs:
                 else:
                     res[k] = v
             return res
+        def get_dict_value(mapping, key):
+            value = mapping.get(key, {})
+            return value if isinstance(value, dict) else {}
         action_path = os.environ.get('GITHUB_ACTION_PATH', '')
         action_yaml_path = os.path.join(action_path, 'action.yml')
         default_perms_hierarchical = {}
@@ -613,21 +616,13 @@ runs:
             user_permissions = {}
         categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
         is_hierarchical = any(k not in categories for k in user_permissions.keys())
-        default_base_perms = default_perms_hierarchical.get('default', {})
-        default_agent_perms = default_perms_hierarchical.get(agent, {})
-        if not isinstance(default_base_perms, dict):
-            default_base_perms = {}
-        if not isinstance(default_agent_perms, dict):
-            default_agent_perms = {}
+        default_base_perms = get_dict_value(default_perms_hierarchical, 'default')
+        default_agent_perms = get_dict_value(default_perms_hierarchical, agent)
         if is_hierarchical:
-            user_base_perms = user_permissions.get('default', {})
-            user_agent_perms = user_permissions.get(agent, {})
+            user_base_perms = get_dict_value(user_permissions, 'default')
+            user_agent_perms = get_dict_value(user_permissions, agent)
         else:
-            user_base_perms = user_permissions
-            user_agent_perms = {}
-        if not isinstance(user_base_perms, dict):
-            user_base_perms = {}
-        if not isinstance(user_agent_perms, dict):
+            user_base_perms = user_permissions if isinstance(user_permissions, dict) else {}
             user_agent_perms = {}
         final_perms = deep_merge(default_base_perms, default_agent_perms)
         final_perms = deep_merge(final_perms, user_base_perms)
