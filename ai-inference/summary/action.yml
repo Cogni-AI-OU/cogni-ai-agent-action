@@ -1,0 +1,81 @@
+name: Generate Summary
+description: Generate an agent run summary based on logs
+inputs:
+  github_token:
+    description: GitHub Token
+    required: true
+  run_attempt:
+    default: ${{ github.run_attempt }}
+    description: Run Attempt
+    required: false
+  run_id:
+    default: ${{ github.run_id }}
+    description: Run ID
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Print and extract previous job logs
+      id: extract-logs
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
+      shell: bash
+      run: |
+        REPO="${{ github.repository }}"
+        RUN_ID="${{ inputs.run_id }}"
+        ATTEMPT="${{ inputs.run_attempt }}"
+        JOB_ID=$(
+          gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
+            --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id'
+        )
+        if [ -z "$JOB_ID" ]; then
+          echo "Job ID not found for 'Cogni AI Agent Local'"
+          exit 1
+        fi
+        gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
+          | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 }
+              END { if (!found) print "No logs found between markers." }' \
+          | tee .agent.log
+    - name: Prepare summary prompt
+      id: prepare-summary-prompt
+      env:
+        ACTOR: ${{ github.actor }}
+        DISCUSSION_URL: ${{ github.event.discussion.html_url }}
+        EVENT_NAME: ${{ github.event_name }}
+        ISSUE_URL: ${{ github.event.issue.html_url }}
+        PR_URL: ${{ github.event.pull_request.html_url }}
+        RUN_ATTEMPT: ${{ inputs.run_attempt }}
+        RUN_ID: ${{ inputs.run_id }}
+      shell: bash
+      run: |
+        echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
+        {
+          echo -n "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) "
+          echo "and write a comprehensive visual audit report using mermaid diagrams and data."
+          echo ""
+          echo "## Execution Context"
+          echo "- **Event Name:** $EVENT_NAME"
+          echo "- **Triggered By:** $ACTOR"
+          if [ -n "$ISSUE_URL" ]; then echo "- **Issue URL:** $ISSUE_URL"; fi
+          if [ -n "$PR_URL" ]; then echo "- **Pull Request URL:** $PR_URL"; fi
+          if [ -n "$DISCUSSION_URL" ]; then echo "- **Discussion URL:** $DISCUSSION_URL"; fi
+          echo ""
+          echo "<logs>"
+          cat .agent.log
+          echo "</logs>"
+        } > .agent.prompt.txt
+    - name: Run Agent Auditor
+      id: cogni-ai-agent-auditor
+      uses: ./ai-inference/
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
+      with:
+        agent: cogni-ai-agent-auditor
+        max-completion-tokens: 12000
+        model: openai/gpt-4o-mini
+        prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
+        skills: agent-log-analysis
+        version_skills: main
+        temperature: 0.2
+        top-p: 0.9
