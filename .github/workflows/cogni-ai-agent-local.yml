@@ -278,7 +278,6 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           echo "prompt_file=.agent.prompt.txt" >> "$GITHUB_OUTPUT"
-          
           {
             echo "Please analyze the agent session logs from GitHub Actions run $RUN_ID (attempt $RUN_ATTEMPT) and write a comprehensive visual audit report using mermaid diagrams and data."
             echo ""
@@ -304,5 +303,6 @@ jobs:
           model: openai/gpt-4o-mini
           prompt-file: ${{ steps.prepare-prompt.outputs.prompt_file }}
           skills: agent-log-analysis
+          skills_version: f214760536acc42d590af08200f48c8d08f576fa
           temperature: 0.2
           top-p: 0.9
