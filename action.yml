@@ -477,12 +477,20 @@ runs:
               '' }}
         DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        PROMPT_FILE_INPUT: ${{ inputs.prompt-file }}
         EFFECTIVE_AGENT: ${{ steps.check.outputs.effective_agent }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
-        if [ -z "$prompt" ]; then
+        if [ -z "$prompt" ] && [ -z "${PROMPT_FILE_INPUT:-}" ]; then
           prompt="${COMMENT_BODY:-}"
+        fi
+        if [ -n "${PROMPT_FILE_INPUT:-}" ]; then
+          if [ -f "$PROMPT_FILE_INPUT" ]; then
+            prompt=$(cat "$PROMPT_FILE_INPUT")
+          else
+            echo "::warning::Prompt file not found: $PROMPT_FILE_INPUT"
+          fi
         fi
         if [ -n "${EFFECTIVE_AGENT:-}" ]; then
           if [ "$EFFECTIVE_AGENT" = "default" ]; then

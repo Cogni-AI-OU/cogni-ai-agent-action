@@ -31,6 +31,12 @@ inputs:
     default: ''
     description: Prompt to pass to the agent.
     required: false
+  prompt-file:
+    description: Path to a file containing the prompt
+    required: false
+  skills:
+    description: Comma-separated list of skills to load
+    required: false
 name: OpenCode Agent
 outputs:
   prompt:
@@ -134,8 +140,27 @@ runs:
           }
           core.setOutput('effective_agent', effectiveAgent);
     - name: Run opencode
-      if: steps.check.outputs.run == 'true'
       id: opencode
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      env:
+        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
+        PROMPT_INPUT: ${{ inputs.prompt }}
+        PROMPT_FILE_INPUT: ${{ inputs.prompt-file }}
+      run: |
+        set -euo pipefail
+        prompt="${PROMPT_INPUT:-}"
+        if [ -n "$PROMPT_FILE_INPUT" ]; then
+          if [ -f "$PROMPT_FILE_INPUT" ]; then
+            prompt=$(cat "$PROMPT_FILE_INPUT")
+          else
+            echo "::warning::Prompt file not found: $PROMPT_FILE_INPUT"
+          fi
+        fi
+        # We use a temporary file to pass the prompt to avoid shell escaping issues
+        printf '%s' "$prompt" > .opencode.prompt
+    - name: Run opencode action
+      if: steps.check.outputs.run == 'true'
       uses: anomalyco/opencode/github@v1.14.35
       env:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
@@ -144,5 +169,6 @@ runs:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions }}
         model: ${{ inputs.model }}
-        prompt: ${{ inputs.prompt }}
+        prompt: "$(< .opencode.prompt)"
         use_github_token: false
+
