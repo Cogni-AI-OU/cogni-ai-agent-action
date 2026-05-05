@@ -177,34 +177,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           top-p: ${{ inputs.top-p }}
           version_agents: ${{ inputs.version_agents || 'main' }}
-  summary:
-    name: Generate Summary (post-run)
-    needs: test
-    if: always() && needs.test.result != 'skipped'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-          ref: >-
-            ${{
-              (
-                github.event_name == 'issue_comment' &&
-                github.event.issue.pull_request &&
-                format('refs/pull/{0}/head', github.event.issue.number)
-              ) ||
-              (
-                github.event_name == 'pull_request_review_comment' &&
-                format('refs/pull/{0}/head', github.event.pull_request.number)
-              ) ||
-              github.ref
-            }}
-      - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
-        with:
-          agent_job_id: test
+
           github_token: ${{ secrets.GITHUB_TOKEN }}
