@@ -15,7 +15,7 @@ This action is typically called after an agent execution job to provide a human-
 
 ```yaml
 - name: Generate Session Summary
-  uses: ./ai-inference/summary/
+  uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -26,7 +26,7 @@ You can specify a different run or attempt if needed:
 
 ```yaml
 - name: Generate Session Summary
-  uses: ./ai-inference/summary/
+  uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
     run_id: 1234567890
@@ -45,4 +45,4 @@ You can specify a different run or attempt if needed:
 
 - **Permissions**: The provided `github_token` must have `actions: read` permissions to fetch job logs.
 - **Job Name**: The action specifically looks for a job named `Cogni AI Agent Local`.
-- **Infrastructure**: This action depends on the `ai-inference` action located in the `./ai-inference/` directory.
+- **Infrastructure**: This action depends on the `ai-inference` action located in the `ai-inference/` directory of this repository.

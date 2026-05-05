@@ -293,6 +293,6 @@ jobs:
           persist-credentials: false
           ref: ${{ env.GITHUB_REF_RESOLVED }}
       - name: Generate Summary
-        uses: ./ai-inference/summary/
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

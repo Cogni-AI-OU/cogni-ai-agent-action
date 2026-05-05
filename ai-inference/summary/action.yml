@@ -67,7 +67,7 @@ runs:
         } > .agent.prompt.txt
     - name: Run Agent Auditor
       id: cogni-ai-agent-auditor
-      uses: ./ai-inference/
+      uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@main
       env:
         GH_TOKEN: ${{ inputs.github_token }}
       with:
