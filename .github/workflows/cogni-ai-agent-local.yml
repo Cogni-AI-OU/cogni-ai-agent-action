@@ -241,6 +241,13 @@ jobs:
       - name: Print logs
         if: cancelled() || failure()
         run: grep -v INFO ~/.local/share/opencode/log/* || true
+      # Debug with tmate on failure when debug logging is enabled.
+      - if: ${{ (cancelled() || failure()) && runner.debug == '1' }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          timeout-minutes: 15
+
   summary:
     name: Generate Summary (post-run)
     needs: cogni-ai
@@ -301,8 +308,8 @@ jobs:
           agent: cogni-ai-agent-auditor
           max-completion-tokens: 8192
           model: openai/gpt-4o-mini
-          prompt-file: ${{ steps.prepare-prompt.outputs.prompt_file }}
+          prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
           skills: agent-log-analysis
-          skills_version: main
+          version_skills: main
           temperature: 0.2
           top-p: 0.9
