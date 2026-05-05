@@ -352,7 +352,7 @@ runs:
           const eventName = context.eventName;
           let run = process.env.FORCE_RUN === 'true';
           let agent = '';
-          console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
+          console.log('### CHECK_CONDITIONS_RESULTS ###');
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
           if (run) {
             agent = 'default';
@@ -615,16 +615,20 @@ runs:
         is_hierarchical = any(k not in categories for k in user_permissions.keys())
         default_base_perms = default_perms_hierarchical.get('default', {})
         default_agent_perms = default_perms_hierarchical.get(agent, {})
-        if not isinstance(default_base_perms, dict): default_base_perms = {}
-        if not isinstance(default_agent_perms, dict): default_agent_perms = {}
+        if not isinstance(default_base_perms, dict):
+            default_base_perms = {}
+        if not isinstance(default_agent_perms, dict):
+            default_agent_perms = {}
         if is_hierarchical:
             user_base_perms = user_permissions.get('default', {})
             user_agent_perms = user_permissions.get(agent, {})
         else:
             user_base_perms = user_permissions
             user_agent_perms = {}
-        if not isinstance(user_base_perms, dict): user_base_perms = {}
-        if not isinstance(user_agent_perms, dict): user_agent_perms = {}
+        if not isinstance(user_base_perms, dict):
+            user_base_perms = {}
+        if not isinstance(user_agent_perms, dict):
+            user_agent_perms = {}
         final_perms = deep_merge(default_base_perms, default_agent_perms)
         final_perms = deep_merge(final_perms, user_base_perms)
         final_perms = deep_merge(final_perms, user_agent_perms)
