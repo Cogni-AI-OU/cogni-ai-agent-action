@@ -23,6 +23,10 @@ inputs:
     default: repos,issues,pull_requests,actions,code_security
     description: Toolsets to enable for GitHub MCP server.
     required: false
+  instructions:
+    default: ''
+    description: Comma-separated list of instructions to load into system prompt.
+    required: false
   max-completion-tokens:
     description: The maximum number of tokens to generate
     required: false
@@ -46,6 +50,10 @@ inputs:
     default: /ai
     description: Comma-separated trigger mentions for AI Inference.
     required: false
+  mentions_bots:
+    default: ''
+    description: Comma-separated bot mentions for AI Inference.
+    required: false
   model:
     default: openai/gpt-4o-mini
     description: Model to use for inference.
@@ -53,6 +61,10 @@ inputs:
   prompt:
     default: ''
     description: Prompt to pass to the model.
+    required: false
+  skills:
+    default: ''
+    description: Comma-separated list of skills to load into system prompt.
     required: false
   system-prompt:
     default: You are a helpful assistant
@@ -70,6 +82,14 @@ inputs:
   version_agents:
     default: main
     description: Version of cogni-ai-agents to use.
+    required: false
+  version_instructions:
+    default: main
+    description: Version of cogni-ai-agent-instructions to use.
+    required: false
+  version_skills:
+    default: main
+    description: Version of cogni-ai-agent-skills to use.
     required: false
 name: Cogni AI Inference
 outputs:
@@ -91,10 +111,13 @@ runs:
       env:
         AGENT_INPUT: ${{ inputs.agent }}
         MENTIONS: ${{ inputs.mentions || '/ai' }}
+        MENTIONS_BOTS: ${{ inputs.mentions_bots }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
-          const BOT_MENTIONS = [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           function matchesTrigger(body, triggers) {
             if (!body) return false;
@@ -120,7 +143,7 @@ runs:
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
             run = true;
-            agent = 'cogni-ai-architect';
+            agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
             'pull_request_review_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
@@ -131,20 +154,20 @@ runs:
             );
             if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
             const pr = context.payload.pull_request;
             const assoc = pr?.author_association;
             if (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           }
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          let effectiveAgent = process.env.AGENT_INPUT || agent || 'cogni-ai-architect';
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
           if (effectiveAgent === 'default') {
             effectiveAgent = '';
           }
@@ -212,13 +235,29 @@ runs:
             `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
           );
     - name: Checkout cogni-ai-agents
-      if: steps.check.outputs.run == 'true'
+      if: steps.check.outputs.run == 'true' && steps.check.outputs.effective_agent != ''
       shell: bash
       run: |
         git clone --depth 1 \
           -b ${{ inputs.version_agents || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
           ${{ runner.temp }}/.agents
+    - name: Checkout cogni-ai-agent-skills
+      if: steps.check.outputs.run == 'true' && inputs.skills != ''
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_skills || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
+          ${{ runner.temp }}/.skills
+    - name: Checkout cogni-ai-agent-instructions
+      if: steps.check.outputs.run == 'true' && inputs.instructions != ''
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_instructions || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
+          ${{ runner.temp }}/.instructions
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
@@ -243,6 +282,11 @@ runs:
         prompt="${PROMPT_INPUT:-}"
         prompt_file="${PROMPT_FILE_INPUT:-}"
 
+        # Resolve prompt content
+        if [ -z "$prompt" ] && [ -z "$prompt_file" ]; then
+          prompt="${COMMENT_BODY:-}"
+        fi
+
         # Build header
         header=""
         if [ -n "${ISSUE_NUMBER:-}" ]; then
@@ -253,22 +297,23 @@ runs:
           header="Related to $entity_type #$ISSUE_NUMBER"
         fi
 
-        if [ -n "$prompt_file" ]; then
-          # For file-based prompts, we just note it in the resolved prompt output
-          prompt="Using prompt from file: $prompt_file"
-        else
-          # For inline prompts, use the input prompt or fallback to comment body
-          if [ -z "$prompt" ]; then
-            prompt="${COMMENT_BODY:-}"
-          fi
-        fi
-
         # Prepend header if we have one
         if [ -n "$header" ]; then
           if [ -n "$prompt" ]; then
             prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
             prompt="$header"
+          fi
+        fi
+
+        # Handle prompt-file specifically for outputs
+        if [ -n "$prompt_file" ]; then
+          # For file-based prompts, we avoid including the file content in the output
+          # as it might be too large. We just note the source.
+          if [ -n "$header" ]; then
+             prompt="$header (Prompt loaded from file: $prompt_file)"
+          else
+             prompt="(Prompt loaded from file: $prompt_file)"
           fi
         fi
 
@@ -287,22 +332,68 @@ runs:
       shell: bash
       env:
         AGENT: ${{ steps.check.outputs.effective_agent }}
+        INSTRUCTIONS: ${{ inputs.instructions }}
+        SKILLS: ${{ inputs.skills }}
+        SYSTEM_PROMPT: ${{ inputs.system-prompt }}
       run: |
         set -euo pipefail
+        prompt_file=$(mktemp "${{ runner.temp }}/system_prompt.XXXXXX.md")
+        if [ -n "${SYSTEM_PROMPT}" ] && [ "${SYSTEM_PROMPT}" != "You are a helpful assistant" ]; then
+          echo "${SYSTEM_PROMPT}" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
         if [ -n "${AGENT}" ]; then
           agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
           if [ -f "$agent_file" ]; then
-            echo "system-prompt-file=$agent_file" >> "$GITHUB_OUTPUT"
-            exit 0
+            cat "$agent_file" >> "$prompt_file"
+            echo "" >> "$prompt_file"
           fi
         fi
-        echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
+        if [ -n "${INSTRUCTIONS}" ]; then
+          echo "<instructions>" >> "$prompt_file"
+          IFS=',' read -ra INSTR_ARRAY <<< "$INSTRUCTIONS"
+          for instr in "${INSTR_ARRAY[@]}"; do
+            instr=$(echo "$instr" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            if [ -n "$instr" ]; then
+              instr_file="${{ runner.temp }}/.instructions/${instr}/${instr}.instructions.md"
+              if [ -f "$instr_file" ]; then
+                echo "<instruction name=\"${instr}\">" >> "$prompt_file"
+                cat "$instr_file" >> "$prompt_file"
+                echo "</instruction>" >> "$prompt_file"
+                echo "" >> "$prompt_file"
+              fi
+            fi
+          done
+          echo "</instructions>" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
+        if [ -n "${SKILLS}" ]; then
+          echo "<skills>" >> "$prompt_file"
+          IFS=',' read -ra SKILL_ARRAY <<< "$SKILLS"
+          for skill in "${SKILL_ARRAY[@]}"; do
+            skill=$(echo "$skill" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            if [ -n "$skill" ]; then
+              skill_file="${{ runner.temp }}/.skills/${skill}/SKILL.md"
+              if [ -f "$skill_file" ]; then
+                echo "<skill>" >> "$prompt_file"
+                cat "$skill_file" >> "$prompt_file"
+                echo "</skill>" >> "$prompt_file"
+                echo "" >> "$prompt_file"
+              fi
+            fi
+          done
+          echo "</skills>" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
+        if [ -s "$prompt_file" ]; then
+          echo "system-prompt-file=$prompt_file" >> "$GITHUB_OUTPUT"
+        else
+          echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
+        fi
     - name: Run AI Inference
       if: steps.check.outputs.run == 'true'
       id: inference
       uses: actions/ai-inference@v2
-      env:
-        ACTIONS_STEP_DEBUG: ${{ runner.debug == '1' }}
       with:
         enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}

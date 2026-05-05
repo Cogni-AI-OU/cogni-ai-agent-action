@@ -51,6 +51,23 @@ on:
           Some models won't support it (such as gpt-5-mini/gpt-5-nano or deepseek).
         required: false
         type: boolean
+      file_input:
+        description: File-based template variables
+        required: false
+        type: string
+      input:
+        description: Template variables for .prompt.yml files
+        required: false
+        type: string
+      max-completion-tokens:
+        description: The maximum number of tokens to generate
+        required: false
+        type: number
+      max-tokens:
+        default: 16000
+        description: The maximum number of tokens to generate (deprecated)
+        required: false
+        type: number
       model:
         default: openai/gpt-4o-mini
         description: Model to use for inference.
@@ -87,6 +104,23 @@ on:
         description: Prompt to pass to the model
         required: false
         default: Count to 10.
+      prompt-file:
+        description: Path to a file containing the prompt
+        required: false
+        type: string
+      temperature:
+        description: The sampling temperature to use (0-1)
+        required: false
+        type: number
+      top-p:
+        description: The nucleus sampling parameter to use (0-1)
+        required: false
+        type: number
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use
+        required: false
+        type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
@@ -102,18 +136,20 @@ jobs:
   test:
     name: AI Inference Local
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
-        (
-          github.event_name == 'issues' &&
-          contains(github.event.issue.body || '', '/ai')
-        ) ||
-        (
-          github.event_name == 'discussion' &&
-          contains(github.event.discussion.body || '', '/ai')
-        ) ||
-        contains(github.event.comment.body || '', '/ai')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/ai'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -145,7 +181,7 @@ jobs:
         uses: ./ai-inference
         with:
           agent: ${{ inputs.agent }}
-          enable-github-mcp: ${{ inputs.enable-github-mcp != '' && inputs.enable-github-mcp || true }}
+          enable-github-mcp: ${{ inputs.enable-github-mcp }}
           max-completion-tokens: ${{ inputs.max-completion-tokens }}
           max-tokens: ${{ inputs.max-tokens }}
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
