@@ -382,4 +382,22 @@ runs:
         system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
+    - name: Write response to step summary
+      if: always() && steps.inference.outputs.response != ''
+      shell: bash
+      env:
+        PROMPT: ${{ steps.prompt.outputs.prompt }}
+        RESPONSE: ${{ steps.inference.outputs.response }}
+      run: |-
+        {
+          if [ -n "${PROMPT:-}" ]; then
+            echo "## Prompt"
+            echo ""
+            echo "$PROMPT"
+            echo ""
+          fi
+          echo "## Agent Response"
+          echo ""
+          echo "$RESPONSE"
+        } >> "$GITHUB_STEP_SUMMARY"
         top-p: ${{ inputs.top-p }}
