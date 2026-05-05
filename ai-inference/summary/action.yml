@@ -4,6 +4,13 @@ inputs:
   github_token:
     description: GitHub Token
     required: true
+  agent_job_id:
+    description: Machine name (YAML key) of the job whose logs should be extracted
+    required: false
+  agent_job_name:
+    default: Cogni AI Agent
+    description: Display name of the job whose logs should be extracted
+    required: false
   run_attempt:
     default: ${{ github.run_attempt }}
     description: Run Attempt
@@ -25,18 +32,52 @@ runs:
         REPO="${{ github.repository }}"
         RUN_ID="${{ inputs.run_id }}"
         ATTEMPT="${{ inputs.run_attempt }}"
+        AGENT_JOB_NAME="${{ inputs.agent_job_name }}"
+        AGENT_JOB_ID="${{ inputs.agent_job_id }}"
+        if [ -n "$AGENT_JOB_ID" ]; then
+          # Fetch workflow file to get the display name for the job ID
+          WORKFLOW_PATH=$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq .path)
+          FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" --jq .content | base64 -d | awk -v id="$AGENT_JOB_ID" '
+            $0 ~ "^  " id ":" { found=1; next }
+            found && $0 ~ "^    name:" {
+              sub(/^[ ]*name:[ ]*/, "");
+              gsub(/^["'\'']|["'\'']$/, "");
+              print;
+              exit
+            }
+            found && $0 ~ "^  [^ ]" { exit }
+          ')
+          if [ -n "$FETCHED_NAME" ]; then
+            AGENT_JOB_NAME="$FETCHED_NAME"
+          fi
+        fi
+        if [ -z "$AGENT_JOB_NAME" ]; then
+          AGENT_JOB_NAME="Cogni AI Agent"
+        fi
         JOB_ID=$(
           gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
-            --jq '.jobs[] | select(.name == "Cogni AI Agent Local") | .id'
+            --jq ".jobs[] | select(
+                .name == \"$AGENT_JOB_NAME\" or 
+                (.name | startswith(\"$AGENT_JOB_NAME\")) or 
+                (any(.steps[]; .name | contains(\"Run Cogni AI Agent\")))
+              ) | .id" \
+            | awk 'NR==1{print; exit}'
         )
         if [ -z "$JOB_ID" ]; then
-          echo "Job ID not found for 'Cogni AI Agent Local'"
-          exit 1
+          echo "::notice title=Job ID not found::No job matched '$AGENT_JOB_NAME' (run=$RUN_ID attempt=$ATTEMPT)."
+          AVAILABLE_JOBS=$(gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" --jq '.jobs[].name' | paste -sd ', ' -)
+          {
+            echo "No job named '$AGENT_JOB_NAME' found in run $RUN_ID (attempt $ATTEMPT)."
+            echo "Available jobs: $AVAILABLE_JOBS"
+            echo
+            echo "Falling back to empty log extraction."
+          } > .agent.log
+        else
+          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
+            | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 }
+                   END { if (!found) print "No logs found between markers." }' \
+            | tee .agent.log
         fi
-        gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
-          | awk '/PROMPT:/,/Post job cleanup/ { print; found=1 }
-              END { if (!found) print "No logs found between markers." }' \
-          | tee .agent.log
     - name: Prepare summary prompt
       id: prepare-summary-prompt
       env:
