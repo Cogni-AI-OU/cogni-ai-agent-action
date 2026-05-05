@@ -23,5 +23,6 @@ actionlint
 *.bak
 *.log
 *.orig
+*.patch
 *.py
 *.swp
