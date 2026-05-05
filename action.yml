@@ -287,6 +287,10 @@ inputs:
     default: ''
     description: Prompt to pass to the agent.
     required: false
+  concurrency:
+    default: 'true'
+    description: Whether to wait for concurrent runs.
+    required: false
   version_agents:
     default: main
     description: Version of cogni-ai-agents to use.
@@ -406,7 +410,7 @@ runs:
           core.setOutput('effective_agent', effectiveAgent);
     - name: Wait for concurrent runs
       id: concurrency
-      if: steps.check.outputs.run == 'true'
+      if: steps.check.outputs.run == 'true' && inputs.concurrency == 'true'
       uses: actions/github-script@v7
       with:
         script: |

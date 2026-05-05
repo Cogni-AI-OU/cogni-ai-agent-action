@@ -31,6 +31,10 @@ inputs:
     default: ''
     description: Prompt to pass to the agent.
     required: false
+  concurrency:
+    default: 'true'
+    description: Whether to wait for concurrent runs.
+    required: false
 name: OpenCode Agent
 outputs:
   prompt:
@@ -139,6 +143,68 @@ runs:
             effectiveAgent = '';
           }
           core.setOutput('effective_agent', effectiveAgent);
+    - name: Wait for concurrent runs
+      id: concurrency
+      if: steps.check.outputs.run == 'true' && inputs.concurrency == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const eventName = context.eventName;
+          const issueOrPREvents = [
+            'discussion',
+            'discussion_comment',
+            'issue_comment',
+            'issues',
+            'pull_request',
+            'pull_request_review_comment',
+            'pull_request_target',
+          ];
+          if (!issueOrPREvents.includes(eventName)) {
+            core.info('Concurrency wait: skipped (not an issue/PR event)');
+            return;
+          }
+          const { data: currentRun } = await github.rest.actions.getWorkflowRun({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+          });
+          const workflowId = currentRun.workflow_id;
+          const currentCreatedAt = new Date(currentRun.created_at).getTime();
+          const POLL_INTERVAL_MS = 30_000;
+          const MAX_WAIT_MS = 20 * 60_000;
+          const start = Date.now();
+          while (Date.now() - start < MAX_WAIT_MS) {
+            let olderActiveRuns = [];
+            for (const status of ['in_progress', 'queued']) {
+              const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: workflowId,
+                status,
+              });
+              olderActiveRuns.push(
+                ...workflow_runs.filter(
+                  run => run.id !== context.runId
+                    && new Date(run.created_at).getTime() < currentCreatedAt
+                    && run.display_title === currentRun.display_title
+                )
+              );
+            }
+            if (olderActiveRuns.length === 0) {
+              core.info('Concurrency wait: no older active runs, proceeding');
+              return;
+            }
+            const ids = olderActiveRuns.map(r => r.id).join(', ');
+            core.info(
+              `Concurrency wait: ${olderActiveRuns.length} older run(s) still active ` +
+              `(IDs: ${ids}). Waiting ${POLL_INTERVAL_MS / 1000}s...`
+            );
+            await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+          }
+          core.warning(
+            `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
+            `for older runs of "${currentRun.display_title}" to finish. Proceeding anyway.`
+          );
     - name: Run opencode
       if: steps.check.outputs.run == 'true'
       id: opencode
