@@ -28,6 +28,7 @@ jobs:
     steps:
       - name: Run AI Inference
         uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
+        id: inference
         with:
           prompt: ${{ inputs.prompt }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -112,6 +113,7 @@ jobs:
             }}
       - name: Run AI Inference
         uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
+        id: inference
         with:
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
           prompt: >-
