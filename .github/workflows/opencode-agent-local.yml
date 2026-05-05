@@ -3,7 +3,13 @@
 # Triggered by /oc, /opencode, or /review commands in comments, or manually via workflow_dispatch/workflow_call.
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode Agent Local
-run-name: 'Agent on #${{ github.event.issue.number || github.event.pull_request.number || github.event.discussion.number || github.run_id }}'
+run-name: >-
+  Agent on #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
 on:
   issue_comment:
     types:
@@ -137,12 +143,30 @@ jobs:
     name: OpenCode Agent Local
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -202,7 +226,14 @@ jobs:
           mentions: /oc,/opencode
           model: ${{ inputs.model || env.OPENCODE_MODEL_DEFAULT }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
-          prompt: ${{ inputs.prompt || github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body }}
+          prompt: >-
+            ${{
+              inputs.prompt ||
+              github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body
+            }}
           prompt-file: ${{ inputs.prompt-file }}
           skills: ${{ inputs.skills }}
       - name: Annotate prompt and output

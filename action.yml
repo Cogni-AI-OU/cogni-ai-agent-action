@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 # See: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 author: Cogni AI OU
 branding:
@@ -323,7 +324,9 @@ runs:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
           const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
-          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
@@ -634,7 +637,7 @@ runs:
     - name: Run opencode
       id: opencode
       if: steps.check.outputs.run == 'true'
-      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main # Note: Do not change this line to anomalyco/opencode.
+      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main  # Note: Do not change this line to anomalyco/opencode.
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}

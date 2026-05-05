@@ -10,7 +10,8 @@ Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a
 
 ### Prerequisites
 
-1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets (**Settings → Secrets and variables → Actions**).
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets
+   (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR comments
@@ -36,12 +37,30 @@ jobs:
   agent:
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -167,13 +186,31 @@ jobs:
     name: Run Cogni AI agent
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event.sender.type != 'Bot') &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event.sender.type != 'Bot'
+      ) &&
       (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'workflow_call' ||
         github.event_name == 'pull_request' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/') ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '@')
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
@@ -259,17 +296,17 @@ to avoid accidental or malicious destructive actions.
 
 ### Inputs
 
-| Input                  | Description                                   | Default                                    | Required |
-| ---------------------- | --------------------------------------------- | ------------------------------------------ | -------- |
-| `agent`                | Agent to use                                  | `default`                                  | No       |
-| `mentions`             | Comma-separated mentions                      | `/co,/cogni,/review,/brainstorm`           | No       |
-| `model`                | Model to use for OpenCode                     | `opencode/gemini-3-flash`                  | No       |
-| `opencode-api-key`     | API key for OpenCode                          | —                                          | **Yes**  |
-| `permissions`          | Permissions configuration                     | —                                          | No       |
-| `prompt`               | Prompt to pass to the agent                   | `''`                                       | No       |
-| `version_agents`       | Version of cogni-ai-agents to use             | `main`                                     | No       |
-| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main`                                     | No       |
-| `version_skills`       | Version of cogni-ai-agent-skills to use       | `main`                                     | No       |
+| Input | Description | Default | Required |
+| :--- | :--- | :--- | :--- |
+| `agent` | Agent to use | `default` | No |
+| `mentions` | Comma-separated mentions | `/co,/cogni,/review,/brainstorm` | No |
+| `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
+| `opencode-api-key` | API key for OpenCode | — | **Yes** |
+| `permissions` | Permissions configuration | — | No |
+| `prompt` | Prompt to pass to the agent | `''` | No |
+| `version_agents` | Version of cogni-ai-agents to use | `main` | No |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main` | No |
+| `version_skills` | Version of cogni-ai-agent-skills to use | `main` | No |
 
 ### Hierarchical Permissions
 

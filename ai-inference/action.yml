@@ -23,6 +23,10 @@ inputs:
     default: repos,issues,pull_requests,actions,code_security
     description: Toolsets to enable for GitHub MCP server.
     required: false
+  instructions:
+    default: ''
+    description: Comma-separated list of instructions to load into system prompt.
+    required: false
   max-completion-tokens:
     description: The maximum number of tokens to generate
     required: false
@@ -69,6 +73,10 @@ inputs:
     default: main
     description: Version of cogni-ai-agents to use.
     required: false
+  version_instructions:
+    default: main
+    description: Version of cogni-ai-agent-instructions to use.
+    required: false
   version_skills:
     default: main
     description: Version of cogni-ai-agent-skills to use.
@@ -94,7 +102,9 @@ runs:
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
-          const BOT_MENTIONS = process.env.MENTIONS_BOTS ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean) : [];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           function matchesTrigger(body, triggers) {
             if (!body) return false;
@@ -227,6 +237,14 @@ runs:
           -b ${{ inputs.version_skills || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
           ${{ runner.temp }}/.skills
+    - name: Checkout cogni-ai-agent-instructions
+      if: steps.check.outputs.run == 'true' && inputs.instructions != ''
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_instructions || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
+          ${{ runner.temp }}/.instructions
     - name: Resolve prompt
       if: steps.check.outputs.run == 'true'
       id: prompt
@@ -279,17 +297,16 @@ runs:
       shell: bash
       env:
         AGENT: ${{ steps.check.outputs.effective_agent }}
+        INSTRUCTIONS: ${{ inputs.instructions }}
         SKILLS: ${{ inputs.skills }}
         SYSTEM_PROMPT: ${{ inputs.system-prompt }}
       run: |
         set -euo pipefail
         prompt_file=$(mktemp "${{ runner.temp }}/system_prompt.XXXXXX.md")
-
         if [ -n "${SYSTEM_PROMPT}" ] && [ "${SYSTEM_PROMPT}" != "You are a helpful assistant" ]; then
           echo "${SYSTEM_PROMPT}" >> "$prompt_file"
           echo "" >> "$prompt_file"
         fi
-
         if [ -n "${AGENT}" ]; then
           agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
           if [ -f "$agent_file" ]; then
@@ -297,7 +314,24 @@ runs:
             echo "" >> "$prompt_file"
           fi
         fi
-
+        if [ -n "${INSTRUCTIONS}" ]; then
+          echo "<instructions>" >> "$prompt_file"
+          IFS=',' read -ra INSTR_ARRAY <<< "$INSTRUCTIONS"
+          for instr in "${INSTR_ARRAY[@]}"; do
+            instr=$(echo "$instr" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            if [ -n "$instr" ]; then
+              instr_file="${{ runner.temp }}/.instructions/${instr}/${instr}.instructions.md"
+              if [ -f "$instr_file" ]; then
+                echo "<instruction name=\"${instr}\">" >> "$prompt_file"
+                cat "$instr_file" >> "$prompt_file"
+                echo "</instruction>" >> "$prompt_file"
+                echo "" >> "$prompt_file"
+              fi
+            fi
+          done
+          echo "</instructions>" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
         if [ -n "${SKILLS}" ]; then
           echo "<skills>" >> "$prompt_file"
           IFS=',' read -ra SKILL_ARRAY <<< "$SKILLS"
@@ -316,7 +350,6 @@ runs:
           echo "</skills>" >> "$prompt_file"
           echo "" >> "$prompt_file"
         fi
-
         if [ -s "$prompt_file" ]; then
           echo "system-prompt-file=$prompt_file" >> "$GITHUB_OUTPUT"
         else

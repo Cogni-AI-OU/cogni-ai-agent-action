@@ -129,10 +129,20 @@ jobs:
   test:
     name: AI Inference Local
     if: |
-      (github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot') &&
       (
         github.event_name == 'workflow_dispatch' ||
-        contains(github.event.comment.body || github.event.issue.body || github.event.pull_request.body || github.event.discussion.body || '', '/ai')
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/ai'
+        )
       )
     runs-on: ubuntu-latest
     permissions:
