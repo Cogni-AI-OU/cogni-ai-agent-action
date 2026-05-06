@@ -234,6 +234,14 @@ inputs:
         read: allow
         edit: deny
         skill: *default-skill
+      cogni-ai-manager:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+        task: allow
       cogni-ai-plan-reviewer:
         bash: deny
         glob: allow
@@ -271,7 +279,7 @@ inputs:
       with 'default' and agent-specific overrides (e.g.,
       'cogni-ai-agent-auditor', 'cogni-ai-architect', 'cogni-ai-brain-ops',
       'cogni-ai-code-reviewer', 'cogni-ai-context7-ops', 'cogni-ai-devops',
-      'cogni-ai-docs-editor', 'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-plan-reviewer',
+      'cogni-ai-docs-editor', 'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-manager', 'cogni-ai-plan-reviewer',
       'cogni-ai-python-dev', 'cogni-ai-security-auditor', 'cogni-ai-tester',
       etc.).
       Example:
@@ -647,6 +655,12 @@ runs:
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
                 "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+              },
+              "cogni-ai-manager": {
+                "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
               },
               "cogni-ai-plan-reviewer": {
                 "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
