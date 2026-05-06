@@ -20,6 +20,10 @@ inputs:
     default: ${{ github.run_id }}
     description: Run ID
     required: false
+  enable-github-mcp:
+    default: 'false'
+    description: Enable Model Context Protocol integration with GitHub tools.
+    required: false
 runs:
   using: composite
   steps:
@@ -136,5 +140,6 @@ runs:
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
         skills: agent-log-analysis
         version_skills: main
+        enable-github-mcp: ${{ inputs.enable-github-mcp }}
         temperature: 0.2
         top-p: 0.9
