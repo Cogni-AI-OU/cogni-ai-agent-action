@@ -81,8 +81,7 @@ jobs:
 ### Advanced workflow
 
 An example of a more advanced configuration with issue and pull request triggers.
-Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies
-or wait for concurrent runs.
+Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies.
 
 ```yaml
 ---

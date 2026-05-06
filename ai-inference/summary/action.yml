@@ -130,7 +130,6 @@ runs:
       with:
         agent: cogni-ai-agent-auditor
         force-run: true
-        concurrency: false
         max-completion-tokens: 12000
         model: openai/gpt-4o-mini
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
