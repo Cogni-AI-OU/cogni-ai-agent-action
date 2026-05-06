@@ -261,7 +261,6 @@ runs:
           # but avoid including the file content in the output as it might be too large.
           prompt="${header:-}"
         fi
-
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
@@ -347,11 +346,11 @@ runs:
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        prompt-file: ${{ inputs.prompt-file }} # Takes precedence over prompt.
+        prompt-file: ${{ inputs.prompt-file }}  # Takes precedence over prompt.
         input: ${{ inputs.input }}
         file_input: ${{ inputs.file_input }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
-        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }} # Takes precedence over system-prompt.
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}  # Takes precedence over system-prompt.
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
         top-p: ${{ inputs.top-p }}
