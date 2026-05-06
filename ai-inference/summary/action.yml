@@ -84,7 +84,7 @@ runs:
             | awk '/### CHECK_CONDITIONS_RESULTS ###/,/################################/ { $1=""; print }
                    /PROMPT:/,/Post job cleanup/ { $1=""; print; found=1 }
                    END { if (!found) print "No agent execution logs found. Check condition results above." }' \
-            | awk '/Edit/ { print substr($0, 1, 80) "..."; next } 1' \
+            | awk '/Edit|Write/ { print substr($0, 1, 80) "..."; next } 1' \
             | tee .agent.log
         fi
     - name: Prepare summary prompt
