@@ -90,7 +90,7 @@ runs:
           const eventName = context.eventName;
           let run = false;
           let agent = '';
-          console.log(`### CHECK_CONDITIONS_RESULTS ###`);
+          console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
@@ -171,6 +171,10 @@ runs:
             repo: context.repo.repo,
             run_id: context.runId,
           });
+          if (!currentRun) {
+            core.info('Concurrency wait: current run not found');
+            return;
+          }
           const workflowId = currentRun.workflow_id;
           const currentCreatedAt = new Date(currentRun.created_at).getTime();
           const POLL_INTERVAL_MS = 30_000;
@@ -188,11 +192,11 @@ runs:
                   status,
                   per_page: 100,
                 },
-                response => response.data.workflow_runs
+                response => response.data.workflow_runs || []
               );
               olderActiveRuns.push(
-                ...workflowRuns.filter(
-                  run => run.id !== context.runId
+                ...(workflowRuns || []).filter(
+                  run => run && run.id !== context.runId
                     && new Date(run.created_at).getTime() < currentCreatedAt
                     && run.display_title === currentRun.display_title
                 )
