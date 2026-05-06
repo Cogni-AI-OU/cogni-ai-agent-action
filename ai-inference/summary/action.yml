@@ -77,8 +77,8 @@ runs:
         else
           echo "job_conclusion=$JOB_CONCLUSION" >> "$GITHUB_OUTPUT"
           gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
-            | awk '/### CHECK_CONDITIONS_RESULTS ###/,/################################/ { print }
-                   /PROMPT:/,/Post job cleanup/ { print; found=1 }
+            | awk '/### CHECK_CONDITIONS_RESULTS ###/,/################################/ { $1=""; print }
+                   /PROMPT:/,/Post job cleanup/ { $1=""; print; found=1 }
                    END { if (!found) print "No agent execution logs found. Check condition results above." }' \
             | tee .agent.log
         fi
