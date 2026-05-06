@@ -712,7 +712,8 @@ runs:
             },
             "skills": {
               "paths": [
-                "${{ runner.temp }}/.skills"
+                "${{ runner.temp }}/.skills",
+                "${{ github.workspace }}/.github/skills"
               ]
             }
           }
