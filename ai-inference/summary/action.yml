@@ -12,6 +12,10 @@ inputs:
     default: Cogni AI Agent
     description: Display name of the job whose logs should be extracted
     required: false
+  enable-github-mcp:
+    default: 'false'
+    description: Enable Model Context Protocol integration with GitHub tools.
+    required: false
   run_attempt:
     default: ${{ github.run_attempt }}
     description: Run Attempt
@@ -136,5 +140,6 @@ runs:
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
         skills: agent-log-analysis
         version_skills: main
+        enable-github-mcp: ${{ inputs.enable-github-mcp }}
         temperature: 0.2
         top-p: 0.9
