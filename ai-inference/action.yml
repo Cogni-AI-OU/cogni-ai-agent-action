@@ -11,7 +11,7 @@ inputs:
     description: Agent to use for system prompt.
     required: false
   enable-github-mcp:
-    default: 'false'
+    default: 'true'
     description: >-
       Enable Model Context Protocol integration with GitHub tools.
       Some models won't support it (such as nano, mini or deepseek).
@@ -31,7 +31,20 @@ inputs:
     description: The maximum number of tokens to generate
     required: false
   max-tokens:
+    default: 16000
     description: The maximum number of tokens to generate (deprecated)
+    required: false
+  prompt-file:
+    description: >-
+      Path to a file containing the prompt (supports .txt and .prompt.yml
+      formats). If both prompt and prompt-file are provided, prompt-file
+      takes precedence.
+    required: false
+  input:
+    description: Template variables in YAML format for .prompt.yml files.
+    required: false
+  file_input:
+    description: Template variables in YAML where values are file paths.
     required: false
   mentions:
     default: /ai
@@ -48,9 +61,6 @@ inputs:
   prompt:
     default: ''
     description: Prompt to pass to the model.
-    required: false
-  prompt-file:
-    description: Path to a file containing the prompt (supports .txt and .prompt.yml formats)
     required: false
   skills:
     default: ''
@@ -93,6 +103,9 @@ outputs:
   response:
     description: The response from the model.
     value: ${{ steps.inference.outputs.response }}
+  response-file:
+    description: The file path where the response is saved (useful for larger responses).
+    value: ${{ steps.inference.outputs.response-file }}
 runs:
   using: composite
   steps:
@@ -216,26 +229,45 @@ runs:
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
-        if [ -z "$prompt" ] && [ -z "${PROMPT_FILE_INPUT:-}" ]; then
+        prompt_file="${PROMPT_FILE_INPUT:-}"
+
+        # Resolve prompt content
+        if [ -z "$prompt" ] && [ -z "$prompt_file" ]; then
           prompt="${COMMENT_BODY:-}"
         fi
-        if [ -n "${ISSUE_NUMBER:-}" ] && [ -z "${PROMPT_FILE_INPUT:-}" ]; then
+
+        # Build header
+        header=""
+        if [ -n "${ISSUE_NUMBER:-}" ]; then
           entity_type="issue/PR"
           if [ -n "${DISCUSSION_NUMBER:-}" ]; then
             entity_type="discussion"
           fi
           header="Related to $entity_type #$ISSUE_NUMBER"
+        fi
+
+        # Prepend header if we have one
+        if [ -n "$header" ]; then
           if [ -n "$prompt" ]; then
             prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
             prompt="$header"
           fi
         fi
+
+        # Handle prompt-file specifically for outputs
+        if [ -n "$prompt_file" ]; then
+          # For file-based prompts, we show the context header if available,
+          # but avoid including the file content in the output as it might be too large.
+          prompt="${header:-}"
+        fi
+
         EOF_TOKEN="EOF_$(openssl rand -hex 10)"
         {
           echo "prompt<<$EOF_TOKEN"
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
+          echo "prompt_file=$prompt_file"
         } >> "$GITHUB_OUTPUT"
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
@@ -309,31 +341,46 @@ runs:
       id: inference
       uses: actions/ai-inference@v2
       with:
-        enable-github-mcp: ${{ inputs.enable-github-mcp || 'false' }}
+        enable-github-mcp: ${{ inputs.enable-github-mcp != 'false' }}
         github-mcp-token: ${{ inputs.github-mcp-token }}
         github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
         max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
         model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        prompt-file: ${{ inputs.prompt-file }}
+        prompt-file: ${{ inputs.prompt-file }} # Takes precedence over prompt.
+        input: ${{ inputs.input }}
+        file_input: ${{ inputs.file_input }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
-        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }} # Takes precedence over system-prompt.
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
         top-p: ${{ inputs.top-p }}
+    - name: Print Response File
+      if: steps.check.outputs.run == 'true' && steps.inference.outputs.response-file != ''
+      shell: bash
+      run: |
+        echo "Response saved to: ${{ steps.inference.outputs.response-file }}"
     - name: Write response to step summary
       if: always() && steps.inference.outputs.response != ''
       shell: bash
       env:
         PROMPT: ${{ steps.prompt.outputs.prompt }}
+        PROMPT_FILE: ${{ steps.prompt.outputs.prompt_file }}
         RESPONSE: ${{ steps.inference.outputs.response }}
       run: |-
         {
-          if [ -n "${PROMPT:-}" ]; then
+          if [ -n "${PROMPT:-}" ] || [ -n "${PROMPT_FILE:-}" ]; then
             echo "## Prompt"
             echo ""
-            echo "$PROMPT"
-            echo ""
+            if [ -n "${PROMPT:-}" ]; then
+              echo "$PROMPT"
+              echo ""
+            fi
+            if [ -n "${PROMPT_FILE:-}" ]; then
+              echo "> [!NOTE]"
+              echo "> Prompt loaded from file: \`${PROMPT_FILE}\`"
+              echo ""
+            fi
           fi
           echo "## Agent Response"
           echo ""
