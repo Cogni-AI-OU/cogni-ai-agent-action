@@ -4,9 +4,8 @@ flowchart TD
     %% --------------------------------------------------------
     subgraph Flow_Cogni_AI_Agent ["Cogni AI Agent (action.yml)"]
         direction TB
-        A1([Trigger Events]) --> A3["Wait for concurrent runs"]
+        A1([Trigger Events]) --> A4["Resolve prompt"]
 
-        A3 --> A4["Resolve prompt"]
         A4 --> A5["Checkout Repositories<br/>(agents, instructions, skills)"]
 
         A5 -- "gh-models-enabled=true" --> A6["Install gh-models extension"]
@@ -36,10 +35,9 @@ flowchart TD
     subgraph Flow_AI_Inference ["AI Inference (ai-inference/action.yml)"]
         direction TB
         I1([Trigger Events]) --> I2{Check conditions}
-        I2 -- "run=true" --> I3["Wait for concurrent runs"]
+        I2 -- "run=true" --> I4["Checkout cogni-ai-agents"]
         I2 -- "run=false" --> I_EndSkip([Action Skipped])
 
-        I3 --> I4["Checkout cogni-ai-agents"]
         I4 --> I5["Resolve prompt"]
         I5 --> I6["Resolve system prompt file"]
         I6 --> I7["Run AI Inference"]

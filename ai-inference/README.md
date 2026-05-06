@@ -131,22 +131,29 @@ jobs:
 | Input | Description | Default | Required |
 | :--- | :--- | :--- | :--- |
 | `agent` | Agent to use for system prompt | `default` | No |
-| `enable-github-mcp` | Enable Model Context Protocol integration | `false` | No |
+| `enable-github-mcp` | Enable Model Context Protocol integration | `true` | No |
 | `github-mcp-token` | Token to use for GitHub MCP server | — | No |
 | `github-mcp-toolsets` | Toolsets to enable for GitHub MCP | `repos,issues,pull_requests,actions,code_security` | No |
 | `max-completion-tokens` | The maximum number of tokens to generate | — | No |
-| `max-tokens` | Max tokens to generate (deprecated) | — | No |
+| `max-tokens` | Max tokens to generate (deprecated) | `16000` | No |
 | `mentions` | Comma-separated triggers | `/ai` | No |
 | `model` | Model to use for inference | `openai/gpt-4o-mini` | No |
 | `prompt` | Prompt to pass to the model | `''` | No |
+| `prompt-file` | Path to a file containing the prompt | `''` | No |
+| `input` | Template variables for .prompt.yml files | `''` | No |
+| `file_input` | File-based template variables | `''` | No |
 | `system-prompt` | The system prompt to send | `You are a helpful assistant` | No |
 | `temperature` | The sampling temperature to use (0-1) | — | No |
 | `token` | Token to use for inference | `github.token` | No |
 | `top-p` | The nucleus sampling parameter to use (0-1) | — | No |
+| `version_agents` | Version of cogni-ai-agents to use | `main` | No |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main` | No |
+| `version_skills` | Version of cogni-ai-agent-skills to use | `main` | No |
 
 ### Outputs
 
-| Output     | Description                           |
-| ---------- | ------------------------------------- |
-| `prompt`   | The resolved prompt sent to the model |
-| `response` | The response from the model           |
+| Output | Description |
+| :--- | :--- |
+| `prompt` | The resolved prompt sent to the model |
+| `response` | The response from the model |
+| `response-file` | The file path where the response is saved (useful for larger responses) |

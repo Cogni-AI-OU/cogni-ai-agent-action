@@ -41,7 +41,7 @@ You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub ac
 ### Action Runtime Internals
 
 - **Internal Flow Reference**:
-  ONLY when explicitly asked about the internal step-by-step logic, concurrency polling, or execution flow of the `cogni-ai-agent-action` runtime itself, you MUST refer to [FLOWS.mmd](./FLOWS.mmd) for the complete architectural mapping.
+  ONLY when explicitly asked about the internal step-by-step logic or execution flow of the `cogni-ai-agent-action` runtime itself, you MUST refer to [FLOWS.mmd](./FLOWS.mmd) for the complete architectural mapping.
 - **Formal Constraint Model**:
   Refer to [CONSTRAINTS.mzn](./CONSTRAINTS.mzn) for the formal definition of runtime bounds, budgets, and logical enforcing functions.
 - **Routing & Sync Policies**:

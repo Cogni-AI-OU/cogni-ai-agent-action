@@ -4,7 +4,7 @@
 # Note: Keep keys and envs in alphabetical order.
 name: OpenCode Agent Local
 run-name: >-
-  Agent on #${{
+  Agent on  #${{
     github.event.issue.number
     || github.event.pull_request.number
     || github.event.discussion.number
@@ -133,6 +133,8 @@ env:
 jobs:
   opencode:
     name: OpenCode Agent Local
+    outputs:
+      run: ${{ steps.opencode.outputs.run }}
     # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
       (
@@ -247,7 +249,7 @@ jobs:
   summary:
     name: Generate Summary (post-run)
     needs: opencode
-    if: always() && needs.opencode.result != 'skipped'
+    if: always() && needs.opencode.result != 'skipped' && needs.opencode.outputs.run == 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: read

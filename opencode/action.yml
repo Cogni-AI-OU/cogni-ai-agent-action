@@ -39,6 +39,9 @@ outputs:
   response:
     description: The response from the agent.
     value: ${{ steps.opencode.outputs.response }}
+  run:
+    description: Whether the agent was executed.
+    value: ${{ steps.check.outputs.run }}
 runs:
   using: composite
   steps:
@@ -83,7 +86,7 @@ runs:
           const eventName = context.eventName;
           let run = false;
           let agent = '';
-          console.log(`### CHECK_CONDITIONS_RESULTS ###`);
+          console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
           console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
           if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
