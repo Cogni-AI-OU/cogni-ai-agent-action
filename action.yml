@@ -10,20 +10,13 @@ inputs:
   agent:
     description: Agent to use.
     required: false
-  model:
-    default: opencode/gemini-3-flash
-    description: Model to use for OpenCode.
-    required: false
-  variant:
-    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal)
+  force-run:
+    default: 'false'
+    description: Whether to force the agent to run regardless of condition checks.
     required: false
   gh-models-enabled:
     default: 'true'
     description: Whether to enable gh-models extension.
-    required: false
-  force-run:
-    default: 'false'
-    description: Whether to force the agent to run regardless of condition checks.
     required: false
   mentions:
     default: /co,/cogni,/review,/brainstorm
@@ -32,6 +25,10 @@ inputs:
   mentions_bots:
     default: '@opencode-agent,@OpenCode-Agent'
     description: Comma-separated bot mentions for OpenCode.
+    required: false
+  model:
+    default: opencode/gemini-3-flash
+    description: Model to use for OpenCode.
     required: false
   opencode-api-key:
     description: API key for OpenCode.
@@ -289,6 +286,9 @@ inputs:
   prompt:
     default: ''
     description: Prompt to pass to the agent.
+    required: false
+  variant:
+    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal)
     required: false
   version_agents:
     default: main
