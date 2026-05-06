@@ -14,6 +14,9 @@ inputs:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
+  variant:
+    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal)
+    required: false
   gh-models-enabled:
     default: 'true'
     description: Whether to enable gh-models extension.
@@ -722,6 +725,7 @@ runs:
         mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
         mentions_bots: ${{ inputs.mentions_bots || '@opencode-agent,@OpenCode-Agent' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
+        variant: ${{ inputs.variant }}
         opencode-api-key: ${{ inputs.opencode-api-key }}
         permissions: ${{ steps.permissions.outputs.json }}
         prompt: ${{ steps.prompt.outputs.prompt }}

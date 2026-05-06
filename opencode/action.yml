@@ -13,6 +13,9 @@ inputs:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
+  variant:
+    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal)
+    required: false
   mentions:
     default: /oc,/opencode,/review  # Note: Do not change default triggers.
     description: Comma-separated trigger mentions for OpenCode.
@@ -153,5 +156,6 @@ runs:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions }}
         model: ${{ inputs.model }}
+        variant: ${{ inputs.variant }}
         prompt: ${{ inputs.prompt }}
         use_github_token: false
