@@ -212,7 +212,7 @@ inputs:
         read: allow
         edit: deny
         skill: *default-skill
-        task: allow
+        task: deny
       cogni-ai-github-ops:
         bash:
           <<: *default-bash
@@ -246,7 +246,7 @@ inputs:
         skill: *default-skill
         task: allow
       cogni-ai-keeper:
-        task: allow
+        task: deny
       cogni-ai-manager:
         bash: deny
         glob: allow
