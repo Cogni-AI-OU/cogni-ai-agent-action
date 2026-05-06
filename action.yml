@@ -113,6 +113,7 @@ inputs:
           robust-commands: allow
           shell: allow
           skill-writer: allow
+          subagent-task: allow
           vim-ex: allow
         # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
         task:
@@ -130,6 +131,7 @@ inputs:
         skill:
           <<: *default-skill
           agent-log-analysis: allow
+        task: allow
       cogni-ai-architect:
         bash:
           <<: *default-bash
@@ -142,6 +144,7 @@ inputs:
           pulumi*: deny
           terraform*: deny
           terragrunt*: deny
+        task: allow
       cogni-ai-brain-ops:
         bash:
           # Brain-ops is a context-gathering agent; gathering context via GH/git is allowed.
@@ -157,6 +160,7 @@ inputs:
         skill:
           <<: *default-skill
           '*': deny
+        task: allow
       cogni-ai-code-reviewer:
         bash:
           <<: *default-bash
@@ -175,6 +179,7 @@ inputs:
         read: allow
         edit: deny
         skill: *default-skill
+        task: allow
       cogni-ai-devops:
         bash:
           <<: *default-bash
@@ -191,18 +196,23 @@ inputs:
         skill:
           <<: *default-skill
           molecule: allow
+        task: allow
       cogni-ai-docs-editor:
         bash: deny
         glob: allow
         read: allow
         edit: allow
         skill: *default-skill
+        task: allow
+      cogni-ai-elite:
+        task: allow
       cogni-ai-fact-ops:
         bash: deny
         glob: allow
         read: allow
         edit: deny
         skill: *default-skill
+        task: allow
       cogni-ai-github-ops:
         bash:
           <<: *default-bash
@@ -234,6 +244,9 @@ inputs:
         read: allow
         edit: deny
         skill: *default-skill
+        task: allow
+      cogni-ai-keeper:
+        task: allow
       cogni-ai-manager:
         bash: deny
         glob: allow
@@ -241,6 +254,18 @@ inputs:
         edit: deny
         skill:
           <<: *default-skill
+          ansible: deny
+          gh-models: deny
+          git-expert: deny
+          github-actions: deny
+          github-script: deny
+          minizinc: deny
+          pdf: deny
+          pre-commit: deny
+          robust-commands: deny
+          shell: deny
+          skill-writer: deny
+          vim-ex: deny
         task: allow
       cogni-ai-plan-reviewer:
         bash: deny
@@ -257,6 +282,7 @@ inputs:
         glob: allow
         read: allow
         skill: *default-skill
+        task: allow
       cogni-ai-security-auditor:
         bash: deny
         glob: allow
@@ -265,6 +291,7 @@ inputs:
         skill:
           <<: *default-skill
           security-auditing: allow
+        task: allow
       cogni-ai-tester:
         bash:
           <<: *default-bash
@@ -274,13 +301,18 @@ inputs:
         glob: allow
         read: allow
         skill: *default-skill
+        task: allow
+      cogni-ai-weaver:
+        task: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
       with 'default' and agent-specific overrides (e.g.,
       'cogni-ai-agent-auditor', 'cogni-ai-architect', 'cogni-ai-brain-ops',
       'cogni-ai-code-reviewer', 'cogni-ai-context7-ops', 'cogni-ai-devops',
-      'cogni-ai-docs-editor', 'cogni-ai-fact-ops', 'cogni-ai-github-ops', 'cogni-ai-manager', 'cogni-ai-plan-reviewer',
+      'cogni-ai-docs-editor', 'cogni-ai-elite', 'cogni-ai-fact-ops', 'cogni-ai-github-ops',
+      'cogni-ai-keeper', 'cogni-ai-manager', 'cogni-ai-plan-reviewer',
       'cogni-ai-python-dev', 'cogni-ai-security-auditor', 'cogni-ai-tester',
+      'cogni-ai-weaver',
       etc.).
       Example:
         default:
