@@ -96,7 +96,7 @@ on:
           - openai/gpt-4.1  # Tools: Yes.
           - openai/gpt-4.1-mini  # Tools: Yes.
           - openai/gpt-4.1-nano  # Tools: Yes.
-          - openai/gpt-4o  # Tools: Yes.
+          - openai/gpt-4o  # Tools: Yes. Max context: 128000 tokens.
           - openai/gpt-4o-mini  # Tools: Yes. Max context: 128000 tokens.
         required: false
         type: choice
