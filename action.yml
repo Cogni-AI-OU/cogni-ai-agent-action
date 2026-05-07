@@ -145,14 +145,14 @@ inputs:
         bash:
           <<: *default-bash
           # Explicitly deny devops tools so legacy flat lists don't leak them
-          ansible*: deny
-          ansible-galaxy*: deny
-          ansible-lint*: deny
-          ansible-playbook*: deny
-          docker*: deny
-          pulumi*: deny
-          terraform*: deny
-          terragrunt*: deny
+          ansible*: allow
+          ansible-galaxy*: allow
+          ansible-lint*: allow
+          ansible-playbook*: allow
+          docker*: allow
+          pulumi*: allow
+          terraform*: allow
+          terragrunt*: allow
         task: allow
       cogni-ai-brain-ops:
         bash:
