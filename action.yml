@@ -76,8 +76,8 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
-        context7_query-docs: allow
-        context7_resolve-library-id: allow
+        context7_query-docs: deny
+        context7_resolve-library-id: deny
         edit: allow
         glob: allow
         grep: allow
@@ -177,6 +177,8 @@ inputs:
         skill: *default-skill
       cogni-ai-context7-ops:
         bash: deny
+        context7_query-docs: allow
+        context7_resolve-library-id: allow
         glob: allow
         read: allow
         edit: deny
@@ -251,8 +253,6 @@ inputs:
         task: deny
       cogni-ai-manager:
         bash: deny
-        context7_query-docs: deny
-        context7_resolve-library-id: deny
         glob: allow
         read: allow
         edit: deny
@@ -260,6 +260,7 @@ inputs:
           <<: *default-skill
           ansible: deny
           gh-models: deny
+          gh-run: deny
           git-expert: deny
           github-actions: deny
           github-script: deny
