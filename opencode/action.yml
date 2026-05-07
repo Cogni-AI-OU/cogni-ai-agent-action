@@ -21,6 +21,9 @@ inputs:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
+  oidc_base_url:
+    description: Base URL for OIDC provider.
+    required: false
   opencode-api-key:
     description: API key for OpenCode.
     required: true
@@ -152,10 +155,10 @@ runs:
       env:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ inputs.permissions || env.OPENCODE_PERMISSION }}
-        OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT }}
-        OTEL_SERVICE_NAME: ${{ env.OTEL_SERVICE_NAME || 'opencode-github' }}
+        OIDC_BASE_URL: ${{ inputs.oidc_base_url }}
+        OTEL_EXPORTER_OTLP_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_ENDPOINT }}
+        OTEL_EXPORTER_OTLP_HEADERS: ${{ env.OTEL_EXPORTER_OTLP_HEADERS }}
         OTEL_RESOURCE_ATTRIBUTES: ${{ env.OTEL_RESOURCE_ATTRIBUTES }}
-        DD_API_KEY: ${{ env.DD_API_KEY }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions }}
