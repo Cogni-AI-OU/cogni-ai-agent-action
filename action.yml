@@ -33,6 +33,10 @@ inputs:
   opencode-api-key:
     description: API key for OpenCode.
     required: true
+  open-telemetry:
+    default: 'false'
+    description: Whether to enable OpenTelemetry spans for AI SDK calls.
+    required: false
   permissions:
     default: |-
       # Keep in alphabetical order.
@@ -742,7 +746,8 @@ runs:
               }
             },
             "experimental": {
-              "batch_tool": true
+              "batch_tool": true,
+              "openTelemetry": ${{ inputs.open-telemetry }}
             },
             "instructions": [
               ${{ steps.prompt.outputs.has_agents == 'true' && '"AGENTS.md",' || '' }}
