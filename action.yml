@@ -576,6 +576,12 @@ runs:
                 else:
                     res[k] = v
             return res
+        def get_dict_value(mapping, key):
+            """Return mapping[key] if mapping is a dict and the value is a dict, otherwise return {}."""
+            if not isinstance(mapping, dict):
+                return {}
+            value = mapping.get(key)
+            return value if isinstance(value, dict) else {}
         action_path = os.environ.get('GITHUB_ACTION_PATH', '')
         action_yaml_path = os.path.join(action_path, 'action.yml')
         default_perms_hierarchical = {}
@@ -597,22 +603,25 @@ runs:
             user_permissions = {}
         categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
         is_hierarchical = any(k not in categories for k in user_permissions.keys())
-        if user_permissions:
-            if is_hierarchical:
-                merged_hierarchical = deep_merge(default_perms_hierarchical, user_permissions)
-            else:
-                # Merge flat list into 'default' section
-                merged_default = deep_merge(default_perms_hierarchical.get('default', {}), user_permissions)
-                merged_hierarchical = default_perms_hierarchical.copy()
-                merged_hierarchical['default'] = merged_default
+        default_base_perms = get_dict_value(default_perms_hierarchical, 'default')
+        default_agent_perms = get_dict_value(default_perms_hierarchical, agent)
+        if is_hierarchical:
+            user_base_perms = get_dict_value(user_permissions, 'default')
+            user_agent_perms = get_dict_value(user_permissions, agent)
         else:
-            merged_hierarchical = default_perms_hierarchical
-        base_perms = merged_hierarchical.get('default', {})
-        agent_perms = merged_hierarchical.get(agent, {})
-        if not isinstance(base_perms, dict): base_perms = {}
-        if not isinstance(agent_perms, dict): agent_perms = {}
-        final_perms = deep_merge(base_perms, agent_perms)
-        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            user_base_perms = user_permissions if isinstance(user_permissions, dict) else {}
+            user_agent_perms = {}
+        # Precedence order: base defaults < agent defaults < user base overrides < user agent overrides.
+        final_perms = deep_merge(default_base_perms, default_agent_perms)
+        final_perms = deep_merge(final_perms, user_base_perms)
+        final_perms = deep_merge(final_perms, user_agent_perms)
+        github_output = os.environ.get('GITHUB_OUTPUT')
+        if not github_output:
+            raise RuntimeError(
+                'GITHUB_OUTPUT environment variable is not set. '
+                'GitHub Actions should set this automatically.'
+            )
+        with open(github_output, 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
       id: opencode
