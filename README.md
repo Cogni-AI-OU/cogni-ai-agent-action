@@ -98,7 +98,6 @@ To enable OpenTelemetry instrumentation and export traces to Datadog, set the `o
     # Datadog / OTLP Configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: https://otlp.datadoghq.com
     OTEL_SERVICE_NAME: opencode-agent
-    DD_API_KEY: ${{ secrets.DD_API_KEY }}
   with:
     opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
     open-telemetry: true
