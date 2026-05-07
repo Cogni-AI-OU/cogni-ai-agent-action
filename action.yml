@@ -260,6 +260,7 @@ inputs:
           <<: *default-skill
           ansible: deny
           gh-models: deny
+          gh-run: deny
           git-expert: deny
           github-actions: deny
           github-script: deny
