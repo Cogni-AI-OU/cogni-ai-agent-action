@@ -104,7 +104,7 @@ inputs:
           github-issue: allow
           github-pr: allow
           github-script: allow
-          mermaid: allow
+          mermaid: deny
           mermaid-beta: allow
           minizinc: allow
           molecule: deny
@@ -249,6 +249,8 @@ inputs:
         task: deny
       cogni-ai-manager:
         bash: deny
+        context7_query-docs: deny
+        context7_resolve-library-id: deny
         glob: allow
         read: allow
         edit: deny
