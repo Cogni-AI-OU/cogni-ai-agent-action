@@ -106,7 +106,7 @@ inputs:
           github-issue: allow
           github-pr: allow
           github-script: allow
-          mermaid: deny
+          mermaid: allow
           mermaid-beta: allow
           minizinc: allow
           molecule: deny
@@ -263,6 +263,7 @@ inputs:
           git-expert: deny
           github-actions: deny
           github-script: deny
+          mermaid: deny
           minizinc: deny
           pdf: deny
           pre-commit: deny
