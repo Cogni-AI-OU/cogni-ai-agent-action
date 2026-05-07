@@ -86,6 +86,26 @@ jobs:
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 
+### OpenTelemetry & Datadog
+
+To enable OpenTelemetry instrumentation and export traces to Datadog, set the `open-telemetry` input to `true` and provide the necessary OTLP environment variables:
+
+```yaml
+- name: Run Cogni AI Agent
+  uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Datadog / OTLP Configuration
+    OTEL_EXPORTER_OTLP_ENDPOINT: https://otlp.datadoghq.com
+    OTEL_SERVICE_NAME: opencode-agent
+    DD_API_KEY: ${{ secrets.DD_API_KEY }}
+  with:
+    opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+    open-telemetry: true
+```
+
+The action supports standard `OTEL_*` environment variables and handles the export via a Bun-native manual OTLP implementation for maximum reliability in the GitHub Actions environment.
+
 ### Execution flow
 
 For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](FLOWS.mmd).
