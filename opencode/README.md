@@ -78,6 +78,24 @@ jobs:
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
 
+### OpenTelemetry & Datadog
+
+You can enable OpenTelemetry spans and export them to Datadog (or any OTLP-compatible backend) by setting the following environment variables:
+
+```yaml
+- name: Run OpenCode Agent
+  uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Datadog / OTLP Configuration
+    OTEL_EXPORTER_OTLP_ENDPOINT: https://otlp.datadoghq.com
+  with:
+    opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+    prompt: ${{ inputs.prompt }}
+```
+
+Note: The implementation uses a lightweight, Bun-native OTLP export to ensure minimal overhead and zero dependencies.
+
 ### Advanced workflow
 
 An example of a more advanced configuration with issue and pull request triggers.

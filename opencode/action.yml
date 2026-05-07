@@ -156,9 +156,10 @@ runs:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ inputs.permissions || env.OPENCODE_PERMISSION }}
         OIDC_BASE_URL: ${{ inputs.oidc_base_url }}
-        OTEL_EXPORTER_OTLP_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_ENDPOINT }}
-        OTEL_EXPORTER_OTLP_HEADERS: ${{ env.OTEL_EXPORTER_OTLP_HEADERS }}
-        OTEL_RESOURCE_ATTRIBUTES: ${{ env.OTEL_RESOURCE_ATTRIBUTES }}
+        # OpenTelemetry / Datadog passthrough
+        OTEL_EXPORTER_OTLP_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_ENDPOINT || '' }}
+        OTEL_EXPORTER_OTLP_HEADERS: ${{ env.OTEL_EXPORTER_OTLP_HEADERS || '' }}
+        OTEL_RESOURCE_ATTRIBUTES: ${{ env.OTEL_RESOURCE_ATTRIBUTES || '' }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions }}
