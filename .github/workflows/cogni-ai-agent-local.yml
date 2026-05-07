@@ -75,6 +75,7 @@ on:
           - cogni-ai-brain-ops
           - cogni-ai-code-reviewer
           - cogni-ai-devops
+          - cogni-ai-manager
           - cogni-ai-plan-reviewer
           - default
         required: false

@@ -12,6 +12,7 @@ on:
         options:
           - build
           - cogni-ai-architect
+          - cogni-ai-manager
           - compaction
           - plan
           - summary

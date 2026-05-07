@@ -52,6 +52,7 @@ jobs:
           - cogni-ai-architect
           - cogni-ai-brain-ops
           - cogni-ai-devops
+          - cogni-ai-manager
         model:
           - opencode/gpt-5-nano
         include:
@@ -92,6 +93,21 @@ jobs:
               2. You have 20+ skills registered at your disposal.
               3. You have access to the bash tool.
               4. You have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
+          - agent: cogni-ai-manager
+            prompt: >-
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are the Cogni AI Manager agent operating on the OpenCode runtime.
+              2. You have 20+ skills registered at your disposal.
+              3. You do NOT have access to the bash tool.
+              4. You do NOT have access to the edit tool.
               5. You have access to the glob tool.
               6. You have access to the read tool.
               7. You can call context7-ops, devops and github-ops agents.
