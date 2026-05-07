@@ -158,7 +158,7 @@ runs:
         OTEL_EXPORTER_OTLP_HEADERS: ${{ env.OTEL_EXPORTER_OTLP_HEADERS || '' }}
         OTEL_SERVICE_NAME: ${{ env.OTEL_SERVICE_NAME || 'opencode-github' }}
         OTEL_RESOURCE_ATTRIBUTES: ${{ env.OTEL_RESOURCE_ATTRIBUTES || '' }}
-        DD_API_KEY: ${{ env.DD_API_KEY || secrets.DD_API_KEY || '' }}
+        DD_API_KEY: ${{ env.DD_API_KEY || '' }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
         mentions: ${{ inputs.mentions }}
