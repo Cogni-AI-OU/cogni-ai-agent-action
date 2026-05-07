@@ -21,6 +21,9 @@ inputs:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
+  oidc_base_url:
+    description: Base URL for OIDC provider.
+    required: false
   opencode-api-key:
     description: API key for OpenCode.
     required: true
@@ -152,6 +155,7 @@ runs:
       env:
         OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         OPENCODE_PERMISSION: ${{ inputs.permissions || env.OPENCODE_PERMISSION }}
+        OIDC_BASE_URL: ${{ inputs.oidc_base_url }}
         # OpenTelemetry / Datadog passthrough
         OTEL_EXPORTER_OTLP_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_ENDPOINT || '' }}
         OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT || '' }}
