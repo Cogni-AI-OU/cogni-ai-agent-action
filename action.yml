@@ -631,6 +631,10 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
+        OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT }}
+        OTEL_SERVICE_NAME: ${{ env.OTEL_SERVICE_NAME || 'opencode-github' }}
+        OTEL_RESOURCE_ATTRIBUTES: ${{ env.OTEL_RESOURCE_ATTRIBUTES }}
+        DD_API_KEY: ${{ env.DD_API_KEY }}
         # @see: https://opencode.ai/docs/zen
         # For full list of available models: https://opencode.ai/zen/v1/models
         # Schema: https://opencode.ai/config.json
