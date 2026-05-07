@@ -1,12 +1,14 @@
 # OpenCode Agent
 
-The OpenCode workflow runs a generic OpenCode agent without loading any specialized Cogni AI agents, skills, or instructions.
+The OpenCode workflow runs a generic OpenCode agent.
+It acts as a lean pass-through wrapper for `anomalyco/opencode/github`.
 
 ## Usage
 
 ### Prerequisites
 
-1. Add `OPENCODE_API_KEY` to your repository secrets (**Settings → Secrets and variables → Actions**).
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets
+   (**Settings → Secrets and variables → Actions**).
 2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
 
 You can trigger the agent via `workflow_dispatch`, or via issue or PR
@@ -28,12 +30,36 @@ on:
 
 jobs:
   agent:
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      contains(github.event.comment.body, '/') ||
-      contains(github.event.comment.body, '@')
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
+      )
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
       id-token: write
       issues: write
@@ -44,17 +70,18 @@ jobs:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run OpenCode Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: ${{ inputs.prompt }}
     timeout-minutes: 60
-```
 
 ### Advanced workflow
 
-An example of a more advanced configuration with issue and pull request triggers:
+An example of a more advanced configuration with issue and pull request triggers.
+Note that unlike the root action, this wrapper does not automatically resolve prompts from comment bodies.
 
 ```yaml
 ---
@@ -112,8 +139,8 @@ on:
           - opencode/minimax-m2.5
           - opencode/minimax-m2.5-free
           - opencode/nemotron-3-super-free
-          - opencode/qwen3-coder
-          - opencode/qwen3.6-plus-free
+          - opencode/qwen3.6-plus
+          - opencode/qwen3.5-plus
         required: true
         type: choice
       prompt:
@@ -124,14 +151,38 @@ on:
 jobs:
   opencode-agent:
     name: Run OpenCode agent
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'issues' ||
-      github.event_name == 'pull_request' ||
-      contains(github.event.comment.body || '', '/') ||
-      contains(github.event.comment.body || '', '@')
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event_name == 'issues' ||
+        github.event_name == 'pull_request' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
+      )
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
       id-token: write
       issues: write
@@ -139,15 +190,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
-      # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action/tree/main/opencode>
+          persist-credentials: false
       - name: Run OpenCode Agent
         uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ inputs.model }}
-          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: >-
             ${{
               github.event.comment.body ||
@@ -156,45 +207,41 @@ jobs:
               inputs.prompt
             }}
     timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: opencode-agent
+    if: always() && needs.opencode-agent.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: opencode-agent
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Inputs
 
-| Input              | Description                 | Default                   | Required |
-| ------------------ | --------------------------- | ------------------------- | -------- |
-| `agent`            | Agent to use                | —                         | No       |
-| `mentions`         | Comma-separated mentions    | `/oc,/opencode,/review`   | No       |
-| `model`            | Model to use for OpenCode   | `opencode/gemini-3-flash` | No       |
-| `opencode-api-key` | API key for OpenCode        | —                         | **Yes**  |
-| `permissions`      | Permissions configuration   | —                         | No       |
-| `prompt`           | Prompt to pass to the agent | `''`                      | No       |
-
-### Hierarchical Permissions
-
-You can define granular permissions per agent type using a hierarchical YAML structure. The `default` section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-reviewer`) can override or extend these defaults.
-
-```yaml
-with:
-  permissions: |
-    default:
-      bash:
-        ls*: allow
-        grep*: allow
-    cogni-ai-architect:
-      bash:
-        git*: allow
-        write*: allow
-    cogni-ai-reviewer:
-      bash:
-        git*: deny
-    cogni-ai-devops:
-      bash:
-        ansible*: allow
-        terraform*: allow
-```
+| Input | Description | Default | Required |
+| :--- | :--- | :--- | :--- |
+| `agent` | Agent to use | — | No |
+| `mentions` | Comma-separated mentions | `/oc,/opencode,/review` | No |
+| `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
+| `opencode-api-key` | API key for OpenCode | — | **Yes** |
+| `permissions` | Permissions (JSON string) | — | No |
+| `prompt` | Prompt to pass to the agent | `''` | No |
 
 ### Outputs
 
-| Output     | Description                 |
-| ---------- | --------------------------- |
-| `response` | The response from the agent |
+| Output     | Description                           |
+| ---------- | ------------------------------------- |
+| `prompt`   | The resolved prompt sent to the agent |
+| `response` | The response from the agent           |

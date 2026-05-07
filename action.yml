@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 # See: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 author: Cogni AI OU
 branding:
@@ -9,42 +10,68 @@ inputs:
   agent:
     description: Agent to use.
     required: false
+  force-run:
+    default: 'false'
+    description: Whether to force the agent to run regardless of condition checks.
+    required: false
+  gh-models-enabled:
+    default: 'true'
+    description: Whether to enable gh-models extension.
+    required: false
+  mentions:
+    default: /co,/cogni,/review,/brainstorm
+    description: Comma-separated trigger mentions for OpenCode.
+    required: false
+  mentions_bots:
+    default: '@opencode-agent,@OpenCode-Agent'
+    description: Comma-separated bot mentions for OpenCode.
+    required: false
   model:
     default: opencode/gemini-3-flash
     description: Model to use for OpenCode.
     required: false
-  mentions:
-    default: /co,/cogni,/review
-    description: Comma-separated trigger mentions for OpenCode.
-    required: false
   opencode-api-key:
     description: API key for OpenCode.
     required: true
+  open-telemetry:
+    default: 'false'
+    description: Whether to enable OpenTelemetry spans for AI SDK calls.
+    required: false
   permissions:
     default: |-
+      # Keep in alphabetical order.
       default:
-        bash:
+        bash: &default-bash
           '*': deny
           awk*: allow
           base64*: allow
+          cat*: allow
           continue*: allow
           cp*: allow
+          echo*: allow
           ex*: allow
           find*: allow
+          # GH is allowed but restricted for the default agent.
+          gh api graphql*: deny
+          gh issue*: deny
+          gh pr*: deny
           gh*: allow
-          gh pr review*: allow  # For batched feedback and setting review states
           git*: allow
           glob*: allow
+          grep*: allow
           hexdump*: allow
           jq*: allow
-          ls*: allow
           links*: allow
+          ls*: allow
           mawk*: allow
+          mkdir*: allow
+          mv*: allow
           pipenv*: allow
           pipx*: allow
           poetry*: allow
           pre-commit*: allow
           printf*: allow
+          rm*: allow
           sed*: allow
           set*: allow
           stat*: allow
@@ -53,18 +80,250 @@ inputs:
           touch*: allow
           true*: allow
           vim*: allow
+        context7_query-docs: deny
+        context7_resolve-library-id: deny
+        edit: allow
+        glob: allow
+        grep: allow
+        list: allow
+        question: deny
+        read: allow
+        # Skills are limited to a curated list from the upstream cogni-ai-agent-skills repository.
+        # Note: Changes here should be synchronized with agent-specific skill allowlists.
+        # Note: Keep in alphabetical order.
+        skill: &default-skill
+          agent-log-analysis: deny
+          ansible: allow
+          cat: allow
+          context-aware-ops: allow
+          fact-writer: allow
+          gh: allow
+          gh-api: allow
+          gh-issue: allow
+          gh-models: allow
+          gh-pr: allow
+          gh-run: allow
+          git: allow
+          git-expert: allow
+          github: allow
+          github-actions: allow
+          github-issue: allow
+          github-pr: allow
+          github-script: allow
+          mermaid: allow
+          mermaid-beta: allow
+          minizinc: allow
+          molecule: deny
+          pdf: allow
+          pre-commit: allow
+          robust-commands: allow
+          shell: allow
+          skill-writer: allow
+          subagent-task: allow
+          vim-ex: allow
+        # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
+        task:
+          '*': allow
+          explore: deny
+          general: deny
+        todowrite: allow
+      cogni-ai-agent-auditor:
+        bash:
+          <<: *default-bash
+          gh run view*: allow
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          agent-log-analysis: allow
+        task: allow
+      cogni-ai-architect:
+        bash:
+          <<: *default-bash
+          # Explicitly deny devops tools so legacy flat lists don't leak them
+          ansible*: deny
+          ansible-galaxy*: deny
+          ansible-lint*: deny
+          ansible-playbook*: deny
+          docker*: deny
+          pulumi*: deny
+          terraform*: deny
+          terragrunt*: deny
+        task: allow
+      cogni-ai-brain-ops:
+        bash:
+          # Brain-ops is a context-gathering agent; gathering context via GH/git is allowed.
+          gh api*: allow
+          gh pr checks*: allow
+          gh pr view*: allow
+          gh run view*: allow
+          git log*: allow
+          git show*: allow
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          '*': deny
+        task: allow
+      cogni-ai-code-reviewer:
+        bash:
+          <<: *default-bash
+          gh api*: allow
+          gh pr checks*: allow
+          gh pr comment*: allow
+          gh pr review*: allow
+          gh pr view*: allow
+        glob: allow
+        read: allow
+        edit: deny
+        skill: *default-skill
+      cogni-ai-context7-ops:
+        bash: deny
+        context7_query-docs: allow
+        context7_resolve-library-id: allow
+        glob: allow
+        read: allow
+        edit: deny
+        skill: *default-skill
+        task: allow
       cogni-ai-devops:
         bash:
+          <<: *default-bash
           ansible*: allow
           ansible-galaxy*: allow
           ansible-playbook*: allow
+          docker*: allow
+          molecule*: allow
           pulumi*: allow
-          terragrunt*: allow
           terraform*: allow
+          terragrunt*: allow
+        glob: allow
+        read: allow
+        skill:
+          <<: *default-skill
+          molecule: allow
+        task: allow
+      cogni-ai-docs-editor:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: allow
+        skill: *default-skill
+        task: allow
+      cogni-ai-elite:
+        task: allow
+      cogni-ai-fact-ops:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill: *default-skill
+        task: deny
+      cogni-ai-github-ops:
+        bash:
+          <<: *default-bash
+          gh api graphql*: allow  # Can also modify issues/discussions
+          gh issue close*: allow
+          gh issue comment*: allow
+          gh issue create*: allow
+          gh issue delete*: deny
+          gh issue edit*: allow
+          gh issue lock*: allow
+          gh issue pin*: allow
+          gh issue reopen*: allow
+          gh issue transfer*: allow
+          gh issue unlock*: allow
+          gh issue unpin*: allow
+          gh pr close*: allow
+          gh pr comment*: allow
+          gh pr create*: allow
+          gh pr edit*: allow
+          gh pr lock*: allow
+          gh pr merge*: allow
+          gh pr ready*: allow
+          gh pr reopen*: allow
+          gh pr revert*: allow
+          gh pr review*: allow
+          gh pr unlock*: allow
+          gh pr update-branch*: allow
+        glob: allow
+        read: allow
+        edit: deny
+        skill: *default-skill
+        task: allow
+      cogni-ai-keeper:
+        task: deny
+      cogni-ai-manager:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          ansible: deny
+          gh-models: deny
+          gh-run: deny
+          git-expert: deny
+          github-actions: deny
+          github-script: deny
+          mermaid: deny
+          minizinc: deny
+          pdf: deny
+          pre-commit: deny
+          robust-commands: deny
+          shell: deny
+          skill-writer: deny
+          vim-ex: deny
+        task: allow
+      cogni-ai-plan-reviewer:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill: *default-skill
+      cogni-ai-python-dev:
+        bash:
+          <<: *default-bash
+          jinja2*: allow
+          python*: allow
+          python3*: allow
+        glob: allow
+        read: allow
+        skill: *default-skill
+        task: allow
+      cogni-ai-security-auditor:
+        bash: deny
+        glob: allow
+        read: allow
+        edit: deny
+        skill:
+          <<: *default-skill
+          security-auditing: allow
+        task: allow
+      cogni-ai-tester:
+        bash:
+          <<: *default-bash
+          molecule*: allow
+          npm test*: allow
+          pytest*: allow
+        glob: allow
+        read: allow
+        skill: *default-skill
+        task: allow
+      cogni-ai-weaver:
+        task: allow
     description: |-
       Permissions configuration for OpenCode. Supports hierarchical format
-      with 'default' and agent-specific overrides (e.g., 'cogni-ai-architect',
-      'cogni-ai-reviewer', 'cogni-ai-devops', 'cogni-ai-fact-ops', etc.).
+      with 'default' and agent-specific overrides (e.g.,
+      'cogni-ai-agent-auditor', 'cogni-ai-architect', 'cogni-ai-brain-ops',
+      'cogni-ai-code-reviewer', 'cogni-ai-context7-ops', 'cogni-ai-devops',
+      'cogni-ai-docs-editor', 'cogni-ai-elite', 'cogni-ai-fact-ops', 'cogni-ai-github-ops',
+      'cogni-ai-keeper', 'cogni-ai-manager', 'cogni-ai-plan-reviewer',
+      'cogni-ai-python-dev', 'cogni-ai-security-auditor', 'cogni-ai-tester',
+      'cogni-ai-weaver',
+      etc.).
       Example:
         default:
           bash:
@@ -78,6 +337,21 @@ inputs:
     default: ''
     description: Prompt to pass to the agent.
     required: false
+  variant:
+    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal)
+    required: false
+  version_agents:
+    default: main
+    description: Version of cogni-ai-agents to use.
+    required: false
+  version_instructions:
+    default: main
+    description: Version of cogni-ai-agent-instructions to use.
+    required: false
+  version_skills:
+    default: main
+    description: Version of cogni-ai-agent-skills to use.
+    required: false
 name: Cogni AI Agent
 outputs:
   prompt:
@@ -86,6 +360,9 @@ outputs:
   response:
     description: The response from the agent.
     value: ${{ steps.opencode.outputs.response }}
+  run:
+    description: Whether the agent was executed.
+    value: ${{ steps.check.outputs.run }}
 runs:
   using: composite
   steps:
@@ -93,45 +370,60 @@ runs:
       id: check
       uses: actions/github-script@v7
       env:
-        MENTIONS: ${{ inputs.mentions || '/co,/cogni,/review' }}
         AGENT_INPUT: ${{ inputs.agent }}
+        FORCE_RUN: ${{ inputs.force-run }}
+        MENTIONS: ${{ inputs.mentions }}
+        MENTIONS_BOTS: ${{ inputs.mentions_bots }}
       with:
         script: |
           const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
           const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
-          const BOT_MENTIONS = ['@opencode-agent', '@OpenCode-Agent'];
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
           const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
           const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
           const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
           function matchesTrigger(body, triggers) {
             if (!body) return false;
-            return triggers.some(t => body.endsWith(t) || body.includes(t + ' '));
+            return triggers.some(t => {
+              if (!t) return false;
+              const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
+              return pattern.test(body);
+            });
           }
           function matchesBotMention(body) {
             if (!body) return false;
             return BOT_MENTIONS.some(m => body.includes(m));
           }
           function getAgent(body) {
-            if (!body) return 'cogni-ai-architect';
+            if (!body) return 'default';
             // Stricter pattern for /review to avoid misclassification
-            if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-reviewer';
-            return 'cogni-ai-architect';
+            if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
+            if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
+            return 'default';
           }
           const isBot = context.actor.endsWith('[bot]');
           const eventName = context.eventName;
-          let run = false;
+          let run = process.env.FORCE_RUN === 'true';
           let agent = '';
-          if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+          console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
+          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
+          if (run) {
+            agent = 'default';
+          } else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
             run = true;
-            agent = 'cogni-ai-architect';
+            agent = 'default';
           } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
             const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
             const assoc = payload?.author_association;
             const body = payload?.body;
+            console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
-              agent = 'cogni-ai-reviewer';
+              agent = 'cogni-ai-code-reviewer';
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
               agent = getAgent(body);
@@ -140,10 +432,11 @@ runs:
             const payload = context.payload.comment;
             const assoc = payload?.author_association;
             const body = payload?.body;
+            console.log(`PR Review Comment - Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
             const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
             if (isReviewTrigger) {
               run = true;
-              agent = 'cogni-ai-reviewer';
+              agent = 'cogni-ai-code-reviewer';
             } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
               run = true;
               agent = getAgent(body);
@@ -154,81 +447,22 @@ runs:
             const login = pr?.user?.login;
             const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
               (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+            console.log(`PR - Assoc: ${assoc}, Login: ${login}, IsAllowed: ${isAllowed}`);
             if (isAllowed) {
               run = true;
-              agent = 'cogni-ai-architect';
+              agent = 'default';
             }
           }
+          console.log(`Run: ${run}, Agent: ${agent}`);
+          console.log(`################################`);
           core.setOutput('run', run ? 'true' : '');
           core.setOutput('agent', agent);
           // Centralized effective agent logic
-          core.setOutput('effective_agent', process.env.AGENT_INPUT || agent || 'cogni-ai-architect');
-    - name: Wait for concurrent runs
-      if: steps.check.outputs.run == 'true'
-      id: concurrency
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const eventName = context.eventName;
-          const issueOrPREvents = [
-            'discussion',
-            'discussion_comment',
-            'issue_comment',
-            'issues',
-            'pull_request',
-            'pull_request_review_comment',
-            'pull_request_target',
-          ];
-          if (!issueOrPREvents.includes(eventName)) {
-            core.info('Concurrency wait: skipped (not an issue/PR event)');
-            return;
-          }
-          const { data: currentRun } = await github.rest.actions.getWorkflowRun({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: context.runId,
-          });
-          const workflowId = currentRun.workflow_id;
-          const groupKey = currentRun.display_title;
-          const currentCreatedAt = new Date(currentRun.created_at).getTime();
-          const POLL_INTERVAL_MS = 30_000;
-          const MAX_WAIT_MS = 20 * 60_000;
-          const start = Date.now();
-          while (Date.now() - start < MAX_WAIT_MS) {
-            let olderActiveRuns = [];
-            for (const status of ['in_progress', 'queued']) {
-              const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: workflowId,
-                status,
-              });
-              olderActiveRuns.push(
-                ...workflow_runs.filter(
-                  run => run.id !== context.runId
-                    && new Date(run.created_at).getTime() < currentCreatedAt
-                    && run.display_title === groupKey
-                )
-              );
-            }
-            if (olderActiveRuns.length === 0) {
-              core.info('Concurrency wait: no older active runs, proceeding');
-              return;
-            }
-            const ids = olderActiveRuns.map(r => r.id).join(', ');
-            core.info(
-              `Concurrency wait: ${olderActiveRuns.length} older run(s) still active ` +
-              `(IDs: ${ids}). Waiting ${POLL_INTERVAL_MS / 1000}s...`
-            );
-            await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
-          }
-          core.warning(
-            `Concurrency wait: timed out after ${MAX_WAIT_MS / 60_000}m waiting ` +
-            `for older runs of "${groupKey}" to finish. Proceeding anyway.`
-          );
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
+          core.setOutput('effective_agent', effectiveAgent);
     - name: Resolve prompt
-      if: steps.check.outputs.run == 'true'
       id: prompt
+      if: steps.check.outputs.run == 'true'
       shell: bash
       env:
         COMMENT_BODY: >-
@@ -244,18 +478,31 @@ runs:
               '' }}
         DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
         PROMPT_INPUT: ${{ inputs.prompt }}
+        EFFECTIVE_AGENT: ${{ steps.check.outputs.effective_agent }}
       run: |
         set -euo pipefail
         prompt="${PROMPT_INPUT:-}"
         if [ -z "$prompt" ]; then
           prompt="${COMMENT_BODY:-}"
         fi
+        if [ -n "${EFFECTIVE_AGENT:-}" ]; then
+          if [ "$EFFECTIVE_AGENT" = "default" ]; then
+            header="You are operating as the default agent."
+          else
+            header="You are operating as the ${EFFECTIVE_AGENT} agent."
+          fi
+          if [ -n "$prompt" ]; then
+            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
+          else
+            prompt="$header"
+          fi
+        fi
         if [ -n "${ISSUE_NUMBER:-}" ]; then
           entity_type="issue/PR"
           if [ -n "${DISCUSSION_NUMBER:-}" ]; then
             entity_type="discussion"
           fi
-          header="Related to $entity_type #$ISSUE_NUMBER"
+          header="Runtime related to $entity_type #$ISSUE_NUMBER, so must load github-pr or github-issue skill."
           if [ -n "$prompt" ]; then
             prompt=$(printf '%s\n\n%s' "$header" "$prompt")
           else
@@ -277,27 +524,47 @@ runs:
           printf '%s\n' "$prompt"
           echo "$EOF_TOKEN"
         } >> "$GITHUB_OUTPUT"
+        if [ -f "${{ github.workspace }}/AGENTS.md" ]; then
+          echo "has_agents=true" >> "$GITHUB_OUTPUT"
+        fi
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agents.git ${{ runner.temp }}/.agents
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_agents || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
+          ${{ runner.temp }}/.agents
     - name: Checkout cogni-ai-agent-instructions
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: |
         git clone --depth 1 \
+          -b ${{ inputs.version_instructions || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
           ${{ runner.temp }}/.instructions
     - name: Checkout cogni-ai-agent-skills
       if: steps.check.outputs.run == 'true'
       shell: bash
-      run: git clone --depth 1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git ${{ runner.temp }}/.skills
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_skills || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
+          ${{ runner.temp }}/.skills
+    - name: Install gh-models extension
+      if: steps.check.outputs.run == 'true' && inputs.gh-models-enabled == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh extension install github/gh-models || gh extension upgrade github/gh-models
+        gh models list
     - name: Convert permissions to JSON
-      if: steps.check.outputs.run == 'true'
       id: permissions
+      if: steps.check.outputs.run == 'true'
       shell: python
       env:
         AGENT_NAME: ${{ steps.check.outputs.effective_agent }}
@@ -306,144 +573,196 @@ runs:
         import os
         import json
         import yaml
+        REPLACE_PERMISSION_MAPS = {'bash', 'skill', 'task'}
         def deep_merge(base, override):
             if not isinstance(base, dict) or not isinstance(override, dict):
                 return override
             res = base.copy()
             for k, v in override.items():
-                if k in res and isinstance(res[k], dict) and isinstance(v, dict):
+                if k in REPLACE_PERMISSION_MAPS and isinstance(v, dict):
+                    res[k] = v.copy()
+                elif k in res and isinstance(res[k], dict) and isinstance(v, dict):
                     res[k] = deep_merge(res[k], v)
                 else:
                     res[k] = v
             return res
+        action_path = os.environ.get('GITHUB_ACTION_PATH', '')
+        action_yaml_path = os.path.join(action_path, 'action.yml')
+        default_perms_hierarchical = {}
+        if action_path and os.path.exists(action_yaml_path):
+            try:
+                with open(action_yaml_path, 'r') as f:
+                    action_data = yaml.safe_load(f)
+                    default_perms_str = action_data.get('inputs', {}).get('permissions', {}).get('default', '')
+                    default_perms_hierarchical = yaml.safe_load(default_perms_str) or {}
+            except Exception as e:
+                print(f"Warning: Failed to load default permissions from action.yml: {e}")
         raw_yaml = os.environ.get('PERMISSIONS_YAML', '')
-        agent = os.environ.get('AGENT_NAME', 'cogni-ai-architect')
+        agent = os.environ.get('AGENT_NAME', 'default')
         try:
-            permissions = yaml.safe_load(raw_yaml) or {}
+            user_permissions = yaml.safe_load(raw_yaml) or {}
         except Exception:
-            permissions = {}
-        if isinstance(permissions, dict) and ('default' in permissions or agent in permissions):
-            base_perms = permissions.get('default', {})
-            agent_perms = permissions.get(agent, {})
-            if not isinstance(base_perms, dict): base_perms = {}
-            if not isinstance(agent_perms, dict): agent_perms = {}
-            final_perms = deep_merge(base_perms, agent_perms)
+            user_permissions = {}
+        if not isinstance(user_permissions, dict):
+            user_permissions = {}
+        categories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}
+        is_hierarchical = any(k not in categories for k in user_permissions.keys())
+        if user_permissions:
+            if is_hierarchical:
+                merged_hierarchical = deep_merge(default_perms_hierarchical, user_permissions)
+            else:
+                # Merge flat list into 'default' section
+                merged_default = deep_merge(default_perms_hierarchical.get('default', {}), user_permissions)
+                merged_hierarchical = default_perms_hierarchical.copy()
+                merged_hierarchical['default'] = merged_default
         else:
-            final_perms = permissions
+            merged_hierarchical = default_perms_hierarchical
+        base_perms = merged_hierarchical.get('default', {})
+        agent_perms = merged_hierarchical.get(agent, {})
+        if not isinstance(base_perms, dict): base_perms = {}
+        if not isinstance(agent_perms, dict): agent_perms = {}
+        final_perms = deep_merge(base_perms, agent_perms)
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f"json={json.dumps(final_perms)}\n")
     - name: Run opencode
-      if: steps.check.outputs.run == 'true'
       id: opencode
-      uses: anomalyco/opencode/github@v1.4.3
+      if: steps.check.outputs.run == 'true'
+      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main  # Note: Do not change this line to anomalyco/opencode.
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
-        OPENCODE_API_KEY: ${{ inputs.opencode-api-key }}
         # @see: https://opencode.ai/docs/zen
         # For full list of available models: https://opencode.ai/zen/v1/models
+        # Schema: https://opencode.ai/config.json
         OPENCODE_CONFIG_CONTENT: |-
           {
             "$schema": "https://opencode.ai/config.json",
-            "experimental": {
-              "openTelemetry": true
-            },
-            "instructions": [
-              "AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.agents/AGENTS.mmd",
-              "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
-              "${{ runner.temp }}/.agents/FLOWS.mmd",
-              "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md",
-              "${{ runner.temp }}/.skills/git/SKILL.md",
-              "${{ runner.temp }}/.skills/github/SKILL.md",
-              "${{ runner.temp }}/.skills/github-actions/SKILL.md"
-            ],
             "agent": {
+              "cogni-ai-agent-auditor": {
+                "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+              },
               "cogni-ai-architect": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
               },
-              "cogni-ai-reviewer": {
-                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and architectural invariant verification.",
+              "cogni-ai-brain-ops": {
+                "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-reviewer/cogni-ai-reviewer.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
               },
-              "cogni-ai-devops": {
-                "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+              "cogni-ai-code-reviewer": {
+                "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
-              },
-              "cogni-ai-fact-ops": {
-                "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
-                "mode": "all",
-                "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
               },
               "cogni-ai-context7-ops": {
                 "description": "Uses Context7-backed documentation context for research and delegation tasks.",
                 "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
               },
-              "cogni-ai-weaver": {
-                "mode": "primary",
+              "cogni-ai-devops": {
+                "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+                "mode": "all",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+              },
+              "cogni-ai-docs-editor": {
+                "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
               },
               "cogni-ai-elite": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+              },
+              "cogni-ai-fact-ops": {
+                "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+              },
+              "cogni-ai-github-ops": {
+                "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
               },
               "cogni-ai-keeper": {
                 "mode": "primary",
                 "model": "opencode/gemini-3-flash",
-                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md",
-                "tools": {
-                  "write": true,
-                  "edit": true,
-                  "bash": true
-                }
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+              },
+              "cogni-ai-manager": {
+                "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+              },
+              "cogni-ai-plan-reviewer": {
+                "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+              },
+              "cogni-ai-python-dev": {
+                "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+              },
+              "cogni-ai-security-auditor": {
+                "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+              },
+              "cogni-ai-tester": {
+                "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+                "mode": "all",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+              },
+              "cogni-ai-weaver": {
+                "mode": "primary",
+                "model": "opencode/gemini-3-flash",
+                "prompt": "file:${{ runner.temp }}/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+              },
+              "explore": {
+                "disable": true,
+                "ignore_instructions": true
+              },
+              "general": {
+                "disable": true,
+                "ignore_instructions": true
+              }
+            },
+            "experimental": {
+              "batch_tool": true,
+              "openTelemetry": ${{ inputs.open-telemetry }}
+            },
+            "instructions": [
+              ${{ steps.prompt.outputs.has_agents == 'true' && '"AGENTS.md",' || '' }}
+              "${{ github.action_path }}/AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.agents/AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.agents/AGENTS.mmd",
+              "${{ runner.temp }}/.agents/CONSTRAINTS.mzn",
+              "${{ runner.temp }}/.agents/FLOWS.mmd",
+              "${{ runner.temp }}/.instructions/AGENTS-RUNTIME.md",
+              "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
+            ],
+            "mcp": {
+              "context7": {
+                "type": "remote",
+                "url": "https://mcp.context7.com/mcp"
               }
             },
             "provider": {
@@ -451,27 +770,24 @@ runs:
                 "options": {}
               }
             },
-            "mcp": {
-              "context7": {
-                "type": "remote",
-                "url": "https://mcp.context7.com/mcp"
-              }
-            },
-            "tools": {
-              "github-triage": false,
-              "github-pr-search": false
+            "skills": {
+              "paths": [
+                "${{ runner.temp }}/.skills",
+                "${{ github.workspace }}/.github/skills"
+              ]
             }
           }
-        # Keep shell permissions aligned with .vscode/settings.json allowlist and in alphabetical order.
-        OPENCODE_PERMISSION: ${{ steps.permissions.outputs.json }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
-        mentions: ${{ inputs.mentions || '/co,/cogni,/review' }}
+        mentions: ${{ inputs.mentions || '/co,/cogni,/review,/brainstorm' }}
+        mentions_bots: ${{ inputs.mentions_bots || '@opencode-agent,@OpenCode-Agent' }}
         model: ${{ inputs.model || 'opencode/gemini-3-flash' }}
+        opencode-api-key: ${{ inputs.opencode-api-key }}
+        permissions: ${{ steps.permissions.outputs.json }}
         prompt: ${{ steps.prompt.outputs.prompt }}
-        use_github_token: false
+        variant: ${{ inputs.variant }}
     - name: Write response to summary
-      if: always() && steps.opencode.outputs.response != ''
+      if: always() && steps.check.outputs.run == 'true' && steps.opencode.outputs.response != ''
       shell: bash
       env:
         PROMPT: ${{ steps.prompt.outputs.prompt }}

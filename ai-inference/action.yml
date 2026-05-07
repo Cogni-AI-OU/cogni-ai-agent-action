@@ -1,0 +1,387 @@
+---
+# See: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+author: Cogni AI OU
+branding:
+  color: blue
+  icon: cpu
+description: Runs AI inference using GitHub Models
+inputs:
+  agent:
+    default: default
+    description: Agent to use for system prompt.
+    required: false
+  enable-github-mcp:
+    default: 'true'
+    description: >-
+      Enable Model Context Protocol integration with GitHub tools.
+      Some models won't support it (such as nano, mini or deepseek).
+    required: false
+  github-mcp-token:
+    description: Token to use for GitHub MCP server.
+    required: false
+  github-mcp-toolsets:
+    default: repos,issues,pull_requests,actions,code_security
+    description: Toolsets to enable for GitHub MCP server.
+    required: false
+  instructions:
+    default: ''
+    description: Comma-separated list of instructions to load into system prompt.
+    required: false
+  max-completion-tokens:
+    description: The maximum number of tokens to generate
+    required: false
+  max-tokens:
+    default: 16000
+    description: The maximum number of tokens to generate (deprecated)
+    required: false
+  prompt-file:
+    description: >-
+      Path to a file containing the prompt (supports .txt and .prompt.yml
+      formats). If both prompt and prompt-file are provided, prompt-file
+      takes precedence.
+    required: false
+  input:
+    description: Template variables in YAML format for .prompt.yml files.
+    required: false
+  file_input:
+    description: Template variables in YAML where values are file paths.
+    required: false
+  mentions:
+    default: /ai
+    description: Comma-separated trigger mentions for AI Inference.
+    required: false
+  mentions_bots:
+    default: ''
+    description: Comma-separated bot mentions for AI Inference.
+    required: false
+  model:
+    default: openai/gpt-4o-mini
+    description: Model to use for inference.
+    required: false
+  prompt:
+    default: ''
+    description: Prompt to pass to the model.
+    required: false
+  skills:
+    default: ''
+    description: Comma-separated list of skills to load into system prompt.
+    required: false
+  system-prompt:
+    default: You are a helpful assistant
+    description: The system prompt to send to the model.
+    required: false
+  temperature:
+    description: The sampling temperature to use (0-1)
+    required: false
+  token:
+    description: Token to use for inference. Typically the GITHUB_TOKEN secret.
+    required: false
+  force-run:
+    default: 'false'
+    description: Whether to force the agent to run regardless of condition checks.
+    required: false
+  top-p:
+    description: The nucleus sampling parameter to use (0-1)
+    required: false
+  version_agents:
+    default: main
+    description: Version of cogni-ai-agents to use.
+    required: false
+  version_instructions:
+    default: main
+    description: Version of cogni-ai-agent-instructions to use.
+    required: false
+  version_skills:
+    default: main
+    description: Version of cogni-ai-agent-skills to use.
+    required: false
+name: Cogni AI Inference
+outputs:
+  prompt:
+    description: The resolved prompt sent to the model.
+    value: ${{ steps.prompt.outputs.prompt }}
+  response:
+    description: The response from the model.
+    value: ${{ steps.inference.outputs.response }}
+  response-file:
+    description: The file path where the response is saved (useful for larger responses).
+    value: ${{ steps.inference.outputs.response-file }}
+runs:
+  using: composite
+  steps:
+    - name: Check conditions
+      id: check
+      uses: actions/github-script@v7
+      env:
+        AGENT_INPUT: ${{ inputs.agent }}
+        FORCE_RUN: ${{ inputs.force-run }}
+        MENTIONS: ${{ inputs.mentions || '/ai' }}
+        MENTIONS_BOTS: ${{ inputs.mentions_bots }}
+      with:
+        script: |
+          const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
+          const BOT_MENTIONS = process.env.MENTIONS_BOTS
+            ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+            : [];
+          const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
+          function matchesTrigger(body, triggers) {
+            if (!body) return false;
+            return triggers.some(t => {
+              if (!t) return false;
+              // Escape trigger for safe use in RegExp
+              const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              // Match trigger with:
+              // - start of string or whitespace / common punctuation before it
+              // - end of string or whitespace / common punctuation (incl. newlines) after it
+              const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
+              return pattern.test(body);
+            });
+          }
+          function matchesBotMention(body) {
+            if (!body) return false;
+            return BOT_MENTIONS.some(m => body.includes(m));
+          }
+          const isBot = context.actor.endsWith('[bot]');
+          const eventName = context.eventName;
+          let run = process.env.FORCE_RUN === 'true';
+          let agent = '';
+          console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
+          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
+          if (run) {
+            agent = 'default';
+          } else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
+            run = true;
+            agent = 'default';
+          } else if (['issues', 'issue_comment', 'discussion', 'discussion_comment',
+            'pull_request_review_comment'].includes(eventName) && !isBot) {
+            const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
+            const assoc = payload?.author_association;
+            const body = payload?.body;
+            console.log(
+              `Assoc: ${assoc}, BodyLength: ${body?.length || 0}`
+            );
+            if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+              run = true;
+              agent = 'default';
+            }
+          } else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
+            const pr = context.payload.pull_request;
+            const assoc = pr?.author_association;
+            console.log(`PR - Assoc: ${assoc}`);
+            if (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) {
+              run = true;
+              agent = 'default';
+            }
+          }
+          console.log(`Run: ${run}, Agent: ${agent}`);
+          console.log(`################################`);
+          core.setOutput('run', run ? 'true' : '');
+          core.setOutput('agent', agent);
+          // Centralized effective agent logic
+          let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
+          if (effectiveAgent === 'default') {
+            effectiveAgent = '';
+          }
+          core.setOutput('effective_agent', effectiveAgent);
+    - name: Checkout cogni-ai-agents
+      if: steps.check.outputs.run == 'true' && steps.check.outputs.effective_agent != ''
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_agents || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
+          ${{ runner.temp }}/.agents
+    - name: Checkout cogni-ai-agent-skills
+      if: steps.check.outputs.run == 'true' && inputs.skills != ''
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_skills || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
+          ${{ runner.temp }}/.skills
+    - name: Checkout cogni-ai-agent-instructions
+      if: steps.check.outputs.run == 'true' && inputs.instructions != ''
+      shell: bash
+      run: |
+        git clone --depth 1 \
+          -b ${{ inputs.version_instructions || 'main' }} \
+          https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
+          ${{ runner.temp }}/.instructions
+    - name: Resolve prompt
+      if: steps.check.outputs.run == 'true'
+      id: prompt
+      shell: bash
+      env:
+        COMMENT_BODY: >-
+          ${{ github.event.comment.body ||
+              github.event.issue.body ||
+              github.event.pull_request.body ||
+              github.event.discussion.body ||
+              '' }}
+        DISCUSSION_NUMBER: ${{ github.event.discussion.number || '' }}
+        ISSUE_NUMBER: >-
+          ${{ github.event.issue.number ||
+              github.event.pull_request.number ||
+              github.event.discussion.number ||
+              '' }}
+        PROMPT_INPUT: ${{ inputs.prompt }}
+        PROMPT_FILE_INPUT: ${{ inputs.prompt-file }}
+      run: |
+        set -euo pipefail
+        prompt="${PROMPT_INPUT:-}"
+        prompt_file="${PROMPT_FILE_INPUT:-}"
+
+        # Resolve prompt content
+        if [ -z "$prompt" ] && [ -z "$prompt_file" ]; then
+          prompt="${COMMENT_BODY:-}"
+        fi
+
+        # Build header
+        header=""
+        if [ -n "${ISSUE_NUMBER:-}" ]; then
+          entity_type="issue/PR"
+          if [ -n "${DISCUSSION_NUMBER:-}" ]; then
+            entity_type="discussion"
+          fi
+          header="Related to $entity_type #$ISSUE_NUMBER"
+        fi
+
+        # Prepend header if we have one
+        if [ -n "$header" ]; then
+          if [ -n "$prompt" ]; then
+            prompt=$(printf '%s\n\n%s' "$header" "$prompt")
+          else
+            prompt="$header"
+          fi
+        fi
+
+        # Handle prompt-file specifically for outputs
+        if [ -n "$prompt_file" ]; then
+          # For file-based prompts, we show the context header if available,
+          # but avoid including the file content in the output as it might be too large.
+          prompt="${header:-}"
+        fi
+        EOF_TOKEN="EOF_$(openssl rand -hex 10)"
+        {
+          echo "prompt<<$EOF_TOKEN"
+          printf '%s\n' "$prompt"
+          echo "$EOF_TOKEN"
+          echo "prompt_file=$prompt_file"
+        } >> "$GITHUB_OUTPUT"
+        echo "::group::Resolved prompt"
+        printf '%s\n' "$prompt"
+        echo "::endgroup::"
+    - name: Resolve system prompt file
+      if: steps.check.outputs.run == 'true'
+      id: system-prompt
+      shell: bash
+      env:
+        AGENT: ${{ steps.check.outputs.effective_agent }}
+        INSTRUCTIONS: ${{ inputs.instructions }}
+        SKILLS: ${{ inputs.skills }}
+        SYSTEM_PROMPT: ${{ inputs.system-prompt }}
+      run: |
+        set -euo pipefail
+        prompt_file=$(mktemp "${{ runner.temp }}/system_prompt.XXXXXX.md")
+        if [ -n "${SYSTEM_PROMPT}" ] && [ "${SYSTEM_PROMPT}" != "You are a helpful assistant" ]; then
+          echo "${SYSTEM_PROMPT}" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
+        if [ -n "${AGENT}" ]; then
+          agent_file="${{ runner.temp }}/.agents/${AGENT}/${AGENT}.agent.md"
+          if [ -f "$agent_file" ]; then
+            cat "$agent_file" >> "$prompt_file"
+            echo "" >> "$prompt_file"
+          fi
+        fi
+        if [ -n "${INSTRUCTIONS}" ]; then
+          echo "<instructions>" >> "$prompt_file"
+          IFS=',' read -ra INSTR_ARRAY <<< "$INSTRUCTIONS"
+          for instr in "${INSTR_ARRAY[@]}"; do
+            instr=$(echo "$instr" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            if [ -n "$instr" ]; then
+              instr_file="${{ runner.temp }}/.instructions/${instr}/${instr}.instructions.md"
+              if [ -f "$instr_file" ]; then
+                echo "<instruction name=\"${instr}\">" >> "$prompt_file"
+                cat "$instr_file" >> "$prompt_file"
+                echo "</instruction>" >> "$prompt_file"
+                echo "" >> "$prompt_file"
+              fi
+            fi
+          done
+          echo "</instructions>" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
+        if [ -n "${SKILLS}" ]; then
+          echo "<skills>" >> "$prompt_file"
+          IFS=',' read -ra SKILL_ARRAY <<< "$SKILLS"
+          for skill in "${SKILL_ARRAY[@]}"; do
+            skill=$(echo "$skill" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            if [ -n "$skill" ]; then
+              skill_file="${{ runner.temp }}/.skills/${skill}/SKILL.md"
+              if [ -f "$skill_file" ]; then
+                echo "<skill>" >> "$prompt_file"
+                cat "$skill_file" >> "$prompt_file"
+                echo "</skill>" >> "$prompt_file"
+                echo "" >> "$prompt_file"
+              fi
+            fi
+          done
+          echo "</skills>" >> "$prompt_file"
+          echo "" >> "$prompt_file"
+        fi
+        if [ -s "$prompt_file" ]; then
+          echo "system-prompt-file=$prompt_file" >> "$GITHUB_OUTPUT"
+        else
+          echo "system-prompt-file=" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Run AI Inference
+      if: steps.check.outputs.run == 'true'
+      id: inference
+      uses: actions/ai-inference@v2
+      with:
+        enable-github-mcp: ${{ inputs.enable-github-mcp != 'false' }}
+        github-mcp-token: ${{ inputs.github-mcp-token }}
+        github-mcp-toolsets: ${{ inputs.github-mcp-toolsets }}
+        max-completion-tokens: ${{ inputs.max-completion-tokens || inputs.max-tokens }}
+        model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
+        prompt: ${{ steps.prompt.outputs.prompt }}
+        prompt-file: ${{ inputs.prompt-file }}  # Takes precedence over prompt.
+        input: ${{ inputs.input }}
+        file_input: ${{ inputs.file_input }}
+        system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}  # Takes precedence over system-prompt.
+        temperature: ${{ inputs.temperature }}
+        token: ${{ inputs.token || github.token }}
+        top-p: ${{ inputs.top-p }}
+    - name: Print Response File
+      if: steps.check.outputs.run == 'true' && steps.inference.outputs.response-file != ''
+      shell: bash
+      run: |
+        echo "Response saved to: ${{ steps.inference.outputs.response-file }}"
+    - name: Write response to step summary
+      if: always() && steps.inference.outputs.response != ''
+      shell: bash
+      env:
+        PROMPT: ${{ steps.prompt.outputs.prompt }}
+        PROMPT_FILE: ${{ steps.prompt.outputs.prompt_file }}
+        RESPONSE: ${{ steps.inference.outputs.response }}
+      run: |-
+        {
+          if [ -n "${PROMPT:-}" ] || [ -n "${PROMPT_FILE:-}" ]; then
+            echo "## Prompt"
+            echo ""
+            if [ -n "${PROMPT:-}" ]; then
+              echo "$PROMPT"
+              echo ""
+            fi
+            if [ -n "${PROMPT_FILE:-}" ]; then
+              echo "> [!NOTE]"
+              echo "> Prompt loaded from file: \`${PROMPT_FILE}\`"
+              echo ""
+            fi
+          fi
+          echo "## Agent Response"
+          echo ""
+          echo "$RESPONSE"
+        } >> "$GITHUB_STEP_SUMMARY"

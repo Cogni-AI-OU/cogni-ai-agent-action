@@ -1,0 +1,186 @@
+---
+# Cogni AI Agent Test workflow — triggered manually by user only.
+# No user inputs, uses predefined settings for testing.
+# Note: Keep keys and envs in alphabetical order.
+name: Cogni AI Agent Test
+run-name: 'Agent Test: Count skills and agents'
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
+      - review_requested
+  pull_request_review_comment:
+    types:
+      - created
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+  workflow_dispatch:
+    inputs:
+      version_agents:
+        default: main
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
+      version_instructions:
+        default: main
+        description: Version of cogni-ai-agent-instructions to use.
+        required: false
+        type: string
+      version_skills:
+        default: main
+        description: Version of cogni-ai-agent-skills to use.
+        required: false
+        type: string
+concurrency:
+  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+jobs:
+  cogni-ai:
+    if: ${{ github.event.sender.type != 'Bot' }}
+    name: Agent Test (${{ matrix.agent }} | ${{ matrix.model }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        agent:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-devops
+          - cogni-ai-manager
+        model:
+          - opencode/gpt-5-nano
+        include:
+          - agent: cogni-ai-architect
+            prompt: >-
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are the Cogni AI Architect agent operating on the OpenCode runtime.
+              2. You have 20+ skills registered at your disposal.
+              3. You have access to the bash tool.
+              4. You have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
+          - agent: cogni-ai-brain-ops
+            prompt: >-
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are the Cogni AI BrainOps agent operating on the OpenCode runtime.
+              2. You have 20+ skills registered at your disposal.
+              3. You have access to the bash tool.
+              4. You do NOT have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
+          - agent: cogni-ai-devops
+            prompt: >-
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are the Cogni AI DevOps agent operating on the OpenCode runtime.
+              2. You have 20+ skills registered at your disposal.
+              3. You have access to the bash tool.
+              4. You have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
+          - agent: cogni-ai-manager
+            prompt: >-
+              You MUST answer each statement with either PASS or FAIL (uppercase).
+              1. You are the Cogni AI Manager agent operating on the OpenCode runtime.
+              2. You have 20+ skills registered at your disposal.
+              3. You do NOT have access to the bash tool.
+              4. You do NOT have access to the edit tool.
+              5. You have access to the glob tool.
+              6. You have access to the read tool.
+              7. You can call context7-ops, devops and github-ops agents.
+              8. You have access to the context7 MCP.
+              Do not fix or edit files and keep the workspace clean.
+              Do not scan action.yml or other files for answers; you should base your answers on your actual runtime.
+              When all are PASS, then reply with only one PASS.
+              Once you have answered all of the above, elaborate on any fails (avoid using '#'), then do a hard stop.
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/cache@v5.0.1
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit|
+      - uses: actions/setup-python@v6.1.0
+        with:
+          cache: pip
+          cache-dependency-path: .devcontainer/requirements.txt
+          python-version: '3.12'
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - id: cache-dependencies
+        name: Cache installed dependencies
+        uses: actions/cache@v5.0.1
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
+      - if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        name: Install dependencies
+        run: pip install -r .devcontainer/requirements.txt
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: cogni-ai
+        name: Run Cogni AI Agent Test
+        uses: ./
+        with:
+          agent: ${{ matrix.agent }}
+          model: ${{ matrix.model }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
+          prompt: ${{ matrix.prompt }}
+          version_agents: ${{ inputs.version_agents || 'main' }}
+          version_instructions: ${{ inputs.version_instructions || 'main' }}
+          version_skills: ${{ inputs.version_skills || 'main' }}
+      - env:
+          COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
+          COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
+        name: Annotate prompt and output
+        run: |
+          set -euo pipefail
+          escape() {
+            local value="$1"
+            value=${value//'%'/'%25'}
+            value=${value//$'\r'/'%0D'}
+            value=${value//$'\n'/'%0A'}
+            printf '%s' "$value"
+          }
+          echo "::notice title=Cogni AI Agent Test prompt::$(escape "$COGNI_AI_PROMPT")"
+          echo "::notice title=Cogni AI Agent Test output::$(escape "${COGNI_AI_OUTPUT:-}")"
+      - env:
+          COGNI_AI_RESPONSE: ${{ steps.cogni-ai.outputs.response }}
+        name: Check for failure in output
+        run: |
+          if echo "$COGNI_AI_RESPONSE" | grep -Ei "FAIL|sorry|cannot"; then
+            echo "::error::Agent output contains failure keyword (FAIL, sorry, or cannot)"
+            exit 1
+          fi
+      - if: cancelled() || failure()
+        name: Print logs
+        run: grep -v INFO ~/.local/share/opencode/log/* || true

@@ -1,0 +1,32 @@
+---
+# AI Inference Test workflow — tests the local ai-inference action.
+# Triggered on push.
+name: AI Inference Test
+run-name: >-
+  Agent on  #${{
+    github.event.issue.number
+    || github.event.pull_request.number
+    || github.event.discussion.number
+    || github.run_id
+  }}
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    if: ${{ github.event.sender.type != 'Bot' }}
+    name: AI Inference Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      models: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run AI Inference
+        uses: ./ai-inference
+        with:
+          agent: default
+          model: openai/gpt-4o-mini
+          prompt: Count to 10.
+          token: ${{ secrets.GITHUB_TOKEN }}

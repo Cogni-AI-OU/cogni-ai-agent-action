@@ -7,14 +7,45 @@ For a human-readable overview, see [README.md](README.md).
 
 ## Workflow catalog
 
-- **[FLOWS.mmd](../../FLOWS.mmd)**: Mermaid diagram describing the logic of `action.yml`.
-- **[check.yml](check.yml)**: Linting and quality gates via org-level reusable workflow.
-- **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**: Runs local `action.yml` as a wrapper for OpenCode.
-- **[copilot-setup-steps.yml](copilot-setup-steps.yml)**: Environment setup utility.
-- **[opencode-agent-local.yml](opencode-agent-local.yml)**: Runs local `./opencode/action.yml` as a wrapper for OpenCode.
-- **[opencode.yml](opencode.yml)**: Invokes org-level reusable OpenCode workflow manually.
+- **[FLOWS.mmd](../../FLOWS.mmd)**:
+  Mermaid diagram describing the logic of `action.yml`.
+- **[ai-inference-local.yml](ai-inference-local.yml)**:
+  Tests the local `ai-inference/action.yml` action manually.
+- **[ai-inference-test.yml](ai-inference-test.yml)**:
+  Tests the local `ai-inference/action.yml` action on push.
+- **[check.yml](check.yml)**:
+  Linting and quality gates via org-level reusable workflow.
+- **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
+  Runs local `action.yml` as a wrapper for OpenCode.
+- **[cogni-ai-agent-local-sudo.yml](cogni-ai-agent-local-sudo.yml)**:
+  Runs local `action.yml` as a wrapper for OpenCode with elevated permissions.
+- **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**:
+  Tests the local `action.yml` action manually with predefined settings
+  and matrices for agents, models, and prompts.
+- **[copilot-setup-steps.yml](copilot-setup-steps.yml)**:
+  Environment setup utility.
+- **[opencode-agent-local.yml](opencode-agent-local.yml)**:
+  Runs local `./opencode/action.yml` as a wrapper for OpenCode.
+- **[opencode.yml](opencode.yml)**:
+  Invokes org-level reusable OpenCode workflow manually.
+- **[task-update-docs.yml](task-update-docs.yml)**:
+  Update core architecture and documentation files.
+- **[test-constraints.yml](test-constraints.yml)**:
+  Runs MiniZinc constraints check to verify least privilege.
 
 ## Details
+
+### ai-inference-local.yml
+
+- Purpose: Tests the local `ai-inference/action.yml` action manually.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`.
+- Commands: `/ai`.
+
+### ai-inference-test.yml
+
+- Purpose: Tests the local `ai-inference/action.yml` action on push.
+- Triggers: `push`.
 
 ### check.yml
 
@@ -25,8 +56,22 @@ For a human-readable overview, see [README.md](README.md).
 ### cogni-ai-agent-local.yml
 
 - Purpose: Runs local `action.yml` wrapper.
-- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
-- Commands: `/co`, `/cogni`, `/review`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`, `workflow_call`.
+- Commands: `/co`, `/cogni`, `/review`, `/brainstorm`.
+
+### cogni-ai-agent-local-sudo.yml
+
+- Purpose: Runs local `action.yml` wrapper with elevated permissions.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`, `workflow_call`.
+- Commands: `/sudo`.
+
+### cogni-ai-agent-test.yml
+
+- Purpose: Tests the local `action.yml` action manually with predefined settings
+  and matrices for agents, models, and prompts.
+- Triggers: `pull_request`, `pull_request_review_comment`, `pull_request_target`, `workflow_dispatch`.
 
 ### copilot-setup-steps.yml
 
@@ -37,13 +82,24 @@ For a human-readable overview, see [README.md](README.md).
 ### opencode-agent-local.yml
 
 - Purpose: Runs local `./opencode/action.yml` wrapper.
-- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
+- Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
+  `workflow_dispatch`, `workflow_call`.
 - Commands: `/oc`, `/opencode`, `/review`.
 
 ### opencode.yml
 
 - Purpose: Invokes org-level reusable OpenCode workflow.
 - Triggers: `workflow_dispatch`.
+
+### task-update-docs.yml
+
+- Purpose: Update core architecture and documentation files.
+- Triggers: `workflow_dispatch`.
+
+### test-constraints.yml
+
+- Purpose: Runs MiniZinc constraints check to verify least privilege and isolation.
+- Triggers: `push`, `pull_request`, `workflow_dispatch`.
 
 ## Notes
 
