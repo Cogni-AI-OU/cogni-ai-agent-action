@@ -42,6 +42,7 @@ on:
           - cogni-ai-architect
           - cogni-ai-brain-ops
           - cogni-ai-devops
+          - cogni-ai-manager
         required: false
         type: choice
       enable-github-mcp:

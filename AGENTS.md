@@ -23,7 +23,7 @@ Authoritative, agent-facing catalog of protocols and invariants for the reposito
 
 `cogni-ai-agent-auditor`, `cogni-ai-brain-ops`, `cogni-ai-code-reviewer`, `cogni-ai-context7-ops`,
 `cogni-ai-devops`, `cogni-ai-docs-editor`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`,
-`cogni-ai-plan-reviewer`, `cogni-ai-python-dev`, `cogni-ai-security-auditor`, and `cogni-ai-tester`
+`cogni-ai-manager`, `cogni-ai-plan-reviewer`, `cogni-ai-python-dev`, `cogni-ai-security-auditor`, and `cogni-ai-tester`
 are configured with `mode: all`, so they remain selectable as primary agents and are also exposed to OpenCode's
 `task` tool as named subagent delegation targets.
 
