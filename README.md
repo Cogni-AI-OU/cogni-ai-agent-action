@@ -97,7 +97,6 @@ To enable OpenTelemetry instrumentation and export traces to Datadog, set the `o
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # Datadog / OTLP Configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: https://otlp.datadoghq.com
-    OTEL_SERVICE_NAME: opencode-agent
   with:
     opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
     open-telemetry: true

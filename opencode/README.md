@@ -89,7 +89,6 @@ You can enable OpenTelemetry spans and export them to Datadog (or any OTLP-compa
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # Datadog / OTLP Configuration
     OTEL_EXPORTER_OTLP_ENDPOINT: https://otlp.datadoghq.com
-    OTEL_SERVICE_NAME: opencode-github
   with:
     opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
     prompt: ${{ inputs.prompt }}

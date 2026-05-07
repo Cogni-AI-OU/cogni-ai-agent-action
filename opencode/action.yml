@@ -158,9 +158,7 @@ runs:
         OIDC_BASE_URL: ${{ inputs.oidc_base_url }}
         # OpenTelemetry / Datadog passthrough
         OTEL_EXPORTER_OTLP_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_ENDPOINT || '' }}
-        OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${{ env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT || '' }}
         OTEL_EXPORTER_OTLP_HEADERS: ${{ env.OTEL_EXPORTER_OTLP_HEADERS || '' }}
-        OTEL_SERVICE_NAME: ${{ env.OTEL_SERVICE_NAME || 'opencode-github' }}
         OTEL_RESOURCE_ATTRIBUTES: ${{ env.OTEL_RESOURCE_ATTRIBUTES || '' }}
       with:
         agent: ${{ steps.check.outputs.effective_agent }}
