@@ -1,0 +1,26 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Getting Started",
+  "steps": [
+    {
+      "file": "README.md",
+      "description": "Welcome to the cogni-ai-agent-action repository! This README provides an overview of the project and its usage.",
+      "line": 1
+    },
+    {
+      "file": "action.yml",
+      "description": "This is the main entry point for the GitHub Action. It defines the inputs and the execution logic.",
+      "line": 1
+    },
+    {
+      "file": ".github/workflows/AGENTS.md",
+      "description": "This file contains the catalog of GitHub Actions workflows used in the repository.",
+      "line": 1
+    },
+    {
+      "file": "AGENTS.md",
+      "description": "This file provides a quick reference for AI agents working in the repository, including project-specific conventions.",
+      "line": 1
+    }
+  ]
+}

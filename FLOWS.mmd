@@ -8,8 +8,8 @@ flowchart TD
 
         A4 --> A5["Checkout Repositories<br/>(agents, instructions, skills)"]
 
-        A5 -- "gh-models-enabled=true" --> A6["Install gh-models extension"]
-        A5 -- "default" --> A7["Convert permissions to JSON"]
+        A5 --|gh-models-enabled=true|--> A6["Install gh-models extension"]
+        A5 --|default|--> A7["Convert permissions to JSON"]
         A6 --> A7
 
         A7 --> A8["Run opencode"]
@@ -24,8 +24,8 @@ flowchart TD
     subgraph Flow_OpenCode_Agent ["OpenCode Agent (opencode/action.yml)"]
         direction TB
         O1([Trigger Events]) --> O2{Check conditions}
-        O2 -- "run=true" --> O3["Run opencode"]
-        O2 -- "run=false" --> O_EndSkip([Action Skipped])
+        O2 --|run=true|--> O3["Run opencode"]
+        O2 --|run=false|--> O_EndSkip([Action Skipped])
         O3 --> O4(["anomalyco/opencode/github@v1.4.3"])
     end
 
@@ -35,8 +35,8 @@ flowchart TD
     subgraph Flow_AI_Inference ["AI Inference (ai-inference/action.yml)"]
         direction TB
         I1([Trigger Events]) --> I2{Check conditions}
-        I2 -- "run=true" --> I4["Checkout cogni-ai-agents"]
-        I2 -- "run=false" --> I_EndSkip([Action Skipped])
+        I2 --|run=true|--> I4["Checkout cogni-ai-agents"]
+        I2 --|run=false|--> I_EndSkip([Action Skipped])
 
         I4 --> I5["Resolve prompt"]
         I5 --> I6["Resolve system prompt file"]
@@ -68,7 +68,7 @@ flowchart TD
     %% --------------------------------------------------------
     subgraph Interaction_Sequence ["Subagent Interaction Sequence"]
         direction TB
-        subgraph Interaction_Sequence_Inner [ ]
+        subgraph Interaction_Sequence_Inner [" "]
             direction TB
             ISQ1[Architect: Formulate sub-task prompt] --> ISQ2[Architect: Call Task Tool with subagent_type]
             ISQ2 --> ISQ3[Subagent: Execute specialized logic]

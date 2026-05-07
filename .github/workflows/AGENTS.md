@@ -15,6 +15,8 @@ For a human-readable overview, see [README.md](README.md).
   Tests the local `ai-inference/action.yml` action on push.
 - **[check.yml](check.yml)**:
   Linting and quality gates via org-level reusable workflow.
+- **[cogni-ai-agent.yml](cogni-ai-agent.yml)**:
+  Logic for the Cogni AI Agent via org-level reusable workflow.
 - **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
   Runs local `action.yml` as a wrapper for OpenCode.
 - **[cogni-ai-agent-local-sudo.yml](cogni-ai-agent-local-sudo.yml)**:
@@ -24,6 +26,8 @@ For a human-readable overview, see [README.md](README.md).
   and matrices for agents, models, and prompts.
 - **[copilot-setup-steps.yml](copilot-setup-steps.yml)**:
   Environment setup utility.
+- **[devcontainer-ci.yml](devcontainer-ci.yml)**:
+  Validates development container builds.
 - **[opencode-agent-local.yml](opencode-agent-local.yml)**:
   Runs local `./opencode/action.yml` as a wrapper for OpenCode.
 - **[opencode.yml](opencode.yml)**:
@@ -50,8 +54,14 @@ For a human-readable overview, see [README.md](README.md).
 ### check.yml
 
 - Purpose: Runs actionlint and pre-commit via org-level reusable workflow.
-- Triggers: `push`, `pull_request`.
+- Triggers: `push`, `pull_request`, `schedule`, `workflow_dispatch`.
 - Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/check.yml@main`.
+
+### cogni-ai-agent.yml
+
+- Purpose: Logic for the Cogni AI Agent.
+- Triggers: `issue_comment`, `pull_request_review_comment`, `workflow_call`, `workflow_dispatch`.
+- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/cogni-ai-agent.yml@main`.
 
 ### cogni-ai-agent-local.yml
 
@@ -79,6 +89,12 @@ For a human-readable overview, see [README.md](README.md).
 - Triggers: `push` and `pull_request` on `copilot-setup-steps.yml` or `.devcontainer/requirements.txt`.
 - Details: Checks out repo, sets up Python 3.12, restores cache, and installs dependencies.
 
+### devcontainer-ci.yml
+
+- Purpose: Tests devcontainer builds and validates required tools.
+- Triggers: `pull_request`, `push`.
+- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/devcontainer-ci.yml@main`.
+
 ### opencode-agent-local.yml
 
 - Purpose: Runs local `./opencode/action.yml` wrapper.
@@ -89,7 +105,8 @@ For a human-readable overview, see [README.md](README.md).
 ### opencode.yml
 
 - Purpose: Invokes org-level reusable OpenCode workflow.
-- Triggers: `workflow_dispatch`.
+- Triggers: `issue_comment`, `pull_request_review_comment`, `issues`, `workflow_call`, `workflow_dispatch`.
+- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/opencode.yml@main`.
 
 ### task-update-docs.yml
 

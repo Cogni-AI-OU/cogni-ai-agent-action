@@ -146,7 +146,9 @@ runs:
           let run = process.env.FORCE_RUN === 'true';
           let agent = '';
           console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
-          console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
+          console.log(
+            `Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`
+          );
           if (run) {
             agent = 'default';
           } else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call' || eventName === 'push') {
@@ -350,7 +352,8 @@ runs:
         input: ${{ inputs.input }}
         file_input: ${{ inputs.file_input }}
         system-prompt: ${{ steps.system-prompt.outputs.system-prompt-file == '' && inputs.system-prompt || '' }}
-        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}  # Takes precedence over system-prompt.
+        system-prompt-file: ${{ steps.system-prompt.outputs.system-prompt-file }}
+        # Note: system-prompt-file takes precedence over system-prompt.
         temperature: ${{ inputs.temperature }}
         token: ${{ inputs.token || github.token }}
         top-p: ${{ inputs.top-p }}

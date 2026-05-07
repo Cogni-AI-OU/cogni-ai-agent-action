@@ -41,7 +41,8 @@ runs:
         if [ -n "$AGENT_JOB_ID" ]; then
           # Fetch workflow file to get the display name for the job ID
           WORKFLOW_PATH=$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq .path)
-          FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" -H "Accept: application/vnd.github.raw" | awk -v id="$AGENT_JOB_ID" '
+          FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" \
+            -H "Accept: application/vnd.github.raw" | awk -v id="$AGENT_JOB_ID" '
             $0 ~ "^  " id ":" { found=1; next }
             found && !done && $0 ~ "^    name:" {
               sub(/^[ ]*name:[ ]*/, "");
@@ -71,7 +72,8 @@ runs:
         JOB_CONCLUSION=$(echo "$JOB_DATA" | jq -r '.conclusion // ""')
         if [ "$JOB_ID" = "null" ] || [ -z "$JOB_ID" ]; then
           echo "::notice title=Job ID not found::No job matched '$AGENT_JOB_NAME' (run=$RUN_ID attempt=$ATTEMPT)."
-          AVAILABLE_JOBS=$(gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" --jq '.jobs[].name' | paste -sd ', ' -)
+          AVAILABLE_JOBS=$(gh api "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
+            --jq '.jobs[].name' | paste -sd ', ' -)
           {
             echo "No job named '$AGENT_JOB_NAME' found in run $RUN_ID (attempt $ATTEMPT)."
             echo "Available jobs: $AVAILABLE_JOBS"

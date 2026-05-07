@@ -6,6 +6,13 @@
 # Cache-related files
 .cache/
 
+# Data exports
+*.csv
+
+# Documentation
+*.html
+*.pdf
+
 # Environments
 .env
 .envrc
@@ -15,14 +22,25 @@
 .venv
 env/
 venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignore .lock files
+.lock
+
+# Cursor
+#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
+#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
+#  refer to https://docs.cursor.com/context/ignore-files
+#.cursorignore
+.cursorindexingignore
 
 # Temporary binary files
 actionlint
 
 # Temporary or backup files
 *.bak
-*.log
+*.org
 *.orig
-*.patch
-*.py
 *.swp

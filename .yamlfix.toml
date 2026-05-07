@@ -7,5 +7,10 @@ line_length = 120
 preserve_block_scalars = true
 preserve_formatting = true
 
+excludes = [
+    ".github/workflows/test.yml",
+    ".github/workflows/opencode.yml"
+]
+
 # Force sequences to use block style (multi-line lists)
 sequence_style = "block_style"
