@@ -44,6 +44,7 @@ inputs:
     default: |-
       # Keep in alphabetical order.
       default:
+        apply_patch: allow
         bash: &default-bash
           '*': deny
           awk*: allow
@@ -131,6 +132,7 @@ inputs:
           general: deny
         todowrite: allow
       cogni-ai-agent-auditor:
+        apply_patch: deny
         bash:
           <<: *default-bash
           gh run view*: allow
@@ -155,6 +157,7 @@ inputs:
           terragrunt*: allow
         task: allow
       cogni-ai-brain-ops:
+        apply_patch: deny
         bash:
           # Brain-ops is a context-gathering agent; gathering context via GH/git is allowed.
           gh api*: allow
@@ -171,6 +174,7 @@ inputs:
           '*': deny
         task: allow
       cogni-ai-code-reviewer:
+        apply_patch: deny
         bash:
           <<: *default-bash
           gh api*: allow
@@ -183,6 +187,7 @@ inputs:
         edit: deny
         skill: *default-skill
       cogni-ai-context7-ops:
+        apply_patch: deny
         bash: deny
         context7_query-docs: allow
         context7_resolve-library-id: allow
@@ -209,6 +214,7 @@ inputs:
           molecule: allow
         task: allow
       cogni-ai-docs-editor:
+        apply_patch: allow
         bash: deny
         glob: allow
         read: allow
@@ -218,6 +224,7 @@ inputs:
       cogni-ai-elite:
         task: allow
       cogni-ai-fact-ops:
+        apply_patch: deny
         bash: deny
         glob: allow
         read: allow
@@ -225,6 +232,7 @@ inputs:
         skill: *default-skill
         task: deny
       cogni-ai-github-ops:
+        apply_patch: deny
         bash:
           <<: *default-bash
           gh api graphql*: allow  # Can also modify issues/discussions
@@ -259,6 +267,7 @@ inputs:
       cogni-ai-keeper:
         task: deny
       cogni-ai-manager:
+        apply_patch: deny
         bash: deny
         glob: allow
         read: allow
@@ -281,6 +290,7 @@ inputs:
           vim-ex: deny
         task: allow
       cogni-ai-plan-reviewer:
+        apply_patch: deny
         bash: deny
         glob: allow
         read: allow
@@ -297,6 +307,7 @@ inputs:
         skill: *default-skill
         task: allow
       cogni-ai-security-auditor:
+        apply_patch: deny
         bash: deny
         glob: allow
         read: allow
