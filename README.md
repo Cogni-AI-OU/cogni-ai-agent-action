@@ -82,8 +82,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
-          # Note: Prompt is automatically resolved from comment/issue/PR body if omitted.
-          prompt: ${{ inputs.prompt }}
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
     timeout-minutes: 60
 
 ### Execution flow
@@ -234,7 +238,12 @@ jobs:
         with:
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
-          prompt: ${{ inputs.prompt }}
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
     timeout-minutes: 60
 
   summary:
@@ -308,7 +317,12 @@ jobs:
           permissions: |-
             bash:
               '*': allow
-          prompt: ${{ inputs.prompt }}
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
     timeout-minutes: 60
 
   summary:

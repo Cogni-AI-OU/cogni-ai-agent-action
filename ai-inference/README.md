@@ -30,7 +30,12 @@ jobs:
         uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
         id: inference
         with:
-          prompt: ${{ inputs.prompt }}
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
 

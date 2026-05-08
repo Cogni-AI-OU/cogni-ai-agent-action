@@ -75,7 +75,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
-          prompt: ${{ inputs.prompt }}
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
     timeout-minutes: 60
 
 ### Advanced workflow
