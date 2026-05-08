@@ -72,6 +72,7 @@ jobs:
       pull-requests: write # create/edit/delete PRs
       discussions: write # create/edit/delete discussions
       packages: read # read packages
+      models: read # read models
     steps:
       - uses: actions/checkout@v6
         with:
@@ -226,6 +227,7 @@ jobs:
       pull-requests: write # create/edit/delete PRs
       discussions: write # create/edit/delete discussions
       packages: read # read packages
+      models: read # read models
     steps:
       - uses: actions/checkout@v6
         with:
@@ -256,6 +258,7 @@ jobs:
       actions: read
       contents: read
       id-token: write
+      models: read
     steps:
       - uses: actions/checkout@v6
         with:
@@ -303,6 +306,7 @@ jobs:
       issues: write # create/edit/delete issues
       packages: write # create/edit/delete packages
       pull-requests: write # create/edit/delete PRs
+      models: read # read models
     steps:
       - uses: actions/checkout@v6
         with:
@@ -335,6 +339,7 @@ jobs:
       actions: read
       contents: read
       id-token: write
+      models: read
     steps:
       - uses: actions/checkout@v6
         with:

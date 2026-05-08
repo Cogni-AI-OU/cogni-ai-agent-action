@@ -64,6 +64,7 @@ jobs:
       id-token: write
       issues: write
       pull-requests: write
+      models: read
     steps:
       - uses: actions/checkout@v6
         with:
@@ -192,6 +193,7 @@ jobs:
       id-token: write
       issues: write
       pull-requests: write
+      models: read
     steps:
       - uses: actions/checkout@v6
         with:
@@ -222,6 +224,7 @@ jobs:
       actions: read
       contents: read
       id-token: write
+      models: read
     steps:
       - uses: actions/checkout@v6
         with:
