@@ -15,20 +15,10 @@ Jobs:
 - **link-checker**: Checks for broken links in Markdown files using Lychee
 - **pre-commit**: Runs pre-commit hooks for code formatting and linting
 
-### Cogni AI Agent Workflow (`cogni-ai-agent.yml`)
-
-The `cogni-ai-agent.yml` workflow provides the underlying logic to run the Cogni AI Agent via the org-level
-reusable workflow. It runs on issue comments, pull request review comments, and manual triggers.
-
 ### Devcontainer CI Workflow (`devcontainer-ci.yml`)
 
 The `devcontainer-ci.yml` workflow builds and tests the development container image.
 It ensures that all required command-line tools and Python packages are properly installed and functional.
-
-### OpenCode Workflow (`opencode.yml`)
-
-The `opencode.yml` workflow provides OpenCode automation for AI-assisted development via the org-level
-reusable workflow.
 
 ### Local/Test Workflows
 

@@ -15,8 +15,6 @@ For a human-readable overview, see [README.md](README.md).
   Tests the local `ai-inference/action.yml` action on push.
 - **[check.yml](check.yml)**:
   Linting and quality gates via org-level reusable workflow.
-- **[cogni-ai-agent.yml](cogni-ai-agent.yml)**:
-  Logic for the Cogni AI Agent via org-level reusable workflow.
 - **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
   Runs local `action.yml` as a wrapper for OpenCode.
 - **[cogni-ai-agent-local-sudo.yml](cogni-ai-agent-local-sudo.yml)**:
@@ -30,12 +28,6 @@ For a human-readable overview, see [README.md](README.md).
   Validates development container builds.
 - **[opencode-agent-local.yml](opencode-agent-local.yml)**:
   Runs local `./opencode/action.yml` as a wrapper for OpenCode.
-- **[opencode.yml](opencode.yml)**:
-  Invokes org-level reusable OpenCode workflow manually.
-- **[task-update-docs.yml](task-update-docs.yml)**:
-  Update core architecture and documentation files.
-- **[test-constraints.yml](test-constraints.yml)**:
-  Runs MiniZinc constraints check to verify least privilege.
 
 ## Details
 
@@ -56,12 +48,6 @@ For a human-readable overview, see [README.md](README.md).
 - Purpose: Runs actionlint and pre-commit via org-level reusable workflow.
 - Triggers: `push`, `pull_request`, `schedule`, `workflow_dispatch`.
 - Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/check.yml@main`.
-
-### cogni-ai-agent.yml
-
-- Purpose: Logic for the Cogni AI Agent.
-- Triggers: `issue_comment`, `pull_request_review_comment`, `workflow_call`, `workflow_dispatch`.
-- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/cogni-ai-agent.yml@main`.
 
 ### cogni-ai-agent-local.yml
 
@@ -101,22 +87,6 @@ For a human-readable overview, see [README.md](README.md).
 - Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
   `workflow_dispatch`, `workflow_call`.
 - Commands: `/oc`, `/opencode`, `/review`.
-
-### opencode.yml
-
-- Purpose: Invokes org-level reusable OpenCode workflow.
-- Triggers: `issue_comment`, `pull_request_review_comment`, `issues`, `workflow_call`, `workflow_dispatch`.
-- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/opencode.yml@main`.
-
-### task-update-docs.yml
-
-- Purpose: Update core architecture and documentation files.
-- Triggers: `workflow_dispatch`.
-
-### test-constraints.yml
-
-- Purpose: Runs MiniZinc constraints check to verify least privilege and isolation.
-- Triggers: `push`, `pull_request`, `workflow_dispatch`.
 
 ## Notes
 

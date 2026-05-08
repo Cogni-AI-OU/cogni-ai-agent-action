@@ -8,8 +8,7 @@ preserve_block_scalars = true
 preserve_formatting = true
 
 excludes = [
-    ".github/workflows/test.yml",
-    ".github/workflows/opencode.yml"
+    ".github/workflows/test.yml"
 ]
 
 # Force sequences to use block style (multi-line lists)
