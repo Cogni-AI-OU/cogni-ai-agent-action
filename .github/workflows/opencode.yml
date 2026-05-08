@@ -49,13 +49,13 @@ jobs:
     with:
       agent: >-
         ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call')
-        && inputs.agent }}
+        && inputs.agent || '' }}
       model: >-
         ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call')
-        && inputs.model }}
+        && inputs.model || '' }}
       prompt: >-
         ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call')
-        && inputs.prompt }}
+        && inputs.prompt || '' }}
       issue_number: >-
         ${{ github.event.issue.number || github.event.pull_request.number || inputs.issue_number }}
     permissions:

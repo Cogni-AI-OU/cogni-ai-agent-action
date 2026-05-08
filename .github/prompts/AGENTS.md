@@ -10,6 +10,7 @@ For a human-readable overview, see [README.md](README.md).
 | Prompt | Format | Purpose |
 | ------ | ------ | ------- |
 | [repository-setup.prompt.md](repository-setup.prompt.md) | Markdown | Full repository setup checklist using org standards from Cogni-AI-OU/.github |
+| [task-update-docs.prompt.md](task-update-docs.prompt.md) | Markdown | Instructions for updating documentation and architecture consistency |
 
 ## Notes
 

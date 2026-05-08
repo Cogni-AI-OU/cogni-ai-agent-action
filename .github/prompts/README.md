@@ -14,14 +14,6 @@ documentation, and constraint files for mutual consistency and accuracy.
 Full repository setup checklist using organization standards from `Cogni-AI-OU/.github`.
 Used for reviewing and standardizing repository structure, configuration files, and development workflows.
 
-### Default Prompt (`default.prompt.yml`)
-
-A simple starting point for general AI agent tasks.
-
-### Test Prompt (`test.prompt.yml`)
-
-Example prompt configuration for testing agent interactions.
-
 ## Catalog
 
 See [AGENTS.md](AGENTS.md) for a technical catalog of available prompts.

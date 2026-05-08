@@ -310,15 +310,6 @@ exist. Do not skip items just because a file already exists.
   - Purpose: GitHub Actions problem matcher for pre-commit output
   - Action: Copy from reference if missing
 
-- [ ] **`.github/GITHUB-WORKFLOWS.md`**
-  - Check if file exists
-  - Reference: `https://github.com/Cogni-AI-OU/.github/blob/main/.github/GITHUB-WORKFLOWS.md`
-  - Purpose: Documentation for GitHub workflows, agents, and problem matchers
-  - Action: Copy from reference as `.github/GITHUB-WORKFLOWS.md` if missing;
-    customize for repository-specific workflows
-  - Content: Workflow templates overview, agent prompts usage, problem matchers configuration, security notes
-  - Customize: Update workflow references and add repository-specific workflow documentation
-
 - [ ] **`.github/workflows/README.md`**
   - Check if file exists
   - Reference: `https://github.com/Cogni-AI-OU/.github/blob/main/.github/workflows/README.md`
@@ -339,10 +330,8 @@ exist. Do not skip items just because a file already exists.
   - Purpose: Prompt templates for GitHub Models, OpenCode, and Copilot
   - Action: Include relevant prompt files; keep formats (Markdown/YAML) as upstream
   - Available prompts:
-    - `default.prompt.yml` - Default prompt for cogni-ai-agent workflow
-    - `pr-review.prompt.md` - PR review prompt
     - `repository-setup.prompt.md` - This setup prompt
-    - `test.prompt.yml` - Example prompt
+    - `task-update-docs.prompt.md` - Instructions for updating documentation and architecture consistency
   - Customize: Add prompts for repository-specific tasks as needed
 
 - [ ] **`.github/prompts/AGENTS.md`**
