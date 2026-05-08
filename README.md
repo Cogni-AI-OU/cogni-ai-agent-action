@@ -362,10 +362,6 @@ override or extend these defaults. See [action.yml](action.yml) for default perm
 | `prompt`   | The resolved prompt sent to the agent |
 | `response` | The response from the agent           |
 
-### Standardization
-
-This repository follows [Cogni AI organization standards](https://github.com/Cogni-AI-OU/.github) for configuration and workflows.
-
 ### Pre-commit
 
 Automated checks run before every commit to ensure code quality and consistency.
