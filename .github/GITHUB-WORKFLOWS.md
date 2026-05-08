@@ -50,7 +50,3 @@ resources. To maintain security:
 
 Workflows that require external API access (like OpenCode) use encrypted GitHub secrets. Ensure that secrets are
 managed securely and rotated periodically.
-
-## Repository-Specific Workflows
-
-*Add documentation for any custom workflows specific to this repository here.*
