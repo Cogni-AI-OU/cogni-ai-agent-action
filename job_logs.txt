@@ -1,0 +1,2124 @@
+﻿2026-05-08T03:00:48.6490376Z Current runner version: '2.334.0'
+2026-05-08T03:00:48.6523090Z ##[group]Runner Image Provisioner
+2026-05-08T03:00:48.6524412Z Hosted Compute Agent
+2026-05-08T03:00:48.6525811Z Version: 20260213.493
+2026-05-08T03:00:48.6526818Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-05-08T03:00:48.6528118Z Build Date: 2026-02-13T00:28:41Z
+2026-05-08T03:00:48.6529211Z Worker ID: {fb7ce7c1-5760-4b4c-9870-5e6d13894e97}
+2026-05-08T03:00:48.6530553Z Azure Region: eastus2
+2026-05-08T03:00:48.6531373Z ##[endgroup]
+2026-05-08T03:00:48.6534209Z ##[group]Operating System
+2026-05-08T03:00:48.6535542Z Ubuntu
+2026-05-08T03:00:48.6536304Z 24.04.4
+2026-05-08T03:00:48.6537236Z LTS
+2026-05-08T03:00:48.6537982Z ##[endgroup]
+2026-05-08T03:00:48.6538891Z ##[group]Runner Image
+2026-05-08T03:00:48.6539921Z Image: ubuntu-24.04
+2026-05-08T03:00:48.6540780Z Version: 20260413.86.1
+2026-05-08T03:00:48.6542748Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+2026-05-08T03:00:48.6545465Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+2026-05-08T03:00:48.6547179Z ##[endgroup]
+2026-05-08T03:00:48.6549178Z ##[group]GITHUB_TOKEN Permissions
+2026-05-08T03:00:48.6551815Z Contents: write
+2026-05-08T03:00:48.6552652Z Issues: write
+2026-05-08T03:00:48.6553386Z Metadata: read
+2026-05-08T03:00:48.6554386Z PullRequests: write
+2026-05-08T03:00:48.6555551Z ##[endgroup]
+2026-05-08T03:00:48.6558499Z Secret source: Actions
+2026-05-08T03:00:48.6559695Z Prepare workflow directory
+2026-05-08T03:00:48.7046446Z Prepare all required actions
+2026-05-08T03:00:48.7105297Z Getting action download info
+2026-05-08T03:00:49.0497821Z Download action repository 'actions/checkout@v6' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+2026-05-08T03:00:49.1818993Z Download action repository 'actions/setup-python@v6.1.0' (SHA:83679a892e2d95755f2dac6acb0bfd1e9ac5d548)
+2026-05-08T03:00:49.3129043Z Download action repository 'actions/cache@v5.0.1' (SHA:9255dc7a253b0ccc959486e2bca901246202afeb)
+2026-05-08T03:00:49.4652805Z Download action repository 'Cogni-AI-OU/cogni-ai-agent-action@main' (SHA:c473a34951f1ad08c8503e747a0c27a368ebcf3e)
+2026-05-08T03:00:49.7866540Z Getting action download info
+2026-05-08T03:00:50.0162547Z Download action repository 'actions/github-script@v7' (SHA:f28e40c7f34bde8b3046d885e986cb6290c5673b)
+2026-05-08T03:00:50.1821884Z Getting action download info
+2026-05-08T03:00:50.3374123Z Download action repository 'anomalyco/opencode@v1.14.35' (SHA:9d57a83a75acccf02d0046f210a35936569cee90)
+2026-05-08T03:00:54.3906603Z Getting action download info
+2026-05-08T03:00:54.5117237Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-05-08T03:00:54.6693521Z Complete job name: Run Cogni AI agent
+2026-05-08T03:00:54.7374281Z ##[group]Run actions/checkout@v6
+2026-05-08T03:00:54.7375335Z with:
+2026-05-08T03:00:54.7375621Z   persist-credentials: false
+2026-05-08T03:00:54.7376000Z   repository: cogni-ai-ee/ansible-role-cogni-ai-agent
+2026-05-08T03:00:54.7376674Z   token: ***
+2026-05-08T03:00:54.7376927Z   ssh-strict: true
+2026-05-08T03:00:54.7377235Z   ssh-user: git
+2026-05-08T03:00:54.7377547Z   clean: true
+2026-05-08T03:00:54.7377835Z   sparse-checkout-cone-mode: true
+2026-05-08T03:00:54.7378131Z   fetch-depth: 1
+2026-05-08T03:00:54.7378451Z   fetch-tags: false
+2026-05-08T03:00:54.7378701Z   show-progress: true
+2026-05-08T03:00:54.7379014Z   lfs: false
+2026-05-08T03:00:54.7379320Z   submodules: false
+2026-05-08T03:00:54.7379575Z   set-safe-directory: true
+2026-05-08T03:00:54.7380190Z ##[endgroup]
+2026-05-08T03:00:54.8324083Z Syncing repository: cogni-ai-ee/ansible-role-cogni-ai-agent
+2026-05-08T03:00:54.8326087Z ##[group]Getting Git version info
+2026-05-08T03:00:54.8326837Z Working directory is '/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent'
+2026-05-08T03:00:54.8356344Z [command]/usr/bin/git version
+2026-05-08T03:00:54.8356796Z git version 2.53.0
+2026-05-08T03:00:54.8404295Z ##[endgroup]
+2026-05-08T03:00:54.8420726Z Temporarily overriding HOME='/home/runner/work/_temp/01dac496-0512-4c51-abce-51bb3c127a5b' before making global git config changes
+2026-05-08T03:00:54.8422057Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-08T03:00:54.8427491Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent
+2026-05-08T03:00:54.8461127Z Deleting the contents of '/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent'
+2026-05-08T03:00:54.8464812Z ##[group]Initializing the repository
+2026-05-08T03:00:54.8469847Z [command]/usr/bin/git init /home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent
+2026-05-08T03:00:54.8560242Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-05-08T03:00:54.8561148Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-05-08T03:00:54.8561968Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-05-08T03:00:54.8562518Z hint: call:
+2026-05-08T03:00:54.8563039Z hint:
+2026-05-08T03:00:54.8563456Z hint: 	git config --global init.defaultBranch <name>
+2026-05-08T03:00:54.8563914Z hint:
+2026-05-08T03:00:54.8564193Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-05-08T03:00:54.8564664Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-05-08T03:00:54.8565234Z hint:
+2026-05-08T03:00:54.8565466Z hint: 	git branch -m <name>
+2026-05-08T03:00:54.8565682Z hint:
+2026-05-08T03:00:54.8565982Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-05-08T03:00:54.8566657Z Initialized empty Git repository in /home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git/
+2026-05-08T03:00:54.8573063Z [command]/usr/bin/git remote add origin https://github.com/cogni-ai-ee/ansible-role-cogni-ai-agent
+2026-05-08T03:00:54.8602360Z ##[endgroup]
+2026-05-08T03:00:54.8602970Z ##[group]Disabling automatic garbage collection
+2026-05-08T03:00:54.8607894Z [command]/usr/bin/git config --local gc.auto 0
+2026-05-08T03:00:54.8635777Z ##[endgroup]
+2026-05-08T03:00:54.8636381Z ##[group]Setting up auth
+2026-05-08T03:00:54.8637518Z Removing SSH command configuration
+2026-05-08T03:00:54.8643738Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-08T03:00:54.8674791Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-08T03:00:54.8945805Z Removing HTTP extra header
+2026-05-08T03:00:54.8951037Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-08T03:00:54.8980213Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-08T03:00:54.9190401Z Removing includeIf entries pointing to credentials config files
+2026-05-08T03:00:54.9196675Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-08T03:00:54.9227100Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-08T03:00:54.9443805Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-05-08T03:00:54.9479180Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git.path /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:54.9508661Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:54.9537373Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:54.9567931Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:54.9594690Z ##[endgroup]
+2026-05-08T03:00:54.9595717Z ##[group]Fetching the repository
+2026-05-08T03:00:54.9603677Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4a354a5534a26a4093b36763a18f485124c8de2f:refs/remotes/origin/main
+2026-05-08T03:00:55.1682327Z From https://github.com/cogni-ai-ee/ansible-role-cogni-ai-agent
+2026-05-08T03:00:55.1683642Z  * [new ref]         4a354a5534a26a4093b36763a18f485124c8de2f -> origin/main
+2026-05-08T03:00:55.1718585Z [command]/usr/bin/git branch --list --remote origin/main
+2026-05-08T03:00:55.1742907Z   origin/main
+2026-05-08T03:00:55.1752308Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-05-08T03:00:55.1776267Z 4a354a5534a26a4093b36763a18f485124c8de2f
+2026-05-08T03:00:55.1785940Z ##[endgroup]
+2026-05-08T03:00:55.1786335Z ##[group]Determining the checkout info
+2026-05-08T03:00:55.1786720Z ##[endgroup]
+2026-05-08T03:00:55.1793990Z [command]/usr/bin/git sparse-checkout disable
+2026-05-08T03:00:55.1827888Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-05-08T03:00:55.1856661Z ##[group]Checking out the ref
+2026-05-08T03:00:55.1859853Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-05-08T03:00:55.1957403Z Switched to a new branch 'main'
+2026-05-08T03:00:55.1959315Z branch 'main' set up to track 'origin/main'.
+2026-05-08T03:00:55.1964833Z ##[endgroup]
+2026-05-08T03:00:55.2004689Z [command]/usr/bin/git log -1 --format=%H
+2026-05-08T03:00:55.2029588Z 4a354a5534a26a4093b36763a18f485124c8de2f
+2026-05-08T03:00:55.2041873Z ##[group]Removing auth
+2026-05-08T03:00:55.2042290Z Removing SSH command configuration
+2026-05-08T03:00:55.2050055Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-08T03:00:55.2078717Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-08T03:00:55.2317778Z Removing HTTP extra header
+2026-05-08T03:00:55.2324317Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-08T03:00:55.2359446Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-08T03:00:55.2588396Z Removing includeIf entries pointing to credentials config files
+2026-05-08T03:00:55.2593149Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-08T03:00:55.2616308Z includeif.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git.path
+2026-05-08T03:00:55.2617667Z includeif.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git/worktrees/*.path
+2026-05-08T03:00:55.2618724Z includeif.gitdir:/github/workspace/.git.path
+2026-05-08T03:00:55.2619361Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-05-08T03:00:55.2626500Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git.path
+2026-05-08T03:00:55.2647564Z /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2657676Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git.path /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2688863Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git/worktrees/*.path
+2026-05-08T03:00:55.2710407Z /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2719892Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2754451Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-05-08T03:00:55.2786145Z /github/runner_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2794182Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2824461Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-05-08T03:00:55.2844810Z /github/runner_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2851528Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config
+2026-05-08T03:00:55.2883948Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-08T03:00:55.3093508Z Removing credentials config '/home/runner/work/_temp/git-credentials-8aab124d-ae73-45a9-8ba5-4d73fb4871c1.config'
+2026-05-08T03:00:55.3102833Z ##[endgroup]
+2026-05-08T03:00:55.3301250Z ##[group]Run actions/setup-python@v6.1.0
+2026-05-08T03:00:55.3301547Z with:
+2026-05-08T03:00:55.3301725Z   python-version: 3.12
+2026-05-08T03:00:55.3301953Z   check-latest: false
+2026-05-08T03:00:55.3302283Z   token: ***
+2026-05-08T03:00:55.3302476Z   update-environment: true
+2026-05-08T03:00:55.3302703Z   allow-prereleases: false
+2026-05-08T03:00:55.3302913Z   freethreaded: false
+2026-05-08T03:00:55.3303104Z ##[endgroup]
+2026-05-08T03:00:55.4620402Z ##[group]Installed versions
+2026-05-08T03:00:55.4712070Z (node:2459) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-05-08T03:00:55.4713334Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-05-08T03:00:55.4715704Z Successfully set up CPython (3.12.13)
+2026-05-08T03:00:55.4716432Z ##[endgroup]
+2026-05-08T03:00:55.5439688Z ##[group]Run actions/cache@v5.0.1
+2026-05-08T03:00:55.5439962Z with:
+2026-05-08T03:00:55.5440130Z   path: ~/.local
+2026-05-08T03:00:55.5440455Z   key: Linux-pip-a5848f5924f79236f9124035382597e1c7b0439aa779b52284a10fdaa5d111ad
+2026-05-08T03:00:55.5440863Z   enableCrossOsArchive: false
+2026-05-08T03:00:55.5441111Z   fail-on-cache-miss: false
+2026-05-08T03:00:55.5441323Z   lookup-only: false
+2026-05-08T03:00:55.5441507Z   save-always: false
+2026-05-08T03:00:55.5441685Z env:
+2026-05-08T03:00:55.5441916Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:55.5442339Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:55.5442748Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:55.5443099Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:55.5443459Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:55.5443864Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:55.5444156Z ##[endgroup]
+2026-05-08T03:00:55.7472572Z Cache hit for: Linux-pip-a5848f5924f79236f9124035382597e1c7b0439aa779b52284a10fdaa5d111ad
+2026-05-08T03:00:56.3834044Z Received 122069693 of 122069693 (100.0%), 202.8 MBs/sec
+2026-05-08T03:00:56.3834673Z Cache Size: ~116 MB (122069693 B)
+2026-05-08T03:00:56.3869101Z [command]/usr/bin/tar -xf /home/runner/work/_temp/610454f7-40cf-48e0-8070-2806ee256a54/cache.tzst -P -C /home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent --use-compress-program unzstd
+2026-05-08T03:00:59.0530969Z Cache restored successfully
+2026-05-08T03:00:59.0664397Z Cache restored from key: Linux-pip-a5848f5924f79236f9124035382597e1c7b0439aa779b52284a10fdaa5d111ad
+2026-05-08T03:00:59.0819402Z ##[group]Run echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+2026-05-08T03:00:59.0819837Z [36;1mecho "$HOME/.local/bin" >> "$GITHUB_PATH"[0m
+2026-05-08T03:00:59.0890440Z shell: /usr/bin/bash -e {0}
+2026-05-08T03:00:59.0890696Z env:
+2026-05-08T03:00:59.0890956Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.0891401Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.0891831Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.0892205Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.0892609Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.0893001Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.0893335Z ##[endgroup]
+2026-05-08T03:00:59.1335653Z ##[group]Run Cogni-AI-OU/cogni-ai-agent-action@main
+2026-05-08T03:00:59.1336009Z with:
+2026-05-08T03:00:59.1336213Z   model: opencode/gemini-3-flash
+2026-05-08T03:00:59.1337674Z   permissions: bash:
+  '*': deny
+  ansible*: allow
+  ansible-galaxy*: allow
+  ansible-playbook*: allow
+  awk*: allow
+  continue*: allow
+  cp*: allow
+  docker*: allow
+  ex*: allow
+  gh*: allow
+  gh pr review*: allow
+  git*: allow
+  hexdump*: allow
+  jq*: allow
+  links*: allow
+  mawk*: allow
+  molecule*: allow
+  pipx*: allow
+  pre-commit*: allow
+  printf*: allow
+  sed*: allow
+  set*: allow
+  time*: allow
+  timeout*: allow
+  touch*: allow
+  true*: allow
+  vim*: allow
+2026-05-08T03:00:59.1339351Z   prompt: Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+2026-05-08T03:00:59.1339842Z   force-run: false
+2026-05-08T03:00:59.1340043Z   gh-models-enabled: true
+2026-05-08T03:00:59.1340283Z   mentions: /co,/cogni,/review,/brainstorm
+2026-05-08T03:00:59.1340629Z   mentions_bots: @opencode-agent,@OpenCode-Agent
+2026-05-08T03:00:59.1340912Z   open-telemetry: false
+2026-05-08T03:00:59.1341121Z   version_agents: main
+2026-05-08T03:00:59.1341333Z   version_instructions: main
+2026-05-08T03:00:59.1341552Z   version_skills: main
+2026-05-08T03:00:59.1341754Z env:
+2026-05-08T03:00:59.1342021Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1342435Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.1342846Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1343218Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1343580Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1343950Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.1344248Z ##[endgroup]
+2026-05-08T03:00:59.1468840Z ##[group]Run actions/github-script@v7
+2026-05-08T03:00:59.1469126Z with:
+2026-05-08T03:00:59.1481076Z   script: const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
+const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
+const BOT_MENTIONS = process.env.MENTIONS_BOTS
+  ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+  : [];
+const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
+const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
+const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
+function matchesTrigger(body, triggers) {
+  if (!body) return false;
+  return triggers.some(t => {
+    if (!t) return false;
+    const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
+    return pattern.test(body);
+  });
+}
+function matchesBotMention(body) {
+  if (!body) return false;
+  return BOT_MENTIONS.some(m => body.includes(m));
+}
+function getAgent(body) {
+  if (!body) return 'default';
+  // Stricter pattern for /review to avoid misclassification
+  if (/(^|\s)\/review\b/.test(body)) return 'cogni-ai-code-reviewer';
+  if (/(^|\s)\/brainstorm\b/.test(body)) return 'cogni-ai-brain-ops';
+  return 'default';
+}
+const isBot = context.actor.endsWith('[bot]');
+const eventName = context.eventName;
+let run = process.env.FORCE_RUN === 'true';
+let agent = '';
+console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
+console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}, ForceRun: ${process.env.FORCE_RUN}`);
+if (run) {
+  agent = 'default';
+} else if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+  run = true;
+  agent = 'default';
+} else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
+  const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
+  const assoc = payload?.author_association;
+  const body = payload?.body;
+  console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
+  const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+  if (isReviewTrigger) {
+    run = true;
+    agent = 'cogni-ai-code-reviewer';
+  } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+    run = true;
+    agent = getAgent(body);
+  }
+} else if (eventName === 'pull_request_review_comment' && !isBot) {
+  const payload = context.payload.comment;
+  const assoc = payload?.author_association;
+  const body = payload?.body;
+  console.log(`PR Review Comment - Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
+  const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+  if (isReviewTrigger) {
+    run = true;
+    agent = 'cogni-ai-code-reviewer';
+  } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+    run = true;
+    agent = getAgent(body);
+  }
+} else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
+  const pr = context.payload.pull_request;
+  const assoc = pr?.author_association;
+  const login = pr?.user?.login;
+  const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+    (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+  console.log(`PR - Assoc: ${assoc}, Login: ${login}, IsAllowed: ${isAllowed}`);
+  if (isAllowed) {
+    run = true;
+    agent = 'default';
+  }
+}
+console.log(`Run: ${run}, Agent: ${agent}`);
+console.log(`################################`);
+core.setOutput('run', run ? 'true' : '');
+core.setOutput('agent', agent);
+// Centralized effective agent logic
+let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
+core.setOutput('effective_agent', effectiveAgent);
+
+2026-05-08T03:00:59.1493066Z   github-token: ***
+2026-05-08T03:00:59.1493273Z   debug: false
+2026-05-08T03:00:59.1493481Z   user-agent: actions/github-script
+2026-05-08T03:00:59.1493738Z   result-encoding: json
+2026-05-08T03:00:59.1493941Z   retries: 0
+2026-05-08T03:00:59.1494154Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-05-08T03:00:59.1494443Z env:
+2026-05-08T03:00:59.1494682Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1495227Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.1495647Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1496013Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1496376Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.1496738Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.1497047Z   AGENT_INPUT: 
+2026-05-08T03:00:59.1497232Z   FORCE_RUN: false
+2026-05-08T03:00:59.1497437Z   MENTIONS: /co,/cogni,/review,/brainstorm
+2026-05-08T03:00:59.1497731Z   MENTIONS_BOTS: @opencode-agent,@OpenCode-Agent
+2026-05-08T03:00:59.1498145Z ##[endgroup]
+2026-05-08T03:00:59.2400989Z ### CHECK_CONDITIONS_RESULTS  ###
+2026-05-08T03:00:59.2404843Z Event: workflow_dispatch, Actor: cogni-ai-ee, IsBot: false, ForceRun: false
+2026-05-08T03:00:59.2405743Z Run: true, Agent: default
+2026-05-08T03:00:59.2406238Z ################################
+2026-05-08T03:00:59.2494501Z ##[group]Run set -euo pipefail
+2026-05-08T03:00:59.2494838Z [36;1mset -euo pipefail[0m
+2026-05-08T03:00:59.2495419Z [36;1mprompt="${PROMPT_INPUT:-}"[0m
+2026-05-08T03:00:59.2495718Z [36;1mif [ -z "$prompt" ]; then[0m
+2026-05-08T03:00:59.2495977Z [36;1m  prompt="${COMMENT_BODY:-}"[0m
+2026-05-08T03:00:59.2496224Z [36;1mfi[0m
+2026-05-08T03:00:59.2496431Z [36;1mif [ -n "${EFFECTIVE_AGENT:-}" ]; then[0m
+2026-05-08T03:00:59.2496738Z [36;1m  if [ "$EFFECTIVE_AGENT" = "default" ]; then[0m
+2026-05-08T03:00:59.2497104Z [36;1m    header="You are operating as the default agent."[0m
+2026-05-08T03:00:59.2497413Z [36;1m  else[0m
+2026-05-08T03:00:59.2497717Z [36;1m    header="You are operating as the ${EFFECTIVE_AGENT} agent."[0m
+2026-05-08T03:00:59.2498049Z [36;1m  fi[0m
+2026-05-08T03:00:59.2498241Z [36;1m  if [ -n "$prompt" ]; then[0m
+2026-05-08T03:00:59.2498745Z [36;1m    prompt=$(printf '%s\n\n%s' "$header" "$prompt")[0m
+2026-05-08T03:00:59.2499040Z [36;1m  else[0m
+2026-05-08T03:00:59.2499231Z [36;1m    prompt="$header"[0m
+2026-05-08T03:00:59.2499454Z [36;1m  fi[0m
+2026-05-08T03:00:59.2499621Z [36;1mfi[0m
+2026-05-08T03:00:59.2499816Z [36;1mif [ -n "${ISSUE_NUMBER:-}" ]; then[0m
+2026-05-08T03:00:59.2500157Z [36;1m  entity_type="issue/PR"[0m
+2026-05-08T03:00:59.2500456Z [36;1m  if [ -n "${DISCUSSION_NUMBER:-}" ]; then[0m
+2026-05-08T03:00:59.2500741Z [36;1m    entity_type="discussion"[0m
+2026-05-08T03:00:59.2500976Z [36;1m  fi[0m
+2026-05-08T03:00:59.2501388Z [36;1m  header="Runtime related to $entity_type #$ISSUE_NUMBER, so must load github-pr or github-issue skill."[0m
+2026-05-08T03:00:59.2501887Z [36;1m  if [ -n "$prompt" ]; then[0m
+2026-05-08T03:00:59.2502193Z [36;1m    prompt=$(printf '%s\n\n%s' "$header" "$prompt")[0m
+2026-05-08T03:00:59.2502490Z [36;1m  else[0m
+2026-05-08T03:00:59.2502681Z [36;1m    prompt="$header"[0m
+2026-05-08T03:00:59.2502901Z [36;1m  fi[0m
+2026-05-08T03:00:59.2503076Z [36;1mfi[0m
+2026-05-08T03:00:59.2503300Z [36;1mif [ "${GITHUB_RUN_ATTEMPT:-1}" -gt 1 ]; then[0m
+2026-05-08T03:00:59.2503630Z [36;1m  prev_attempt=$(( GITHUB_RUN_ATTEMPT - 1 ))[0m
+2026-05-08T03:00:59.2504185Z [36;1m  previous_build_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${prev_attempt}"[0m
+2026-05-08T03:00:59.2504813Z [36;1m  rerun_note="Note: This is a re-run of a previous build attempt."[0m
+2026-05-08T03:00:59.2505543Z [36;1m  rerun_note+=" Check the previous attempt to understand what was"[0m
+2026-05-08T03:00:59.2505993Z [36;1m  rerun_note+=" already done and continue from where it left off:"[0m
+2026-05-08T03:00:59.2506360Z [36;1m  rerun_note+=" ${previous_build_url}"[0m
+2026-05-08T03:00:59.2506700Z [36;1m  prompt=$(printf '%s\n\n%s' "$prompt" "$rerun_note")[0m
+2026-05-08T03:00:59.2506997Z [36;1mfi[0m
+2026-05-08T03:00:59.2507200Z [36;1mEOF_TOKEN="EOF_$(openssl rand -hex 10)"[0m
+2026-05-08T03:00:59.2507469Z [36;1m{[0m
+2026-05-08T03:00:59.2507653Z [36;1m  echo "prompt<<$EOF_TOKEN"[0m
+2026-05-08T03:00:59.2507899Z [36;1m  printf '%s\n' "$prompt"[0m
+2026-05-08T03:00:59.2508137Z [36;1m  echo "$EOF_TOKEN"[0m
+2026-05-08T03:00:59.2508360Z [36;1m} >> "$GITHUB_OUTPUT"[0m
+2026-05-08T03:00:59.2508836Z [36;1mif [ -f "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/AGENTS.md" ]; then[0m
+2026-05-08T03:00:59.2509367Z [36;1m  echo "has_agents=true" >> "$GITHUB_OUTPUT"[0m
+2026-05-08T03:00:59.2509640Z [36;1mfi[0m
+2026-05-08T03:00:59.2509832Z [36;1mecho "::group::Resolved prompt"[0m
+2026-05-08T03:00:59.2510088Z [36;1mprintf '%s\n' "$prompt"[0m
+2026-05-08T03:00:59.2510326Z [36;1mecho "::endgroup::"[0m
+2026-05-08T03:00:59.2534109Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:00:59.2534431Z env:
+2026-05-08T03:00:59.2534680Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2535420Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.2535864Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2536226Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2536602Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2536972Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.2537273Z   COMMENT_BODY: 
+2026-05-08T03:00:59.2537460Z   ISSUE_NUMBER: 
+2026-05-08T03:00:59.2537643Z   DISCUSSION_NUMBER: 
+2026-05-08T03:00:59.2538075Z   PROMPT_INPUT: Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+2026-05-08T03:00:59.2538570Z   EFFECTIVE_AGENT: default
+2026-05-08T03:00:59.2538792Z ##[endgroup]
+2026-05-08T03:00:59.2630294Z ##[group]Resolved prompt
+2026-05-08T03:00:59.2630789Z You are operating as the default agent.
+2026-05-08T03:00:59.2631122Z 
+2026-05-08T03:00:59.2631988Z Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+2026-05-08T03:00:59.2632643Z 
+2026-05-08T03:00:59.2633955Z Note: This is a re-run of a previous build attempt. Check the previous attempt to understand what was already done and continue from where it left off: https://github.com/cogni-ai-ee/ansible-role-cogni-ai-agent/actions/runs/25534134569/attempts/1
+2026-05-08T03:00:59.2635506Z ##[endgroup]
+2026-05-08T03:00:59.2654390Z ##[group]Run git clone --depth 1 \
+2026-05-08T03:00:59.2654680Z [36;1mgit clone --depth 1 \[0m
+2026-05-08T03:00:59.2654911Z [36;1m  -b main \[0m
+2026-05-08T03:00:59.2655408Z [36;1m  https://github.com/Cogni-AI-OU/cogni-ai-agents.git \[0m
+2026-05-08T03:00:59.2655754Z [36;1m  /home/runner/work/_temp/.agents[0m
+2026-05-08T03:00:59.2675855Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:00:59.2676178Z env:
+2026-05-08T03:00:59.2676421Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2676843Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.2677264Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2677625Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2677995Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.2678366Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.2678672Z ##[endgroup]
+2026-05-08T03:00:59.2731376Z Cloning into '/home/runner/work/_temp/.agents'...
+2026-05-08T03:00:59.5547476Z ##[group]Run git clone --depth 1 \
+2026-05-08T03:00:59.5547775Z [36;1mgit clone --depth 1 \[0m
+2026-05-08T03:00:59.5548014Z [36;1m  -b main \[0m
+2026-05-08T03:00:59.5548365Z [36;1m  https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \[0m
+2026-05-08T03:00:59.5548810Z [36;1m  /home/runner/work/_temp/.instructions[0m
+2026-05-08T03:00:59.5570364Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:00:59.5570689Z env:
+2026-05-08T03:00:59.5570939Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.5571365Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.5571789Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.5572160Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.5572521Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.5572897Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.5573207Z ##[endgroup]
+2026-05-08T03:00:59.5629292Z Cloning into '/home/runner/work/_temp/.instructions'...
+2026-05-08T03:00:59.7388911Z ##[group]Run git clone --depth 1 \
+2026-05-08T03:00:59.7389205Z [36;1mgit clone --depth 1 \[0m
+2026-05-08T03:00:59.7389595Z [36;1m  -b main \[0m
+2026-05-08T03:00:59.7389907Z [36;1m  https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \[0m
+2026-05-08T03:00:59.7390275Z [36;1m  /home/runner/work/_temp/.skills[0m
+2026-05-08T03:00:59.7412059Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:00:59.7412384Z env:
+2026-05-08T03:00:59.7412621Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.7413028Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.7413431Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.7413785Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.7414150Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.7414542Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.7414849Z ##[endgroup]
+2026-05-08T03:00:59.7471581Z Cloning into '/home/runner/work/_temp/.skills'...
+2026-05-08T03:00:59.9779688Z ##[group]Run gh extension install github/gh-models || gh extension upgrade github/gh-models
+2026-05-08T03:00:59.9780289Z [36;1mgh extension install github/gh-models || gh extension upgrade github/gh-models[0m
+2026-05-08T03:00:59.9780876Z [36;1mgh models list[0m
+2026-05-08T03:00:59.9802620Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:00:59.9802938Z env:
+2026-05-08T03:00:59.9803182Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.9803593Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:00:59.9803987Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.9804345Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.9804716Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:00:59.9805360Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:00:59.9805855Z   GH_TOKEN: ***
+2026-05-08T03:00:59.9806056Z ##[endgroup]
+2026-05-08T03:01:01.1290364Z 
+2026-05-08T03:01:01.1290893Z ai21-labs/ai21-jamba-1.5-large	AI21 Jamba 1.5 Large
+2026-05-08T03:01:01.1291474Z cohere/cohere-command-a	Cohere Command A
+2026-05-08T03:01:01.1292135Z cohere/cohere-command-r-08-2024	Cohere Command R 08-2024
+2026-05-08T03:01:01.1292834Z cohere/cohere-command-r-plus-08-2024	Cohere Command R+ 08-2024
+2026-05-08T03:01:01.1293454Z deepseek/deepseek-r1	DeepSeek-R1
+2026-05-08T03:01:01.1293931Z deepseek/deepseek-r1-0528	DeepSeek-R1-0528
+2026-05-08T03:01:01.1294437Z deepseek/deepseek-v3-0324	DeepSeek-V3-0324
+2026-05-08T03:01:01.1295333Z meta/llama-3.2-11b-vision-instruct	Llama-3.2-11B-Vision-Instruct
+2026-05-08T03:01:01.1296087Z meta/llama-3.2-90b-vision-instruct	Llama-3.2-90B-Vision-Instruct
+2026-05-08T03:01:01.1296812Z meta/llama-3.3-70b-instruct	Llama-3.3-70B-Instruct
+2026-05-08T03:01:01.1297677Z meta/llama-4-maverick-17b-128e-instruct-fp8	Llama 4 Maverick 17B 128E Instruct FP8
+2026-05-08T03:01:01.1298643Z meta/llama-4-scout-17b-16e-instruct	Llama 4 Scout 17B 16E Instruct
+2026-05-08T03:01:01.1299419Z meta/meta-llama-3.1-405b-instruct	Meta-Llama-3.1-405B-Instruct
+2026-05-08T03:01:01.1300112Z meta/meta-llama-3.1-8b-instruct	Meta-Llama-3.1-8B-Instruct
+2026-05-08T03:01:01.1300683Z microsoft/mai-ds-r1	MAI-DS-R1
+2026-05-08T03:01:01.1301078Z microsoft/phi-4	Phi-4
+2026-05-08T03:01:01.1301494Z microsoft/phi-4-mini-instruct	Phi-4-mini-instruct
+2026-05-08T03:01:01.1302069Z microsoft/phi-4-mini-reasoning	Phi-4-mini-reasoning
+2026-05-08T03:01:01.1302705Z microsoft/phi-4-multimodal-instruct	Phi-4-multimodal-instruct
+2026-05-08T03:01:01.1303296Z microsoft/phi-4-reasoning	Phi-4-reasoning
+2026-05-08T03:01:01.1303756Z mistral-ai/codestral-2501	Codestral 25.01
+2026-05-08T03:01:01.1304207Z mistral-ai/ministral-3b	Ministral 3B
+2026-05-08T03:01:01.1304714Z mistral-ai/mistral-medium-2505	Mistral Medium 3 (25.05)
+2026-05-08T03:01:01.1305583Z mistral-ai/mistral-small-2503	Mistral Small 3.1
+2026-05-08T03:01:01.1306073Z openai/gpt-4.1	OpenAI GPT-4.1
+2026-05-08T03:01:01.1306938Z openai/gpt-4.1-mini	OpenAI GPT-4.1-mini
+2026-05-08T03:01:01.1307383Z openai/gpt-4.1-nano	OpenAI GPT-4.1-nano
+2026-05-08T03:01:01.1307834Z openai/gpt-4o	OpenAI GPT-4o
+2026-05-08T03:01:01.1308230Z openai/gpt-4o-mini	OpenAI GPT-4o mini
+2026-05-08T03:01:01.1308640Z openai/gpt-5	OpenAI gpt-5
+2026-05-08T03:01:01.1309025Z openai/gpt-5-chat	OpenAI gpt-5-chat (preview)
+2026-05-08T03:01:01.1309496Z openai/gpt-5-mini	OpenAI gpt-5-mini
+2026-05-08T03:01:01.1309992Z openai/gpt-5-nano	OpenAI gpt-5-nano
+2026-05-08T03:01:01.1310379Z openai/o1	OpenAI o1
+2026-05-08T03:01:01.1310708Z openai/o1-mini	OpenAI o1-mini
+2026-05-08T03:01:01.1311112Z openai/o1-preview	OpenAI o1-preview
+2026-05-08T03:01:01.1311489Z openai/o3	OpenAI o3
+2026-05-08T03:01:01.1311819Z openai/o3-mini	OpenAI o3-mini
+2026-05-08T03:01:01.1312205Z openai/o4-mini	OpenAI o4-mini
+2026-05-08T03:01:01.1312543Z xai/grok-3	Grok 3
+2026-05-08T03:01:01.1312873Z xai/grok-3-mini	Grok 3 Mini
+2026-05-08T03:01:01.1370280Z ##[group]Run import os
+2026-05-08T03:01:01.1370795Z [36;1mimport os[0m
+2026-05-08T03:01:01.1371151Z [36;1mimport json[0m
+2026-05-08T03:01:01.1371612Z [36;1mimport yaml[0m
+2026-05-08T03:01:01.1372255Z [36;1mREPLACE_PERMISSION_MAPS = {'bash', 'skill', 'task'}[0m
+2026-05-08T03:01:01.1373311Z [36;1mdef deep_merge(base, override):[0m
+2026-05-08T03:01:01.1374252Z [36;1m    if not isinstance(base, dict) or not isinstance(override, dict):[0m
+2026-05-08T03:01:01.1375586Z [36;1m        return override[0m
+2026-05-08T03:01:01.1376247Z [36;1m    res = base.copy()[0m
+2026-05-08T03:01:01.1376888Z [36;1m    for k, v in override.items():[0m
+2026-05-08T03:01:01.1377733Z [36;1m        if k in REPLACE_PERMISSION_MAPS and isinstance(v, dict):[0m
+2026-05-08T03:01:01.1378603Z [36;1m            res[k] = v.copy()[0m
+2026-05-08T03:01:01.1379558Z [36;1m        elif k in res and isinstance(res[k], dict) and isinstance(v, dict):[0m
+2026-05-08T03:01:01.1380431Z [36;1m            res[k] = deep_merge(res[k], v)[0m
+2026-05-08T03:01:01.1381122Z [36;1m        else:[0m
+2026-05-08T03:01:01.1381744Z [36;1m            res[k] = v[0m
+2026-05-08T03:01:01.1382250Z [36;1m    return res[0m
+2026-05-08T03:01:01.1382948Z [36;1maction_path = os.environ.get('GITHUB_ACTION_PATH', '')[0m
+2026-05-08T03:01:01.1384006Z [36;1maction_yaml_path = os.path.join(action_path, 'action.yml')[0m
+2026-05-08T03:01:01.1384910Z [36;1mdefault_perms_hierarchical = {}[0m
+2026-05-08T03:01:01.1385996Z [36;1mif action_path and os.path.exists(action_yaml_path):[0m
+2026-05-08T03:01:01.1386867Z [36;1m    try:[0m
+2026-05-08T03:01:01.1387452Z [36;1m        with open(action_yaml_path, 'r') as f:[0m
+2026-05-08T03:01:01.1388123Z [36;1m            action_data = yaml.safe_load(f)[0m
+2026-05-08T03:01:01.1389258Z [36;1m            default_perms_str = action_data.get('inputs', {}).get('permissions', {}).get('default', '')[0m
+2026-05-08T03:01:01.1390559Z [36;1m            default_perms_hierarchical = yaml.safe_load(default_perms_str) or {}[0m
+2026-05-08T03:01:01.1406015Z [36;1m    except Exception as e:[0m
+2026-05-08T03:01:01.1406844Z [36;1m        print(f"Warning: Failed to load default permissions from action.yml: {e}")[0m
+2026-05-08T03:01:01.1407684Z [36;1mraw_yaml = os.environ.get('PERMISSIONS_YAML', '')[0m
+2026-05-08T03:01:01.1408316Z [36;1magent = os.environ.get('AGENT_NAME', 'default')[0m
+2026-05-08T03:01:01.1408826Z [36;1mtry:[0m
+2026-05-08T03:01:01.1409243Z [36;1m    user_permissions = yaml.safe_load(raw_yaml) or {}[0m
+2026-05-08T03:01:01.1409766Z [36;1mexcept Exception:[0m
+2026-05-08T03:01:01.1410148Z [36;1m    user_permissions = {}[0m
+2026-05-08T03:01:01.1410614Z [36;1mif not isinstance(user_permissions, dict):[0m
+2026-05-08T03:01:01.1411072Z [36;1m    user_permissions = {}[0m
+2026-05-08T03:01:01.1411808Z [36;1mcategories = {'bash', 'edit', 'glob', 'grep', 'list', 'question', 'read', 'skill', 'task', 'todowrite'}[0m
+2026-05-08T03:01:01.1412810Z [36;1mis_hierarchical = any(k not in categories for k in user_permissions.keys())[0m
+2026-05-08T03:01:01.1413499Z [36;1mif user_permissions:[0m
+2026-05-08T03:01:01.1414204Z [36;1m    if is_hierarchical:[0m
+2026-05-08T03:01:01.1414911Z [36;1m        merged_hierarchical = deep_merge(default_perms_hierarchical, user_permissions)[0m
+2026-05-08T03:01:01.1416334Z [36;1m    else:[0m
+2026-05-08T03:01:01.1416762Z [36;1m        # Merge flat list into 'default' section[0m
+2026-05-08T03:01:01.1417655Z [36;1m        merged_default = deep_merge(default_perms_hierarchical.get('default', {}), user_permissions)[0m
+2026-05-08T03:01:01.1418657Z [36;1m        merged_hierarchical = default_perms_hierarchical.copy()[0m
+2026-05-08T03:01:01.1419368Z [36;1m        merged_hierarchical['default'] = merged_default[0m
+2026-05-08T03:01:01.1419889Z [36;1melse:[0m
+2026-05-08T03:01:01.1420315Z [36;1m    merged_hierarchical = default_perms_hierarchical[0m
+2026-05-08T03:01:01.1420961Z [36;1mbase_perms = merged_hierarchical.get('default', {})[0m
+2026-05-08T03:01:01.1421616Z [36;1magent_perms = merged_hierarchical.get(agent, {})[0m
+2026-05-08T03:01:01.1422263Z [36;1mif not isinstance(base_perms, dict): base_perms = {}[0m
+2026-05-08T03:01:01.1422910Z [36;1mif not isinstance(agent_perms, dict): agent_perms = {}[0m
+2026-05-08T03:01:01.1423774Z [36;1mfinal_perms = deep_merge(base_perms, agent_perms)[0m
+2026-05-08T03:01:01.1424414Z [36;1mwith open(os.environ['GITHUB_OUTPUT'], 'a') as f:[0m
+2026-05-08T03:01:01.1425011Z [36;1m    f.write(f"json={json.dumps(final_perms)}\n")[0m
+2026-05-08T03:01:01.1428187Z shell: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python {0}
+2026-05-08T03:01:01.1428730Z env:
+2026-05-08T03:01:01.1429134Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.1429844Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:01.1430527Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.1431129Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.1431762Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.1432410Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:01.1432940Z   AGENT_NAME: default
+2026-05-08T03:01:01.1435722Z   PERMISSIONS_YAML: bash:
+  '*': deny
+  ansible*: allow
+  ansible-galaxy*: allow
+  ansible-playbook*: allow
+  awk*: allow
+  continue*: allow
+  cp*: allow
+  docker*: allow
+  ex*: allow
+  gh*: allow
+  gh pr review*: allow
+  git*: allow
+  hexdump*: allow
+  jq*: allow
+  links*: allow
+  mawk*: allow
+  molecule*: allow
+  pipx*: allow
+  pre-commit*: allow
+  printf*: allow
+  sed*: allow
+  set*: allow
+  time*: allow
+  timeout*: allow
+  touch*: allow
+  true*: allow
+  vim*: allow
+2026-05-08T03:01:01.1438314Z ##[endgroup]
+2026-05-08T03:01:01.6198048Z ##[group]Run Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+2026-05-08T03:01:01.6198385Z with:
+2026-05-08T03:01:01.6198548Z   agent: default
+2026-05-08T03:01:01.6198754Z   mentions: /co,/cogni,/review,/brainstorm
+2026-05-08T03:01:01.6199063Z   mentions_bots: @opencode-agent,@OpenCode-Agent
+2026-05-08T03:01:01.6199387Z   model: opencode/gemini-3-flash
+2026-05-08T03:01:01.6203910Z   permissions: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:01.6210460Z   prompt: You are operating as the default agent.
+
+Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+
+Note: This is a re-run of a previous build attempt. Check the previous attempt to understand what was already done and continue from where it left off: https://github.com/cogni-ai-ee/ansible-role-cogni-ai-agent/actions/runs/25534134569/attempts/1
+2026-05-08T03:01:01.6212001Z env:
+2026-05-08T03:01:01.6212242Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6212671Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:01.6213094Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6213620Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6214006Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6214384Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:01.6214850Z   GH_TOKEN: ***
+2026-05-08T03:01:01.6215203Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:01.6215465Z   OIDC_BASE_URL: 
+2026-05-08T03:01:01.6215668Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:01.6215914Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:01.6216151Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:01.6238100Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:01.6261570Z ##[endgroup]
+2026-05-08T03:01:01.6296045Z ##[group]Run actions/github-script@v7
+2026-05-08T03:01:01.6296292Z with:
+2026-05-08T03:01:01.6307631Z   script: const TRIGGERS = process.env.MENTIONS.split(',').map(t => t.trim());
+const REVIEW_TRIGGERS = TRIGGERS.filter(t => t.includes('review'));
+const BOT_MENTIONS = process.env.MENTIONS_BOTS
+  ? process.env.MENTIONS_BOTS.split(',').map(t => t.trim()).filter(Boolean)
+  : [];
+const ALLOWED_ROLES = ['COLLABORATOR', 'CONTRIBUTOR', 'MEMBER', 'OWNER'];
+const REVIEW_ROLES = ['COLLABORATOR', 'MEMBER', 'OWNER'];
+const COPILOT_LOGINS = ['Copilot', 'copilot[bot]', 'copilot-swe-agent'];
+function matchesTrigger(body, triggers) {
+  if (!body) return false;
+  return triggers.some(t => {
+    if (!t) return false;
+    // Escape trigger for safe use in RegExp
+    const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match trigger with:
+    // - start of string or whitespace / common punctuation before it
+    // - end of string or whitespace / common punctuation (incl. newlines) after it
+    const pattern = new RegExp(`(^|[\\s,.!?:;\\(\\[])${escaped}(?=$|[\\s,.!?:;\\)\\]])`);
+    return pattern.test(body);
+  });
+}
+function matchesBotMention(body) {
+  if (!body) return false;
+  return BOT_MENTIONS.some(m => body.includes(m));
+}
+function getAgent(body) {
+  return 'default';
+}
+const isBot = context.actor.endsWith('[bot]');
+const eventName = context.eventName;
+let run = false;
+let agent = '';
+console.log(`### CHECK_CONDITIONS_RESULTS  ###`);
+console.log(`Event: ${eventName}, Actor: ${context.actor}, IsBot: ${isBot}`);
+if (eventName === 'workflow_dispatch' || eventName === 'workflow_call') {
+  run = true;
+  agent = 'default';
+} else if (['issues', 'issue_comment', 'discussion', 'discussion_comment'].includes(eventName) && !isBot) {
+  const payload = context.payload.comment || context.payload.issue || context.payload.discussion;
+  const assoc = payload?.author_association;
+  const body = payload?.body;
+  console.log(`Assoc: ${assoc}, BodyLength: ${body?.length || 0}`);
+  const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+  if (isReviewTrigger) {
+    run = true;
+    agent = 'cogni-ai-code-reviewer';
+  } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+    run = true;
+    agent = getAgent(body);
+  }
+} else if (eventName === 'pull_request_review_comment' && !isBot) {
+  const payload = context.payload.comment;
+  const assoc = payload?.author_association;
+  const body = payload?.body;
+  console.log(
+    `PR Review Comment - Assoc: ${assoc}, ` +
+    `BodyLength: ${body?.length || 0}`
+  );
+  const isReviewTrigger = REVIEW_ROLES.includes(assoc) && matchesTrigger(body, REVIEW_TRIGGERS);
+  if (isReviewTrigger) {
+    run = true;
+    agent = 'cogni-ai-code-reviewer';
+  } else if (ALLOWED_ROLES.includes(assoc) && (matchesTrigger(body, TRIGGERS) || matchesBotMention(body))) {
+    run = true;
+    agent = getAgent(body);
+  }
+} else if (eventName === 'pull_request' || eventName === 'pull_request_target') {
+  const pr = context.payload.pull_request;
+  const assoc = pr?.author_association;
+  const login = pr?.user?.login;
+  const isAllowed = (!isBot && ['COLLABORATOR', 'MEMBER', 'OWNER'].includes(assoc)) ||
+    (COPILOT_LOGINS.includes(login) && assoc === 'CONTRIBUTOR');
+  console.log(`PR - Assoc: ${assoc}, Login: ${login}, IsAllowed: ${isAllowed}`);
+  if (isAllowed) {
+    run = true;
+    agent = 'default';
+  }
+}
+console.log(`Run: ${run}, Agent: ${agent}`);
+console.log(`################################`);
+core.setOutput('run', run ? 'true' : '');
+core.setOutput('agent', agent);
+// Centralized effective agent logic
+let effectiveAgent = process.env.AGENT_INPUT || agent || 'default';
+if (effectiveAgent === 'default') {
+  effectiveAgent = '';
+}
+core.setOutput('effective_agent', effectiveAgent);
+
+2026-05-08T03:01:01.6319518Z   github-token: ***
+2026-05-08T03:01:01.6319708Z   debug: false
+2026-05-08T03:01:01.6319903Z   user-agent: actions/github-script
+2026-05-08T03:01:01.6320294Z   result-encoding: json
+2026-05-08T03:01:01.6320491Z   retries: 0
+2026-05-08T03:01:01.6320702Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-05-08T03:01:01.6320965Z env:
+2026-05-08T03:01:01.6321205Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6321602Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:01.6322004Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6322365Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6322710Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.6323068Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:01.6323468Z   GH_TOKEN: ***
+2026-05-08T03:01:01.6323660Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:01.6323891Z   OIDC_BASE_URL: 
+2026-05-08T03:01:01.6324086Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:01.6324328Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:01.6324546Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:01.6343924Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:01.6363428Z   AGENT_INPUT: default
+2026-05-08T03:01:01.6363646Z   MENTIONS: /co,/cogni,/review,/brainstorm
+2026-05-08T03:01:01.6363935Z   MENTIONS_BOTS: @opencode-agent,@OpenCode-Agent
+2026-05-08T03:01:01.6364203Z ##[endgroup]
+2026-05-08T03:01:01.7253757Z ### CHECK_CONDITIONS_RESULTS  ###
+2026-05-08T03:01:01.7257900Z Event: workflow_dispatch, Actor: cogni-ai-ee, IsBot: false
+2026-05-08T03:01:01.7258425Z Run: true, Agent: default
+2026-05-08T03:01:01.7258792Z ################################
+2026-05-08T03:01:01.7384579Z ##[group]Run anomalyco/opencode/github@v1.14.35
+2026-05-08T03:01:01.7384849Z with:
+2026-05-08T03:01:01.7385223Z   mentions: /co,/cogni,/review,/brainstorm
+2026-05-08T03:01:01.7385665Z   model: opencode/gemini-3-flash
+2026-05-08T03:01:01.7387072Z   prompt: You are operating as the default agent.
+
+Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+
+Note: This is a re-run of a previous build attempt. Check the previous attempt to understand what was already done and continue from where it left off: https://github.com/cogni-ai-ee/ansible-role-cogni-ai-agent/actions/runs/25534134569/attempts/1
+2026-05-08T03:01:01.7388449Z   use_github_token: false
+2026-05-08T03:01:01.7388654Z env:
+2026-05-08T03:01:01.7388878Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7389273Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:01.7389666Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7390020Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7390370Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7390727Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:01.7391176Z   GH_TOKEN: ***
+2026-05-08T03:01:01.7391382Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:01.7391770Z   OIDC_BASE_URL: 
+2026-05-08T03:01:01.7391967Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:01.7392198Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:01.7392430Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:01.7411923Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:01.7431366Z   OPENCODE_API_KEY: 
+2026-05-08T03:01:01.7435588Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:01.7439922Z ##[endgroup]
+2026-05-08T03:01:01.7456860Z ##[group]Run VERSION=$(curl -sf https://api.github.com/repos/anomalyco/opencode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
+2026-05-08T03:01:01.7457817Z [36;1mVERSION=$(curl -sf https://api.github.com/repos/anomalyco/opencode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)[0m
+2026-05-08T03:01:01.7458446Z [36;1mecho "version=${VERSION:-latest}" >> $GITHUB_OUTPUT[0m
+2026-05-08T03:01:01.7479787Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:01:01.7480101Z env:
+2026-05-08T03:01:01.7480342Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7480756Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:01.7481162Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7481521Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7481877Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.7482255Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:01.7482747Z   GH_TOKEN: ***
+2026-05-08T03:01:01.7482953Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:01.7483204Z   OIDC_BASE_URL: 
+2026-05-08T03:01:01.7483399Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:01.7483634Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:01.7483858Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:01.7503184Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:01.7522632Z   OPENCODE_API_KEY: 
+2026-05-08T03:01:01.7526839Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:01.7530999Z ##[endgroup]
+2026-05-08T03:01:01.9144000Z ##[group]Run actions/cache@v4
+2026-05-08T03:01:01.9144391Z with:
+2026-05-08T03:01:01.9144672Z   path: ~/.opencode/bin
+2026-05-08T03:01:01.9145551Z   key: opencode-Linux-X64-v1.14.41
+2026-05-08T03:01:01.9146036Z   enableCrossOsArchive: false
+2026-05-08T03:01:01.9146444Z   fail-on-cache-miss: false
+2026-05-08T03:01:01.9146824Z   lookup-only: false
+2026-05-08T03:01:01.9147159Z   save-always: false
+2026-05-08T03:01:01.9147469Z env:
+2026-05-08T03:01:01.9147877Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.9148576Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:01.9149295Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.9149951Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.9150622Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:01.9151281Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:01.9152054Z   GH_TOKEN: ***
+2026-05-08T03:01:01.9152418Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:01.9152856Z   OIDC_BASE_URL: 
+2026-05-08T03:01:01.9153213Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:01.9153633Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:01.9154045Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:01.9188908Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:01.9224176Z   OPENCODE_API_KEY: 
+2026-05-08T03:01:01.9231483Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:01.9239283Z ##[endgroup]
+2026-05-08T03:01:02.1429360Z Cache not found for input keys: opencode-Linux-X64-v1.14.41
+2026-05-08T03:01:02.1505878Z ##[group]Run curl -fsSL https://opencode.ai/install | bash
+2026-05-08T03:01:02.1506299Z [36;1mcurl -fsSL https://opencode.ai/install | bash[0m
+2026-05-08T03:01:02.1528279Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:01:02.1528600Z env:
+2026-05-08T03:01:02.1528865Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:02.1529451Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:02.1529866Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:02.1530252Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:02.1530615Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:02.1530991Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:02.1531468Z   GH_TOKEN: ***
+2026-05-08T03:01:02.1531680Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:02.1531934Z   OIDC_BASE_URL: 
+2026-05-08T03:01:02.1532131Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:02.1532376Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:02.1532656Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:02.1552268Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:02.1571914Z   OPENCODE_API_KEY: 
+2026-05-08T03:01:02.1576143Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:02.1580507Z ##[endgroup]
+2026-05-08T03:01:02.3942388Z [0m
+2026-05-08T03:01:02.3942981Z [0;2mInstalling [0mopencode [0;2mversion: [0m1.14.41[0m
+2026-05-08T03:01:02.5111034Z 
+2026-05-08T03:01:02.6143635Z                                                                            0.0%
+2026-05-08T03:01:02.7158823Z ##############                                                            20.3%
+2026-05-08T03:01:02.7692639Z ###################################################                       71.5%
+2026-05-08T03:01:02.7693104Z ######################################################################## 100.0%
+2026-05-08T03:01:03.7084016Z [0m[0;2mSuccessfully added [0mopencode [0;2mto $PATH in [0m/home/runner/.bashrc[0m
+2026-05-08T03:01:03.7085528Z [0mAdded /home/runner/.opencode/bin to $GITHUB_PATH[0m
+2026-05-08T03:01:03.7085943Z 
+2026-05-08T03:01:03.7087002Z [0;2m                    [0m             ▄     
+2026-05-08T03:01:03.7088082Z [0;2m█▀▀█ █▀▀█ █▀▀█ █▀▀▄ [0m█▀▀▀ █▀▀█ █▀▀█ █▀▀█
+2026-05-08T03:01:03.7088777Z [0;2m█░░█ █░░█ █▀▀▀ █░░█ [0m█░░░ █░░█ █░░█ █▀▀▀
+2026-05-08T03:01:03.7089427Z [0;2m▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀  ▀ [0m▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+2026-05-08T03:01:03.7089750Z 
+2026-05-08T03:01:03.7089758Z 
+2026-05-08T03:01:03.7090059Z [0;2mOpenCode includes free models, to start:[0m
+2026-05-08T03:01:03.7090427Z 
+2026-05-08T03:01:03.7090694Z cd <project>  [0;2m# Open directory[0m
+2026-05-08T03:01:03.7091225Z opencode      [0;2m# Run command[0m
+2026-05-08T03:01:03.7091532Z 
+2026-05-08T03:01:03.7092014Z [0;2mFor more information visit [0mhttps://opencode.ai/docs
+2026-05-08T03:01:03.7092451Z 
+2026-05-08T03:01:03.7092462Z 
+2026-05-08T03:01:03.7117195Z ##[group]Run echo "$HOME/.opencode/bin" >> $GITHUB_PATH
+2026-05-08T03:01:03.7117574Z [36;1mecho "$HOME/.opencode/bin" >> $GITHUB_PATH[0m
+2026-05-08T03:01:03.7139642Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:01:03.7139958Z env:
+2026-05-08T03:01:03.7140214Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7140633Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:03.7141047Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7141422Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7141798Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7142165Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:03.7142679Z   GH_TOKEN: ***
+2026-05-08T03:01:03.7142904Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:03.7143154Z   OIDC_BASE_URL: 
+2026-05-08T03:01:03.7143353Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:03.7143593Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:03.7143833Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:03.7163827Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:03.7183804Z   OPENCODE_API_KEY: 
+2026-05-08T03:01:03.7188084Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:03.7192320Z ##[endgroup]
+2026-05-08T03:01:03.7254400Z ##[group]Run opencode github run
+2026-05-08T03:01:03.7254648Z [36;1mopencode github run[0m
+2026-05-08T03:01:03.7274854Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:01:03.7275399Z env:
+2026-05-08T03:01:03.7275717Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7276136Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:03.7276544Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7276909Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7277273Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:03.7277641Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:03.7278081Z   GH_TOKEN: ***
+2026-05-08T03:01:03.7278282Z   GITHUB_EVENT_NAME: workflow_dispatch
+2026-05-08T03:01:03.7278531Z   OIDC_BASE_URL: 
+2026-05-08T03:01:03.7278885Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-05-08T03:01:03.7279119Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-05-08T03:01:03.7279346Z   OTEL_RESOURCE_ATTRIBUTES: 
+2026-05-08T03:01:03.7299505Z   OPENCODE_CONFIG_CONTENT: {
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
+2026-05-08T03:01:03.7319438Z   OPENCODE_API_KEY: 
+2026-05-08T03:01:03.7323500Z   OPENCODE_PERMISSION: {"bash": {"*": "deny", "ansible*": "allow", "ansible-galaxy*": "allow", "ansible-playbook*": "allow", "awk*": "allow", "continue*": "allow", "cp*": "allow", "docker*": "allow", "ex*": "allow", "gh*": "allow", "gh pr review*": "allow", "git*": "allow", "hexdump*": "allow", "jq*": "allow", "links*": "allow", "mawk*": "allow", "molecule*": "allow", "pipx*": "allow", "pre-commit*": "allow", "printf*": "allow", "sed*": "allow", "set*": "allow", "time*": "allow", "timeout*": "allow", "touch*": "allow", "true*": "allow", "vim*": "allow"}, "context7_query-docs": "deny", "context7_resolve-library-id": "deny", "edit": "allow", "glob": "allow", "grep": "allow", "list": "allow", "question": "deny", "read": "allow", "skill": {"agent-log-analysis": "deny", "ansible": "allow", "cat": "allow", "context-aware-ops": "allow", "fact-writer": "allow", "gh": "allow", "gh-api": "allow", "gh-issue": "allow", "gh-models": "allow", "gh-pr": "allow", "gh-run": "allow", "git": "allow", "git-expert": "allow", "github": "allow", "github-actions": "allow", "github-issue": "allow", "github-pr": "allow", "github-script": "allow", "mermaid": "allow", "mermaid-beta": "allow", "minizinc": "allow", "molecule": "deny", "pdf": "allow", "pre-commit": "allow", "robust-commands": "allow", "shell": "allow", "skill-writer": "allow", "subagent-task": "allow", "vim-ex": "allow"}, "task": {"*": "allow", "explore": "deny", "general": "deny"}, "todowrite": "allow"}
+2026-05-08T03:01:03.7328040Z   MODEL: opencode/gemini-3-flash
+2026-05-08T03:01:03.7328421Z   AGENT: 
+2026-05-08T03:01:03.7328575Z   SHARE: 
+2026-05-08T03:01:03.7329920Z   PROMPT: You are operating as the default agent.
+
+Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+
+Note: This is a re-run of a previous build attempt. Check the previous attempt to understand what was already done and continue from where it left off: https://github.com/cogni-ai-ee/ansible-role-cogni-ai-agent/actions/runs/25534134569/attempts/1
+2026-05-08T03:01:03.7331335Z   USE_GITHUB_TOKEN: false
+2026-05-08T03:01:03.7331575Z   MENTIONS: /co,/cogni,/review,/brainstorm
+2026-05-08T03:01:03.7331823Z   VARIANT: 
+2026-05-08T03:01:03.7331983Z ##[endgroup]
+2026-05-08T03:01:04.6800978Z Performing one time database migration, may take a few minutes...
+2026-05-08T03:01:04.6965540Z sqlite-migration:done
+2026-05-08T03:01:04.6966229Z Database migration complete.
+2026-05-08T03:01:05.3369274Z Failed to parse JSON
+2026-05-08T03:01:05.3393077Z ##[error]Failed to parse JSON
+2026-05-08T03:01:05.3616715Z ##[error]Process completed with exit code 1.
+2026-05-08T03:01:05.3683929Z ##[group]Run grep -v INFO ~/.local/share/opencode/log/* || true
+2026-05-08T03:01:05.3684347Z [36;1mgrep -v INFO ~/.local/share/opencode/log/* || true[0m
+2026-05-08T03:01:05.3706847Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-05-08T03:01:05.3707184Z env:
+2026-05-08T03:01:05.3707432Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3707846Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:05.3708277Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3708647Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3709021Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3709381Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:05.3709682Z ##[endgroup]
+2026-05-08T03:01:05.3811989Z ##[group]Run set -euo pipefail
+2026-05-08T03:01:05.3812303Z [36;1mset -euo pipefail[0m
+2026-05-08T03:01:05.3812526Z [36;1mescape() {[0m
+2026-05-08T03:01:05.3812726Z [36;1m  local value="$1"[0m
+2026-05-08T03:01:05.3812945Z [36;1m  value=${value//'%'/'%25'}[0m
+2026-05-08T03:01:05.3813192Z [36;1m  value=${value//$'\r'/'%0D'}[0m
+2026-05-08T03:01:05.3813431Z [36;1m  value=${value//$'\n'/'%0A'}[0m
+2026-05-08T03:01:05.3813670Z [36;1m  printf '%s' "$value"[0m
+2026-05-08T03:01:05.3813882Z [36;1m}[0m
+2026-05-08T03:01:05.3814175Z [36;1mecho "::notice title=Cogni AI Agent prompt::$(escape "$AGENT_PROMPT")"[0m
+2026-05-08T03:01:05.3814655Z [36;1mecho "::notice title=Cogni AI Agent output::$(escape "${AGENT_OUTPUT:-}")"[0m
+2026-05-08T03:01:05.3835337Z shell: /usr/bin/bash -e {0}
+2026-05-08T03:01:05.3835576Z env:
+2026-05-08T03:01:05.3835821Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3836283Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+2026-05-08T03:01:05.3836697Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3837058Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3837423Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+2026-05-08T03:01:05.3837793Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+2026-05-08T03:01:05.3838098Z   AGENT_OUTPUT: 
+2026-05-08T03:01:05.3838524Z   AGENT_PROMPT: Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+2026-05-08T03:01:05.3839007Z ##[endgroup]
+2026-05-08T03:01:05.3889693Z ##[notice]Convert role and refs into cogni-ai-agent role, ensure molecule tests are green, fix till it's done.
+2026-05-08T03:01:05.4179206Z Post job cleanup.
+2026-05-08T03:01:05.4279499Z Post job cleanup.
+2026-05-08T03:01:05.4357838Z Post job cleanup.
+2026-05-08T03:01:05.4424101Z Post job cleanup.
+2026-05-08T03:01:05.5267707Z [command]/usr/bin/git version
+2026-05-08T03:01:05.5306276Z git version 2.53.0
+2026-05-08T03:01:05.5347533Z Temporarily overriding HOME='/home/runner/work/_temp/2755b655-3f89-4f35-9c74-13f7301f8f98' before making global git config changes
+2026-05-08T03:01:05.5349558Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-08T03:01:05.5354138Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent
+2026-05-08T03:01:05.5387931Z Removing SSH command configuration
+2026-05-08T03:01:05.5393170Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-08T03:01:05.5432076Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-08T03:01:05.5707096Z Removing HTTP extra header
+2026-05-08T03:01:05.5712455Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-08T03:01:05.5748213Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-08T03:01:05.5984228Z Removing includeIf entries pointing to credentials config files
+2026-05-08T03:01:05.5994950Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-08T03:01:05.6031752Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-08T03:01:05.6387053Z Cleaning up orphan processes
+2026-05-08T03:01:05.6663150Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/cache@v4, actions/github-script@v7. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cogni-ai-agent-auditor": {
+      "description": "Expert autonomous auditor specializing in analyzing agent session logs, evaluating reasoning workflows, and generating visual reports.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-agent-auditor/cogni-ai-agent-auditor.agent.md"
+    },
+    "cogni-ai-architect": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-architect/cogni-ai-architect.agent.md"
+    },
+    "cogni-ai-brain-ops": {
+      "description": "Autonomous brainstorming agent responsible for gathering facts, describing constraints, and architecting suggested plans and tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-brain-ops/cogni-ai-brain-ops.agent.md"
+    },
+    "cogni-ai-code-reviewer": {
+      "description": "Elite autonomous code reviewer for PR analysis, quality enforcement, and deep code verification.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-code-reviewer/cogni-ai-code-reviewer.agent.md"
+    },
+    "cogni-ai-context7-ops": {
+      "description": "Uses Context7-backed documentation context for research and delegation tasks.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-context7-ops/cogni-ai-context7-ops.agent.md"
+    },
+    "cogni-ai-devops": {
+      "description": "Elite autonomous DevOps and Site Reliability Engineering agent focusing on task automation, CI/CD pipeline precision, and infrastructure-as-code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-devops/cogni-ai-devops.agent.md"
+    },
+    "cogni-ai-docs-editor": {
+      "description": "Autonomous documentation editor responsible for creating, updating, and maintaining project documentation.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-docs-editor/cogni-ai-docs-editor.agent.md"
+    },
+    "cogni-ai-elite": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-elite/cogni-ai-elite.agent.md"
+    },
+    "cogni-ai-fact-ops": {
+      "description": "Autonomous fact operator responsible for maintaining canonical fact files and information consistency.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-fact-ops/cogni-ai-fact-ops.agent.md"
+    },
+    "cogni-ai-github-ops": {
+      "description": "Autonomous GitHub Operator responsible for GitHub operations such as modifying comments, issues, or discussions on behalf of other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-github-ops/cogni-ai-github-ops.agent.md"
+    },
+    "cogni-ai-keeper": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-keeper/cogni-ai-keeper.agent.md"
+    },
+    "cogni-ai-manager": {
+      "description": "Autonomous manager agent responsible for coordinating tasks and delegating work to other agents.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-manager/cogni-ai-manager.agent.md"
+    },
+    "cogni-ai-plan-reviewer": {
+      "description": "Elite autonomous architectural reviewer for plan validation and ensuring strategic alignment.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-plan-reviewer/cogni-ai-plan-reviewer.agent.md"
+    },
+    "cogni-ai-python-dev": {
+      "description": "Autonomous Python Developer responsible for writing, testing, and debugging Python 3 code.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-python-dev/cogni-ai-python-dev.agent.md"
+    },
+    "cogni-ai-security-auditor": {
+      "description": "Elite autonomous security auditor specializing in zero-defect threat modeling, vulnerability detection, and hardening system boundaries.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-security-auditor/cogni-ai-security-auditor.agent.md"
+    },
+    "cogni-ai-tester": {
+      "description": "Autonomous Tester responsible for executing test tasks, ensuring quality, and verifying system behavior.",
+      "mode": "all",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-tester/cogni-ai-tester.agent.md"
+    },
+    "cogni-ai-weaver": {
+      "mode": "primary",
+      "model": "opencode/gemini-3-flash",
+      "prompt": "file:/home/runner/work/_temp/.agents/cogni-ai-weaver/cogni-ai-weaver.agent.md"
+    },
+    "explore": {
+      "disable": true,
+      "ignore_instructions": true
+    },
+    "general": {
+      "disable": true,
+      "ignore_instructions": true
+    }
+  },
+  "experimental": {
+    "batch_tool": true,
+    "openTelemetry": false
+  },
+  "instructions": [
+    "AGENTS.md",
+    "/home/runner/work/_actions/Cogni-AI-OU/cogni-ai-agent-action/main/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.agents/AGENTS.mmd",
+    "/home/runner/work/_temp/.agents/CONSTRAINTS.mzn",
+    "/home/runner/work/_temp/.agents/FLOWS.mmd",
+    "/home/runner/work/_temp/.instructions/AGENTS-RUNTIME.md",
+    "/home/runner/work/_temp/.skills/AGENTS-RUNTIME.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  },
+  "provider": {
+    "opencode": {
+      "options": {}
+    }
+  },
+  "skills": {
+    "paths": [
+      "/home/runner/work/_temp/.skills",
+      "/home/runner/work/ansible-role-cogni-ai-agent/ansible-role-cogni-ai-agent/.github/skills"
+    ]
+  }
+}
