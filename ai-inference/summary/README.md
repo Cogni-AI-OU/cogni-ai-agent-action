@@ -52,6 +52,7 @@ You can specify a different run or attempt if needed:
 - **Permissions**: The provided `github_token` must have the following minimal permissions:
   - `actions: read`: Required to fetch job logs from the repository.
   - `id-token: write`: Required if using GitHub Models (for OIDC authentication).
+  - `models: read`: Required if using GitHub Models.
   - Note: This action does **not** require `issues: write` or `pull-requests: write` permissions as it only
     reads logs and outputs to the job summary.
 - **Job Lookup**: The action looks for the target job using the configured `agent_job_id` (by resolving it to a name),

@@ -206,6 +206,7 @@ jobs:
       discussions: read
       id-token: write  # Needed so opencode can request an OIDC token for GitHub API calls
       issues: write
+      models: read
       packages: read
       pull-requests: write
     steps:
@@ -290,6 +291,7 @@ jobs:
       actions: read
       contents: read
       id-token: write
+      models: read
     steps:
       - uses: actions/checkout@v6
         with:
