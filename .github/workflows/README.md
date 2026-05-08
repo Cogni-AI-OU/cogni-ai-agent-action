@@ -6,8 +6,8 @@ This directory contains GitHub Actions workflows, agent prompts, and related con
 
 ### Check Workflow (`check.yml`)
 
-The `check.yml` workflow runs on pull requests and pushes to ensure code quality and correctness.
-It calls the org-level reusable `check.yml` workflow.
+The `check.yml` workflow runs on pull requests, pushes, and weekly schedule to
+ensure code quality and correctness.
 
 Jobs:
 
@@ -15,36 +15,26 @@ Jobs:
 - **link-checker**: Checks for broken links in Markdown files using Lychee
 - **pre-commit**: Runs pre-commit hooks for code formatting and linting
 
-### Cogni AI Agent Local Workflow (`cogni-ai-agent-local.yml`)
+### Devcontainer CI Workflow (`devcontainer-ci.yml`)
 
-The `cogni-ai-agent-local.yml` workflow runs the local composite action (`./action.yml`) as a wrapper for OpenCode.
-It is triggered by `/co`, `/cogni`, or `/review` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
+The `devcontainer-ci.yml` workflow builds and tests the development container image.
+It ensures that all required command-line tools and Python packages are properly installed and functional.
 
-### OpenCode Workflow (`opencode.yml`)
+### Local/Test Workflows
 
-The `opencode.yml` workflow calls the org-level reusable OpenCode workflow. It is triggered manually via `workflow_dispatch`.
-
-### OpenCode Agent Local Workflow (`opencode-agent-local.yml`)
-
-The `opencode-agent-local.yml` workflow runs the local composite action (`./opencode/action.yml`) as a wrapper for OpenCode.
-It is triggered by `/oc`, `/opencode`, or `/review` commands in comments, or manually via `workflow_dispatch`/`workflow_call`.
-
-### Task - Update Docs (`task-update-docs.yml`)
-
-The `task-update-docs.yml` workflow is a manual task that updates core architecture and documentation files
-for mutual consistency and accuracy. It uses the `task-update-docs.prompt.md` prompt.
-It is triggered manually via `workflow_dispatch`.
-
-### Copilot Setup Steps Workflow (`copilot-setup-steps.yml`)
-
-The `copilot-setup-steps.yml` workflow is a utility workflow that checks out the repository, sets up Python 3.12,
-restores the Python user site cache, and installs dependencies from `.devcontainer/requirements.txt`. It is triggered
-on pushes and pull requests that modify the workflow file or the requirements file.
+- **ai-inference-local.yml**: Tests the local `ai-inference/action.yml` action manually.
+- **ai-inference-test.yml**: Tests the local `ai-inference/action.yml` action on push.
+- **cogni-ai-agent-local.yml**: Runs local `action.yml` as a wrapper for OpenCode.
+- **cogni-ai-agent-local-sudo.yml**: Runs local `action.yml` as a wrapper for OpenCode with elevated permissions.
+- **cogni-ai-agent-test.yml**: Tests the local `action.yml` action manually.
+- **opencode-agent-local.yml**: Runs local `./opencode/action.yml` as a wrapper for OpenCode.
+- **task-update-docs.yml**: Update core architecture and documentation files.
+- **test-constraints.yml**: Runs MiniZinc constraints check.
 
 ## Problem Matchers
 
 GitHub Actions problem matchers automatically annotate files with errors and
 warnings in pull requests, making it easier to identify and fix issues.
 
-The matchers are provided from the org-level `.github` repository when using
-the `check.yml` reusable workflow.
+- **actionlint-matcher.json**: Captures errors from actionlint workflow linting.
+- **pre-commit-matcher.json**: Captures errors from various pre-commit hooks.

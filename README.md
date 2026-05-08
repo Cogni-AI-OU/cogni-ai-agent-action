@@ -2,6 +2,7 @@
 
 [![Tag][gh-tag-image]][gh-tag-link]
 [![Check][gha-image-check-main]][gha-link-check-main]
+[![License][gh-license-image]][gh-license-link]
 [![Edit][gh-edit-badge]][gh-edit-link]
 
 Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a GitHub Actions workflow.
@@ -375,6 +376,25 @@ override or extend these defaults. See [action.yml](action.yml) for default perm
 | `prompt`   | The resolved prompt sent to the agent |
 | `response` | The response from the agent           |
 
+### Pre-commit
+
+Automated checks run before every commit to ensure code quality and consistency.
+
+#### Installation
+
+1. Install pre-commit: `pip install pre-commit`
+2. Install the hooks: `pre-commit install`
+
+#### Running checks manually
+
+```bash
+# Run all hooks on all files
+pre-commit run -a
+
+# Run specific hook
+pre-commit run markdownlint -a
+```
+
 ## Codespaces
 
 When working in Codespaces,
@@ -401,6 +421,9 @@ cd -
 
 [gh-tag-image]: https://img.shields.io/github/tag/Cogni-AI-OU/cogni-ai-agent-action.svg?logo=github
 [gh-tag-link]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/tags
+
+[gh-license-image]: https://img.shields.io/badge/license-MIT-blue.svg
+[gh-license-link]: https://tldrlegal.com/license/mit-license
 
 [gha-link-check-main]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/actions?query=workflow%3ACheck+branch%3Amain
 [gha-image-check-main]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/workflows/Check/badge.svg

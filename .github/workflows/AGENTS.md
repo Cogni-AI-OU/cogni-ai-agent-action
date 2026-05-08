@@ -24,14 +24,10 @@ For a human-readable overview, see [README.md](README.md).
   and matrices for agents, models, and prompts.
 - **[copilot-setup-steps.yml](copilot-setup-steps.yml)**:
   Environment setup utility.
+- **[devcontainer-ci.yml](devcontainer-ci.yml)**:
+  Validates development container builds.
 - **[opencode-agent-local.yml](opencode-agent-local.yml)**:
   Runs local `./opencode/action.yml` as a wrapper for OpenCode.
-- **[opencode.yml](opencode.yml)**:
-  Invokes org-level reusable OpenCode workflow manually.
-- **[task-update-docs.yml](task-update-docs.yml)**:
-  Update core architecture and documentation files.
-- **[test-constraints.yml](test-constraints.yml)**:
-  Runs MiniZinc constraints check to verify least privilege.
 
 ## Details
 
@@ -50,7 +46,7 @@ For a human-readable overview, see [README.md](README.md).
 ### check.yml
 
 - Purpose: Runs actionlint and pre-commit via org-level reusable workflow.
-- Triggers: `push`, `pull_request`.
+- Triggers: `push`, `pull_request`, `schedule`, `workflow_dispatch`.
 - Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/check.yml@main`.
 
 ### cogni-ai-agent-local.yml
@@ -79,27 +75,18 @@ For a human-readable overview, see [README.md](README.md).
 - Triggers: `push` and `pull_request` on `copilot-setup-steps.yml` or `.devcontainer/requirements.txt`.
 - Details: Checks out repo, sets up Python 3.12, restores cache, and installs dependencies.
 
+### devcontainer-ci.yml
+
+- Purpose: Tests devcontainer builds and validates required tools.
+- Triggers: `pull_request`, `push`.
+- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/devcontainer-ci.yml@main`.
+
 ### opencode-agent-local.yml
 
 - Purpose: Runs local `./opencode/action.yml` wrapper.
 - Triggers: `issues`, `issue_comment`, `pull_request_review_comment`, `discussion`, `discussion_comment`,
   `workflow_dispatch`, `workflow_call`.
 - Commands: `/oc`, `/opencode`, `/review`.
-
-### opencode.yml
-
-- Purpose: Invokes org-level reusable OpenCode workflow.
-- Triggers: `workflow_dispatch`.
-
-### task-update-docs.yml
-
-- Purpose: Update core architecture and documentation files.
-- Triggers: `workflow_dispatch`.
-
-### test-constraints.yml
-
-- Purpose: Runs MiniZinc constraints check to verify least privilege and isolation.
-- Triggers: `push`, `pull_request`, `workflow_dispatch`.
 
 ## Notes
 
