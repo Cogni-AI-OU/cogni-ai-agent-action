@@ -66,11 +66,8 @@ on:
         options:
           - openai/gpt-4o
           - openai/gpt-4o-mini
-          - openai/gpt-5
           - meta/llama-3.3-70b-instruct
           - deepseek/deepseek-r1
-          - microsoft/phi-4-mini-reasoning
-          - xai/grok-3
         required: true
         type: choice
       prompt:

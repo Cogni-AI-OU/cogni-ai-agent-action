@@ -109,17 +109,6 @@ are configured with `mode: all`, so they remain selectable as primary agents and
 
 For running a generic OpenCode agent without specialized skills or instructions, see the [OpenCode Agent documentation](opencode/README.md).
 
-### Specialized actions
-
-For convenience, several specialized actions are available that wrap the `ai-inference` action with pre-configured models:
-
-- `ai-agents`: Interface for AI Agents using Azure AI Agents SDK.
-- `ai-inference-chat-deepseek-r1`: AI inference using DeepSeek R1.
-- `ai-inference-chat-meta-llama-3-3-70b-instruct`: AI inference using Meta Llama 3.3 70b Instruct.
-- `ai-inference-chat-microsoft-phi-4-mini-reasoning`: AI inference using Microsoft Phi-4 mini reasoning.
-- `ai-inference-chat-openai-gpt-4o-mini`: AI inference using OpenAI GPT-4o mini.
-- `ai-inference-chat-xai-grok-3`: AI inference using xAI Grok 3.
-
 ### Advanced workflow
 
 An example of a more advanced configuration with issue and pull request triggers:
