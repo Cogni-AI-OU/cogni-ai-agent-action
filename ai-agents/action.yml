@@ -1,0 +1,68 @@
+---
+name: Cogni AI Agents
+description: Interface for AI Agents using Azure AI Agents SDK via GitHub Models
+inputs:
+  agent_id:
+    description: The ID of an existing agent. If not provided, a new agent will be created.
+    required: false
+  thread_id:
+    description: The ID of an existing thread. If not provided, a new thread will be created.
+    required: false
+  model:
+    default: phi-4-mini-reasoning
+    description: >-
+      The model to use when creating a new agent.
+      If agent_id is not provided and model is omitted, the default model is used.
+    required: false
+  name:
+    description: The name of the agent to create.
+    required: false
+  instructions:
+    description: The instructions for the agent to follow.
+    required: false
+  prompt:
+    description: A single user prompt to send to the agent.
+    required: false
+  messages:
+    description: A list of messages to add to the thread.
+    required: false
+  token:
+    description: Token to use for authentication. Typically the GITHUB_TOKEN secret.
+    required: false
+  endpoint:
+    default: https://models.inference.ai.azure.com
+    description: The endpoint for the AI Inference service.
+    required: false
+outputs:
+  message:
+    description: The generated message content from the agent.
+    value: ${{ steps.agent.outputs.message }}
+  agent_id:
+    description: The ID of the agent used or created.
+    value: ${{ steps.agent.outputs.agent_id }}
+  thread_id:
+    description: The ID of the thread used or created.
+    value: ${{ steps.agent.outputs.thread_id }}
+runs:
+  using: composite
+  steps:
+    - name: Run AI Agent
+      id: agent
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
+        INPUT_AGENT_ID: ${{ inputs.agent_id }}
+        INPUT_THREAD_ID: ${{ inputs.thread_id }}
+        INPUT_MODEL: ${{ inputs.model }}
+        INPUT_NAME: ${{ inputs.name }}
+        INPUT_INSTRUCTIONS: ${{ inputs.instructions }}
+        INPUT_PROMPT: ${{ inputs.prompt }}
+        INPUT_MESSAGES: ${{ inputs.messages }}
+        INPUT_ENDPOINT: ${{ inputs.endpoint }}
+      run: |
+        # AI Agents implementation using azure-ai-agents SDK.
+        # This requires the 'azure-ai-agents' python package.
+        echo "AI Agents implementation is pending."
+        echo "message=AI Agents response placeholder" >> "$GITHUB_OUTPUT"
+        echo "agent_id=${INPUT_AGENT_ID:-new_agent_id}" >> "$GITHUB_OUTPUT"
+        echo "thread_id=${INPUT_THREAD_ID:-new_thread_id}" >> "$GITHUB_OUTPUT"
