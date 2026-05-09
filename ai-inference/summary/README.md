@@ -61,5 +61,6 @@ You can specify a different run or attempt if needed:
   This multi-layered heuristic makes the lookup much more robust.
 - **Infrastructure**: This action depends on the `ai-inference` action located in the `ai-inference/` directory of this repository.
 - **GitHub Models Access**: This action invokes an auditor agent via GitHub Models.
-  Ensure GitHub Models are enabled in [Settings > Models > Access policy](https://github.com/settings/models/access-policy).
-  See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models) for details.
+  Ensure GitHub Models are enabled in your organization or repository settings under the **Models** section.
+  See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models)
+  for details.
