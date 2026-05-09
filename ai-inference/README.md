@@ -168,4 +168,6 @@ jobs:
 - **Permissions**: The following minimal permissions are required:
   - `models: read`: Required to access GitHub Models.
   - `id-token: write`: Required for OIDC authentication.
-- **GitHub Models Access**: To use this action, you must have GitHub Models enabled for your organization or personal account. You can configure this in [Settings > Models > Access policy](https://github.com/settings/models/access-policy). For more information, see [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models).
+- **GitHub Models Access**: To use this action, you must have GitHub Models enabled for your organization or personal account.
+  You can configure this in [Settings > Models > Access policy](https://github.com/settings/models/access-policy).
+  For more information, see [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models).
