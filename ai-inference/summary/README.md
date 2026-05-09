@@ -5,6 +5,9 @@ session by analyzing GitHub Actions job logs.
 
 ## Overview
 
+> [!IMPORTANT]
+> **GitHub Models Access**: This action invokes an auditor agent via GitHub Models. Ensure GitHub Models are enabled in [Settings > Models > Access policy](https://github.com/settings/models/access-policy). See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models) for details.
+
 The Summary action performs the following steps:
 
 1. **Log Extraction**: Retrieves logs from the target job of a specific run and attempt.
