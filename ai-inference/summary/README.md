@@ -59,8 +59,4 @@ You can specify a different run or attempt if needed:
   `agent_job_name` (default `Cogni AI Agent`), or by identifying a job containing a step named
   `Run Cogni AI Agent`. This multi-layered heuristic makes the lookup much more robust.
 - **Infrastructure**: This action depends on the `ai-inference` action located in the `ai-inference/` directory of this repository.
-
-> [!IMPORTANT]
-> **GitHub Models Access**:
-> This action invokes an auditor agent via GitHub Models. Ensure GitHub Models are enabled in [Settings > Models > Access policy](https://github.com/settings/models/access-policy).
-> See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models) for details.
+- **GitHub Models Access**: This action invokes an auditor agent via GitHub Models. Ensure GitHub Models are enabled in [Settings > Models > Access policy](https://github.com/settings/models/access-policy). See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models) for details.
