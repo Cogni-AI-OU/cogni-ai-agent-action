@@ -34,6 +34,10 @@ on:
         description: Agent to use.
         required: false
         type: string
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       agent:
