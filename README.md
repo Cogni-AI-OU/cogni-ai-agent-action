@@ -27,8 +27,28 @@ The default Cogni AI agent workflow loads specialized agents, skills, and instru
 name: Cogni AI
 
 on:
+  workflow_call:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        required: false
+        type: string
   workflow_dispatch:
     inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-manager
+          - cogni-ai-plan-reviewer
+          - default
+        required: false
+        type: choice
       prompt:
         description: Prompt for the agent
         required: true
@@ -83,6 +103,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          agent: ${{ inputs.agent }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           prompt: >-
             ${{ github.event.comment.body ||
@@ -148,8 +169,28 @@ on:
     types:
       - created
       - edited
+  workflow_call:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        required: false
+        type: string
   workflow_dispatch:
     inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-manager
+          - cogni-ai-plan-reviewer
+          - default
+        required: false
+        type: choice
       model:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
@@ -239,6 +280,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          agent: ${{ inputs.agent }}
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
           prompt: >-
@@ -279,8 +321,28 @@ An example of a manual-triggered workflow with elevated permissions and sudo mod
 name: Cogni AI Agent (Sudo)
 
 on:
+  workflow_call:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        required: false
+        type: string
   workflow_dispatch:
     inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-manager
+          - cogni-ai-plan-reviewer
+          - default
+        required: false
+        type: choice
       model:
         default: opencode/gemini-3-flash
         description: Model to use for OpenCode
@@ -317,6 +379,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          agent: ${{ inputs.agent }}
           model: ${{ inputs.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
           permissions: |-
@@ -358,7 +421,7 @@ to avoid accidental or malicious destructive actions.
 
 | Input | Description | Default | Required |
 | :--- | :--- | :--- | :--- |
-| `agent` | Agent to use | `default` | No |
+| `agent` | Agent to use | `cogni-ai-architect` | No |
 | `mentions` | Comma-separated mentions | `/co,/cogni,/review,/brainstorm` | No |
 | `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
 | `opencode-api-key` | API key for OpenCode | — | **Yes** |
