@@ -328,6 +328,15 @@ on:
         description: Agent to use.
         required: false
         type: string
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        required: true
+        type: string
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       agent:
