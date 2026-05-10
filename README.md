@@ -50,6 +50,8 @@ on:
           - cogni-ai-devops
           - cogni-ai-manager
           - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
           - default
         required: false
         type: choice
@@ -202,6 +204,8 @@ on:
           - cogni-ai-devops
           - cogni-ai-manager
           - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
           - default
         required: false
         type: choice
@@ -363,6 +367,8 @@ on:
           - cogni-ai-devops
           - cogni-ai-manager
           - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
           - default
         required: false
         type: choice
@@ -444,7 +450,7 @@ to avoid accidental or malicious destructive actions.
 
 | Input | Description | Default | Required |
 | :--- | :--- | :--- | :--- |
-| `agent` | Agent to use | `default` | No |
+| `agent` | Agent to use | `cogni-ai-architect` | No |
 | `mentions` | Comma-separated mentions | `/co,/cogni,/review,/brainstorm` | No |
 | `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
 | `opencode-api-key` | API key for OpenCode | — | **Yes** |
