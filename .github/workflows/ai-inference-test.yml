@@ -11,7 +11,11 @@ run-name: >-
   }}
 on:
   push:
+    paths-ignore:
+      - '**.md'
   pull_request:
+    paths-ignore:
+      - '**.md'
 jobs:
   test:
     if: ${{ github.event.sender.type != 'Bot' }}
