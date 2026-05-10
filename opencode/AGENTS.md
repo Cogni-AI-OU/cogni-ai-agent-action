@@ -52,7 +52,7 @@ Available native tools include:
 - **File Mutation**: `Edit` (exact string replacements), `Write` (overwrite/create files)
 - **Execution**: `Bash` (persistent shell session for terminal operations like git, npm, etc.)
 - **Agentic Tracking**: `Todo` / `TodoWrite` (creates and manages structured task lists for complex sessions)
-- **Research & Sub-agents**: `Task` (launch specialized subagents), `Webfetch`, `Websearch`, `Codesearch`
+- **Research & Sub-agents**: `Task` (launch specialized sub-agents), `Webfetch`, `Websearch`, `Codesearch`
 
 *Note: The native tools `Glob`, `Read`, `Grep`, `Edit`, and `Write` are explicitly prioritized over their shell
 equivalents (such as `find`, `cat`, `grep`, `sed`) to ensure precise context retention and safety.*
