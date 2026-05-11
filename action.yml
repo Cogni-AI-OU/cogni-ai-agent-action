@@ -97,9 +97,15 @@ inputs:
         # Note: Keep in alphabetical order.
         skill: &default-skill
           agent-log-analysis: deny
+          agents-md-writer: allow
           ansible: allow
           cat: allow
+          code-review: allow
+          code-tour: allow
           context-aware-ops: allow
+          docs-review: allow
+          docs-writer: allow
+          dot-github: allow
           fact-writer: allow
           gh: allow
           gh-api: allow
@@ -107,24 +113,37 @@ inputs:
           gh-models: allow
           gh-pr: allow
           gh-run: allow
+          gh-search: allow
           git: allow
           git-expert: allow
+          git-filter-branch: allow
+          git-merge: allow
+          git-rebase: allow
           github: allow
           github-actions: allow
           github-issue: allow
           github-pr: allow
+          github-pr-review: allow
           github-script: allow
+          github-topics: allow
           mermaid: allow
           mermaid-beta: allow
           minizinc: allow
           molecule: deny
+          opencode: allow
+          out-yaml: allow
           pdf: allow
           pre-commit: allow
           robust-commands: allow
+          security-audit: allow
           shell: allow
           skill-writer: allow
           subagent-task: allow
+          tdd: allow
+          tester: allow
           vim-ex: allow
+          yaml: allow
+          yq: allow
         # Keep explicit denies for built-in subagents to ensure they are omitted from task delegation lists.
         task:
           '*': allow
@@ -312,9 +331,7 @@ inputs:
         glob: allow
         read: allow
         edit: deny
-        skill:
-          <<: *default-skill
-          security-auditing: allow
+        skill: *default-skill
         task: allow
       cogni-ai-tester:
         bash:
