@@ -7,7 +7,7 @@ For a human-readable overview, see [README.md](README.md).
 
 ## Workflow catalog
 
-- **[FLOWS.mmd](../../FLOWS.mmd)**:
+- **[FLOWS.mmd](../../docs/FLOWS.mmd)**:
   Mermaid diagram describing the logic of `action.yml`.
 - **[ai-inference-local.yml](ai-inference-local.yml)**:
   Tests the local `ai-inference/action.yml` action manually.

@@ -19,7 +19,7 @@ Your tasks are to:
 1. **Analyze Relationships:** Cross-reference the relationships, definitions, rules, and configurations defined across
    these files.
 2. **Identify Inconsistencies:** Look for contradictions, outdated references, missing updates, or structural
-   mismatches between them (e.g., ensuring `CONSTRAINTS.mzn` aligns with the documented `FLOWS.mmd` and the agent
+   mismatches between them (e.g., ensuring `CONSTRAINTS.mzn` aligns with the documented `docs/FLOWS.mmd` and the agent
    definitions).
 3. **Verify Up-to-Date Status:** Check if any of the documentation lags behind the current state of the repository.
 
