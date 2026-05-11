@@ -4,7 +4,7 @@
 % Also defines runtime bounds, budgets, and logical enforcing functions.
 
 % --- Parameters (Budgets and Limits) ---
-% Derived from Global_Budget_Protocol (GBP) and Loop_Arrest_Protocol (LAP) in FLOWS.mmd
+% Derived from Global_Budget_Protocol (GBP) and Loop_Arrest_Protocol (LAP) in docs/FLOWS.mmd
 int: MAX_STEPS = 20;               % Gated by Global_Budget_Protocol (GBP1)
 int: MAX_TOOL_CALLS = 100;         % Gated by Global_Budget_Protocol (GBP2)
 int: MAX_TOKEN_BUDGET = 50000;     % Gated by Global_Budget_Protocol (GBP3)

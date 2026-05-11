@@ -121,7 +121,7 @@ jobs:
 
 ### Execution flow
 
-For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](FLOWS.mmd).
+For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](docs/FLOWS.mmd).
 For the formal constraint model covering skill and tool permission constraints, see [CONSTRAINTS.mzn](CONSTRAINTS.mzn).
 
 ### Task delegation
