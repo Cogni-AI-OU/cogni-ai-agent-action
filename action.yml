@@ -99,10 +99,14 @@ inputs:
           agent-log-analysis: deny
           agents-md-writer: allow
           ansible: allow
+          brainstorm: allow
+          brainstorm-agent-runs: allow
+          brainstorm-github-pr: allow
           cat: allow
           code-review: allow
           code-tour: allow
           context-aware-ops: allow
+          critical-thinking: allow
           docs-review: allow
           docs-writer: allow
           dot-github: allow
@@ -134,6 +138,7 @@ inputs:
           out-yaml: allow
           pdf: allow
           pre-commit: allow
+          python: allow
           robust-commands: allow
           security-audit: allow
           shell: allow
