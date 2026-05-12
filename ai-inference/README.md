@@ -171,3 +171,30 @@ jobs:
 - **GitHub Models Access**: To use this action, you must have GitHub Models enabled for your organization or repository.
   You can configure this in your organization or repository settings under the **Models** section.
   For more information, see [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models).
+
+## Limitations
+
+### GitHub Models Inference API
+
+When using GitHub's Models inference API, you may encounter an error if your inference request exceeds the model's allowed token budget.
+This means you need to send less input or request fewer output tokens.
+
+**Error which can happen:**
+`413 Request body too large for gpt-4o-mini model. Max size: 8000 tokens.`
+
+**Why:**
+GitHub's Models inference API requires that messages be included in the request body,
+and the total token usage is constrained by the model's context/window and requested output.
+The docs state that `max_tokens` plus your prompt tokens cannot exceed the model's limit,
+so a large prompt body can trigger a 413-style failure when it is too big for that model.
+See [REST API endpoints for models inference](https://docs.github.com/en/rest/models/inference).
+Also, GitHub Models documentation shows per-request token limits for some models in the prototyping experience,
+which reinforces that request size limits are model-specific and subject to change.
+See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models).
+
+**What to do:**
+- Reduce the size of the messages you send.
+- Lower `max_tokens`.
+- Trim or summarize prior conversation/history before sending it.
+- Remove large pasted logs, diffs, file contents, or tool schemas from the prompt.
+- Split one large request into multiple smaller requests.
