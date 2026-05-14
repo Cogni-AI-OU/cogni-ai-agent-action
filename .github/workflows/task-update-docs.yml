@@ -24,11 +24,17 @@ jobs:
           key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
       - uses: actions/setup-python@v6.1.0
         with:
-          cache: pip
-          cache-dependency-path: .devcontainer/requirements.txt
+          cache: ${{ hashFiles('.devcontainer/requirements.txt', '**/pyproject.toml') != '' && 'pip' || '' }}
+          cache-dependency-path: |
+            .devcontainer/requirements.txt
+            **/pyproject.toml
           python-version: '3.12'
       - name: Install dependencies
-        run: pip install -r .devcontainer/requirements.txt pre-commit
+        run: |
+          pip install pre-commit
+          if [ -f .devcontainer/requirements.txt ]; then
+            pip install -r .devcontainer/requirements.txt
+          fi
       - name: Read prompt
         id: read-prompt
         run: |

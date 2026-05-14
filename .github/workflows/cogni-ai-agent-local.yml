@@ -209,8 +209,11 @@ jobs:
             pre-commit|
       - uses: actions/setup-python@v6.1.0
         with:
-          cache: pip
-          cache-dependency-path: .devcontainer/requirements.txt
+          cache: ${{ hashFiles('.devcontainer/requirements.txt', 'requirements.txt', '**/pyproject.toml') != '' && 'pip' || '' }}
+          cache-dependency-path: |
+            .devcontainer/requirements.txt
+            requirements.txt
+            **/pyproject.toml
           python-version: '3.12'
       - name: Install pre-commit
         run: pip install pre-commit
@@ -218,6 +221,8 @@ jobs:
         run: |
           if [ -f .devcontainer/requirements.txt ]; then
             pip install -r .devcontainer/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
           fi
       - name: Run Cogni AI Agent Local
         id: cogni-ai
