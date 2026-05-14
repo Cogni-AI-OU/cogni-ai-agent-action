@@ -14,9 +14,9 @@ inputs:
     default: 'false'
     description: Whether to force the agent to run regardless of condition checks.
     required: false
-  gh-models-enabled:
-    default: 'true'
-    description: Whether to enable gh-models extension.
+  gh-extensions:
+    default: github/gh-aw,github/gh-models
+    description: Comma-separated list of GitHub CLI extensions to install.
     required: false
   mentions:
     default: /co,/cogni,/review,/brainstorm
@@ -590,14 +590,22 @@ runs:
           -b ${{ inputs.version_skills || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
           ${{ runner.temp }}/.skills
-    - name: Install gh-models extension
-      if: steps.check.outputs.run == 'true' && inputs.gh-models-enabled == 'true'
+    - name: Install gh extensions
+      if: steps.check.outputs.run == 'true' && inputs.gh-extensions != ''
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh extension install github/gh-models || gh extension upgrade github/gh-models
-        gh models list
+        IFS=',' read -ra EXTS <<< "${{ inputs.gh-extensions }}"
+        for ext in "${EXTS[@]}"; do
+          ext=$(echo "$ext" | xargs)
+          if [ -n "$ext" ]; then
+            gh extension install "$ext" || gh extension upgrade "$ext"
+            if [ "$ext" = "github/gh-models" ]; then
+              gh models list
+            fi
+          fi
+        done
     - name: Convert permissions to JSON
       id: permissions
       if: steps.check.outputs.run == 'true'

@@ -8,7 +8,7 @@ flowchart TD
 
         A4 --> A5["Checkout Repositories<br/>(agents, instructions, skills)"]
 
-        A5 --|gh-models-enabled=true|--> A6["Install gh-models extension"]
+        A5 --|gh-extensions != ''|--> A6["Install gh extensions"]
         A5 --|default|--> A7["Convert permissions to JSON"]
         A6 --> A7
 
