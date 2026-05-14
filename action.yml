@@ -15,7 +15,7 @@ inputs:
     description: Whether to force the agent to run regardless of condition checks.
     required: false
   gh-extensions:
-    default: github/gh-models,github/gh-aw
+    default: github/gh-aw,github/gh-models
     description: Comma-separated list of GitHub CLI extensions to install.
     required: false
   mentions:
