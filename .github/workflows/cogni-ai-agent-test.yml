@@ -148,7 +148,9 @@ jobs:
         uses: actions/cache@v5.0.1
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt', '**/pyproject.toml') }}
+          key: >-
+            ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{
+            hashFiles('.devcontainer/requirements.txt', '**/pyproject.toml') }}
       - name: Install dependencies
         run: |
           if [ "${{ steps.cache-dependencies.outputs.cache-hit }}" != "true" ]; then

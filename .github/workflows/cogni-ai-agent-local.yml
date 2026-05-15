@@ -209,7 +209,9 @@ jobs:
             pre-commit|
       - uses: actions/setup-python@v6.1.0
         with:
-          cache: ${{ hashFiles('.devcontainer/requirements.txt', 'requirements.txt', '**/pyproject.toml') != '' && 'pip' || '' }}
+          cache: >-
+            ${{ hashFiles('.devcontainer/requirements.txt', 'requirements.txt',
+            '**/pyproject.toml') != '' && 'pip' || '' }}
           cache-dependency-path: |
             .devcontainer/requirements.txt
             requirements.txt

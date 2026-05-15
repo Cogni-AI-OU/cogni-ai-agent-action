@@ -176,7 +176,8 @@ jobs:
 
 ### GitHub Models Inference API
 
-When using GitHub's Models inference API, you may encounter an error if your inference request exceeds the model's allowed token budget.
+When using GitHub's Models inference API, you may encounter an error if your inference request exceeds the
+model's allowed token budget.
 This means you need to send less input or request fewer output tokens.
 
 **Error which can happen:**
@@ -193,6 +194,7 @@ which reinforces that request size limits are model-specific and subject to chan
 See [Prototyping with AI models](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models).
 
 **What to do:**
+
 - Reduce the size of the messages you send.
 - Lower `max_tokens`.
 - Trim or summarize prior conversation/history before sending it.
