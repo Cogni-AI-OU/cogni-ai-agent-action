@@ -133,13 +133,13 @@ runs:
       id: cogni-ai-agent-auditor
       uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1.0.0
       with:
-        token: ${{ inputs.github_token }}
         agent: cogni-ai-agent-auditor
         force-run: true
         max-completion-tokens: 12000
         model: openai/gpt-4o-mini
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
         skills: agent-log-analysis
+        token: ${{ inputs.github_token }}
         version_skills: v1.0.0
         enable-github-mcp: ${{ inputs.enable-github-mcp }}
         temperature: 0.2
