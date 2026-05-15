@@ -42,12 +42,12 @@ on:
         type: string
       model:
         default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
-        description: Model to use for OpenCode
+        description: Model to use for OpenCode.
         required: false
         type: string
       prompt:
         default: ''
-        description: Custom prompt to override the default prompt
+        description: Custom prompt to override the default prompt.
         required: false
         type: string
       version_agents:
@@ -82,7 +82,7 @@ on:
         type: choice
       model:
         default: opencode/gemini-3-flash
-        description: Model to use for OpenCode
+        description: Model to use for OpenCode.
         options:
           - opencode/big-pickle
           - opencode/claude-3-5-haiku
@@ -134,7 +134,7 @@ on:
         required: false
         type: choice
       prompt:
-        description: Custom prompt to override the default prompt
+        description: Custom prompt to override the default prompt.
         required: false
         default: ''
 env:
@@ -284,7 +284,7 @@ jobs:
           persist-credentials: false
           ref: ${{ env.GITHUB_REF_RESOLVED }}
       - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        uses: ./ai-inference/summary
         with:
           agent_job_id: cogni-ai
           github_token: ${{ secrets.GITHUB_TOKEN }}

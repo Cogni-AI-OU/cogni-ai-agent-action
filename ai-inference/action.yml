@@ -28,11 +28,11 @@ inputs:
     description: Comma-separated list of instructions to load into system prompt.
     required: false
   max-completion-tokens:
-    description: The maximum number of tokens to generate
+    description: The maximum number of tokens to generate.
     required: false
   max-tokens:
     default: 16000
-    description: The maximum number of tokens to generate (deprecated)
+    description: The maximum number of tokens to generate (deprecated).
     required: false
   prompt-file:
     description: >-
@@ -71,7 +71,7 @@ inputs:
     description: The system prompt to send to the model.
     required: false
   temperature:
-    description: The sampling temperature to use (0-1)
+    description: The sampling temperature to use (0-1).
     required: false
   token:
     description: Token to use for inference. Typically the GITHUB_TOKEN secret.
@@ -81,7 +81,7 @@ inputs:
     description: Whether to force the agent to run regardless of condition checks.
     required: false
   top-p:
-    description: The nucleus sampling parameter to use (0-1)
+    description: The nucleus sampling parameter to use (0-1).
     required: false
   version_agents:
     default: v1.0.0
