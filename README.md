@@ -1,0 +1,527 @@
+# cogni-ai-agent-action
+
+[![Tag][gh-tag-image]][gh-tag-link]
+[![Check][gha-image-check-main]][gha-link-check-main]
+[![License][gh-license-image]][gh-license-link]
+[![Edit][gh-edit-badge]][gh-edit-link]
+
+Cogni AI agent (GitHub Action) — runs [OpenCode](https://opencode.ai) inside a GitHub Actions workflow.
+
+## Usage
+
+### Prerequisites
+
+1. Add `OPENCODE_API_KEY` (generated at [opencode.ai/auth](https://opencode.ai/auth)) to your repository secrets
+   (**Settings → Secrets and variables → Actions**).
+2. Install the [GitHub OpenCode app](https://github.com/apps/opencode-agent) or follow the [manual setup guide](https://opencode.ai/docs/github/#manual-setup).
+
+You can trigger the agent via `workflow_dispatch`, or via issue or PR comments
+using commands like `/co`, `/cogni`, `/review`, or `/brainstorm`.
+
+### Basic workflow
+
+The default Cogni AI agent workflow loads specialized agents, skills, and instructions.
+
+```yaml
+---
+name: Cogni AI
+
+on:
+  workflow_call:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        required: false
+        type: string
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-manager
+          - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
+          - default
+        required: false
+        type: choice
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
+
+jobs:
+  agent:
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
+    if: |
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write # create/edit/delete files
+      id-token: write # required for OIDC
+      issues: write # create/edit/delete issues
+      pull-requests: write # create/edit/delete PRs
+      discussions: write # create/edit/delete discussions
+      packages: read # read packages
+      models: read # read models
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
+      - name: Run Cogni AI Agent
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        id: agent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          agent: ${{ inputs.agent }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
+    timeout-minutes: 60
+
+### Execution flow
+
+For a detailed overview of the action's logic and execution flow, see [FLOWS.mmd](docs/FLOWS.mmd).
+For the formal constraint model covering skill and tool permission constraints, see [CONSTRAINTS.mzn](CONSTRAINTS.mzn).
+
+### Task delegation
+
+`cogni-ai-agent-auditor`, `cogni-ai-brain-ops`, `cogni-ai-code-reviewer`, `cogni-ai-context7-ops`,
+`cogni-ai-devops`, `cogni-ai-docs-editor`, `cogni-ai-fact-ops`, `cogni-ai-github-ops`,
+`cogni-ai-manager`, `cogni-ai-plan-reviewer`, `cogni-ai-python-dev`, `cogni-ai-security-auditor`, and `cogni-ai-tester`
+are configured with `mode: all`, so they remain selectable as primary agents and are also exposed to OpenCode's
+`task` tool as named subagent delegation targets.
+
+### OpenCode workflow
+
+For running a generic OpenCode agent without specialized skills or instructions, see the [OpenCode Agent documentation](opencode/README.md).
+
+### Advanced workflow
+
+An example of a more advanced configuration with issue and pull request triggers:
+
+```yaml
+---
+# See: <https://opencode.ai/docs>
+name: Cogni AI Agent
+
+# yamllint disable-line rule:truthy
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+  issue_comment:
+    types:
+      - created
+      - edited
+  discussion:
+    types:
+      - created
+      - edited
+      - answered
+  discussion_comment:
+    types:
+      - created
+      - edited
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  pull_request_review_comment:
+    types:
+      - created
+      - edited
+  workflow_call:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        required: false
+        type: string
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        required: false
+        type: string
+      prompt:
+        default: ""
+        description: Prompt for the agent
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-manager
+          - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
+          - default
+        required: false
+        type: choice
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        options:
+          - opencode/big-pickle
+          - opencode/claude-3-5-haiku
+          - opencode/claude-haiku-4-5
+          - opencode/claude-opus-4-5
+          - opencode/claude-opus-4-6
+          - opencode/claude-sonnet-4
+          - opencode/claude-sonnet-4-5
+          - opencode/claude-sonnet-4-6
+          - opencode/deepseek-v4-flash-free
+          - opencode/gemini-3.1-pro
+          - opencode/gemini-3-flash
+          - opencode/gemini-3-pro
+          - opencode/glm-5
+          - opencode/glm-5.1
+          - opencode/gpt-5
+          - opencode/gpt-5-codex
+          - opencode/gpt-5-nano
+          - opencode/gpt-5.3-codex
+          - opencode/gpt-5.3-codex-spark
+          - opencode/gpt-5.4
+          - opencode/gpt-5.4-mini
+          - opencode/gpt-5.4-nano
+          - opencode/minimax-m2.5
+          - opencode/minimax-m2.5-free
+          - opencode/nemotron-3-super-free
+          - opencode/qwen3.6-plus
+          - opencode/qwen3.5-plus
+        required: true
+        type: choice
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
+
+jobs:
+  cogni-ai-agent:
+    name: Run Cogni AI agent
+    # Note: These are pre-run conditions, actual trigger conditions are defined within the action it-self.
+    if: |
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event.sender.type != 'Bot'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_call' ||
+        github.event_name == 'pull_request' ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '/'
+        ) ||
+        contains(
+          github.event.comment.body ||
+          github.event.issue.body ||
+          github.event.pull_request.body ||
+          github.event.discussion.body ||
+          '',
+          '@'
+        )
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write # create/edit/delete files
+      id-token: write # required for OIDC token
+      issues: write # create/edit/delete issues
+      pull-requests: write # create/edit/delete PRs
+      discussions: write # create/edit/delete discussions
+      packages: read # read packages
+      models: read # read models
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
+      # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action>
+      - name: Run Cogni AI Agent
+        uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        id: agent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          agent: ${{ inputs.agent }}
+          model: ${{ inputs.model }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}  # <https://opencode.ai/auth>
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
+    timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: cogni-ai-agent
+    if: always() && needs.cogni-ai-agent.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      models: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: cogni-ai-agent
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Sudo workflow
+
+An example of a manual-triggered workflow with elevated permissions and sudo mode (using `bash: '*': allow`):
+
+```yaml
+---
+name: Cogni AI Agent (Sudo)
+
+on:
+  workflow_call:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        required: false
+        type: string
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        required: true
+        type: string
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      agent:
+        default: cogni-ai-architect
+        description: Agent to use.
+        options:
+          - cogni-ai-architect
+          - cogni-ai-brain-ops
+          - cogni-ai-code-reviewer
+          - cogni-ai-devops
+          - cogni-ai-manager
+          - cogni-ai-plan-reviewer
+          - cogni-ai-python-dev
+          - cogni-ai-tester
+          - default
+        required: false
+        type: choice
+      model:
+        default: opencode/gemini-3-flash
+        description: Model to use for OpenCode
+        options:
+          - opencode/gemini-3.1-pro
+          - opencode/gemini-3-flash
+        required: true
+        type: choice
+      prompt:
+        description: Prompt for the agent
+        required: true
+        type: string
+
+jobs:
+  cogni-ai-agent-sudo:
+    name: Run Cogni AI agent (Sudo)
+    if: ${{ github.event.sender.type != 'Bot' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write # create/edit/delete files
+      id-token: write # required for OIDC token
+      issues: write # create/edit/delete issues
+      packages: write # create/edit/delete packages
+      pull-requests: write # create/edit/delete PRs
+      models: read # read models
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run Cogni AI Agent
+        uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        id: agent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          agent: ${{ inputs.agent }}
+          model: ${{ inputs.model }}
+          opencode-api-key: ${{ secrets.OPENCODE_API_KEY }} # <https://opencode.ai/auth>
+          permissions: |-
+            bash:
+              '*': allow
+          prompt: >-
+            ${{ github.event.comment.body ||
+                github.event.discussion.body ||
+                github.event.issue.body ||
+                github.event.pull_request.body ||
+                inputs.prompt }}
+    timeout-minutes: 60
+
+  summary:
+    name: Generate Summary (post-run)
+    needs: cogni-ai-agent-sudo
+    if: always() && needs.cogni-ai-agent-sudo.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      models: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Generate Summary
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        with:
+          agent_job_id: cogni-ai-agent-sudo
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Important note: Only use this sudo workflow with trusted inputs and repositories
+to avoid accidental or malicious destructive actions.
+
+### Inputs
+
+| Input | Description | Default | Required |
+| :--- | :--- | :--- | :--- |
+| `agent` | Agent to use | `cogni-ai-architect` | No |
+| `mentions` | Comma-separated mentions | `/co,/cogni,/review,/brainstorm` | No |
+| `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
+| `opencode-api-key` | API key for OpenCode | — | **Yes** |
+| `permissions` | Permissions configuration | — | No |
+| `prompt` | Prompt to pass to the agent | `''` | No |
+| `version_agents` | Version of cogni-ai-agents to use | `main` | No |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main` | No |
+| `version_skills` | Version of cogni-ai-agent-skills to use | `main` | No |
+
+### Hierarchical Permissions
+
+Define granular permissions per agent type using a hierarchical YAML structure. The `default`
+section applies to all agents, while agent-specific sections (e.g., `cogni-ai-architect`, `cogni-ai-code-reviewer`)
+override or extend these defaults. See [action.yml](action.yml) for default permissions.
+
+### Outputs
+
+| Output     | Description                           |
+| ---------- | ------------------------------------- |
+| `prompt`   | The resolved prompt sent to the agent |
+| `response` | The response from the agent           |
+
+### Pre-commit
+
+Automated checks run before every commit to ensure code quality and consistency.
+
+#### Installation
+
+1. Install pre-commit: `pip install pre-commit`
+2. Install the hooks: `pre-commit install`
+
+#### Running checks manually
+
+```bash
+# Run all hooks on all files
+pre-commit run -a
+
+# Run specific hook
+pre-commit run markdownlint -a
+```
+
+## Codespaces
+
+When working in Codespaces,
+you can follow these steps to set up the required agents, instructions, and skills in the repository:
+
+```bash
+# Clone agents, instructions, and skills.
+git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agents .github/agents
+git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions .github/instructions
+git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills .github/skills
+
+# Symlink individual agents from their subdirectories to the discovery directory.
+cd .github/agents
+for d in */; do
+  ln -fsv "$d${d%/}.agent.md" .
+done
+cd -
+```
+
+<!-- Named links -->
+
+[gh-edit-badge]: https://img.shields.io/badge/GitHub-edit-purple.svg?logo=github
+[gh-edit-link]: https://github.dev/Cogni-AI-OU/cogni-ai-agent-action
+
+[gh-tag-image]: https://img.shields.io/github/tag/Cogni-AI-OU/cogni-ai-agent-action.svg?logo=github
+[gh-tag-link]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/tags
+
+[gh-license-image]: https://img.shields.io/badge/license-MIT-blue.svg
+[gh-license-link]: https://tldrlegal.com/license/mit-license
+
+[gha-link-check-main]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/actions?query=workflow%3ACheck+branch%3Amain
+[gha-image-check-main]: https://github.com/Cogni-AI-OU/cogni-ai-agent-action/workflows/Check/badge.svg
