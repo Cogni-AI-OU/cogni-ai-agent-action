@@ -141,7 +141,7 @@ runs:
         model: openai/gpt-4o-mini
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
         skills: agent-log-analysis
-        version_skills: main
+        version_skills: v1.0.0
         enable-github-mcp: ${{ inputs.enable-github-mcp }}
         temperature: 0.2
         top-p: 0.9

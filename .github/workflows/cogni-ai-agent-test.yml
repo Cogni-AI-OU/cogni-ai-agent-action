@@ -27,17 +27,17 @@ on:
   workflow_dispatch:
     inputs:
       version_agents:
-        default: main
+        default: v1.0.0
         description: Version of cogni-ai-agents to use.
         required: false
         type: string
       version_instructions:
-        default: main
+        default: v1.0.0
         description: Version of cogni-ai-agent-instructions to use.
         required: false
         type: string
       version_skills:
-        default: main
+        default: v1.0.0
         description: Version of cogni-ai-agent-skills to use.
         required: false
         type: string
@@ -170,9 +170,9 @@ jobs:
           model: ${{ matrix.model }}
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ matrix.prompt }}
-          version_agents: ${{ inputs.version_agents || 'main' }}
-          version_instructions: ${{ inputs.version_instructions || 'main' }}
-          version_skills: ${{ inputs.version_skills || 'main' }}
+          version_agents: ${{ inputs.version_agents || 'v1.0.0' }}
+          version_instructions: ${{ inputs.version_instructions || 'v1.0.0' }}
+          version_skills: ${{ inputs.version_skills || 'v1.0.0' }}
       - env:
           COGNI_AI_OUTPUT: ${{ steps.cogni-ai.outputs.response }}
           COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}

@@ -123,8 +123,18 @@ on:
         required: false
         type: number
       version_agents:
-        default: main
-        description: Version of cogni-ai-agents to use
+        default: v1.0.0
+        description: Version of cogni-ai-agents to use.
+        required: false
+        type: string
+      version_instructions:
+        default: v1.0.0
+        description: Version of cogni-ai-agent-instructions to use.
+        required: false
+        type: string
+      version_skills:
+        default: v1.0.0
+        description: Version of cogni-ai-agent-skills to use.
         required: false
         type: string
       version_instructions:
@@ -208,6 +218,6 @@ jobs:
           temperature: ${{ inputs.temperature }}
           token: ${{ secrets.GITHUB_TOKEN }}
           top-p: ${{ inputs.top-p }}
-          version_agents: ${{ inputs.version_agents || 'main' }}
-          version_instructions: ${{ inputs.version_instructions || 'main' }}
-          version_skills: ${{ inputs.version_skills || 'main' }}
+          version_agents: ${{ inputs.version_agents || 'v1.0.0' }}
+          version_instructions: ${{ inputs.version_instructions || 'v1.0.0' }}
+          version_skills: ${{ inputs.version_skills || 'v1.0.0' }}
