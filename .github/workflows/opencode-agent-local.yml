@@ -261,7 +261,14 @@ jobs:
   summary:
     name: Generate Summary (post-run)
     needs: opencode
-    if: always() && needs.opencode.result != 'skipped' && needs.opencode.outputs.run == 'true'
+    if: >-
+      always() &&
+      needs.opencode.result != 'skipped' &&
+      needs.opencode.outputs.run == 'true' &&
+      !contains(
+        fromJSON('["discussion_comment","issue_comment","pull_request_review_comment"]'),
+        github.event_name
+      )
     runs-on: ubuntu-latest
     permissions:
       actions: read

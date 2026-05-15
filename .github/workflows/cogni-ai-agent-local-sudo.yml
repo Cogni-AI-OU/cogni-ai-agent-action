@@ -276,7 +276,14 @@ jobs:
   summary:
     name: Generate Summary (post-run)
     needs: cogni-ai
-    if: always() && needs.cogni-ai.result != 'skipped' && needs.cogni-ai.outputs.run == 'true'
+    if: >-
+      always() &&
+      needs.cogni-ai.result != 'skipped' &&
+      needs.cogni-ai.outputs.run == 'true' &&
+      !contains(
+        fromJSON('["discussion_comment","issue_comment","pull_request_review_comment"]'),
+        github.event_name
+      )
     runs-on: ubuntu-latest
     permissions:
       actions: read
