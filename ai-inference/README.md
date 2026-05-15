@@ -27,7 +27,7 @@ jobs:
       models: read
     steps:
       - name: Run AI Inference
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1.0.0
         id: inference
         with:
           prompt: >-
@@ -117,7 +117,7 @@ jobs:
               github.ref
             }}
       - name: Run AI Inference
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1.0.0
         id: inference
         with:
           model: ${{ inputs.model || 'openai/gpt-4o-mini' }}
