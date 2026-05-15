@@ -262,9 +262,6 @@ jobs:
           }
           echo "::notice title=Cogni AI Agent Local prompt::$(escape "$COGNI_AI_PROMPT")"
           echo "::notice title=Cogni AI Agent Local output::$(escape "${COGNI_AI_OUTPUT:-}")"
-      - name: Print logs
-        if: cancelled() || failure()
-        run: grep -v INFO ~/.local/share/opencode/log/* || true
       # Debug with tmate on failure when debug logging is enabled.
       - if: ${{ (cancelled() || failure()) && runner.debug == '1' }}
         uses: mxschmitt/action-tmate@v3
