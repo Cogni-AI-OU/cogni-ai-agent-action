@@ -137,16 +137,6 @@ on:
         description: Version of cogni-ai-agent-skills to use.
         required: false
         type: string
-      version_instructions:
-        default: main
-        description: Version of cogni-ai-agent-instructions to use
-        required: false
-        type: string
-      version_skills:
-        default: main
-        description: Version of cogni-ai-agent-skills to use
-        required: false
-        type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
 concurrency:
   cancel-in-progress: false
