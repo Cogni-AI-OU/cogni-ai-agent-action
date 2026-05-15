@@ -32,9 +32,15 @@ jobs:
         uses: actions/cache@v5.0.1
         with:
           path: ~/.local
-          key: ${{ runner.os }}-pip-${{ hashFiles('.devcontainer/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('.devcontainer/requirements.txt', '**/pyproject.toml') }}
       - name: Install Python dependencies
-        if: steps.python-user-site.outputs.cache-hit != 'true'
-        run: python -m pip install --user -r .devcontainer/requirements.txt
+        run: |
+          if [ "${{ steps.python-user-site.outputs.cache-hit }}" != "true" ]; then
+            if [ -f .devcontainer/requirements.txt ]; then
+              python -m pip install --user -r .devcontainer/requirements.txt
+            elif [ -f pyproject.toml ]; then
+              python -m pip install --user .
+            fi
+          fi
       - name: Ensure local bin on PATH
         run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"

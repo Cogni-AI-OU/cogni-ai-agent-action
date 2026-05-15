@@ -197,8 +197,10 @@ jobs:
             pre-commit|
       - uses: actions/setup-python@v6.1.0
         with:
-          cache: pip
-          cache-dependency-path: .devcontainer/requirements.txt
+          cache: ${{ hashFiles('.devcontainer/requirements.txt', '**/pyproject.toml') != '' && 'pip' || '' }}
+          cache-dependency-path: |
+            .devcontainer/requirements.txt
+            **/pyproject.toml
           python-version: '3.12'
       - name: Install pre-commit
         run: pip install pre-commit
@@ -207,10 +209,18 @@ jobs:
         uses: actions/cache@v5.0.1
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('.devcontainer/requirements.txt') }}
+          key: >-
+            ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{
+            hashFiles('.devcontainer/requirements.txt', '**/pyproject.toml') }}
       - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: pip install -r .devcontainer/requirements.txt
+        run: |
+          if [ "${{ steps.cache-dependencies.outputs.cache-hit }}" != "true" ]; then
+            if [ -f .devcontainer/requirements.txt ]; then
+              pip install -r .devcontainer/requirements.txt
+            elif [ -f pyproject.toml ]; then
+              pip install .
+            fi
+          fi
       - name: Run OpenCode Agent Local
         id: opencode
         uses: ./opencode
