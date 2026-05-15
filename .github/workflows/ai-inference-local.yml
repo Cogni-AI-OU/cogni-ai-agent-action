@@ -36,7 +36,7 @@ on:
     inputs:
       agent:
         default: default
-        description: Agent to use for system prompt
+        description: Agent to use for system prompt.
         options:
           - default
           - cogni-ai-architect
@@ -53,20 +53,20 @@ on:
         required: false
         type: boolean
       file_input:
-        description: File-based template variables
+        description: File-based template variables.
         required: false
         type: string
       input:
-        description: Template variables for .prompt.yml files
+        description: Template variables for .prompt.yml files.
         required: false
         type: string
       max-completion-tokens:
-        description: The maximum number of tokens to generate
+        description: The maximum number of tokens to generate.
         required: false
         type: number
       max-tokens:
         default: 16000
-        description: The maximum number of tokens to generate (deprecated)
+        description: The maximum number of tokens to generate (deprecated).
         required: false
         type: number
       model:
@@ -107,34 +107,34 @@ on:
         required: false
         type: choice
       prompt:
-        description: Prompt to pass to the model
+        description: Prompt to pass to the model.
         required: false
         default: Count to 10.
       prompt-file:
-        description: Path to a file containing the prompt
+        description: Path to a file containing the prompt.
         required: false
         type: string
       temperature:
-        description: The sampling temperature to use (0-1)
+        description: The sampling temperature to use (0-1).
         required: false
         type: number
       top-p:
-        description: The nucleus sampling parameter to use (0-1)
+        description: The nucleus sampling parameter to use (0-1).
         required: false
         type: number
       version_agents:
-        default: main
-        description: Version of cogni-ai-agents to use
+        default: v1.0.0
+        description: Version of cogni-ai-agents to use.
         required: false
         type: string
       version_instructions:
-        default: main
-        description: Version of cogni-ai-agent-instructions to use
+        default: v1.0.0
+        description: Version of cogni-ai-agent-instructions to use.
         required: false
         type: string
       version_skills:
-        default: main
-        description: Version of cogni-ai-agent-skills to use
+        default: v1.0.0
+        description: Version of cogni-ai-agent-skills to use.
         required: false
         type: string
 # Prevent concurrent runs on the same branch to avoid push conflicts.
@@ -208,6 +208,6 @@ jobs:
           temperature: ${{ inputs.temperature }}
           token: ${{ secrets.GITHUB_TOKEN }}
           top-p: ${{ inputs.top-p }}
-          version_agents: ${{ inputs.version_agents || 'main' }}
-          version_instructions: ${{ inputs.version_instructions || 'main' }}
-          version_skills: ${{ inputs.version_skills || 'main' }}
+          version_agents: ${{ inputs.version_agents || 'v1.0.0' }}
+          version_instructions: ${{ inputs.version_instructions || 'v1.0.0' }}
+          version_skills: ${{ inputs.version_skills || 'v1.0.0' }}

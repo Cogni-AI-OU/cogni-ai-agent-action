@@ -294,7 +294,7 @@ jobs:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action>
       - name: Run Cogni AI Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -404,7 +404,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Run Cogni AI Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action@main
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -457,9 +457,9 @@ to avoid accidental or malicious destructive actions.
 | `opencode-api-key` | API key for OpenCode | — | **Yes** |
 | `permissions` | Permissions configuration | — | No |
 | `prompt` | Prompt to pass to the agent | `''` | No |
-| `version_agents` | Version of cogni-ai-agents to use | `main` | No |
-| `version_instructions` | Version of cogni-ai-agent-instructions to use | `main` | No |
-| `version_skills` | Version of cogni-ai-agent-skills to use | `main` | No |
+| `version_agents` | Version of cogni-ai-agents to use. | `v1.0.0` | No |
+| `version_instructions` | Version of cogni-ai-agent-instructions to use. | `v1.0.0` | No |
+| `version_skills` | Version of cogni-ai-agent-skills to use. | `v1.0.0` | No |
 
 ### Hierarchical Permissions
 
@@ -500,9 +500,9 @@ you can follow these steps to set up the required agents, instructions, and skil
 
 ```bash
 # Clone agents, instructions, and skills.
-git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agents .github/agents
-git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions .github/instructions
-git clone --depth=1 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills .github/skills
+git clone --depth=1 -b v1.0.0 https://github.com/Cogni-AI-OU/cogni-ai-agents .github/agents
+git clone --depth=1 -b v1.0.0 https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions .github/instructions
+git clone --depth=1 -b v1.0.0 https://github.com/Cogni-AI-OU/cogni-ai-agent-skills .github/skills
 
 # Symlink individual agents from their subdirectories to the discovery directory.
 cd .github/agents

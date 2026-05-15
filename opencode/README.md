@@ -70,7 +70,7 @@ jobs:
         with:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run OpenCode Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@v1
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -200,7 +200,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Run OpenCode Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main
+        uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@v1
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -231,7 +231,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@v1
         with:
           agent_job_id: opencode-agent
           github_token: ${{ secrets.GITHUB_TOKEN }}

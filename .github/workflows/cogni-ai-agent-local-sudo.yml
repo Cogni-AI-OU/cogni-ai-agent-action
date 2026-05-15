@@ -41,26 +41,26 @@ on:
         type: string
       model:
         default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
-        description: Model to use for OpenCode
+        description: Model to use for OpenCode.
         required: false
         type: string
       prompt:
         default: ''
-        description: Custom prompt to override the default prompt
+        description: Custom prompt to override the default prompt.
         required: false
         type: string
       version_agents:
-        default: main
+        default: v1.0.0
         description: Version of cogni-ai-agents to use.
         required: false
         type: string
       version_instructions:
-        default: main
+        default: v1.0.0
         description: Version of cogni-ai-agent-instructions to use.
         required: false
         type: string
       version_skills:
-        default: main
+        default: v1.0.0
         description: Version of cogni-ai-agent-skills to use.
         required: false
         type: string
@@ -81,7 +81,7 @@ on:
         type: choice
       model:
         default: opencode/gemini-3-flash
-        description: Model to use for OpenCode
+        description: Model to use for OpenCode.
         options:
           - opencode/big-pickle
           - opencode/claude-3-5-haiku
@@ -133,7 +133,7 @@ on:
         required: false
         type: choice
       prompt:
-        description: Custom prompt to override the default prompt
+        description: Custom prompt to override the default prompt.
         required: false
         default: ''
 # Prevent concurrent runs on the same branch to avoid push conflicts.
@@ -252,9 +252,9 @@ jobs:
               github.event.pull_request.body ||
               github.event.discussion.body
             }}
-          version_agents: ${{ inputs.version_agents || 'main' }}
-          version_instructions: ${{ inputs.version_instructions || 'main' }}
-          version_skills: ${{ inputs.version_skills || 'main' }}
+          version_agents: ${{ inputs.version_agents || 'v1.0.0' }}
+          version_instructions: ${{ inputs.version_instructions || 'v1.0.0' }}
+          version_skills: ${{ inputs.version_skills || 'v1.0.0' }}
       - name: Annotate prompt and output
         env:
           COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
@@ -301,7 +301,7 @@ jobs:
               github.ref
             }}
       - name: Generate Summary
-        uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference/summary@main
+        uses: ./ai-inference/summary
         with:
           agent_job_id: cogni-ai
           github_token: ${{ secrets.GITHUB_TOKEN }}

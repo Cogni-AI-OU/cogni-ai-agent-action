@@ -374,18 +374,18 @@ inputs:
     description: Prompt to pass to the agent.
     required: false
   variant:
-    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal)
+    description: Model variant for provider-specific reasoning effort (e.g., high, max, minimal).
     required: false
   version_agents:
-    default: main
+    default: v1.0.0
     description: Version of cogni-ai-agents to use.
     required: false
   version_instructions:
-    default: main
+    default: v1.0.0
     description: Version of cogni-ai-agent-instructions to use.
     required: false
   version_skills:
-    default: main
+    default: v1.0.0
     description: Version of cogni-ai-agent-skills to use.
     required: false
 name: Cogni AI Agent
@@ -571,7 +571,7 @@ runs:
       shell: bash
       run: |
         git clone --depth 1 \
-          -b ${{ inputs.version_agents || 'main' }} \
+          -b ${{ inputs.version_agents || 'v1.0.0' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agents.git \
           ${{ runner.temp }}/.agents
     - name: Checkout cogni-ai-agent-instructions
@@ -579,7 +579,7 @@ runs:
       shell: bash
       run: |
         git clone --depth 1 \
-          -b ${{ inputs.version_instructions || 'main' }} \
+          -b ${{ inputs.version_instructions || 'v1.0.0' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
           ${{ runner.temp }}/.instructions
     - name: Checkout cogni-ai-agent-skills
@@ -587,7 +587,7 @@ runs:
       shell: bash
       run: |
         git clone --depth 1 \
-          -b ${{ inputs.version_skills || 'main' }} \
+          -b ${{ inputs.version_skills || 'v1.0.0' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
           ${{ runner.temp }}/.skills
     - name: Install gh extensions
@@ -671,7 +671,7 @@ runs:
     - name: Run opencode
       id: opencode
       if: steps.check.outputs.run == 'true'
-      uses: Cogni-AI-OU/cogni-ai-agent-action/opencode@main  # Note: Do not change this line to anomalyco/opencode.
+      uses: ./opencode
       env:
         GH_TOKEN: ${{ github.token }}
         GITHUB_EVENT_NAME: ${{ github.event_name == 'pull_request_target' && 'pull_request' || github.event_name }}
