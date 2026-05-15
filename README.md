@@ -104,7 +104,7 @@ jobs:
         with:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       - name: Run Cogni AI Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1.0.0
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -125,7 +125,7 @@ To enable OpenTelemetry instrumentation and export traces to Datadog, set the `o
 
 ```yaml
 - name: Run Cogni AI Agent
-  uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+  uses: Cogni-AI-OU/cogni-ai-agent-action@v1.0.0
   env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # Datadog / OTLP Configuration
@@ -312,7 +312,7 @@ jobs:
           persist-credentials: false  # Prevents Duplicate header: "Authorization" error.
       # See: <https://github.com/Cogni-AI-OU/cogni-ai-agent-action>
       - name: Run Cogni AI Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1.0.0
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -422,7 +422,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Run Cogni AI Agent
-        uses: Cogni-AI-OU/cogni-ai-agent-action@v1
+        uses: Cogni-AI-OU/cogni-ai-agent-action@v1.0.0
         id: agent
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
