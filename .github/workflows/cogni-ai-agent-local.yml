@@ -174,7 +174,7 @@ jobs:
           github.event.pull_request.body ||
           github.event.discussion.body ||
           '',
-          '/brainstorm'
+          '/'
         ) ||
         contains(
           github.event.comment.body ||
@@ -182,39 +182,7 @@ jobs:
           github.event.pull_request.body ||
           github.event.discussion.body ||
           '',
-          '/co'
-        ) ||
-        contains(
-          github.event.comment.body ||
-          github.event.issue.body ||
-          github.event.pull_request.body ||
-          github.event.discussion.body ||
-          '',
-          '/cogni'
-        ) ||
-        contains(
-          github.event.comment.body ||
-          github.event.issue.body ||
-          github.event.pull_request.body ||
-          github.event.discussion.body ||
-          '',
-          '/review'
-        ) ||
-        contains(
-          github.event.comment.body ||
-          github.event.issue.body ||
-          github.event.pull_request.body ||
-          github.event.discussion.body ||
-          '',
-          '@OpenCode-Agent'
-        ) ||
-        contains(
-          github.event.comment.body ||
-          github.event.issue.body ||
-          github.event.pull_request.body ||
-          github.event.discussion.body ||
-          '',
-          '@opencode-agent'
+          '@'
         )
       )
     runs-on: ubuntu-latest
