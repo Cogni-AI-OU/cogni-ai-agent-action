@@ -2,9 +2,6 @@
 name: Generate Summary
 description: Generate an agent run summary based on logs
 inputs:
-  github_token:
-    description: GitHub Token
-    required: true
   agent_job_id:
     description: Machine name (YAML key) of the job whose logs should be extracted
     required: false
@@ -16,6 +13,9 @@ inputs:
     default: 'false'
     description: Enable Model Context Protocol integration with GitHub tools.
     required: false
+  github_token:
+    description: GitHub Token
+    required: true
   run_attempt:
     default: ${{ github.run_attempt }}
     description: Run Attempt
@@ -134,13 +134,13 @@ runs:
       uses: Cogni-AI-OU/cogni-ai-agent-action/ai-inference@v1.0.0
       with:
         agent: cogni-ai-agent-auditor
+        enable-github-mcp: ${{ inputs.enable-github-mcp }}
         force-run: true
         max-completion-tokens: 12000
         model: openai/gpt-4o-mini
         prompt-file: ${{ steps.prepare-summary-prompt.outputs.prompt_file }}
         skills: agent-log-analysis
-        token: ${{ inputs.github_token }}
-        version_skills: v1.0.0
-        enable-github-mcp: ${{ inputs.enable-github-mcp }}
         temperature: 0.2
+        token: ${{ inputs.github_token }}
         top-p: 0.9
+        version_skills: v1.0.0
