@@ -103,16 +103,37 @@ inputs:
           brainstorm-agent-runs: allow
           brainstorm-github-pr: allow
           cat: allow
+          chrome-devtools: deny
           code-review: allow
           code-tour: allow
+          codeql: deny
+          coding-standard-writer: allow
           context-aware-ops: allow
           critical-thinking: allow
+          datadog-agent: deny
+          datadog-api: deny
+          datadog-mcp: deny
+          datadog-monitors: deny
+          datadog-pulumi: deny
+          devcontainer: allow
+          dictation: deny
+          direnv: deny
+          docker: allow
+          dockerfile: allow
           docs-review: allow
           docs-writer: allow
           dot-github: allow
+          editorconfig: allow
           fact-writer: allow
+          gdpr-compliant: allow
           gh: allow
           gh-api: allow
+          gh-aw: allow
+          gh-aw-compile: allow
+          gh-aw-debug: allow
+          gh-aw-firewall: allow
+          gh-aw-firewall-debug: allow
+          gh-aw-new: allow
           gh-issue: allow
           gh-models: allow
           gh-pr: allow
@@ -123,6 +144,7 @@ inputs:
           git-filter-branch: allow
           git-merge: allow
           git-rebase: allow
+          gitattributes: allow
           github: allow
           github-actions: allow
           github-issue: allow
@@ -130,16 +152,27 @@ inputs:
           github-pr-review: allow
           github-script: allow
           github-topics: allow
+          github-aw: allow
+          github-aw-debug: allow
+          github-aw-memory: allow
+          github-aw-syntax: allow
+          github-mcp-server: allow
+          github-pulumi: allow
           mermaid: allow
           mermaid-beta: allow
+          mcp-cli: deny
           minizinc: allow
           molecule: deny
           opencode: allow
           out-yaml: allow
           pdf: allow
+          pipenv: allow
+          pipfile: allow
           pre-commit: allow
           python: allow
+          report-writer: deny
           robust-commands: allow
+          sbom: deny
           security-audit: allow
           shell: allow
           skill-writer: allow
@@ -299,14 +332,32 @@ inputs:
         skill:
           <<: *default-skill
           ansible: deny
+          coding-standard-writer: deny
+          devcontainer: deny
+          docker: deny
+          dockerfile: deny
+          gh-aw: deny
+          gh-aw-compile: deny
+          gh-aw-debug: deny
+          gh-aw-firewall: deny
+          gh-aw-firewall-debug: deny
+          gh-aw-new: deny
           gh-models: deny
           gh-run: deny
           git-expert: deny
           github-actions: deny
+          github-aw: deny
+          github-aw-debug: deny
+          github-aw-memory: deny
+          github-aw-syntax: deny
+          github-mcp-server: deny
+          github-pulumi: deny
           github-script: deny
           mermaid: deny
           minizinc: deny
           pdf: deny
+          pipenv: deny
+          pipfile: deny
           pre-commit: deny
           robust-commands: deny
           shell: deny
