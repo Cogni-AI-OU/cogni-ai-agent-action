@@ -56,7 +56,7 @@ repos:
           - yaml
         # Excluded due to https://github.com/lyz-code/yamlfix/issues/310 which breaks multiline formatting.
         # Also excluding workflows that require blank lines for readability.
-        exclude: \.github/workflows/opencode(-review)?\.yml$
+        exclude: \.github/workflows/(opencode(-review)?\.yml$|.*\.lock\.yml$)
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -85,6 +85,7 @@ repos:
     rev: v1.7.10
     hooks:
       - id: actionlint
+        exclude: \.github/workflows/.*\.lock\.yml$
   - repo: https://github.com/tcort/markdown-link-check
     rev: v3.14.2
     hooks:
