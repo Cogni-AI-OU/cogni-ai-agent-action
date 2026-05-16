@@ -7,6 +7,7 @@ engine:
   id: copilot
 imports:
   - Cogni-AI-OU/cogni-ai-agents/cogni-ai-architect/cogni-ai-architect.agent.md@main
+  - AGENTS-RUNTIME.md
 on:
   slash_command:
     name: co
