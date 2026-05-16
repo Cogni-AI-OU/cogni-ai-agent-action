@@ -201,7 +201,7 @@ on:
         required: false
         type: string
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/deepseek-v4-flash-free
         description: Model to use for OpenCode
         required: false
         type: string
@@ -228,7 +228,7 @@ on:
         required: false
         type: choice
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/deepseek-v4-flash-free
         description: Model to use for OpenCode
         options:
           - opencode/big-pickle
@@ -241,7 +241,7 @@ on:
           - opencode/claude-sonnet-4-6
           - opencode/deepseek-v4-flash-free
           - opencode/gemini-3.1-pro
-          - opencode/gemini-3-flash
+          - opencode/deepseek-v4-flash-free
           - opencode/gemini-3-pro
           - opencode/glm-5
           - opencode/glm-5.1
@@ -366,7 +366,7 @@ on:
         required: false
         type: string
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/deepseek-v4-flash-free
         description: Model to use for OpenCode
         required: true
         type: string
@@ -392,11 +392,11 @@ on:
         required: false
         type: choice
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/deepseek-v4-flash-free
         description: Model to use for OpenCode
         options:
           - opencode/gemini-3.1-pro
-          - opencode/gemini-3-flash
+          - opencode/deepseek-v4-flash-free
         required: true
         type: choice
       prompt:
@@ -471,7 +471,7 @@ to avoid accidental or malicious destructive actions.
 | :--- | :--- | :--- | :--- |
 | `agent` | Agent to use | `cogni-ai-architect` | No |
 | `mentions` | Comma-separated mentions | `/co,/cogni,/review,/brainstorm` | No |
-| `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
+| `model` | Model to use for OpenCode | `opencode/deepseek-v4-flash-free` | No |
 | `opencode-api-key` | API key for OpenCode | — | **Yes** |
 | `permissions` | Permissions configuration | — | No |
 | `prompt` | Prompt to pass to the agent | `''` | No |

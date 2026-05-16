@@ -18,7 +18,7 @@ inputs:
     description: Comma-separated bot mentions for OpenCode.
     required: false
   model:
-    default: opencode/gemini-3-flash
+    default: opencode/deepseek-v4-flash-free
     description: Model to use for OpenCode.
     required: false
   oidc_base_url:

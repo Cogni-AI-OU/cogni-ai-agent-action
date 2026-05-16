@@ -136,7 +136,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/deepseek-v4-flash-free
         description: Model to use for OpenCode
         options:
           - opencode/big-pickle
@@ -149,7 +149,7 @@ on:
           - opencode/claude-sonnet-4-6
           - opencode/deepseek-v4-flash-free
           - opencode/gemini-3.1-pro
-          - opencode/gemini-3-flash
+          - opencode/deepseek-v4-flash-free
           - opencode/gemini-3-pro
           - opencode/glm-5
           - opencode/glm-5.1
@@ -261,7 +261,7 @@ jobs:
 | :--- | :--- | :--- | :--- |
 | `agent` | Agent to use | — | No |
 | `mentions` | Comma-separated mentions | `/oc,/opencode,/review` | No |
-| `model` | Model to use for OpenCode | `opencode/gemini-3-flash` | No |
+| `model` | Model to use for OpenCode | `opencode/deepseek-v4-flash-free` | No |
 | `opencode-api-key` | API key for OpenCode | — | **Yes** |
 | `permissions` | Permissions (JSON string) | — | No |
 | `prompt` | Prompt to pass to the agent | `''` | No |
