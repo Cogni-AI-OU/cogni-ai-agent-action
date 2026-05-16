@@ -12,6 +12,7 @@ repos:
           - -c
           - .yamllint
           - -s
+        exclude: \.github/workflows/.*\.lock\.yml$
   - repo: https://github.com/ansible-community/ansible-lint
     rev: v6.22.2
     hooks:
@@ -65,7 +66,9 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
       - id: check-yaml
+        exclude: \.github/workflows/.*\.lock\.yml$
       - id: end-of-file-fixer
+        exclude: \.github/workflows/.*\.lock\.yml$
       - id: fix-byte-order-marker
       - id: trailing-whitespace
         exclude: \.ya?ml$  # yamllint handles YAML files with warning level
