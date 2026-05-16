@@ -51,6 +51,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           agent: cogni-ai-docs-editor
-          model: opencode/gemini-3-flash
+          model: opencode/deepseek-v4-flash-free
           opencode-api-key: ${{ secrets.OPENCODE_API_KEY }}
           prompt: ${{ steps.read-prompt.outputs.prompt }}

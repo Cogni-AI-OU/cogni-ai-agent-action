@@ -41,7 +41,7 @@ on:
         required: false
         type: string
       model:
-        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/gemini-3-flash' }}
+        default: ${{ vars.OPENCODE_MODEL_DEFAULT || 'opencode/deepseek-v4-flash-free' }}
         description: Model to use for OpenCode.
         required: false
         type: string
@@ -81,7 +81,7 @@ on:
         required: false
         type: choice
       model:
-        default: opencode/gemini-3-flash
+        default: opencode/deepseek-v4-flash-free
         description: Model to use for OpenCode.
         options:
           - opencode/big-pickle
@@ -152,7 +152,7 @@ env:
       github.ref
     }}
   OPENCODE_AGENT_DEFAULT: cogni-ai-architect
-  OPENCODE_MODEL_DEFAULT: opencode/gemini-3-flash
+  OPENCODE_MODEL_DEFAULT: opencode/deepseek-v4-flash-free
 jobs:
   cogni-ai:
     name: Cogni AI Agent Local
