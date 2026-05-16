@@ -98,6 +98,7 @@ inputs:
         skill: &default-skill
           agent-log-analysis: deny
           agents-md-writer: allow
+          agentskills: allow
           ansible: allow
           brainstorm: allow
           brainstorm-agent-runs: allow
@@ -127,6 +128,7 @@ inputs:
           fact-writer: allow
           gdpr-compliant: allow
           gh: allow
+          gh-agent-task: allow
           gh-api: allow
           gh-aw: allow
           gh-aw-compile: allow
@@ -134,10 +136,12 @@ inputs:
           gh-aw-firewall: allow
           gh-aw-firewall-debug: allow
           gh-aw-new: allow
+          gh-codespace: allow
           gh-issue: allow
           gh-models: allow
           gh-pr: allow
           gh-run: allow
+          gh-skill: allow
           gh-search: allow
           git: allow
           git-expert: allow
@@ -147,6 +151,7 @@ inputs:
           gitattributes: allow
           github: allow
           github-actions: allow
+          github-ah: allow
           github-issue: allow
           github-pr: allow
           github-pr-review: allow
@@ -331,21 +336,26 @@ inputs:
         edit: deny
         skill:
           <<: *default-skill
+          agentskills: deny
           ansible: deny
           coding-standard-writer: deny
           devcontainer: deny
           docker: deny
           dockerfile: deny
+          gh-agent-task: deny
           gh-aw: deny
           gh-aw-compile: deny
           gh-aw-debug: deny
           gh-aw-firewall: deny
           gh-aw-firewall-debug: deny
           gh-aw-new: deny
+          gh-codespace: deny
           gh-models: deny
           gh-run: deny
+          gh-skill: deny
           git-expert: deny
           github-actions: deny
+          github-ah: deny
           github-aw: deny
           github-aw-debug: deny
           github-aw-memory: deny
