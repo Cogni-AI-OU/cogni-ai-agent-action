@@ -1,6 +1,6 @@
 ---
 # Cogni AI Architect
-# Triggered by /co, /cogni
+# Triggered by /archi, /architect
 name: Cogni AI Architect
 description: Runs Cogni AI Architect, an elite autonomous engineering kernel and systems architect.
 engine:
