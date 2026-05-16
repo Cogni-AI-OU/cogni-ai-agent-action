@@ -241,7 +241,7 @@ on:
           - opencode/claude-sonnet-4-6
           - opencode/deepseek-v4-flash-free
           - opencode/gemini-3.1-pro
-          - opencode/deepseek-v4-flash-free
+          - opencode/gemini-3-flash
           - opencode/gemini-3-pro
           - opencode/glm-5
           - opencode/glm-5.1
