@@ -1,29 +1,21 @@
 ---
 # Cogni AI Architect
-# Triggered by /archi
 name: Cogni AI Architect
 description: Runs Cogni AI Architect, an elite autonomous engineering kernel and systems architect.
 engine:
   id: opencode
+  model: copilot/claude-sonnet-4.6
 imports:
   - Cogni-AI-OU/cogni-ai-agents/cogni-ai-architect/cogni-ai-architect.agent.md@main
-  - AGENTS-RUNTIME.md
 on:
   discussion:
     types: [created, edited, labeled]
   discussion_comment:
     types: [created, edited]
-  slash_command:
-    name: archi
-    events: [issue_comment, pull_request_comment]
   issues:
     types: [opened]
   issue_comment:
     types: [created, edited]
-  label_command:
-    name: cogni-ai-architect
-    events: [pull_request]
-    strategy: decentralized
   pull_request:
     types: [edited, labeled, opened, reopened]
   pull_request_review_comment:
@@ -41,6 +33,10 @@ on:
         required: false
         type: string
         default: ''
+  label_command:
+    name: cogni-ai-architect
+    events: [pull_request]
+    strategy: decentralized
 permissions:
   contents: read
   actions: read
