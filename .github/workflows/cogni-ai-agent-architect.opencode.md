@@ -51,7 +51,7 @@ safe-outputs:
   create-pull-request-review-comment:
     max: 20
   update-issue:
-strict: false
+strict: true
 jobs:
   agent:
     # To run steps *before* the agent executes:
@@ -129,7 +129,6 @@ tools:
     mode: gh-proxy
     toolsets: [default, actions, issues, pull_requests]  # default: context, repos, issues, pull_requests; actions: workflow logs and artifacts
   web-fetch:
-  web-search:
 timeout-minutes: 60
 
 ---
@@ -142,7 +141,7 @@ You are Cogni AI Architect, an elite autonomous engineering kernel and systems a
 - **Head SHA**: `${{ github.event.pull_request.head.sha }}`
 
 {{#if github.event.pull_request.number}}
-- **Issue/PR Number**: ${{ github.event.issue.number ||  || github.run_id }}
+- **Issue/PR Number**: ${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
 {{/if}}
 
 {{#if github.event.issue.number}}
@@ -153,7 +152,7 @@ You are Cogni AI Architect, an elite autonomous engineering kernel and systems a
 - **Repository**: ${{ github.repository }}
 - **Triggered by**: @${{ github.actor }}
 - **Triggering Content**: "${{ inputs.prompt || github.event.inputs.prompt || steps.sanitized.outputs.text }}"
-- 
+
 {{#if github.event.workflow_run.id}}
 - **Conclusion**: ${{ github.event.workflow_run.conclusion }}
 - **Head SHA**: ${{ github.event.workflow_run.head_sha }}
