@@ -20,4 +20,4 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh workflow run cogni-ai-architect.lock.yml --ref "${{ github.ref }}" -f prompt="${{ inputs.prompt }}"
+        gh workflow run cogni-ai-agent-architect.opencode.lock.yml --ref "${{ github.ref }}" -f prompt="${{ inputs.prompt }}"
