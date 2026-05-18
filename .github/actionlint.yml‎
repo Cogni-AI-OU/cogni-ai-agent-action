@@ -1,0 +1,21 @@
+# .github/actionlint.yml
+paths:
+  # Match any .lock.yml (or .lock.yaml) file inside .github/workflows/
+  # Glob syntax uses doublestar (see docs for details). Path separator is always '/'.
+  .github/workflows/**/*.lock.yml:
+    ignore:
+      # '.*' is a broad regex that matches (and ignores) every error message
+      # for files matching the glob above. This suppresses syntax, expression,
+      # shellcheck, and all other errors.
+      - '.*'
+
+  # Also cover the .lock.yaml variant if your generator ever produces it
+  .github/workflows/**/*.lock.yaml:
+    ignore:
+      - '.*'
+
+  # Optional: You can still have rules for real workflow files
+  .github/workflows/**/*.yml:
+    ignore: []   # or add specific ignores, e.g. certain shellcheck rules
+  .github/workflows/**/*.yaml:
+    ignore: []
