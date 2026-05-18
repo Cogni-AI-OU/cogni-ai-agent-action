@@ -11,7 +11,7 @@ inputs:
   prompt:
     description: User prompt
     required: false
-    default: 'Hello from wrapper'
+    default: Hello from wrapper
 runs:
   using: composite
   steps:
@@ -19,5 +19,6 @@ runs:
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
-      run: |
-        gh workflow run cogni-ai-agent-architect.opencode.lock.yml --ref "${{ github.ref }}" -f prompt="${{ inputs.prompt }}"
+        PROMPT: ${{ inputs.prompt }}
+      run: |-
+        gh workflow run cogni-ai-agent-architect.opencode.lock.yml --ref "${{ github.ref }}" -f prompt="$PROMPT"
