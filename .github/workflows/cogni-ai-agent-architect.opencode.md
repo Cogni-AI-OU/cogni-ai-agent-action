@@ -4,7 +4,7 @@
 name: Cogni AI Architect
 description: Runs Cogni AI Architect, an elite autonomous engineering kernel and systems architect.
 engine:
-  id: copilot
+  id: opencode
 imports:
   - Cogni-AI-OU/cogni-ai-agents/cogni-ai-architect/cogni-ai-architect.agent.md@main
   - AGENTS-RUNTIME.md
