@@ -28,12 +28,6 @@ The use of the `task` tool and spawning sub-agents is permitted for complex, mul
 5. **Session Task Initialization**:
    Ensure appropriate todos are created before starting work, so the session can be continued upon restart.
 
-## Path Resolution for Instructions and Skills
-
-When instructions are loaded from a temporary directory (e.g., `${{ runner.temp }}/.agents/` or `${{ runner.temp }}/.skills/`), you MUST resolve any relative paths mentioned within those files against the directory where the instruction file itself is located.
-
-To determine the base directory for an instruction file, check the `Instructions from: <path>` header provided in your system prompt. Do NOT assume paths are relative to your current working directory unless the instruction file explicitly states otherwise or is located within your project's workspace.
-
 ## GitHub Actions Runtime
 
 You are running as an autonomous agent via the `cogni-ai-agent-action` GitHub action through the OpenCode integration within a GitHub runner environment. The project resides in `/home/runner/work/` in the GitHub runner.
