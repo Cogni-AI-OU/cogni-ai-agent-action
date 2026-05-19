@@ -1,0 +1,24 @@
+---
+# yamllint disable rule:line-length
+# This is a GitHub Action that triggers the Cogni AI Architect workflow.
+author: Cogni AI OU
+branding:
+  color: blue
+  icon: cpu
+name: Cogni AI Architect
+description: Triggers the Cogni AI Architect workflow
+inputs:
+  prompt:
+    description: User prompt
+    required: false
+    default: Hello from wrapper
+runs:
+  using: composite
+  steps:
+    - name: Call Architect workflow
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PROMPT: ${{ inputs.prompt }}
+      run: |-
+        gh workflow run cogni-ai-agent-architect.opencode.lock.yml --ref "${{ github.ref }}" -f prompt="$PROMPT"
