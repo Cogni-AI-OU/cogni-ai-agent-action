@@ -168,7 +168,7 @@ jobs:
           parent-span-id: ${{ needs.pre_activation.outputs.setup-parent-span-id || needs.pre_activation.outputs.setup-span-id }}
         env:
           GH_AW_SETUP_WORKFLOW_NAME: "Cogni AI Architect"
-          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent-architect.opencode.lock.yml@${{ github.ref }}
+          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent.opencode.lock.yml@${{ github.ref }}
           GH_AW_INFO_VERSION: "1.2.14"
           GH_AW_INFO_ENGINE_ID: "opencode"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
@@ -270,7 +270,7 @@ jobs:
         id: check-lock-file
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          GH_AW_WORKFLOW_FILE: "cogni-ai-agent-architect.opencode.lock.yml"
+          GH_AW_WORKFLOW_FILE: "cogni-ai-agent.opencode.lock.yml"
           GH_AW_CONTEXT_WORKFLOW_REF: "${{ github.workflow_ref }}"
         with:
           script: |
@@ -400,7 +400,7 @@ jobs:
           cat << 'GH_AW_PROMPT_c0fe7307ef761609_EOF'
           </system>
           {{#runtime-import .github/aw/imports/Cogni-AI-OU/cogni-ai-agents/8b578dd87119c14f573caf705fa7db8eb5cffd43/cogni-ai-architect_cogni-ai-architect.agent.md}}
-          {{#runtime-import .github/workflows/cogni-ai-agent-architect.opencode.md}}
+          {{#runtime-import .github/workflows/cogni-ai-agent.opencode.md}}
           GH_AW_PROMPT_c0fe7307ef761609_EOF
           } > "$GH_AW_PROMPT"
       - name: Interpolate variables and render templates
@@ -557,7 +557,7 @@ jobs:
           parent-span-id: ${{ needs.activation.outputs.setup-parent-span-id || needs.activation.outputs.setup-span-id }}
         env:
           GH_AW_SETUP_WORKFLOW_NAME: "Cogni AI Architect"
-          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent-architect.opencode.lock.yml@${{ github.ref }}
+          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent.opencode.lock.yml@${{ github.ref }}
           GH_AW_INFO_VERSION: "1.2.14"
           GH_AW_INFO_ENGINE_ID: "opencode"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
@@ -1184,7 +1184,7 @@ jobs:
       issues: write
       pull-requests: write
     concurrency:
-      group: "gh-aw-conclusion-cogni-ai-agent-architect.opencode"
+      group: "gh-aw-conclusion-cogni-ai-agent.opencode"
       cancel-in-progress: false
       queue: max
     outputs:
@@ -1203,7 +1203,7 @@ jobs:
           parent-span-id: ${{ needs.activation.outputs.setup-parent-span-id || needs.activation.outputs.setup-span-id }}
         env:
           GH_AW_SETUP_WORKFLOW_NAME: "Cogni AI Architect"
-          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent-architect.opencode.lock.yml@${{ github.ref }}
+          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent.opencode.lock.yml@${{ github.ref }}
           GH_AW_INFO_VERSION: "1.2.14"
           GH_AW_INFO_ENGINE_ID: "opencode"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
@@ -1291,7 +1291,7 @@ jobs:
           GH_AW_WORKFLOW_NAME: "Cogni AI Architect"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
-          GH_AW_WORKFLOW_ID: "cogni-ai-agent-architect.opencode"
+          GH_AW_WORKFLOW_ID: "cogni-ai-agent.opencode"
           GH_AW_ACTION_FAILURE_ISSUE_EXPIRES_HOURS: "168"
           GH_AW_ENGINE_ID: "opencode"
           GH_AW_SECRET_VERIFICATION_RESULT: ${{ needs.activation.outputs.secret_verification_result }}
@@ -1358,7 +1358,7 @@ jobs:
           parent-span-id: ${{ needs.activation.outputs.setup-parent-span-id || needs.activation.outputs.setup-span-id }}
         env:
           GH_AW_SETUP_WORKFLOW_NAME: "Cogni AI Architect"
-          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent-architect.opencode.lock.yml@${{ github.ref }}
+          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent.opencode.lock.yml@${{ github.ref }}
           GH_AW_INFO_VERSION: "1.2.14"
           GH_AW_INFO_ENGINE_ID: "opencode"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
@@ -1572,7 +1572,7 @@ jobs:
           job-name: ${{ github.job }}
         env:
           GH_AW_SETUP_WORKFLOW_NAME: "Cogni AI Architect"
-          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent-architect.opencode.lock.yml@${{ github.ref }}
+          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent.opencode.lock.yml@${{ github.ref }}
           GH_AW_INFO_VERSION: "1.2.14"
           GH_AW_INFO_ENGINE_ID: "opencode"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
@@ -1602,13 +1602,13 @@ jobs:
       pull-requests: write
     timeout-minutes: 15
     env:
-      GH_AW_CALLER_WORKFLOW_ID: "${{ github.repository }}/cogni-ai-agent-architect.opencode"
+      GH_AW_CALLER_WORKFLOW_ID: "${{ github.repository }}/cogni-ai-agent.opencode"
       GH_AW_DETECTION_CONCLUSION: ${{ needs.detection.outputs.detection_conclusion }}
       GH_AW_DETECTION_REASON: ${{ needs.detection.outputs.detection_reason }}
       GH_AW_EFFECTIVE_TOKENS: ${{ needs.agent.outputs.effective_tokens }}
       GH_AW_ENGINE_ID: "opencode"
       GH_AW_ENGINE_MODEL: "copilot/claude-sonnet-4.6"
-      GH_AW_WORKFLOW_ID: "cogni-ai-agent-architect.opencode"
+      GH_AW_WORKFLOW_ID: "cogni-ai-agent.opencode"
       GH_AW_WORKFLOW_NAME: "Cogni AI Architect"
     outputs:
       code_push_failure_count: ${{ steps.process_safe_outputs.outputs.code_push_failure_count }}
@@ -1628,7 +1628,7 @@ jobs:
           parent-span-id: ${{ needs.activation.outputs.setup-parent-span-id || needs.activation.outputs.setup-span-id }}
         env:
           GH_AW_SETUP_WORKFLOW_NAME: "Cogni AI Architect"
-          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent-architect.opencode.lock.yml@${{ github.ref }}
+          GH_AW_CURRENT_WORKFLOW_REF: ${{ github.repository }}/.github/workflows/cogni-ai-agent.opencode.lock.yml@${{ github.ref }}
           GH_AW_INFO_VERSION: "1.2.14"
           GH_AW_INFO_ENGINE_ID: "opencode"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
