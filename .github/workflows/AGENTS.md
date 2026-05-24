@@ -15,6 +15,8 @@ For a human-readable overview, see [README.md](README.md).
   Tests the local `ai-inference/action.yml` action on push.
 - **[check.yml](check.yml)**:
   Linting and quality gates via org-level reusable workflow.
+- **[check-pr-comment.yml](check-pr-comment.yml)**:
+  Extracts annotations from failed Check workflow runs and posts them as a PR comment.
 - **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
   Runs local `action.yml` as a wrapper for OpenCode.
 - **[cogni-ai-agent-local-sudo.yml](cogni-ai-agent-local-sudo.yml)**:
@@ -48,6 +50,12 @@ For a human-readable overview, see [README.md](README.md).
 - Purpose: Runs actionlint and pre-commit via org-level reusable workflow.
 - Triggers: `push`, `pull_request`, `schedule`, `workflow_dispatch`.
 - Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/check.yml@main`.
+
+### check-pr-comment.yml
+
+- Purpose: Extracts annotations from failed Check workflow runs and posts them as a PR comment.
+- Triggers: `workflow_run` (Check completed).
+- Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/check-pr-comment.yml@main`.
 
 ### cogni-ai-agent-local.yml
 
