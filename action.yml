@@ -636,7 +636,7 @@ runs:
     - name: Install GitHub Copilot CLI
       env:
         GH_HOST: github.com
-      run: curl -fsSL https://raw.githubusercontent.com/github/gh-aw/refs/tags/v0.75.4/actions/setup/sh/install_copilot_cli.sh | bash 1.0.52
+      run: curl -fsSL https://raw.githubusercontent.com/github/gh-aw/refs/tags/v0.75.4/actions/setup/sh/install_copilot_cli.sh | bash -s -- 1.0.52
       shell: bash
     - name: Install copilot plugins
       if: steps.check.outputs.run == 'true'
