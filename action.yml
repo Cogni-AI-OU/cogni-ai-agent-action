@@ -627,6 +627,13 @@ runs:
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
+    - name: Install copilot plugins
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        copilot plugin marketplace add Cogni-AI-OU/cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-dev-ops@cogni-ai-agentic-collections
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
@@ -882,6 +889,7 @@ runs:
             },
             "skills": {
               "paths": [
+                "~/.copilot/skills",
                 "${{ runner.temp }}/.skills",
                 "${{ github.workspace }}/.github/skills"
               ]
