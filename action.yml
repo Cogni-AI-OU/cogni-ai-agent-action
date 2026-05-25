@@ -630,7 +630,8 @@ runs:
     - name: Install GitHub Copilot CLI
       env:
         GH_HOST: github.com
-      run: curl -fsSL https://raw.githubusercontent.com/github/gh-aw/refs/tags/v0.75.4/actions/setup/sh/install_copilot_cli.sh | bash -s -- 1.0.52
+      run: curl -fsSL https://raw.githubusercontent.com/github/gh-aw/refs/tags/v0.75.4/actions/setup/sh/install_copilot_cli.sh
+        | bash -s -- 1.0.52
       shell: bash
     - name: Install copilot plugins
       if: steps.check.outputs.run == 'true'
@@ -670,7 +671,7 @@ runs:
         persist-credentials: false
         ref: ${{ inputs.version_skills || 'main' }}
         repository: Cogni-AI-OU/cogni-ai-agentic-collections
-        # path: ${{ runner.temp }}/collections # This won't work: Error: Repository path '/home/runner/work/_temp/collections' is not under '/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action'
+        path: .collections
         sparse-checkout: |
           skills
         fetch-depth: 1
@@ -679,7 +680,7 @@ runs:
       shell: bash
       run: |
         mkdir -p ${{ env.HOME }}/.copilot
-        ln -sf ${{ runner.temp }}/collections/skills ${{ env.HOME }}/.copilot/skills
+        ln -sf ${{ github.workspace }}/.collections/skills ${{ env.HOME }}/.copilot/skills
     - name: Install gh extensions
       if: steps.check.outputs.run == 'true' && inputs.gh-extensions != ''
       shell: bash
