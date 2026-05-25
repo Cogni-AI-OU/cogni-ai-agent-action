@@ -666,21 +666,12 @@ runs:
       if: steps.check.outputs.run == 'true'
       uses: actions/checkout@v4
       with:
-        repository: Cogni-AI-OU/cogni-ai-agentic-collections
-        ref: ${{ inputs.version_skills || 'main' }}
-        path: ${{ runner.temp }}/.skillscache
-        sparse-checkout: |
-          AGENTS-RUNTIME.md
-          skills
-        sparse-checkout-cone-mode: false
+        path: ${{ env.HOME }}/.copilot/skills
         persist-credentials: false
-    - name: Install skills from collections
-      if: steps.check.outputs.run == 'true'
-      shell: bash
-      run: |
-        mkdir -p ${{ runner.temp }}/.skills
-        cp -r "${{ runner.temp }}/.skillscache/skills/"* "${{ runner.temp }}/.skills/"
-        cp "${{ runner.temp }}/.skillscache/AGENTS-RUNTIME.md" "${{ runner.temp }}/.skills/AGENTS-RUNTIME.md"
+        ref: ${{ inputs.version_skills || 'main' }}
+        repository: Cogni-AI-OU/cogni-ai-agentic-collections
+        sparse-checkout: |
+          skills
     - name: Install gh extensions
       if: steps.check.outputs.run == 'true' && inputs.gh-extensions != ''
       shell: bash
