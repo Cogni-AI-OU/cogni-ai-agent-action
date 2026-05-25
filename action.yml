@@ -901,7 +901,7 @@ runs:
             },
             "skills": {
               "paths": [
-                "~/.copilot/skills",
+                "${{ env.HOME }}/.copilot/skills",
                 "${{ runner.temp }}/.skills",
                 "${{ github.workspace }}/.github/skills"
               ]
