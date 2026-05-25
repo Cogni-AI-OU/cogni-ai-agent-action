@@ -670,7 +670,7 @@ runs:
         persist-credentials: false
         ref: ${{ inputs.version_skills || 'main' }}
         repository: Cogni-AI-OU/cogni-ai-agentic-collections
-        path: ${{ runner.temp }}/collections
+        # path: ${{ runner.temp }}/collections # This won't work: Error: Repository path '/home/runner/work/_temp/collections' is not under '/home/runner/work/cogni-ai-agent-action/cogni-ai-agent-action'
         sparse-checkout: |
           skills
         fetch-depth: 1
