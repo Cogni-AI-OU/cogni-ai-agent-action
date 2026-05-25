@@ -641,9 +641,10 @@ runs:
         copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections
         copilot plugin install cogni-ai-dev-ops@cogni-ai-agentic-collections
     - name: Install GitHub Copilot CLI
-      run: bash "${RUNNER_TEMP}/gh-aw/actions/install_copilot_cli.sh" 1.0.52
       env:
         GH_HOST: github.com
+      run: "${RUNNER_TEMP}/gh-aw/actions/install_copilot_cli.sh" 1.0.52
+      shell: bash
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
