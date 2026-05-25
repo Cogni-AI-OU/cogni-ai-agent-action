@@ -643,7 +643,7 @@ runs:
     - name: Install GitHub Copilot CLI
       env:
         GH_HOST: github.com
-      run: "${RUNNER_TEMP}/gh-aw/actions/install_copilot_cli.sh" 1.0.52
+      run: bash "${RUNNER_TEMP}/gh-aw/actions/install_copilot_cli.sh" 1.0.52
       shell: bash
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
