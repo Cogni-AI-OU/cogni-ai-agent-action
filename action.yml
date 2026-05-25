@@ -638,14 +638,14 @@ runs:
       run: |
         copilot plugin marketplace add Cogni-AI-OU/cogni-ai-agentic-collections
         copilot plugin install cogni-ai-agentic-ops@cogni-ai-agentic-collections
-        copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-coder@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-dev-ops@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-developer@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-git-ops@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-github-ops@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-programmer@cogni-ai-agentic-collections &
-        copilot plugin install cogni-ai-tester@cogni-ai-agentic-collections &
+        copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-coder@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-dev-ops@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-developer@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-git-ops@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-github-ops@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-programmer@cogni-ai-agentic-collections
+        copilot plugin install cogni-ai-tester@cogni-ai-agentic-collections
         wait
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
