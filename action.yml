@@ -627,6 +627,12 @@ runs:
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
+    - name: Setup gh-aw scripts
+      id: setup
+      uses: github/gh-aw/actions/setup@v0.75.4
+      with:
+        destination: ${{ runner.temp }}/gh-aw/actions
+        job-name: ${{ github.job }}
     - name: Install copilot plugins
       if: steps.check.outputs.run == 'true'
       shell: bash
