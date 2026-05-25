@@ -633,6 +633,11 @@ runs:
       with:
         destination: ${{ runner.temp }}/gh-aw/actions
         job-name: ${{ github.job }}
+    - name: Install GitHub Copilot CLI
+      env:
+        GH_HOST: github.com
+      run: curl -fsSL https://raw.githubusercontent.com/github/gh-aw/refs/tags/v0.75.4/actions/setup/sh/install_copilot_cli.sh | bash 1.0.52
+      shell: bash
     - name: Install copilot plugins
       if: steps.check.outputs.run == 'true'
       shell: bash
@@ -640,11 +645,6 @@ runs:
         copilot plugin marketplace add Cogni-AI-OU/cogni-ai-agentic-collections
         copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections
         copilot plugin install cogni-ai-dev-ops@cogni-ai-agentic-collections
-    - name: Install GitHub Copilot CLI
-      env:
-        GH_HOST: github.com
-      run: bash "${RUNNER_TEMP}/gh-aw/actions/install_copilot_cli.sh" 1.0.52
-      shell: bash
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
