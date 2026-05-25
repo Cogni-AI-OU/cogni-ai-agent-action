@@ -662,15 +662,24 @@ runs:
           -b ${{ inputs.version_instructions || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
           ${{ runner.temp }}/.instructions
-    #- name: Checkout cogni-ai-agentic-collections (skills)
-    #  if: steps.check.outputs.run == 'true'
-    #  uses: actions/checkout@v4
-    #  with:
-    #    persist-credentials: false
-    #    ref: ${{ inputs.version_skills || 'main' }}
-    #    repository: Cogni-AI-OU/cogni-ai-agentic-collections
-    #    sparse-checkout: |
-    #      skills
+    - name: Checkout cogni-ai-agentic-collections (skills)
+      if: steps.check.outputs.run == 'true'
+      uses: actions/checkout@v4
+      with:
+        token: ${{ github.token }}
+        persist-credentials: false
+        ref: ${{ inputs.version_skills || 'main' }}
+        repository: Cogni-AI-OU/cogni-ai-agentic-collections
+        path: ${{ runner.temp }}/collections
+        sparse-checkout: |
+          skills
+        fetch-depth: 1
+    - name: Link skills directory
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        mkdir -p ${{ env.HOME }}/.copilot
+        ln -sf ${{ runner.temp }}/collections/skills ${{ env.HOME }}/.copilot/skills
     - name: Install gh extensions
       if: steps.check.outputs.run == 'true' && inputs.gh-extensions != ''
       shell: bash
