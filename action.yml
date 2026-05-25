@@ -636,7 +636,7 @@ runs:
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: |
-        copilot plugin marketplace add Cogni-AI-OU/cogni-ai-agentic-collections &
+        copilot plugin marketplace add Cogni-AI-OU/cogni-ai-agentic-collections
         copilot plugin install cogni-ai-agentic-ops@cogni-ai-agentic-collections &
         copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections &
         copilot plugin install cogni-ai-coder@cogni-ai-agentic-collections &
