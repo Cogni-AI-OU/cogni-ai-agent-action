@@ -646,7 +646,6 @@ runs:
         copilot plugin install cogni-ai-github-ops@cogni-ai-agentic-collections
         copilot plugin install cogni-ai-programmer@cogni-ai-agentic-collections
         copilot plugin install cogni-ai-tester@cogni-ai-agentic-collections
-        wait
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
