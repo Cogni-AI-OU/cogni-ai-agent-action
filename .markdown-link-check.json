@@ -21,15 +21,6 @@
     },
     {
       "pattern": "^https://github.com/org/repo"
-    },
-    {
-      "pattern": "^https://github.com/MiniZinc/MiniZincIDE/releases/download/"
-    }
-  ],
-  "replacementPatterns": [
-    {
-      "pattern": "\\$\\{\\{ env\\.MINIZINC_VERSION \\}\\}",
-      "replacement": "2.9.3"
     }
   ],
   "retryCount": 3,
