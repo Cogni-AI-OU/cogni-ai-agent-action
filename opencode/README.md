@@ -86,7 +86,8 @@ jobs:
 
 ### OpenTelemetry & Datadog
 
-You can enable OpenTelemetry spans and export them to Datadog (or any OTLP-compatible backend) by setting the following environment variables:
+You can enable OpenTelemetry spans and export them to Datadog (or any
+OTLP-compatible backend) by setting the following environment variables:
 
 ```yaml
 - name: Run OpenCode Agent
