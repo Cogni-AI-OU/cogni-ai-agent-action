@@ -18,7 +18,7 @@ jobs:
   test-constraints:
     runs-on: ubuntu-latest
     env:
-      MINIZINC_VERSION: 2.9.3
+      MINIZINC_VERSION: 2.9.7
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,21 +26,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libegl1
-      - name: Cache MiniZinc bundle
-        id: cache-minizinc
-        uses: actions/cache@v5
-        with:
-          path: MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64
-          key: minizinc-${{ env.MINIZINC_VERSION }}
-      - name: Download MiniZinc bundle
-        if: steps.cache-minizinc.outputs.cache-hit != 'true'
+      - name: Install eget
         run: |
-          URL="https://github.com/MiniZinc/MiniZincIDE/releases/download/${MINIZINC_VERSION}/MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
-          wget "$URL"
-          tar xzf "MiniZincIDE-${MINIZINC_VERSION}-bundle-linux-x86_64.tgz"
+          wget -qO- https://zyedidia.github.io/eget.sh | sh
+      - name: Install MiniZinc via eget
+        run: |
+          ./eget -a bundle-linux-x86_64.tgz --tag ${{ env.MINIZINC_VERSION }} --file '*/bin/minizinc' MiniZinc/MiniZincIDE
       - name: Add MiniZinc to PATH
         run: |
-          echo "$PWD/MiniZincIDE-${{ env.MINIZINC_VERSION }}-bundle-linux-x86_64/bin" >> "$GITHUB_PATH"
+          echo "$PWD" >> "$GITHUB_PATH"
       - name: Verify MiniZinc installation
         run: |
           minizinc --version
