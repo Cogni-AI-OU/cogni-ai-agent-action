@@ -663,7 +663,8 @@ runs:
           if [ -n "$ext" ]; then
             gh extension install "$ext" || gh extension upgrade "$ext"
             if [ "$ext" = "github/gh-models" ]; then
-              gh models list
+              gh auth status
+              gh models list || echo "gh models list failed; continuing"
             fi
           fi
         done
