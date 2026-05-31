@@ -121,7 +121,9 @@ jobs:
 
 ### OpenTelemetry & Datadog
 
-To enable OpenTelemetry instrumentation and export traces to Datadog, set the `open-telemetry` input to `true` and provide the necessary OTLP environment variables:
+To enable OpenTelemetry instrumentation and export traces to Datadog, set the
+`open-telemetry` input to `true` and provide the necessary OTLP environment
+variables:
 
 ```yaml
 - name: Run Cogni AI Agent
@@ -135,7 +137,9 @@ To enable OpenTelemetry instrumentation and export traces to Datadog, set the `o
     open-telemetry: true
 ```
 
-The action supports standard `OTEL_*` environment variables and handles the export via a Bun-native manual OTLP implementation for maximum reliability in the GitHub Actions environment.
+The action supports standard `OTEL_*` environment variables and handles the export
+via a Bun-native manual OTLP implementation for maximum reliability in the GitHub
+Actions environment.
 
 ### Execution flow
 
