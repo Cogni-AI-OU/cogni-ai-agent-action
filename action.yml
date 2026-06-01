@@ -627,6 +627,20 @@ runs:
         echo "::group::Resolved prompt"
         printf '%s\n' "$prompt"
         echo "::endgroup::"
+    - name: Install copilot plugins
+      if: steps.check.outputs.run == 'true'
+      shell: bash
+      run: |
+        gh copilot plugin marketplace add Cogni-AI-OU/cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-agentic-ops@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-architect@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-coder@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-dev-ops@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-developer@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-git-ops@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-github-ops@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-programmer@cogni-ai-agentic-collections
+        gh copilot plugin install cogni-ai-tester@cogni-ai-agentic-collections
     - name: Checkout cogni-ai-agents
       if: steps.check.outputs.run == 'true'
       shell: bash
@@ -643,14 +657,24 @@ runs:
           -b ${{ inputs.version_instructions || 'main' }} \
           https://github.com/Cogni-AI-OU/cogni-ai-agent-instructions.git \
           ${{ runner.temp }}/.instructions
-    - name: Checkout cogni-ai-agent-skills
+    - name: Checkout cogni-ai-agentic-collections (skills)
+      if: steps.check.outputs.run == 'true'
+      uses: actions/checkout@v4
+      with:
+        token: ${{ github.token }}
+        persist-credentials: false
+        ref: ${{ inputs.version_skills || 'main' }}
+        repository: Cogni-AI-OU/cogni-ai-agentic-collections
+        path: .collections
+        sparse-checkout: |
+          skills
+        fetch-depth: 1
+    - name: Link skills directory
       if: steps.check.outputs.run == 'true'
       shell: bash
       run: |
-        git clone --depth 1 \
-          -b ${{ inputs.version_skills || 'main' }} \
-          https://github.com/Cogni-AI-OU/cogni-ai-agent-skills.git \
-          ${{ runner.temp }}/.skills
+        mkdir -p ${{ env.HOME }}/.copilot
+        ln -sf ${{ github.workspace }}/.collections/skills ${{ env.HOME }}/.copilot/skills
     - name: Install gh extensions
       if: steps.check.outputs.run == 'true' && inputs.gh-extensions != ''
       shell: bash
@@ -883,6 +907,7 @@ runs:
             },
             "skills": {
               "paths": [
+                "${{ env.HOME }}/.copilot/skills",
                 "${{ runner.temp }}/.skills",
                 "${{ github.workspace }}/.github/skills"
               ]

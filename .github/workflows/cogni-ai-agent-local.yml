@@ -61,7 +61,7 @@ on:
         required: false
         type: string
       version_skills:
-        default: v1.0.0
+        default: main
         description: Version of cogni-ai-agent-skills to use.
         required: false
         type: string
@@ -246,7 +246,7 @@ jobs:
             }}
           version_agents: ${{ inputs.version_agents || 'v1.0.0' }}
           version_instructions: ${{ inputs.version_instructions || 'v1.0.0' }}
-          version_skills: ${{ inputs.version_skills || 'v1.0.0' }}
+          version_skills: ${{ inputs.version_skills || 'main' }}
       - name: Annotate prompt and output
         env:
           COGNI_AI_PROMPT: ${{ steps.cogni-ai.outputs.prompt }}
