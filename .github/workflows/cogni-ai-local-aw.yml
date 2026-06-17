@@ -1,0 +1,28 @@
+---
+name: Cogni AI Local Architect Wrapper
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: Custom prompt to override the default prompt.
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  cogni-ai-local-aw:
+    name: Cogni AI Local Architect Wrapper
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run Wrapper Action
+        uses: ./gh-aw
+        with:
+          prompt: ${{ inputs.prompt }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

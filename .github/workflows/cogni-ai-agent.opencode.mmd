@@ -1,0 +1,92 @@
+flowchart TD
+    %% --------------------------------------------------------
+    %% Cogni AI Architect (lock.yml)
+    %% --------------------------------------------------------
+    subgraph Jobs_Cogni_AI_Architect ["Cogni AI Architect Job Orchestration"]
+        direction TB
+
+        %% Entry / Pre-activation
+        PE([Trigger: /co command or event]) --> PA["pre_activation<br/>Check team membership<br/>Check command position"]
+
+        PA --|activated=true|--> ACT["activation<br/>Setup scripts & resolve host repo<br/>Generate AW info & add reaction<br/>Validate COPILOT_GITHUB_TOKEN<br/>Checkout .github & .agent configs<br/>Check lock file staleness<br/>Compute prompt body text<br/>Add workflow run comment<br/>Build, interpolate & validate prompt<br/>Upload activation artifact"]
+
+        PA --|activated=false|--> Skip([Skip: Not authorized])
+
+        %% Parallel depends (activation -> init, script)
+        ACT --> INIT["init<br/>Clone cogni-ai-agents<br/>Clone cogni-ai-agent-instructions<br/>Clone cogni-ai-agent-skills"]
+        ACT --> SCRIPT["script<br/>Run GitHub Script metadata<br/>(session ID, context type)"]
+
+        %% Agent job depends on activation + init + script
+        AGT["agent<br/>Setup scripts & runtime paths<br/>Checkout repo & PR branch<br/>Configure git & gh CLI<br/>Install Copilot CLI & AWF binary<br/>Download activation artifact<br/>Restore agent config folders<br/>Download container images<br/>Start Safe Outputs MCP HTTP Server<br/>Start MCP Gateway<br/>Mount MCP servers as CLIs<br/>Audit workspace & start CLI Proxy<br/>Execute Copilot CLI (firewalled)<br/>Stop proxy, detect errors<br/>Parse & collect agent output<br/>Upload agent artifacts"]
+
+        ACT --> AGT
+        INIT --> AGT
+        SCRIPT --> AGT
+
+        %% Detection depends on activation + agent
+        DET["detection<br/>Download agent output artifact<br/>Checkout repo for patch context<br/>Run threat detection agent<br/>Parse & conclude detection"]
+
+        AGT --> DET
+        ACT -.->|output_types/has_patch| DET
+
+        %% Safe Outputs depends on activation + agent + detection
+        SO["safe_outputs<br/>Download agent output artifact<br/>Process safe outputs<br/>(PR comments, issues, no-op, etc.)<br/>Upload safe outputs items"]
+
+        ACT --> SO
+        AGT --> SO
+        DET --|result: success|--> SO
+
+        %% Conclusion depends on all
+        CONC["conclusion<br/>Download agent output artifact<br/>Process no-op messages<br/>Log detection runs<br/>Record missing tools & incomplete<br/>Handle agent failure<br/>Update reaction with completion status"]
+
+        ACT --> CONC
+        AGT --> CONC
+        DET --> CONC
+        INIT --> CONC
+        SO --> CONC
+        SCRIPT --> CONC
+    end
+
+    subgraph Activation_Sub_Flow ["Activation Steps Detail"]
+        direction TB
+        S1["Setup gh-aw scripts"] --> S2["Resolve host repo"]
+        S2 --> S3["Compute artifact prefix"]
+        S3 --> S4["Generate AW info<br/>(engine, model, firewall, etc.)"]
+        S4 --> S5["Add eyes reaction"]
+        S5 --> S6["Validate COPILOT_GITHUB_TOKEN"]
+        S6 --|failure & cross-repo|--> S7["Print cross-repo setup guidance"]
+        S6 --> S8["Checkout .github & .agents folders<br/>(sparse checkout)"]
+        S8 --> S9["Save agent config folders<br/>for base branch restoration"]
+        S9 --> S10["Check workflow lock file<br/>for staleness"]
+        S10 --> S11["Check compile-agentic version"]
+        S11 --> S12["Compute body text"]
+        S12 --> S13["Add workflow run comment"]
+        S13 --> S14["Create prompt with<br/>built-in context & templates"]
+        S14 --> S15["Interpolate variables &<br/>substitute placeholders"]
+        S15 --> S16["Validate & print prompt"]
+        S16 --> S17["Upload activation artifact"]
+    end
+
+    subgraph Agent_Sub_Flow ["Agent Execution Steps Detail"]
+        direction TB
+        A1["Setup scripts & runtime paths"] --> A2["Checkout repository"]
+        A2 --> A3["Configure gh CLI & git credentials"]
+        A3 --> A4["Checkout PR branch<br/>(if PR context)"]
+        A4 --> A5["Install Copilot CLI & AWF binary"]
+        A5 --> A6["Determine automatic<br/>lockdown mode"]
+        A6 --> A7["Download activation artifact<br/>& restore agent config"]
+        A7 --> A8["Download container images"]
+        A8 --> A9["Generate Safe Outputs<br/>Config & Tools & MCP Config"]
+        A9 --> A10["Start Safe Outputs MCP Server"]
+        A10 --> A11["Start MCP Gateway"]
+        A11 --> A12["Mount MCP servers as CLIs"]
+        A12 --> A13["Clean credentials &<br/>audit pre-agent workspace"]
+        A13 --> A14["Start CLI Proxy"]
+        A14 --> A15["Execute GitHub Copilot CLI<br/>(firewalled sandbox)"]
+        A15 --> A16["Stop proxy & detect errors"]
+        A16 --> A17["Configure git & copy session state"]
+        A17 --> A18["Stop MCP Gateway<br/>& redact secrets in logs"]
+        A18 --> A19["Ingest & parse agent output<br/>(collect output, parse logs)"]
+        A19 --> A20["Parse token usage &<br/>print AWF reflect summary"]
+        A20 --> A21["Upload agent artifacts"]
+    end

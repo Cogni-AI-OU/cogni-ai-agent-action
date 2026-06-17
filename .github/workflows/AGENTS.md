@@ -15,6 +15,8 @@ For a human-readable overview, see [README.md](README.md).
   Tests the local `ai-inference/action.yml` action on push.
 - **[check.yml](check.yml)**:
   Linting and quality gates via org-level reusable workflow.
+- **[cogni-ai-agent.opencode.md](cogni-ai-agent.opencode.md)**:
+  Runs Cogni AI Architect via OpenCode (Agentic Workflow).
 - **[cogni-ai-agent-local.yml](cogni-ai-agent-local.yml)**:
   Runs local `action.yml` as a wrapper for OpenCode.
 - **[cogni-ai-agent-local-sudo.yml](cogni-ai-agent-local-sudo.yml)**:
@@ -22,6 +24,8 @@ For a human-readable overview, see [README.md](README.md).
 - **[cogni-ai-agent-test.yml](cogni-ai-agent-test.yml)**:
   Tests the local `action.yml` action manually with predefined settings
   and matrices for agents, models, and prompts.
+- **[cogni-ai-local-aw.yml](cogni-ai-local-aw.yml)**:
+  Runs the local `gh-aw/action.yml` as a wrapper for the Architect workflow.
 - **[copilot-setup-steps.yml](copilot-setup-steps.yml)**:
   Environment setup utility.
 - **[devcontainer-ci.yml](devcontainer-ci.yml)**:
@@ -49,6 +53,15 @@ For a human-readable overview, see [README.md](README.md).
 - Triggers: `push`, `pull_request`, `schedule`, `workflow_dispatch`.
 - Reusable: `uses: Cogni-AI-OU/.github/.github/workflows/check.yml@main`.
 
+### cogni-ai-agent.opencode.md
+
+- Purpose: Runs Cogni AI Architect, an elite autonomous engineering kernel and systems architect.
+- Triggers: `issues`, `issue_comment`, `pull_request`, `pull_request_review_comment`,
+  `discussion`, `discussion_comment`, `workflow_dispatch`, `workflow_call`.
+- Commands: `/architect` (label), `/archi` (legacy).
+- Engine: `opencode`.
+- Model: `copilot/claude-sonnet-4.6`.
+
 ### cogni-ai-agent-local.yml
 
 - Purpose: Runs local `action.yml` wrapper.
@@ -68,6 +81,12 @@ For a human-readable overview, see [README.md](README.md).
 - Purpose: Tests the local `action.yml` action manually with predefined settings
   and matrices for agents, models, and prompts.
 - Triggers: `pull_request`, `pull_request_review_comment`, `pull_request_target`, `workflow_dispatch`.
+
+### cogni-ai-local-aw.yml
+
+- Purpose: Runs the local `gh-aw/action.yml` as a wrapper for the Architect workflow.
+- Triggers: `workflow_dispatch`.
+- Details: Dispatches `.github/workflows/cogni-ai-agent.opencode.lock.yml` via the `gh-aw` composite action.
 
 ### copilot-setup-steps.yml
 
