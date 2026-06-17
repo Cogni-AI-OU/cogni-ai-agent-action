@@ -15,6 +15,12 @@ Jobs:
 - **link-checker**: Checks for broken links in Markdown files using Lychee
 - **pre-commit**: Runs pre-commit hooks for code formatting and linting
 
+### Check — PR Comment Workflow (`check-pr-comment.yml`)
+
+The `check-pr-comment.yml` workflow extracts annotations from failed `Check` workflow runs
+and posts them as a PR comment. It also manages the `check-error` label and provides
+detailed PR feedback for failed runs.
+
 ### Devcontainer CI Workflow (`devcontainer-ci.yml`)
 
 The `devcontainer-ci.yml` workflow builds and tests the development container image.
