@@ -41,7 +41,9 @@ runs:
         if [ -n "$AGENT_JOB_ID" ]; then
           # Fetch workflow file to get the display name for the job ID
           WORKFLOW_PATH=$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq .path)
-          FETCHED_NAME=$(gh api "repos/$REPO/contents/$WORKFLOW_PATH" \
+          # The raw media type returns plain text, which gh refuses to print if it
+          # contains terminal escape sequences; opt in explicitly.
+          FETCHED_NAME=$(gh api --allow-escape-sequences "repos/$REPO/contents/$WORKFLOW_PATH" \
             -H "Accept: application/vnd.github.raw" | awk -v id="$AGENT_JOB_ID" '
             $0 ~ "^  " id ":" { found=1; next }
             found && !done && $0 ~ "^    name:" {
@@ -82,7 +84,11 @@ runs:
           } > .agent.log
         else
           echo "job_conclusion=$JOB_CONCLUSION" >> "$GITHUB_OUTPUT"
-          gh api "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
+          # Job logs are plain text carrying ANSI color codes. gh refuses to print
+          # such a body unless --allow-escape-sequences is passed, so opt in and then
+          # strip the escape sequences before they reach the log file and prompt.
+          gh api --allow-escape-sequences "repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" \
+            | sed -E 's/\x1b\[[0-9;?]*[a-zA-Z]//g; s/\x1b\][^\x07]*\x07//g' \
             | awk '/### CHECK_CONDITIONS_RESULTS ###/,/################################/ { $1=""; print }
                    /PROMPT:/,/Post job cleanup/ { $1=""; print; found=1 }
                    END { if (!found) print "No agent execution logs found. Check condition results above." }' \
